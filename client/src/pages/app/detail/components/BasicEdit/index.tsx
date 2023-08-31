@@ -542,7 +542,10 @@ const Settings = ({ appId }: { appId: string }) => {
       {isOpenKbSelect && (
         <KBSelectModal
           kbList={myKbList}
-          activeKbs={selectedKbList.map((item) => ({ kbId: item._id }))}
+          activeKbs={selectedKbList.map((item) => ({
+            kbId: item._id,
+            vectorModel: item.vectorModel
+          }))}
           onClose={onCloseKbSelect}
           onChange={replaceKbList}
         />
@@ -636,6 +639,7 @@ const ChatTest = ({ appId }: { appId: string }) => {
           ref={ChatBoxRef}
           appAvatar={appDetail.avatar}
           userAvatar={userInfo?.avatar}
+          showMarkIcon
           {...getSpecialModule(modules)}
           onStartChat={startChat}
           onDelMessage={() => {}}

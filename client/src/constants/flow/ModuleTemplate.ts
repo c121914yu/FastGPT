@@ -158,7 +158,8 @@ export const ChatModule: FlowModuleTemplateType = {
       label: '系统提示词',
       valueType: FlowValueTypeEnum.string,
       description: ChatModelSystemTip,
-      placeholder: ChatModelSystemTip
+      placeholder: ChatModelSystemTip,
+      value: ''
     },
     {
       key: 'limitPrompt',
@@ -166,7 +167,8 @@ export const ChatModule: FlowModuleTemplateType = {
       valueType: FlowValueTypeEnum.string,
       label: '限定词',
       description: ChatModelLimitTip,
-      placeholder: ChatModelLimitTip
+      placeholder: ChatModelLimitTip,
+      value: ''
     },
     Input_Template_TFSwitch,
     {
@@ -182,7 +184,7 @@ export const ChatModule: FlowModuleTemplateType = {
     {
       key: TaskResponseKeyEnum.answerText,
       label: '模型回复',
-      description: '如果外接了内容，会在回复结束时自动添加\n\n',
+      description: '将在 stream 回复完毕后触发',
       valueType: FlowValueTypeEnum.string,
       type: FlowOutputItemTypeEnum.source,
       targets: []
@@ -216,7 +218,7 @@ export const KBSearchModule: FlowModuleTemplateType = {
       key: 'similarity',
       type: FlowInputItemTypeEnum.slider,
       label: '相似度',
-      value: 0.8,
+      value: 0.4,
       min: 0,
       max: 1,
       step: 0.01,
@@ -281,6 +283,7 @@ export const AnswerModule: FlowModuleTemplateType = {
       key: SpecialInputKeyEnum.answerText,
       type: FlowInputItemTypeEnum.textarea,
       valueType: FlowValueTypeEnum.string,
+      value: '',
       label: '回复的内容',
       description:
         '可以使用 \\n 来实现换行。也可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容'
@@ -337,6 +340,7 @@ export const ClassifyQuestionModule: FlowModuleTemplateType = {
       key: 'systemPrompt',
       type: FlowInputItemTypeEnum.textarea,
       valueType: FlowValueTypeEnum.string,
+      value: '',
       label: '系统提示词',
       description:
         '你可以添加一些特定内容的介绍，从而更好的识别用户的问题类型。这个内容通常是给模型介绍一个它不知道的内容。',
@@ -398,6 +402,7 @@ export const ContextExtractModule: FlowModuleTemplateType = {
       key: ContextExtractEnum.description,
       type: FlowInputItemTypeEnum.textarea,
       valueType: FlowValueTypeEnum.string,
+      value: '',
       label: '提取要求描述',
       description: '写一段提取要求，告诉 AI 需要提取哪些内容',
       required: true,
@@ -840,7 +845,7 @@ export const appTemplates: (AppItemType & { avatar: string; intro: string })[] =
             key: 'similarity',
             type: 'slider',
             label: '相似度',
-            value: 0.8,
+            value: 0.4,
             min: 0,
             max: 1,
             step: 0.01,

@@ -1,6 +1,6 @@
 import { GET, POST, PUT } from './request';
 import { createHashPassword } from '@/utils/tools';
-import { ResLogin } from './response/user';
+import type { ResLogin, PromotionRecordType } from './response/user';
 import { UserAuthTypeEnum } from '@/constants/common';
 import { UserBillType, UserType, UserUpdateParams } from '@/types/user';
 import type { PagingData, RequestPaging } from '@/types';
@@ -10,10 +10,11 @@ export const sendAuthCode = (data: {
   username: string;
   type: `${UserAuthTypeEnum}`;
   googleToken: string;
-}) => POST('/user/sendAuthCode', data);
+}) => POST(`/plusApi/user/account/sendCode`, data);
 
 export const getTokenLogin = () => GET<UserType>('/user/account/tokenLogin');
-export const gitLogin = (code: string) => GET<ResLogin>('/user/account/gitLogin', { code });
+export const gitLogin = (params: { code: string; inviterId?: string }) =>
+  GET<ResLogin>('/plusApi/user/account/gitLogin', params);
 
 export const postRegister = ({
   username,
@@ -24,9 +25,9 @@ export const postRegister = ({
   username: string;
   code: string;
   password: string;
-  inviterId: string;
+  inviterId?: string;
 }) =>
-  POST<ResLogin>('/user/account/register', {
+  POST<ResLogin>(`/plusApi/user/account/register`, {
     username,
     code,
     inviterId,
@@ -42,7 +43,7 @@ export const postFindPassword = ({
   code: string;
   password: string;
 }) =>
-  POST<ResLogin>('/user/account/updatePasswordByCode', {
+  POST<ResLogin>(`/plusApi/user/account/updatePasswordByCode`, {
     username,
     code,
     password: createHashPassword(password)
@@ -73,12 +74,29 @@ export const getPayCode = (amount: number) =>
   GET<{
     codeUrl: string;
     payId: string;
-  }>(`/user/getPayCode?amount=${amount}`);
+  }>(`/plusApi/user/pay/getPayCode`, { amount });
 
-export const checkPayResult = (payId: string) => GET<number>(`/user/checkPayResult?payId=${payId}`);
+export const checkPayResult = (payId: string) =>
+  GET<number>(`/plusApi/user/pay/checkPayResult`, { payId }).then(() => {
+    try {
+      GET('/user/account/paySuccess');
+    } catch (error) {}
+    return 'success';
+  });
 
 export const getInforms = (data: RequestPaging) =>
   POST<PagingData<informSchema>>(`/user/inform/list`, data);
 
 export const getUnreadCount = () => GET<number>(`/user/inform/countUnread`);
 export const readInform = (id: string) => GET(`/user/inform/read`, { id });
+
+/* get promotion init data */
+export const getPromotionInitData = () =>
+  GET<{
+    invitedAmount: number;
+    earningsAmount: number;
+  }>('/user/promotion/getPromotionData');
+
+/* promotion records */
+export const getPromotionRecords = (data: RequestPaging) =>
+  POST<PromotionRecordType>(`/user/promotion/getPromotions`, data);

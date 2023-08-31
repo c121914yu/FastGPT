@@ -24,11 +24,11 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
 
     await connectToDatabase();
 
-    // 凭证校验
-    const { userId } = await authUser({ req });
-
-    // find model
-    const kb = await KB.findById(kbId, 'model');
+    // auth user and get kb
+    const [{ userId }, kb] = await Promise.all([
+      authUser({ req }),
+      KB.findById(kbId, 'vectorModel')
+    ]);
 
     if (!kb) {
       throw new Error("Can't find database");
@@ -40,7 +40,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
         return getVector({
           userId,
           input: [q],
-          model: kb.model
+          model: kb.vectorModel
         });
       }
       return { vectors: [[]] };

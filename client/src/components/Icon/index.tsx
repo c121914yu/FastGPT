@@ -75,7 +75,11 @@ const map = {
   outlink_iframe: require('./icons/outlink/iframe.svg').default,
   addCircle: require('./icons/circle/add.svg').default,
   playFill: require('./icons/fill/play.svg').default,
-  courseLight: require('./icons/light/course.svg').default
+  courseLight: require('./icons/light/course.svg').default,
+  promotionLight: require('./icons/light/promotion.svg').default,
+  logsLight: require('./icons/light/logs.svg').default,
+  badLight: require('./icons/light/bad.svg').default,
+  markLight: require('./icons/light/mark.svg').default
 };
 
 export type IconName = keyof typeof map;

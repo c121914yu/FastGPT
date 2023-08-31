@@ -34,8 +34,8 @@ services:
       - ./mongo/data:/data/db
   fastgpt:
     container_name: fastgpt
-    # image: c121914yu/fast-gpt:latest # docker hub
-    image: registry.cn-hangzhou.aliyuncs.com/fastgpt/fastgpt:latest # 阿里云
+    image: ghcr.io/labring/fastgpt:latest # git
+    # image: registry.cn-hangzhou.aliyuncs.com/fastgpt/fastgpt:latest # 阿里云
     ports:
       - 3000:3000
     networks:
@@ -53,8 +53,8 @@ services:
       - DB_MAX_LINK=5 # database max link
       - TOKEN_KEY=any
       - ROOT_KEY=root_key
-      # mongo 配置，不需要改
-      - MONGODB_URI=mongodb://username:password@mongo:27017/fastgpt
+      # mongo 配置，不需要改. 如果连不上，可能需要去掉 ?authSource=admin
+      - MONGODB_URI=mongodb://username:password@mongo:27017/fastgpt?authSource=admin
       # pg配置. 不需要改
       - PG_URL=postgresql://username:password@pg:5432/postgres
     volumes:
@@ -93,8 +93,7 @@ networks:
 #       - ./mongo/data:/data/db
 #       - ./mongo/logs:/var/log/mongodb
 #   fastgpt:
-#   # image: ghcr.io/c121914yu/fastgpt:latest # github
-#   # image: c121914yu/fast-gpt:latest # docker hub
+#   # image: ghcr.io/labring/fastgpt:latest # github
 #   image: registry.cn-hangzhou.aliyuncs.com/fastgpt/fastgpt:latest # 阿里云
 #   network_mode: host
 #   restart: always
@@ -111,6 +110,6 @@ networks:
 #       # root key, 最高权限，可以内部接口互相调用
 #       - ROOT_KEY=root_key
 #       # mongo 配置，不需要改
-#       - MONGODB_URI=mongodb://username:password@0.0.0.0:27017/fastgpt
+#       - MONGODB_URI=mongodb://username:password@0.0.0.0:27017/fastgpt?authSource=admin
 #       # pg配置. 不需要改
 #       - PG_URL=postgresql://username:password@0.0.0.0:5432/postgres

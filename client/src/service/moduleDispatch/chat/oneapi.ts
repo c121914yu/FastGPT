@@ -15,13 +15,13 @@ import { getChatModel } from '@/service/utils/data';
 import { countModelPrice } from '@/service/events/pushBill';
 import { ChatModelItemType } from '@/types/model';
 import { UserModelSchema } from '@/types/mongoSchema';
-import { textCensor } from '@/service/api/plugins';
+import { textCensor } from '@/api/service/plugins';
 import { ChatCompletionRequestMessageRoleEnum } from 'openai';
 import { AppModuleItemType } from '@/types/app';
 
 export type ChatProps = {
   res: NextApiResponse;
-  model: `${OpenAiChatEnum}`;
+  model: string;
   temperature?: number;
   maxToken?: number;
   history?: ChatItemType[];
@@ -44,7 +44,7 @@ export type ChatResponse = {
 export const dispatchChatCompletion = async (props: Record<string, any>): Promise<ChatResponse> => {
   let {
     res,
-    model,
+    model = global.chatModels[0]?.model,
     temperature = 0,
     maxToken = 4000,
     stream = false,
@@ -68,7 +68,7 @@ export const dispatchChatCompletion = async (props: Record<string, any>): Promis
     return Promise.reject('The chat model is undefined, you need to select a chat model.');
   }
 
-  const { filterQuoteQA, quotePrompt } = filterQuote({
+  const { filterQuoteQA, quotePrompt, hasQuoteOutput } = filterQuote({
     quoteQA,
     model: modelConstantsData
   });
@@ -89,7 +89,8 @@ export const dispatchChatCompletion = async (props: Record<string, any>): Promis
     quotePrompt,
     userChatInput,
     systemPrompt,
-    limitPrompt
+    limitPrompt,
+    hasQuoteOutput
   });
   const { max_tokens } = getMaxTokens({
     model: modelConstantsData,
@@ -181,7 +182,7 @@ export const dispatchChatCompletion = async (props: Record<string, any>): Promis
       tokens: totalTokens,
       question: userChatInput,
       answer: answerText,
-      maxToken,
+      maxToken: max_tokens,
       quoteList: filterQuoteQA,
       completeMessages
     },
@@ -201,7 +202,7 @@ function filterQuote({
     maxToken: model.quoteMaxToken,
     messages: quoteQA.map((item) => ({
       obj: ChatRoleEnum.System,
-      value: item.a ? `{instruction:${item.q},output:${item.a}}` : `{instruction:${item.q}}`
+      value: item.a ? `${item.q}\n${item.a}` : item.q
     }))
   });
 
@@ -210,16 +211,17 @@ function filterQuote({
 
   const quotePrompt =
     filterQuoteQA.length > 0
-      ? `下面是知识库内容:
-${filterQuoteQA
-  .map((item) => (item.a ? `{instruction:${item.q},output:${item.a}}` : `{instruction:${item.q}}`))
-  .join('\n')}
-`
+      ? `"""${filterQuoteQA
+          .map((item) =>
+            item.a ? `{instruction:"${item.q}",output:"${item.a}"}` : `{instruction:"${item.q}"}`
+          )
+          .join('\n')}"""`
       : '';
 
   return {
     filterQuoteQA,
-    quotePrompt
+    quotePrompt,
+    hasQuoteOutput: !!filterQuoteQA.find((item) => item.a)
   };
 }
 function getChatMessages({
@@ -228,7 +230,8 @@ function getChatMessages({
   systemPrompt,
   limitPrompt,
   userChatInput,
-  model
+  model,
+  hasQuoteOutput
 }: {
   quotePrompt: string;
   history: ChatProps['history'];
@@ -236,29 +239,35 @@ function getChatMessages({
   limitPrompt: string;
   userChatInput: string;
   model: ChatModelItemType;
+  hasQuoteOutput: boolean;
 }) {
   const limitText = (() => {
-    if (limitPrompt) return limitPrompt;
-    if (quotePrompt && !limitPrompt) {
-      return '严格按照知识库提供的内容回答，不要做过多补充。';
+    if (!quotePrompt) {
+      return limitPrompt;
     }
-    return '';
+    const defaultPrompt = `三引号引用的内容是我提供给你的知识，它们拥有最高优先级。instruction 是相关介绍${
+      hasQuoteOutput ? '，output 是预期回答或补充' : ''
+    }，使用引用内容来回答我下面的问题。`;
+    if (limitPrompt) {
+      return `${defaultPrompt}${limitPrompt}`;
+    }
+    return `${defaultPrompt}\n回答内容限制：你仅回答三引号中提及的内容，下面我提出的问题与引用内容无关时，你可以直接回复: "你的问题没有在知识库中体现"`;
   })();
 
   const messages: ChatItemType[] = [
-    ...(quotePrompt
-      ? [
-          {
-            obj: ChatRoleEnum.System,
-            value: quotePrompt
-          }
-        ]
-      : []),
     ...(systemPrompt
       ? [
           {
             obj: ChatRoleEnum.System,
             value: systemPrompt
+          }
+        ]
+      : []),
+    ...(quotePrompt
+      ? [
+          {
+            obj: ChatRoleEnum.System,
+            value: quotePrompt
           }
         ]
       : []),
@@ -301,6 +310,7 @@ function getMaxTokens({
 }) {
   const tokensLimit = model.contextMaxToken;
   /* count response max token */
+
   const promptsToken = modelToolMap.countTokens({
     model: model.model,
     messages: filterMessages

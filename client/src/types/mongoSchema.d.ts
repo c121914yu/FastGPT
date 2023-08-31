@@ -13,8 +13,8 @@ export interface UserModelSchema {
   password: string;
   avatar: string;
   balance: number;
+  promotionRate: number;
   inviterId?: string;
-  promotionAmount: number;
   openaiKey: string;
   createTime: number;
   openaiAccount?: {
@@ -72,7 +72,7 @@ export interface TrainingDataSchema {
   kbId: string;
   expireAt: Date;
   lockTime: Date;
-  model: string;
+  vectorModel: string;
   mode: `${TrainingModeEnum}`;
   prompt: string;
   q: string;
@@ -102,6 +102,12 @@ export interface ChatItemSchema extends ChatItemType {
   userId: string;
   appId: string;
   time: Date;
+  userFeedback?: string;
+  adminFeedback?: {
+    kbId: string;
+    dataId: string;
+    content: string;
+  };
 }
 
 export type BillListItemType = {
@@ -135,14 +141,14 @@ export interface OpenApiSchema {
   userId: string;
   createTime: Date;
   lastUsedTime?: Date;
-  apiKey: String;
+  apiKey: string;
 }
 
 export interface PromotionRecordSchema {
   _id: string;
   userId: string; // 收益人
   objUId?: string; // 目标对象（如果是withdraw则为空）
-  type: 'invite' | 'shareModel' | 'withdraw';
+  type: 'register' | 'pay';
   createTime: Date; // 记录时间
   amount: number;
 }
@@ -164,7 +170,7 @@ export interface kbSchema {
   updateTime: Date;
   avatar: string;
   name: string;
-  model: string;
+  vectorModel: string;
   tags: string[];
 }
 

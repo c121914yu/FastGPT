@@ -1,5 +1,5 @@
 import { TrainingData } from '@/service/mongo';
-import { pushSplitDataBill } from '@/service/events/pushBill';
+import { pushQABill } from '@/service/events/pushBill';
 import { pushDataToKb } from '@/pages/api/openapi/kb/pushData';
 import { TrainingModeEnum } from '@/constants/plugin';
 import { ERROR_ENUM } from '../errorCode';
@@ -60,19 +60,18 @@ export async function generateQA(): Promise<any> {
     // 请求 chatgpt 获取回答
     const response = await Promise.all(
       [data.q].map((text) => {
-        const modelTokenLimit =
-          chatModels.find((item) => item.model === data.model)?.contextMaxToken || 16000;
+        const modelTokenLimit = global.qaModel.maxToken || 16000;
         const messages: ChatCompletionRequestMessage[] = [
           {
             role: 'system',
-            content: `你是出题人.
-${data.prompt || '我会发送一段长文本'}.
-从中提取出 25 个问题和答案. 答案详细完整. 按下面格式返回: 
+            content: `我会给你发送一段长文本，${
+              data.prompt ? `是${data.prompt}，` : ''
+            }请学习它，并用 markdown 格式给出 25 个问题和答案，问题可以多样化、自由扩展；答案要详细、解读到位，答案包含普通文本、链接、代码、表格、公示、媒体链接等。按下面 QA 问答格式返回: 
 Q1:
 A1:
 Q2:
 A2:
-...`
+……`
           },
           {
             role: 'user',
@@ -88,7 +87,7 @@ A2:
         return chatAPI
           .createChatCompletion(
             {
-              model: data.model,
+              model: global.qaModel.model,
               temperature: 0.8,
               messages,
               stream: false,
@@ -106,12 +105,12 @@ A2:
             const result = formatSplitText(answer || ''); // 格式化后的QA对
             console.log(`split result length: `, result.length);
             // 计费
-            pushSplitDataBill({
-              userId: data.userId,
-              totalTokens,
-              model: data.model,
-              appName: 'QA 拆分'
-            });
+            result.length > 0 &&
+              pushQABill({
+                userId: data.userId,
+                totalTokens,
+                appName: 'QA 拆分'
+              });
             return {
               rawContent: answer,
               result
@@ -135,7 +134,6 @@ A2:
         source: data.source
       })),
       userId,
-      model: global.vectorModels[0].model,
       mode: TrainingModeEnum.index
     });
 

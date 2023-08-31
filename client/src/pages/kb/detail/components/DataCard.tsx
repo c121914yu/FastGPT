@@ -163,7 +163,7 @@ const DataCard = ({ kbId }: { kbId: string }) => {
           maxW={['60%', '300px']}
           size={'sm'}
           value={searchText}
-          placeholder="根据匹配知识，补充知识和来源进行搜索"
+          placeholder="根据匹配知识，预期答案和来源进行搜索"
           onChange={(e) => {
             setSearchText(e.target.value);
             getFirstData();
@@ -217,7 +217,7 @@ const DataCard = ({ kbId }: { kbId: string }) => {
               <Box color={'myGray.600'}>{item.a}</Box>
             </Box>
             <Flex py={2} px={4} h={'36px'} alignItems={'flex-end'} fontSize={'sm'}>
-              <Box className={'textEllipsis'} flex={1}>
+              <Box className={'textEllipsis'} flex={1} color={'myGray.500'}>
                 {item.source?.trim()}
               </Box>
               <IconButton

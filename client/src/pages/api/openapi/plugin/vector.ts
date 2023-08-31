@@ -66,14 +66,14 @@ export async function getVector({
         ...axiosConfig()
       }
     )
-    .then((res) => {
-      if (!res.data?.usage?.total_tokens) {
+    .then(async (res) => {
+      if (!res.data?.data?.[0]?.embedding) {
         // @ts-ignore
         return Promise.reject(res.data?.error?.message || 'Embedding Error');
       }
       return {
         tokenLen: res.data.usage.total_tokens || 0,
-        vectors: res.data.data.map((item) => item.embedding)
+        vectors: await Promise.all(res.data.data.map((item) => unityDimensional(item.embedding)))
       };
     });
 
@@ -85,4 +85,14 @@ export async function getVector({
     });
 
   return result;
+}
+
+function unityDimensional(vector: number[]) {
+  if (vector.length > 1536) return Promise.reject('向量维度不能超过 1536');
+  let resultVector = vector;
+  const vectorLen = vector.length;
+
+  const zeroVector = new Array(1536 - vectorLen).fill(0);
+
+  return resultVector.concat(zeroVector);
 }

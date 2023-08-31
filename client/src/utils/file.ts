@@ -148,10 +148,10 @@ export const fileDownload = ({
  * maxLen > overlapLen
  */
 export const splitText2Chunks = ({ text, maxLen }: { text: string; maxLen: number }) => {
-  const overlapLen = Math.floor(maxLen * 0.3); // Overlap length
+  const overlapLen = Math.floor(maxLen * 0.25); // Overlap length
 
   try {
-    const splitTexts = text.split(/(?<=[。！？.!?])/g);
+    const splitTexts = text.split(/(?<=[。！？；.!?;])/g);
     const chunks: string[] = [];
 
     let preChunk = '';
@@ -173,9 +173,16 @@ export const splitText2Chunks = ({ text, maxLen }: { text: string; maxLen: numbe
       chunks.push(chunk);
     }
 
-    const enc = getOpenAiEncMap();
-    const encodeText = enc.encode(chunks.join(''));
-    const tokens = encodeText.length;
+    const tokens = (() => {
+      try {
+        const enc = getOpenAiEncMap();
+        const encodeText = enc.encode(chunks.join(''));
+        const tokens = encodeText.length;
+        return tokens;
+      } catch (error) {
+        return chunks.join('').length;
+      }
+    })();
 
     return {
       chunks,
@@ -268,3 +275,14 @@ export const compressImg = ({
       reject('压缩图片异常');
     };
   });
+
+/* simple text, remove chinese space and extra \n */
+export const simpleText = (text: string) => {
+  text = text.replace(/([\u4e00-\u9fa5])\s+([\u4e00-\u9fa5])/g, '$1$2');
+  text = text.replace(/\n{2,}/g, '\n');
+  text = text.replace(/\s{2,}/g, ' ');
+
+  text = text.replace(/[\x00-\x08]/g, ' ');
+
+  return text;
+};

@@ -10,7 +10,7 @@ import NProgress from 'nprogress'; //nprogress module
 import Router from 'next/router';
 import { clientInitData, feConfigs } from '@/store/static';
 import { appWithTranslation, useTranslation } from 'next-i18next';
-import { getLangStore } from '@/utils/i18n';
+import { getLangStore, setLangStore } from '@/utils/i18n';
 import { useRouter } from 'next/router';
 
 import 'nprogress/nprogress.css';
@@ -28,13 +28,14 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: false,
-      cacheTime: 0
+      cacheTime: 10
     }
   }
 });
 
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
+  const { hiId } = router.query as { hiId?: string };
   const { i18n } = useTranslation();
 
   const [scripts, setScripts] = useState<FeConfigsType['scripts']>([]);
@@ -51,14 +52,19 @@ function App({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
+    hiId && localStorage.setItem('inviterId', hiId);
+  }, [hiId]);
+
+  useEffect(() => {
     const lang = getLangStore() || 'zh';
     i18n?.changeLanguage?.(lang);
+    setLangStore(lang);
   }, [router.asPath]);
 
   return (
     <>
       <Head>
-        <title>{feConfigs?.systemTitle || 'FastGPT'}</title>
+        <title>{feConfigs?.systemTitle || 'AI'}</title>
         <meta name="description" content="Embedding + LLM, Build AI knowledge base" />
         <meta
           name="viewport"
