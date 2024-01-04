@@ -136,16 +136,61 @@ importers:
 
   packages/web:
     dependencies:
+      '@chakra-ui/anatomy':
+        specifier: ^2.2.1
+        version: registry.npmmirror.com/@chakra-ui/anatomy@2.2.1
+      '@chakra-ui/icons':
+        specifier: ^2.1.1
+        version: registry.npmmirror.com/@chakra-ui/icons@2.1.1(@chakra-ui/system@2.6.1)(react@18.2.0)
+      '@chakra-ui/next-js':
+        specifier: ^2.1.5
+        version: registry.npmmirror.com/@chakra-ui/next-js@2.1.5(@chakra-ui/react@2.8.1)(@emotion/react@11.11.1)(next@13.5.2)(react@18.2.0)
+      '@chakra-ui/react':
+        specifier: ^2.8.1
+        version: registry.npmmirror.com/@chakra-ui/react@2.8.1(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.0)(framer-motion@9.0.6)(react-dom@18.2.0)(react@18.2.0)
+      '@chakra-ui/styled-system':
+        specifier: ^2.9.1
+        version: registry.npmmirror.com/@chakra-ui/styled-system@2.9.1
+      '@chakra-ui/system':
+        specifier: ^2.6.1
+        version: registry.npmmirror.com/@chakra-ui/system@2.6.1(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(react@18.2.0)
+      '@emotion/react':
+        specifier: ^11.11.1
+        version: registry.npmmirror.com/@emotion/react@11.11.1(@types/react@18.2.0)(react@18.2.0)
+      '@emotion/styled':
+        specifier: ^11.11.0
+        version: registry.npmmirror.com/@emotion/styled@11.11.0(@emotion/react@11.11.1)(@types/react@18.2.0)(react@18.2.0)
       '@fastgpt/global':
         specifier: workspace:*
         version: link:../global
+      i18next:
+        specifier: ^22.5.1
+        version: registry.npmmirror.com/i18next@22.5.1
       joplin-turndown-plugin-gfm:
         specifier: ^1.0.12
         version: registry.npmmirror.com/joplin-turndown-plugin-gfm@1.0.12
+      next-i18next:
+        specifier: ^13.3.0
+        version: registry.npmmirror.com/next-i18next@13.3.0(i18next@22.5.1)(next@13.5.2)(react-i18next@12.3.1)(react@18.2.0)
+      react:
+        specifier: 18.2.0
+        version: registry.npmmirror.com/react@18.2.0
+      react-dom:
+        specifier: 18.2.0
+        version: registry.npmmirror.com/react-dom@18.2.0(react@18.2.0)
+      react-i18next:
+        specifier: ^12.3.1
+        version: registry.npmmirror.com/react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0)(react@18.2.0)
       turndown:
         specifier: ^7.1.2
         version: registry.npmmirror.com/turndown@7.1.2
     devDependencies:
+      '@types/react':
+        specifier: 18.2.0
+        version: registry.npmmirror.com/@types/react@18.2.0
+      '@types/react-dom':
+        specifier: 18.2.0
+        version: registry.npmmirror.com/@types/react-dom@18.2.0
       '@types/turndown':
         specifier: ^5.0.4
         version: registry.npmmirror.com/@types/turndown@5.0.4

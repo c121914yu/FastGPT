@@ -133,6 +133,9 @@
     "Name is empty": "Name is empty",
     "New Create": "Create",
     "Next Step": "Next",
+    "Not open": "Close",
+    "OK": "OK",
+    "Opened": "Opened",
     "Output": "Output",
     "Params": "Params",
     "Password inconsistency": "Password inconsistency",
@@ -243,12 +246,13 @@
       "create app": "Create App",
       "edit": {
         "Confirm Save App Tip": "The application may be in advanced orchestration mode, and the advanced orchestration configuration will be overwritten after saving, please confirm!",
+        "Open cfr": "Open Cfr",
         "Out Ad Edit": "You are about to exit the Advanced orchestration page, please confirm",
         "Prompt Editor": "Prompt Editor",
         "Save and out": "Save out",
         "UnSave": "UnSave",
-        "cfr background prompt": "Question completion - Chat background description",
-        "cfr background tip": "Describing the scope of the current conversation makes it easier for AI to complete first or vague questions, thereby enhancing the knowledge base's ability to continue conversations. \nIf is empty, the problem completion function is not used."
+        "cfr background prompt": "Chat background description",
+        "cfr background tip": "Describing the scope of the current conversation makes it easier for AI to complete first or vague questions, thereby enhancing the knowledge base's ability to continue conversations.\nIf the value is empty, the problem completion function is not used for the \"first problem\".\nIf the value is none, the problem completion function is not used."
       },
       "feedback": {
         "Custom feedback": "Custom feedback",
@@ -295,6 +299,7 @@
       "Select Image": "Select Image",
       "Send Message": "Send Message",
       "Speaking": "I'm listening...",
+      "Start Chat": "Start Chat",
       "Stop Speak": "Stop Speak",
       "Type a message": "Input problem",
       "error": {
@@ -350,6 +355,7 @@
         "module time": "Running Time",
         "module tokens": "Tokens",
         "plugin output": "Plugin Output",
+        "search using reRank": "ReRank",
         "text output": "Text Output"
       },
       "tts": {
@@ -377,6 +383,7 @@
       "Name": "Name",
       "Quote Length": "Quote Length",
       "Read Dataset": "Read Dataset",
+      "Search score tip": "{{scoreText}}Here are the rankings and scores:\n----\n{{detailScore}}",
       "Set Empty Result Tip": ",Response empty text",
       "Set Website Config": "Configuring Website",
       "Similarity": "Similarity",
@@ -399,6 +406,7 @@
         "metadata": {
           "Chunk Size": "Chunk Size",
           "Createtime": "Create Time",
+          "Raw text length": "Raw text length",
           "Read Metadata": "Read Metadata",
           "Training Type": "Training Type",
           "Updatetime": "Update Time",
@@ -432,6 +440,7 @@
         "Too Long": "Content is too long",
         "Total Amount": "{{total}} Chunks",
         "data is deleted": "Data is deleted",
+        "get data error": "Get data error",
         "id": "Data ID"
       },
       "error": {
@@ -479,6 +488,7 @@
       "link": "Link",
       "search": {
         "Dataset Search Params": "Dataset Search Params",
+        "Embedding score": "Embedding score",
         "Empty result response": "Empty Response",
         "Empty result response Tips": "If you fill in the content, if no suitable content is found, you will directly reply to the content.",
         "Max Tokens": "Max Tokens",
@@ -486,14 +496,28 @@
         "Min Similarity": "Min Similarity",
         "Min Similarity Tips": "The similarity of different index models is different, please use the search test to select the appropriate value",
         "Params Setting": "Params Setting",
+        "Rank": "Rank",
+        "Rank Tip": "Ranking in all data",
+        "ReRank": "ReRank",
+        "ReRank desc": "The rearrangement model is used for secondary ranking to enhance the overall ranking.",
+        "Read score": "Read score",
+        "Rerank score": "ReRank score",
+        "Score": "Score",
+        "Search type": "Type",
         "Top K": "Top K",
         "mode": {
-          "embFullTextReRank": "Hybrid search ",
-          "embFullTextReRank desc": "Reordering with a mixture of vector search and full-text search results by Rerank usually works best",
           "embedding": "Vector search",
-          "embedding desc": "Direct vector topk correlation query ",
-          "embeddingReRank": "Enhanced semantic retrieval ",
-          "embeddingReRank desc": "Sort using Rerank after overperforming vector topk queries "
+          "embedding desc": "Use vectors for text correlation queries",
+          "fullTextRecall": "Full text search ",
+          "fullTextRecall desc": "Using traditional full-text search, suitable for finding data with specific keywords and main predicates",
+          "mixedRecall": "Mixedrecall",
+          "mixedRecall desc": "Returns the combined results of vector and full-text searches, sorted using the RRF algorithm."
+        },
+        "score": {
+          "embedding": "Embedding",
+          "fullText": "Full text",
+          "reRank": "ReRank",
+          "rrf": "RRF Merge"
         },
         "search mode": "Search Mode"
       },
@@ -502,17 +526,26 @@
         "syncing": "Syncing"
       },
       "test": {
+        "Batch test": "Batch test",
+        "Batch test Placeholder": "Select one csv file",
         "Search Test": "Search Test",
         "Test": "Start",
+        "Test File": "",
         "Test Result": "Results",
         "Test Text": "Text",
         "Test Text Placeholder": "Enter the text you want to test",
+        "Test params": "Search Params",
         "delete test history": "Delete the test result",
         "test history": "Test History",
         "test result placeholder": "The test results will be presented here",
         "test result tip": "The contents of the knowledge base are sorted according to their similarity to the test text, and you can adjust the corresponding text according to the test results. Note: The data in the test record may have been modified, clicking on a test data will show the latest data."
       },
       "training": {
+        "Agent queue": "QA wait list",
+        "Full": "Expect more than 5 minutes",
+        "Leisure": "Leisure",
+        "Vector queue": "Vector wait list",
+        "Waiting": "Waiting",
         "Website Sync": "Website Sync",
         "type chunk": "Chunk",
         "type qa": "QA"
@@ -607,7 +640,7 @@
         "TFSwitch": "",
         "TFSwitch intro": "",
         "UnKnow Module": "UnKnow Module",
-        "cfr": "",
+        "cfr": "Coreference resolution",
         "cfr intro": "Refine the current issue based on history, making it more conducive to knowledge base search, while improving continuous conversation capabilities.",
         "textEditor": "Text Editor",
         "textEditor intro": "Output of fixed or incoming text after edit"
@@ -870,7 +903,8 @@
       },
       "login": {
         "Github": "Github",
-        "Google": "Google"
+        "Google": "Google",
+        "Provider error": "Login exception, please try again"
       }
     }
   },

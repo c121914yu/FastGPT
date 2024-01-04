@@ -28,7 +28,7 @@ import { useQuery } from '@tanstack/react-query';
 import { debounce } from 'lodash';
 import { useConfirm } from '@/web/common/hooks/useConfirm';
 import { useTranslation } from 'next-i18next';
-import MyIcon from '@/components/Icon';
+import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyInput from '@/components/MyInput';
 import dayjs from 'dayjs';
 import { useRequest } from '@/web/common/hooks/useRequest';
@@ -386,7 +386,7 @@ const CollectionCard = () => {
                       color={'white'}
                       h={['28px', '35px']}
                     >
-                      <MyIcon name={'importLight'} mr={2} w={'14px'} />
+                      <MyIcon name={'common/importLight'} mr={2} w={'14px'} />
                       <Box>{t('dataset.collections.Create And Import')}</Box>
                     </Flex>
                   </MenuButton>
@@ -581,7 +581,7 @@ const CollectionCard = () => {
                           _hover={{
                             color: 'primary.500',
                             '& .icon': {
-                              bg: 'myGray.100'
+                              bg: 'myGray.200'
                             }
                           }}
                         >
