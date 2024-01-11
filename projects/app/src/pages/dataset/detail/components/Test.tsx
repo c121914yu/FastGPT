@@ -5,7 +5,6 @@ import {
   Button,
   Flex,
   useTheme,
-  Grid,
   useDisclosure,
   Table,
   Thead,
@@ -389,7 +388,7 @@ const TestHistories = React.memo(function TestHistories({
             })}
             onClick={() => setDatasetTestItem(item)}
           >
-            <Box flex={'0 0 80px'}>
+            <Box flex={'0 0 auto'} mr={2}>
               {DatasetSearchModeMap[item.searchMode] ? (
                 <Flex alignItems={'center'} fontWeight={'500'} color={'myGray.500'}>
                   <MyIcon

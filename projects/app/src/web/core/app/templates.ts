@@ -28,7 +28,7 @@ export const appTemplates: (AppItemType & {
             key: 'welcomeText',
             type: 'hidden',
             valueType: 'string',
-            label: '开场白',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -37,7 +37,7 @@ export const appTemplates: (AppItemType & {
             key: 'variables',
             type: 'hidden',
             valueType: 'any',
-            label: '对话框变量',
+            label: '',
             value: [],
             showTargetInApp: false,
             showTargetInPlugin: false,
@@ -47,7 +47,7 @@ export const appTemplates: (AppItemType & {
             key: 'questionGuide',
             valueType: 'boolean',
             type: 'switch',
-            label: '问题引导',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -56,7 +56,7 @@ export const appTemplates: (AppItemType & {
             key: 'tts',
             type: 'hidden',
             valueType: 'any',
-            label: '语音播报',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -66,7 +66,7 @@ export const appTemplates: (AppItemType & {
       },
       {
         moduleId: 'userChatInput',
-        name: '用户问题(对话入口)',
+        name: 'core.module.template.Chat entrance',
         avatar: '/imgs/module/userChatInput.png',
         flowType: 'questionInput',
         position: {
@@ -78,7 +78,7 @@ export const appTemplates: (AppItemType & {
             key: 'userChatInput',
             type: 'systemInput',
             valueType: 'string',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -87,7 +87,7 @@ export const appTemplates: (AppItemType & {
         outputs: [
           {
             key: 'userChatInput',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             type: 'source',
             valueType: 'string',
             targets: [
@@ -122,7 +122,7 @@ export const appTemplates: (AppItemType & {
           {
             key: 'model',
             type: 'selectChatModel',
-            label: '对话模型',
+            label: 'core.module.input.label.aiModel',
             required: true,
             valueType: 'string',
             showTargetInApp: false,
@@ -216,7 +216,7 @@ export const appTemplates: (AppItemType & {
           {
             key: 'systemPrompt',
             type: 'textarea',
-            label: '系统提示词',
+            label: 'core.ai.Prompt',
             max: 300,
             valueType: 'string',
             description:
@@ -311,7 +311,7 @@ export const appTemplates: (AppItemType & {
             key: 'welcomeText',
             type: 'hidden',
             valueType: 'string',
-            label: '开场白',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             value: '你好，我是知识库助手，请不要忘记选择知识库噢~\n[你是谁]\n[如何使用]',
@@ -321,7 +321,7 @@ export const appTemplates: (AppItemType & {
             key: 'variables',
             type: 'hidden',
             valueType: 'any',
-            label: '对话框变量',
+            label: '',
             value: [],
             showTargetInApp: false,
             showTargetInPlugin: false,
@@ -331,7 +331,7 @@ export const appTemplates: (AppItemType & {
             key: 'questionGuide',
             valueType: 'boolean',
             type: 'switch',
-            label: '问题引导',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             value: false,
@@ -341,7 +341,7 @@ export const appTemplates: (AppItemType & {
             key: 'tts',
             type: 'hidden',
             valueType: 'any',
-            label: '语音播报',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             value: {
@@ -354,7 +354,7 @@ export const appTemplates: (AppItemType & {
       },
       {
         moduleId: 'userChatInput',
-        name: '用户问题(对话入口)',
+        name: 'core.module.template.Chat entrance',
         avatar: '/imgs/module/userChatInput.png',
         flowType: 'questionInput',
         position: {
@@ -366,7 +366,7 @@ export const appTemplates: (AppItemType & {
             key: 'userChatInput',
             type: 'systemInput',
             valueType: 'string',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -375,7 +375,7 @@ export const appTemplates: (AppItemType & {
         outputs: [
           {
             key: 'userChatInput',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             type: 'source',
             valueType: 'string',
             targets: [
@@ -549,7 +549,7 @@ export const appTemplates: (AppItemType & {
           {
             key: 'model',
             type: 'selectChatModel',
-            label: '对话模型',
+            label: 'core.module.input.label.aiModel',
             required: true,
             valueType: 'string',
             showTargetInApp: false,
@@ -645,7 +645,7 @@ export const appTemplates: (AppItemType & {
           {
             key: 'systemPrompt',
             type: 'textarea',
-            label: '系统提示词',
+            label: 'core.ai.Prompt',
             max: 300,
             valueType: 'string',
             description:
@@ -741,7 +741,7 @@ export const appTemplates: (AppItemType & {
             key: 'welcomeText',
             type: 'hidden',
             valueType: 'string',
-            label: '开场白',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             value: '你好，我可以为你翻译各种语言，请告诉我你需要翻译成什么语言？',
@@ -751,7 +751,7 @@ export const appTemplates: (AppItemType & {
             key: 'variables',
             type: 'hidden',
             valueType: 'any',
-            label: '对话框变量',
+            label: '',
             value: [
               {
                 id: '35c640eb-cf22-431f-bb57-3fc21643880e',
@@ -791,7 +791,7 @@ export const appTemplates: (AppItemType & {
             key: 'questionGuide',
             valueType: 'boolean',
             type: 'switch',
-            label: '问题引导',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             value: false,
@@ -801,7 +801,7 @@ export const appTemplates: (AppItemType & {
             key: 'tts',
             type: 'hidden',
             valueType: 'any',
-            label: '语音播报',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -811,7 +811,7 @@ export const appTemplates: (AppItemType & {
       },
       {
         moduleId: 'userChatInput',
-        name: '用户问题(对话入口)',
+        name: 'core.module.template.Chat entrance',
         avatar: '/imgs/module/userChatInput.png',
         flowType: 'questionInput',
         position: {
@@ -823,7 +823,7 @@ export const appTemplates: (AppItemType & {
             key: 'userChatInput',
             type: 'systemInput',
             valueType: 'string',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -832,7 +832,7 @@ export const appTemplates: (AppItemType & {
         outputs: [
           {
             key: 'userChatInput',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             type: 'source',
             valueType: 'string',
             targets: [
@@ -867,7 +867,7 @@ export const appTemplates: (AppItemType & {
           {
             key: 'model',
             type: 'selectChatModel',
-            label: '对话模型',
+            label: 'core.module.input.label.aiModel',
             required: true,
             valueType: 'string',
             showTargetInApp: false,
@@ -961,7 +961,7 @@ export const appTemplates: (AppItemType & {
           {
             key: 'systemPrompt',
             type: 'textarea',
-            label: '系统提示词',
+            label: 'core.ai.Prompt',
             max: 300,
             valueType: 'string',
             description:
@@ -1045,7 +1045,7 @@ export const appTemplates: (AppItemType & {
     modules: [
       {
         moduleId: '7z5g5h',
-        name: '用户问题(对话入口)',
+        name: 'core.module.template.Chat entrance',
         avatar: '/imgs/module/userChatInput.png',
         flowType: 'questionInput',
         position: {
@@ -1057,7 +1057,7 @@ export const appTemplates: (AppItemType & {
             key: 'userChatInput',
             type: 'systemInput',
             valueType: 'string',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -1066,7 +1066,7 @@ export const appTemplates: (AppItemType & {
         outputs: [
           {
             key: 'userChatInput',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             type: 'source',
             valueType: 'string',
             targets: [
@@ -1325,7 +1325,7 @@ export const appTemplates: (AppItemType & {
           {
             key: 'model',
             type: 'selectChatModel',
-            label: '对话模型',
+            label: 'core.module.input.label.aiModel',
             required: true,
             valueType: 'string',
             showTargetInApp: false,
@@ -1419,7 +1419,7 @@ export const appTemplates: (AppItemType & {
           {
             key: 'systemPrompt',
             type: 'textarea',
-            label: '系统提示词',
+            label: 'core.ai.Prompt',
             max: 300,
             valueType: 'string',
             description:
@@ -1651,7 +1651,7 @@ export const appTemplates: (AppItemType & {
             key: 'welcomeText',
             type: 'hidden',
             valueType: 'string',
-            label: '开场白',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             value:
@@ -1662,7 +1662,7 @@ export const appTemplates: (AppItemType & {
             key: 'variables',
             type: 'hidden',
             valueType: 'any',
-            label: '对话框变量',
+            label: '',
             value: [],
             showTargetInApp: false,
             showTargetInPlugin: false,
@@ -1672,7 +1672,7 @@ export const appTemplates: (AppItemType & {
             key: 'questionGuide',
             valueType: 'boolean',
             type: 'switch',
-            label: '问题引导',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -1681,7 +1681,7 @@ export const appTemplates: (AppItemType & {
             key: 'tts',
             type: 'hidden',
             valueType: 'any',
-            label: '语音播报',
+            label: '',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -1736,7 +1736,7 @@ export const appTemplates: (AppItemType & {
       },
       {
         moduleId: '9act94',
-        name: '用户问题(对话入口)',
+        name: 'core.module.template.Chat entrance',
         avatar: '/imgs/module/userChatInput.png',
         flowType: 'questionInput',
         position: {
@@ -1748,7 +1748,7 @@ export const appTemplates: (AppItemType & {
             key: 'userChatInput',
             type: 'systemInput',
             valueType: 'string',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             showTargetInApp: false,
             showTargetInPlugin: false,
             connected: false
@@ -1757,7 +1757,7 @@ export const appTemplates: (AppItemType & {
         outputs: [
           {
             key: 'userChatInput',
-            label: '用户问题',
+            label: 'core.module.input.label.user question',
             type: 'source',
             valueType: 'string',
             targets: [

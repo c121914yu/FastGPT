@@ -376,7 +376,7 @@ const CollectionCard = () => {
             <>
               {userInfo?.team?.role !== TeamMemberRoleEnum.visitor && (
                 <MyMenu
-                  offset={[-40, 10]}
+                  offset={[-0, 10]}
                   width={120}
                   Button={
                     <MenuButton

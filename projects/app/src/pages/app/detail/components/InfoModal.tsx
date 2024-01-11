@@ -111,12 +111,12 @@ const InfoModal = ({
         setRefresh((state) => !state);
       } catch (err: any) {
         toast({
-          title: getErrText(err, '头像选择异常'),
+          title: getErrText(err, t('common.error.Select avatar failed')),
           status: 'warning'
         });
       }
     },
-    [setValue, toast]
+    [setValue, t, toast]
   );
 
   return (

@@ -39,7 +39,6 @@
     "Logs Title": "Title",
     "Mark Count": "Mark Count",
     "My Apps": "My Apps",
-    "Open AI Advanced Settings": "Advanced Settings",
     "Output Field Settings": "Output Field Settings",
     "Paste Config": "Paste Config",
     "To Chat": "To Chat Page",
@@ -96,6 +95,7 @@
     "Loading": "Loading",
     "Max credit": "Credit",
     "Max credit tips": "What is the maximum amount of money that can be consumed by the link? If the link is exceeded, it will be banned. -1 indicates no limit.",
+    "More settings": "More settings",
     "Name": "Name",
     "Name Can": "Name Can't Be Empty",
     "Name is empty": "Name is empty",
@@ -108,6 +108,7 @@
     "Params": "Params",
     "Password inconsistency": "Password inconsistency",
     "Please Input Name": "Please Input Name",
+    "Read intro": "Read intro",
     "Rename": "Rename",
     "Rename Failed": "Rename Failed",
     "Rename Success": "Rename Success",
@@ -119,8 +120,10 @@
     "Search": "Search",
     "Select File Failed": "Select File Failed",
     "Select One Folder": "Select a folder",
+    "Select template": "Select template",
     "Set Avatar": "Set Avatar",
     "Set Name": "Make a nice name",
+    "Setting": "Setting",
     "Status": "Status",
     "Submit success": "Update Success",
     "Team": "Team",
@@ -151,6 +154,7 @@
       "Common Tip": "No data"
     },
     "error": {
+      "Select avatar failed": "Select avatar failed",
       "Update error": "Update error",
       "unKnow": "There was an accident"
     },
@@ -193,7 +197,10 @@
     }
   },
   "core": {
+    "Chat": "Chat",
+    "Chat test": "Chat test",
     "Max Token": "MaxTokens",
+    "Start chat": "Start chat",
     "ai": {
       "Model": "Model",
       "Prompt": "Prompt",
@@ -203,18 +210,27 @@
       }
     },
     "app": {
+      "Ai response": "Ai response",
       "App params config": "App Config",
       "Chat Variable": "",
+      "Max tokens": "Max tokens",
       "Next Step Guide": "Next step guide",
       "Question Guide": "",
       "Question Guide Tip": "At the end of the conversation, three leading questions will be asked.",
+      "Quote prompt": "Quote prompt",
+      "Quote templates": "Quote templates",
+      "Random": "Random",
       "Save and preview": "Save",
       "Select TTS": "Select TTS",
+      "Select app from template": "Select from the template",
+      "Select quote template": "Select quote template",
       "Simple Config Tip": "Only basic functions are included. For complex agent functions, use advanced orchestration.",
       "TTS": "Audio Speech",
       "TTS Tip": "After this function is enabled, the voice playback function can be used after each conversation. Use of this feature may incur additional charges.",
+      "Temperature": "Temperature",
       "Welcome Text": "Welcome Text",
       "create app": "Create App",
+      "deterministic": "Deterministic",
       "edit": {
         "Confirm Save App Tip": "The application may be in advanced orchestration mode, and the advanced orchestration configuration will be overwritten after saving, please confirm!",
         "Open cfr": "Open Cfr",
@@ -225,12 +241,21 @@
         "cfr background prompt": "Chat background description",
         "cfr background tip": "Describing the scope of the current conversation makes it easier for AI to complete first or vague questions, thereby enhancing the knowledge base's ability to continue conversations.\nIf the value is empty, the problem completion function is not used for the \"first problem\".\nIf the value is none, the problem completion function is not used."
       },
+      "error": {
+        "App name can not be empty": "App name can not be empty",
+        "Get app failed": "Get app failed"
+      },
       "feedback": {
         "Custom feedback": "Custom feedback",
         "close custom feedback": "Close Feedback"
       },
       "logs": {
         "Source And Time": "Source & Time"
+      },
+      "navbar": {
+        "External": "External",
+        "Flow mode": "Flow mode",
+        "Simple mode": "Simple mode"
       },
       "outLink": {
         "Can Drag": "Icon Drag",
@@ -249,6 +274,19 @@
       "setting": "App Setting",
       "simple": {
         "mode template select": "Template"
+      },
+      "template": {
+        "Common template": "Common",
+        "Common template tip": "Common template\nCan completely self-configure AI properties and knowledge base",
+        "Simple template": "Simple",
+        "Simple template tip": "Simple template\nHas built-in parameter details"
+      },
+      "tip": {
+        "Add a intro to app": "Add a intro to app",
+        "chatNodeSystemPromptTip": "Indicates the fixed guide word of the model. If this content is adjusted, the model chat direction can be guided. The content is fixed at the beginning of the context. You can use variables such as {{language}}",
+        "userGuideTip": "You can set the guide language before the session, set global variables, set next guidelines ",
+        "variableTip": "You can ask the user to fill in something as a specific variable for this round of conversation before the conversation starts. This module is located after the opening boot.\nvariables can be injected into other modules with string input in the form of {{variable key}}, such as: prompts, qualifiers, etc.",
+        "welcomeTextTip": "Before each conversation begins, send an initial content. Support standard Markdown syntax, additional tags can be used :\n[shortcut button]: The user can send the question directly after clicking "
       },
       "tts": {
         "Close": "NoUse",
@@ -293,8 +331,8 @@
       "Restart": "Restart",
       "Select File": "Select file",
       "Select Image": "Select Image",
-      "Select Mark Kb": "Select Dataset",
-      "Select Mark Kb Desc": "Select a dataset to store the expected answers",
+      "Select dataset": "Select Dataset",
+      "Select dataset Desc": "Select a dataset to store the expected answers",
       "Send Message": "Send Message",
       "Speaking": "I'm listening...",
       "Start Chat": "Start Chat",
@@ -369,6 +407,11 @@
         "Stop Speech": "Stop"
       }
     },
+    "common": {
+      "tip": {
+        "leave page": "Content has been modified, are you sure to leave the page?"
+      }
+    },
     "dataset": {
       "All Dataset": "All Dataset",
       "Avatar": "Avatar",
@@ -393,6 +436,7 @@
       "Quote Length": "Quote Length",
       "Read Dataset": "Read Dataset",
       "Search score tip": "{{scoreText}}Here are the rankings and scores:\n----\n{{detailScore}}",
+      "Select dataset": "Select dataset",
       "Set Empty Result Tip": ",Response empty text",
       "Set Website Config": "Configuring Website",
       "Similarity": "Similarity",
@@ -461,6 +505,7 @@
       },
       "error": {
         "Start Sync Failed": "Start Sync Failed",
+        "Template does not exist": "Template does not exist",
         "unAuthDataset": "No access to this knowledge base ",
         "unAuthDatasetCollection": "Not authorized to manipulate this data set ",
         "unAuthDatasetData": "Not authorized to manipulate this data ",
@@ -522,11 +567,11 @@
         "Search type": "Type",
         "Top K": "Top K",
         "mode": {
-          "embedding": "Vector search",
+          "embedding": "Vector recall",
           "embedding desc": "Use vectors for text correlation queries",
-          "fullTextRecall": "Full text search ",
+          "fullTextRecall": "Full text recall ",
           "fullTextRecall desc": "Using traditional full-text search, suitable for finding data with specific keywords and main predicates",
-          "mixedRecall": "Mixedrecall",
+          "mixedRecall": "Mixed recall",
           "mixedRecall desc": "Returns the combined results of vector and full-text searches, sorted using the RRF algorithm."
         },
         "score": {
@@ -590,7 +635,8 @@
       "Field key": "Key",
       "Input Type": "Input Type",
       "Plugin output must connect": "Custom outputs must all be connected",
-      "Variable": "Variable",
+      "Unlink tip": "[{{name}}] An unfilled or unconnected parameter exists",
+      "Variable": "Variables",
       "Variable Setting": "Variable Setting",
       "edit": {
         "Field Already Exist": "Key already exist",
@@ -606,25 +652,27 @@
         "Add Input": "Add Input",
         "Input Number": "Input: {{length}}",
         "description": {
-          "Http Request Header": "",
-          "Http Request Url": "",
-          "TFSwitch textarea": "",
-          "anyInput": "",
-          "cfr background": "The background knowledge of the current conversation makes it easy to complete the first question and the fuzzy question, and only needs to briefly describe the scope of the current conversation.",
-          "dynamic input": "",
-          "textEditor textarea": "The passed variable can be referenced by {{key}}."
+          "Http Request Header": "User-defined request header, please strictly fill in the JSON string.\n1. Make sure the last attribute has no commas\n2. Make sure key contains double quotes\nFor example: {\"Authorization\":\"Bearer xxx\"}",
+          "Http Request Url": "New HTTP request address. If two 'request addresses' appear, the module can be deleted and rejoined, and the latest module configuration will be pulled.",
+          "Quote": "Object array format, structure:\n[{q:' question ',a:' answer '}]",
+          "TFSwitch textarea": "Allows you to define a number of strings to achieve false matching, one per line, and supports regular expressions.",
+          "anyInput": "Can pass anything ",
+          "cfr background": "Describes the scope of the current conversation, making it easier for the AI to complete first or vague questions, thereby enhancing the knowledge base's ability to continue conversations. If\nis empty, the question completion function is not used in the first conversation. ",
+          "dynamic input": "Receives parameters dynamically added by the user and will be tiled in at run time ",
+          "textEditor textarea": "The passed variable can be referenced by {{key}}. Variables support only strings or numbers."
         },
         "label": {
-          "Http Request Header": "",
-          "Http Request Method": "",
-          "Http Request Url": "",
-          "TFSwitch textarea": "",
-          "aiModel": "",
-          "anyInput": "",
-          "cfr background": "Background",
+          "Http Request Header": "Request header ",
+          "Http Request Method": "Request Method",
+          "Http Request Url": "Request address ",
+          "Quote": "Quote",
+          "TFSwitch textarea": "Custom False matching rule ",
+          "aiModel": "AI model ",
+          "anyInput": "Any input ",
+          "cfr background": "Background knowledge ",
           "chat history": "chat history",
-          "switch": "Switch",
-          "textEditor textarea": "Text Edit",
+          "switch": "Trigger",
+          "textEditor textarea": "Text edit",
           "user question": "User question"
         },
         "placeholder": {
@@ -646,24 +694,46 @@
         "Add Output": "Add Output",
         "Output Number": "Output: {{length}}",
         "description": {
-          "running done": "Triggered when the module call ends"
+          "Ai response content": "Will be triggered after the stream reply is complete",
+          "New context": "Concatenate the reply content with history and return it as a new context",
+          "running done": "Triggered when the module call finish",
+          "Quote": "Always return an array, if you want the search results to be empty to perform additional operations, you need to use the above two inputs and the trigger of the target module"
         },
         "label": {
-          "cfr result": "",
-          "result false": "",
-          "result true": "",
-          "running done": "End of module call ",
-          "text": "Text output"
+          "Ai response content": "Response Content",
+          "New context": "New context",
+          "cfr result": "Response text",
+          "result false": "False",
+          "result true": "True",
+          "running done": "done",
+          "text": "Text output",
+          "Search result empty": "Search result empty",
+          "Search result not empty": "Search result not empty",
+          "Quote": "Quote"
         }
       },
       "template": {
-        "TFSwitch": "",
-        "TFSwitch intro": "",
+        "Ai chat": "LLM Chat",
+        "Ai chat intro": "Request LLM chat",
+        "TFSwitch": "TF Switch",
+        "TFSwitch intro": "Output True False based on what is passed in. By default, false is printed when the content passed in is false, undefined, null, 0, none. You can also add some custom strings to supplement the output of false.",
         "UnKnow Module": "UnKnow Module",
         "cfr": "Coreference resolution",
         "cfr intro": "Refine the current issue based on history, making it more conducive to knowledge base search, while improving continuous conversation capabilities.",
         "textEditor": "Text Editor",
-        "textEditor intro": "Output of fixed or incoming text after edit"
+        "textEditor intro": "Output of fixed or incoming text after edit",
+        "Chat entrance": "Chat entrance",
+        "Chat entrance intro": "When the user sends a content, the flow will start from this module.",
+        "User guide": "User guide",
+        "Dataset search": "Dataset search",
+        "Dataset search intro": "Invoke the Dataset search capability to find content that may be relevant to the problem",
+        "Guide module": "Guides",
+        "System input module": "System input",
+        "Tool module": "Tools",
+        "Response module": "Text output",
+        "Function module": " Function call",
+        "External module": "External call",
+        "My plugin module": "Personal plugins"
       },
       "textEditor": {
         "Text Edit": "Text Edit"
@@ -717,10 +787,10 @@
     "Files": "{{total}} Files",
     "Folder Name": "Input folder name",
     "Insert Data": "Insert",
-    "Manual collection Tip": "Manual Collections allow you to create a custom container to hold data",
     "Manual Data": "Manual Data",
     "Manual Input": "Manual Input",
     "Manual Mark": "Manual Mark",
+    "Manual collection Tip": "Manual Collections allow you to create a custom container to hold data",
     "Mark Data": "Mark Data",
     "Move Failed": "Move Failed",
     "Queue Desc": "This data refers to the current amount of training for the entire system. FastGPT uses queued training, and if you have too much data to train, you may need to wait for a while",
@@ -859,9 +929,9 @@
   },
   "navbar": {
     "Account": "Account",
-    "Apps": "Apps",
+    "Apps": "App",
     "Chat": "Chat",
-    "Datasets": "DataSets",
+    "Datasets": "DataSet",
     "Module": "Module",
     "Plugin": "Plugin",
     "Store": "Store",

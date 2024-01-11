@@ -39,7 +39,6 @@
     "Logs Title": "标题",
     "Mark Count": "标注答案数量",
     "My Apps": "我的应用",
-    "Open AI Advanced Settings": "高级配置",
     "Output Field Settings": "输出字段编辑",
     "Paste Config": "粘贴配置",
     "To Chat": "前去对话",
@@ -96,6 +95,7 @@
     "Loading": "加载中",
     "Max credit": "最大金额",
     "Max credit tips": "该链接最大可消耗多少金额，超出后链接将被禁止使用。-1 代表无限制。",
+    "More settings": "更多设置",
     "Name": "名称",
     "Name Can": "名称不能为空",
     "Name is empty": "名称不能为空",
@@ -108,6 +108,7 @@
     "Params": "参数",
     "Password inconsistency": "两次密码不一致",
     "Please Input Name": "请输入名称",
+    "Read intro": "查看说明",
     "Rename": "重命名",
     "Rename Failed": "重命名失败",
     "Rename Success": "重命名成功",
@@ -119,8 +120,10 @@
     "Search": "搜索",
     "Select File Failed": "选择文件异常",
     "Select One Folder": "选择一个目录",
+    "Select template": "选择模板",
     "Set Avatar": "点击设置头像",
     "Set Name": "取个名字",
+    "Setting": "设置",
     "Status": "状态",
     "Submit success": "提交成功",
     "Team": "团队",
@@ -151,6 +154,7 @@
       "Common Tip": "没有什么数据噢~"
     },
     "error": {
+      "Select avatar failed": "头像选择异常",
       "Update error": "更新失败",
       "unKnow": "出现了点意外~"
     },
@@ -193,7 +197,10 @@
     }
   },
   "core": {
+    "Chat": "对话",
+    "Chat test": "测试对话",
     "Max Token": "单条数据上限",
+    "Start chat": "立即对话",
     "ai": {
       "Model": "AI 模型",
       "Prompt": "提示词",
@@ -203,18 +210,27 @@
       }
     },
     "app": {
+      "Ai response": "返回AI内容",
       "App params config": "应用配置",
       "Chat Variable": "对话框变量",
+      "Max tokens": "回复上限",
       "Next Step Guide": "下一步指引",
       "Question Guide": "问题引导",
       "Question Guide Tip": "对话结束后，会为生成 3 个引导性问题。",
+      "Quote prompt": "引用模板提示词",
+      "Quote templates": "引用内容模板",
+      "Random": "发散",
       "Save and preview": "保存并预览",
       "Select TTS": "选择语音播放模式",
+      "Select app from template": "从模板中选择",
+      "Select quote template": "选择引用提示模板",
       "Simple Config Tip": "仅包含基础功能，复杂 agent 功能请使用高级编排。",
       "TTS": "语音播报",
       "TTS Tip": "开启后，每次对话后可使用语音播放功能。使用该功能可能产生额外费用。",
+      "Temperature": "温度",
       "Welcome Text": "对话开场白",
       "create app": "创建属于你的 AI 应用",
+      "deterministic": "严谨",
       "edit": {
         "Confirm Save App Tip": "该应用可能为高级编排模式，保存后将会覆盖高级编排配置，请确认！",
         "Open cfr": "开启自动补全",
@@ -225,12 +241,21 @@
         "cfr background prompt": "对话背景描述",
         "cfr background tip": "描述当前对话的范围，便于AI补全首次问题或模糊的问题，从而增强知识库连续对话的能力。\n值为空时，表示【首个问题】不使用问题补全功能。\n值为 none 时，表示不使用问题补全功能。"
       },
+      "error": {
+        "App name can not be empty": "应用名不能为空",
+        "Get app failed": "获取应用异常"
+      },
       "feedback": {
         "Custom feedback": "自定义反馈",
         "close custom feedback": "关闭反馈"
       },
       "logs": {
         "Source And Time": "来源 & 时间"
+      },
+      "navbar": {
+        "External": "外部使用",
+        "Flow mode": "高级编排",
+        "Simple mode": "简易配置"
       },
       "outLink": {
         "Can Drag": "图标可拖拽",
@@ -249,6 +274,19 @@
       "setting": "应用信息设置",
       "simple": {
         "mode template select": "简易模板"
+      },
+      "templates": {
+        "Common template": "通用模板",
+        "Common template tip": "通用模板\n可完全自行配置AI属性和知识库",
+        "Simple template": "简易模板",
+        "Simple template tip": "极简模板\n已内置参数细节"
+      },
+      "tip": {
+        "Add a intro to app": "快来给应用一个介绍~",
+        "chatNodeSystemPromptTip": "模型固定的引导词，通过调整该内容，可以引导模型聊天方向。该内容会被固定在上下文的开头。可使用变量，例如 {{language}}",
+        "userGuideTip": "可以在对话前设置引导语，设置全局变量，设置下一步指引",
+        "variableTip": "可以在对话开始前，要求用户填写一些内容作为本轮对话的特定变量。该模块位于开场引导之后。\n变量可以通过 {{变量key}} 的形式注入到其他模块 string 类型的输入中，例如：提示词、限定词等",
+        "welcomeTextTip": "每次对话开始前，发送一个初始内容。支持标准 Markdown 语法，可使用的额外标记:\n[快捷按键]: 用户点击后可以直接发送该问题"
       },
       "tts": {
         "Close": "不使用",
@@ -293,8 +331,8 @@
       "Restart": "重开对话",
       "Select File": "选择文件",
       "Select Image": "选择图片",
-      "Select Mark Kb": "选择知识库",
-      "Select Mark Kb Desc": "选择一个知识库存储预期答案",
+      "Select dataset": "选择知识库",
+      "Select dataset Desc": "选择一个知识库存储预期答案",
       "Send Message": "发送",
       "Speaking": "我在听，请说...",
       "Start Chat": "开始对话",
@@ -369,6 +407,11 @@
         "Stop Speech": "停止"
       }
     },
+    "common": {
+      "tip": {
+        "leave page": "内容已修改，确认离开页面吗？"
+      }
+    },
     "dataset": {
       "All Dataset": "全部知识库",
       "Avatar": "知识库头像",
@@ -393,6 +436,7 @@
       "Quote Length": "引用内容长度",
       "Read Dataset": "查看知识库详情",
       "Search score tip": "{{scoreText}}下面是详细排名和得分情况:\n----\n{{detailScore}}",
+      "Select dataset": "选择知识库",
       "Set Empty Result Tip": ",未搜索到内容时回复指定内容",
       "Set Website Config": "开始配置网站信息",
       "Similarity": "相关度",
@@ -461,6 +505,7 @@
       },
       "error": {
         "Start Sync Failed": "开始同步失败",
+        "Template does not exist": "模板不存在",
         "unAuthDataset": "无权操作该知识库",
         "unAuthDatasetCollection": "无权操作该数据集",
         "unAuthDatasetData": "无权操作该数据",
@@ -590,6 +635,7 @@
       "Field key": "字段 Key",
       "Input Type": "输入类型",
       "Plugin output must connect": "自定义输出必须全部连接",
+      "Unlink tip": "【{{name}}】存在未填或未连接参数",
       "Variable": "参数变量",
       "Variable Setting": "变量设置",
       "edit": {
@@ -608,16 +654,19 @@
         "description": {
           "Http Request Header": "自定义请求头，请严格填入JSON字符串。\n1. 确保最后一个属性没有逗号\n2. 确保 key 包含双引号\n例如: {\"Authorization\":\"Bearer xxx\"}",
           "Http Request Url": "新的HTTP请求地址。如果出现两个“请求地址”，可以删除该模块重新加入，会拉取最新的模块配置。",
+          "Quote": "对象数组格式，结构：\n [{q:'问题',a:'回答'}]",
           "TFSwitch textarea": "允许定义一些字符串来实现 false 匹配，每行一个，支持正则表达式。",
           "anyInput": "可传入任意内容",
           "cfr background": "描述当前对话的范围，便于AI补全首次问题或模糊的问题，从而增强知识库连续对话的能力。\n为空时，表示【首次对话】不使用问题补全功能。",
           "dynamic input": "接收用户动态添加的参数，会在运行时将这些参数平铺传入",
-          "textEditor textarea": "可以通过 {{key}} 的方式引用传入的变量。变量仅支持字符串或数字。"
+          "textEditor textarea": "可以通过 {{key}} 的方式引用传入的变量。变量仅支持字符串或数字。",
+          "Response content": "可以使用 \\n 来实现连续换行。\n可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容。\n如传入非字符串类型数据将会自动转成字符串"
         },
         "label": {
           "Http Request Header": "请求头",
           "Http Request Method": "请求方式",
           "Http Request Url": "请求地址",
+          "Quote": "引用内容",
           "TFSwitch textarea": "自定义 False 匹配规则",
           "aiModel": "AI 模型",
           "anyInput": "任意内容输入",
@@ -625,7 +674,9 @@
           "chat history": "聊天记录",
           "switch": "触发器",
           "textEditor textarea": "文本编辑",
-          "user question": "用户问题"
+          "user question": "用户问题",
+          "Select dataset": "选择知识库",
+          "Response content": "回复的内容"
         },
         "placeholder": {
           "cfr background": "关于 python 的介绍和使用等问题。\n当前对话与游戏《GTA5》有关。"
@@ -646,24 +697,47 @@
         "Add Output": "添加出参",
         "Output Number": "出参: {{length}}",
         "description": {
-          "running done": "模块调用结束时触发"
+          "Ai response content": "将在 stream 回复完毕后触发",
+          "New context": "将本次回复内容拼接上历史记录，作为新的上下文返回",
+          "running done": "模块调用结束时触发",
+          "Quote": "始终返回数组，如果希望搜索结果为空时执行额外操作，需要用到上面的两个输入以及目标模块的触发器"
         },
         "label": {
+          "Ai response content": "AI回复内容",
+          "New context": "新的上下文",
           "cfr result": "补全结果",
           "result false": "False",
           "result true": "True",
           "running done": "模块调用结束",
-          "text": "文本输出"
+          "text": "文本输出",
+          "Search result empty": "搜索结果为空",
+          "Search result not empty": "搜索结果为空",
+          "Quote": "引用内容"
         }
       },
       "template": {
+        "Ai chat": "AI 对话",
+        "Ai chat intro": "AI 大模型对话",
         "TFSwitch": "判断器",
         "TFSwitch intro": "根据传入的内容进行 True False 输出。默认情况下，当传入的内容为 false, undefined, null, 0, none 时，会输出 false。你也可以增加一些自定义的字符串来补充输出 false 的内容。",
         "UnKnow Module": "未知模块",
         "cfr": "问题补全",
         "cfr intro": "根据历史记录，完善当前问题，使其更利于知识库搜索，同时提高连续对话能力。",
         "textEditor": "文本加工",
-        "textEditor intro": "可对固定或传入的文本进行加工后输出"
+        "textEditor intro": "可对固定或传入的文本进行加工后输出",
+        "Chat entrance": "对话入口",
+        "Chat entrance intro": "当用户发送一个内容后，流程将会从这个模块开始执行。",
+        "Dataset search": "知识库搜索",
+        "Dataset search intro": "调用知识库搜索能力，查找有可能与问题相关的内容",
+        "Assigned reply": "指定回复",
+        "Assigned reply intro": "该模块可以直接回复一段指定的内容。常用于引导、提示",
+        "Guide module": "引导模块",
+        "System input module": "系统输入",
+        "Tool module": "工具",
+        "Response module": "文本输出",
+        "Function module": "功能调用",
+        "External module": "外部调用",
+        "My plugin module": "个人插件"
       },
       "textEditor": {
         "Text Edit": "文本加工"
@@ -717,10 +791,10 @@
     "Files": "文件: {{total}}个",
     "Folder Name": "输入文件夹名称",
     "Insert Data": "插入",
-    "Manual collection Tip": "手动数据集允许创建一个空的容器装入数据",
     "Manual Data": "手动录入",
     "Manual Input": "手动录入",
     "Manual Mark": "手动标注",
+    "Manual collection Tip": "手动数据集允许创建一个空的容器装入数据",
     "Mark Data": "标注数据",
     "Move Failed": "移动出现错误~",
     "Queue Desc": "该数据是指整个系统当前待训练的数量。{{title}} 采用排队训练的方式，如果待训练的数据过多，可能需要等待一段时间",
