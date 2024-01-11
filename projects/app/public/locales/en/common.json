@@ -308,11 +308,11 @@
         "Simple template tip": "Simple template\nHas built-in parameter details",
         "Simple chat": "Simple chat",
         "Simple chat desc": "An extremely simple AI conversation application ",
-        "Dataset and guide": "Knowledge base + dialogue guide",
+        "Dataset and guide": "Dataset + dialogue guide",
         "Dataset and guide desc": "Conduct a knowledge base search each time a question is asked, inject the search results into the LLM model for reference answers ",
         "Guide and variables": "Dialogue guide + Variables ",
         "Guide and variables desc": "You can send a prompt at the beginning of the conversation, or ask the user to fill in something as a variable for the conversation ",
-        "Classify and dataset": "Problem classification + Knowledge base ",
+        "Classify and dataset": "Classification + Dataset",
         "Classify and dataset desc": "Classify the user's problems first, then perform different actions according to the different types of problems."
       },
       "tip": {

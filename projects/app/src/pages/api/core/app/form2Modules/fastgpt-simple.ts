@@ -296,10 +296,6 @@ function datasetTemplate({ formData, maxToken }: Props): ModuleItemType[] {
             {
               moduleId: 'vuc92c',
               key: 'userChatInput'
-            },
-            {
-              moduleId: 'chatModule',
-              key: 'userChatInput'
             }
           ]
         }
@@ -307,7 +303,7 @@ function datasetTemplate({ formData, maxToken }: Props): ModuleItemType[] {
     },
     {
       moduleId: 'datasetSearch',
-      name: '知识库搜索',
+      name: 'core.module.template.Dataset search',
       avatar: '/imgs/module/db.png',
       flowType: 'datasetSearchNode',
       showStatus: true,
@@ -447,6 +443,18 @@ function datasetTemplate({ formData, maxToken }: Props): ModuleItemType[] {
           valueType: 'boolean',
           type: 'source',
           targets: []
+        },
+        {
+          key: 'userChatInput',
+          label: 'core.module.input.label.user question',
+          type: 'hidden',
+          valueType: 'string',
+          targets: [
+            {
+              moduleId: 'chatModule',
+              key: 'userChatInput'
+            }
+          ]
         }
       ]
     },

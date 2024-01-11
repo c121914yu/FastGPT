@@ -393,7 +393,7 @@ export const appTemplates: (AppItemType & {
       },
       {
         moduleId: 'datasetSearch',
-        name: '知识库搜索',
+        name: 'core.module.template.Dataset search',
         avatar: '/imgs/module/db.png',
         flowType: 'datasetSearchNode',
         showStatus: true,
@@ -1494,7 +1494,7 @@ export const appTemplates: (AppItemType & {
       },
       {
         moduleId: 'fljhzy',
-        name: '知识库搜索',
+        name: 'core.module.template.Dataset search',
         avatar: '/imgs/module/db.png',
         flowType: 'datasetSearchNode',
         showStatus: true,
