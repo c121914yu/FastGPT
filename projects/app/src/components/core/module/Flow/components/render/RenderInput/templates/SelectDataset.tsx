@@ -95,14 +95,14 @@ const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) 
         >
           {t('common.Choose')}
         </Button>
-        <Button
+        {/* <Button
           h={'36px'}
           variant={'whitePrimary'}
           leftIcon={<MyIcon name={'common/settingLight'} w={'14px'} />}
           onClick={onOpenDatasetParams}
         >
           {t('core.dataset.search.Params Setting')}
-        </Button>
+        </Button> */}
         {selectedDatasets.map((item) => (
           <Flex
             key={item._id}
@@ -144,7 +144,7 @@ const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) 
           onClose={onCloseDatasetSelect}
         />
       )}
-      {isOpenDatasetPrams && (
+      {/* {isOpenDatasetPrams && (
         <DatasetParamsModal
           {...data}
           maxTokens={tokenLimit}
@@ -166,7 +166,7 @@ const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) 
             }
           }}
         />
-      )}
+      )} */}
     </>
   );
 };

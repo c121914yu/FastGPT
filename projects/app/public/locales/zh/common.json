@@ -302,16 +302,18 @@
         "mode template select": "简易模板"
       },
       "template": {
-        "Common template": "",
-        "Common template tip": "",
-        "Simple template": "",
-        "Simple template tip": ""
-      },
-      "templates": {
         "Common template": "通用模板",
         "Common template tip": "通用模板\n可完全自行配置AI属性和知识库",
         "Simple template": "简易模板",
-        "Simple template tip": "极简模板\n已内置参数细节"
+        "Simple template tip": "极简模板\n已内置参数细节",
+        "Simple chat": "简单的对话",
+        "Simple chat desc": "一个极其简单的 AI 对话应用",
+        "Dataset and guide": "知识库 + 对话引导",
+        "Dataset and guide desc": "每次提问时进行一次知识库搜索，将搜索结果注入 LLM 模型进行参考回答",
+        "Guide and variables": "对话引导 + 变量",
+        "Guide and variables desc": "可以在对话开始发送一段提示，或者让用户填写一些内容，作为本次对话的变量",
+        "Classify and dataset": "问题分类 + 知识库",
+        "Classify and dataset desc": "先对用户的问题进行分类，再根据不同类型问题，执行不同的操作"
       },
       "tip": {
         "Add a intro to app": "快来给应用一个介绍~",
@@ -766,7 +768,7 @@
         "TFSwitch intro": "根据传入的内容进行 True False 输出。默认情况下，当传入的内容为 false, undefined, null, 0, none 时，会输出 false。你也可以增加一些自定义的字符串来补充输出 false 的内容。",
         "Tool module": "工具",
         "UnKnow Module": "未知模块",
-        "User guide": "",
+        "User guide": "用户引导",
         "cfr": "问题补全",
         "cfr intro": "根据历史记录，完善当前问题，使其更利于知识库搜索，同时提高连续对话能力。",
         "textEditor": "文本加工",

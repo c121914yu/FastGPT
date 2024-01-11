@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Button,
-  ModalHeader,
   ModalFooter,
   ModalBody,
   Input,
@@ -168,11 +167,11 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                   <Flex alignItems={'center'}>
                     <Avatar src={item.avatar} borderRadius={'md'} w={'20px'} />
                     <Box ml={3} fontWeight={'bold'}>
-                      {item.name}
+                      {t(item.name)}
                     </Box>
                   </Flex>
                   <Box fontSize={'sm'} mt={4}>
-                    {item.intro}
+                    {t(item.intro)}
                   </Box>
                 </Card>
               ))}

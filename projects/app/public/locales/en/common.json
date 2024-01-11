@@ -305,13 +305,15 @@
         "Common template": "Common",
         "Common template tip": "Common template\nCan completely self-configure AI properties and knowledge base",
         "Simple template": "Simple",
-        "Simple template tip": "Simple template\nHas built-in parameter details"
-      },
-      "templates": {
-        "Common template": "",
-        "Common template tip": "",
-        "Simple template": "",
-        "Simple template tip": ""
+        "Simple template tip": "Simple template\nHas built-in parameter details",
+        "Simple chat": "Simple chat",
+        "Simple chat desc": "An extremely simple AI conversation application ",
+        "Dataset and guide": "Knowledge base + dialogue guide",
+        "Dataset and guide desc": "Conduct a knowledge base search each time a question is asked, inject the search results into the LLM model for reference answers ",
+        "Guide and variables": "Dialogue guide + Variables ",
+        "Guide and variables desc": "You can send a prompt at the beginning of the conversation, or ask the user to fill in something as a variable for the conversation ",
+        "Classify and dataset": "Problem classification + Knowledge base ",
+        "Classify and dataset desc": "Classify the user's problems first, then perform different actions according to the different types of problems."
       },
       "tip": {
         "Add a intro to app": "Add a intro to app",
@@ -608,13 +610,11 @@
         },
         "score": {
           "embedding": "Embedding",
-          "embedding desc": "",
-          "fullText": "Full text",
-          "fullText desc": "",
-          "reRank": "ReRank",
-          "reRank desc": "",
-          "rrf": "RRF Merge",
-          "rrf desc": ""
+          "embedding desc": "Text correlation query using vectors",
+          "fullTextRecall": "Full text recall",
+          "fullTextRecall desc": "Using traditional full-text search, suitable for finding specific data with keywords and main predicates ",
+          "mixedRecall": "Mixed recall",
+          "mixedRecall desc": "Returns the combined results of vector and full-text searches, sorted using the RRF algorithm."
         },
         "search mode": "Search Mode"
       },
@@ -687,7 +687,7 @@
           "Http Request Header": "User-defined request header, please strictly fill in the JSON string.\n1. Make sure the last attribute has no commas\n2. Make sure key contains double quotes\nFor example: {\"Authorization\":\"Bearer xxx\"}",
           "Http Request Url": "New HTTP request address. If two 'request addresses' appear, the module can be deleted and rejoined, and the latest module configuration will be pulled.",
           "Quote": "Object array format, structure:\n[{q:' question ',a:' answer '}]",
-          "Response content": "",
+          "Response content": "You can use \\n to achieve continuous line wrapping.\nReplies can be achieved by external module input, which overwrites the content currently filled in.\nIf passed non-string type data will be automatically converted to a string",
           "TFSwitch textarea": "Allows you to define a number of strings to achieve false matching, one per line, and supports regular expressions.",
           "anyInput": "Can pass anything ",
           "cfr background": "Describes the scope of the current conversation, making it easier for the AI to complete first or vague questions, thereby enhancing the knowledge base's ability to continue conversations. If\nis empty, the question completion function is not used in the first conversation. ",
@@ -699,8 +699,8 @@
           "Http Request Method": "Request Method",
           "Http Request Url": "Request address ",
           "Quote": "Quote",
-          "Response content": "",
-          "Select dataset": "",
+          "Response content": "Response content",
+          "Select dataset": "Select dataset",
           "TFSwitch textarea": "Custom False matching rule ",
           "aiModel": "AI model ",
           "anyInput": "Any input ",
@@ -750,8 +750,8 @@
       "template": {
         "Ai chat": "LLM Chat",
         "Ai chat intro": "Request LLM chat",
-        "Assigned reply": "",
-        "Assigned reply intro": "",
+        "Assigned reply": "Assigned reply",
+        "Assigned reply intro": "The module can respond directly to a specified piece of content. Often used to guide and prompt",
         "Chat entrance": "Chat entrance",
         "Chat entrance intro": "When the user sends a content, the flow will start from this module.",
         "Dataset search": "Dataset search",
