@@ -36,6 +36,7 @@ import VariableEdit from '@/components/core/module/Flow/components/modules/Varia
 import PromptTextarea from '@/components/common/Textarea/PromptTextarea/index';
 import { DatasetSearchModeMap } from '@fastgpt/global/core/dataset/constants';
 import SelectAiModel from '@/components/Select/SelectAiModel';
+import PromptEditor from '@/components/common/Editor/PromptEditor';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/module/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/module/DatasetParamsModal'));
@@ -296,16 +297,7 @@ const EditForm = ({
                       <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
                     </MyTooltip>
                   </Box>
-                  <PromptTextarea
-                    flex={1}
-                    bg={'myWhite.400'}
-                    rows={5}
-                    placeholder={t(chatNodeSystemPromptTip)}
-                    defaultValue={getValues('aiSettings.systemPrompt')}
-                    onBlur={(e) => {
-                      setValue('aiSettings.systemPrompt', e.target.value || '');
-                    }}
-                  />
+                  <PromptEditor variables={getValues('userGuide.variables')} />
                 </Flex>
               )}
             </Box>
