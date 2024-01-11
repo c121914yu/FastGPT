@@ -11,7 +11,7 @@ import * as ReactDOM from 'react-dom';
 import styles from '../../index.module.scss';
 import { VariableInputEnum } from '@fastgpt/global/core/module/constants';
 import { useTranslation } from 'next-i18next';
-import MyIcon from '@fastgpt/web/components/common/Icon';
+import MyIcon from '../../../../Icon';
 
 export default function VariablePickerPlugin({ variables }: { variables: VariableItemType[] }) {
   const [editor] = useLexicalComposerContext();

@@ -175,6 +175,15 @@ importers:
       '@fingerprintjs/fingerprintjs':
         specifier: ^4.2.1
         version: registry.npmmirror.com/@fingerprintjs/fingerprintjs@4.2.1
+      '@lexical/react':
+        specifier: 0.12.6
+        version: registry.npmmirror.com/@lexical/react@0.12.6(lexical@0.12.6)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.10)
+      '@lexical/text':
+        specifier: 0.12.6
+        version: registry.npmmirror.com/@lexical/text@0.12.6(lexical@0.12.6)
+      '@lexical/utils':
+        specifier: 0.12.6
+        version: registry.npmmirror.com/@lexical/utils@0.12.6(lexical@0.12.6)
       '@monaco-editor/react':
         specifier: ^4.6.0
         version: registry.npmmirror.com/@monaco-editor/react@4.6.0(monaco-editor@0.45.0)(react-dom@18.2.0)(react@18.2.0)
@@ -184,6 +193,9 @@ importers:
       joplin-turndown-plugin-gfm:
         specifier: ^1.0.12
         version: registry.npmmirror.com/joplin-turndown-plugin-gfm@1.0.12
+      lexical:
+        specifier: 0.12.6
+        version: registry.npmmirror.com/lexical@0.12.6
       mammoth:
         specifier: ^1.6.0
         version: registry.npmmirror.com/mammoth@1.6.0
@@ -254,15 +266,6 @@ importers:
       '@fastgpt/web':
         specifier: workspace:*
         version: link:../../packages/web
-      '@lexical/react':
-        specifier: ^0.12.6
-        version: registry.npmmirror.com/@lexical/react@0.12.6(lexical@0.12.6)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.10)
-      '@lexical/text':
-        specifier: ^0.12.6
-        version: registry.npmmirror.com/@lexical/text@0.12.6(lexical@0.12.6)
-      '@lexical/utils':
-        specifier: ^0.12.6
-        version: registry.npmmirror.com/@lexical/utils@0.12.6(lexical@0.12.6)
       '@node-rs/jieba':
         specifier: ^1.7.2
         version: registry.npmmirror.com/@node-rs/jieba@1.7.2
@@ -308,9 +311,6 @@ importers:
       jsonwebtoken:
         specifier: ^9.0.2
         version: registry.npmmirror.com/jsonwebtoken@9.0.2
-      lexical:
-        specifier: ^0.12.6
-        version: registry.npmmirror.com/lexical@0.12.6
       lodash:
         specifier: ^4.17.21
         version: registry.npmmirror.com/lodash@4.17.21
