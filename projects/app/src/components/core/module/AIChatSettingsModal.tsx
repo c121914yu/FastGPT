@@ -189,6 +189,7 @@ const AIChatSettingsModal = ({
             </Flex>
 
             <PromptTextarea
+              title={t('core.app.Quote templates')}
               bg={'myWhite.400'}
               rows={8}
               placeholder={t('template.Quote Content Tip', {
@@ -214,6 +215,7 @@ const AIChatSettingsModal = ({
               </MyTooltip>
             </Flex>
             <PromptTextarea
+              title={t('core.app.Quote prompt')}
               bg={'myWhite.400'}
               rows={11}
               placeholder={t('template.Quote Prompt Tip', {

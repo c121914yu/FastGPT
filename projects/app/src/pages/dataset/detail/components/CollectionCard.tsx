@@ -545,11 +545,6 @@ const CollectionCard = () => {
                     } catch (error) {}
                     setDragTargetId(undefined);
                   }}
-                  title={
-                    collection.type === DatasetCollectionTypeEnum.folder
-                      ? t('dataset.collections.Click to view folder')
-                      : t('dataset.collections.Click to view file')
-                  }
                   onClick={() => {
                     if (collection.type === DatasetCollectionTypeEnum.folder) {
                       router.replace({

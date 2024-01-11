@@ -24,7 +24,6 @@ import { useTranslation } from 'next-i18next';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import { useAppStore } from '@/web/core/app/store/useAppStore';
-
 import { postForm2Modules } from '@/web/core/app/utils';
 
 import dynamic from 'next/dynamic';
