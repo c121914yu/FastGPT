@@ -98,22 +98,23 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
         alignItems={'center'}
         userSelect={'none'}
       >
-        <MyTooltip label={t('common.Back')} offset={[10, 10]}>
-          <IconButton
-            size={'smSquare'}
-            icon={<MyIcon name={'common/backLight'} w={'14px'} />}
-            borderColor={'myGray.300'}
-            variant={'whiteBase'}
-            aria-label={''}
-            onClick={openConfirmOut(async () => {
-              const modules = await flow2ModulesAndCheck();
-              if (modules) {
-                await onclickSave(modules);
-              }
-              onClose();
-            }, onClose)}
-          />
-        </MyTooltip>
+        <IconButton
+          size={'smSquare'}
+          icon={<MyIcon name={'common/backFill'} w={'14px'} />}
+          borderRadius={'50%'}
+          w={'26px'}
+          h={'26px'}
+          borderColor={'myGray.300'}
+          variant={'whiteBase'}
+          aria-label={''}
+          onClick={openConfirmOut(async () => {
+            const modules = await flow2ModulesAndCheck();
+            if (modules) {
+              await onclickSave(modules);
+            }
+            onClose();
+          }, onClose)}
+        />
         <Box ml={[3, 6]} fontSize={['md', '2xl']} flex={1}>
           {app.name}
         </Box>
@@ -173,7 +174,7 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
 
         <MyTooltip label={t('common.Save')}>
           <IconButton
-            icon={<MyIcon name={'save'} w={['14px', '16px']} />}
+            icon={<MyIcon name={'common/saveFill'} w={['14px', '16px']} />}
             size={'smSquare'}
             isLoading={isLoading}
             aria-label={'save'}

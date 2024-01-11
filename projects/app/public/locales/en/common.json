@@ -76,6 +76,7 @@
     "Course": "",
     "Create Failed": "Create Failed",
     "Create Success": "Create Success",
+    "Create Time": "Create time",
     "Custom Title": "Custom Title",
     "Delete": "Delete",
     "Delete Failed": "Delete Failed",
@@ -91,6 +92,7 @@
     "Input": "Input",
     "Intro": "Intro",
     "Last Step": "Last",
+    "Last use time": "Last use time",
     "Load Failed": "Load Failed",
     "Loading": "Loading",
     "Max credit": "Credit",
@@ -108,6 +110,8 @@
     "Params": "Params",
     "Password inconsistency": "Password inconsistency",
     "Please Input Name": "Please Input Name",
+    "Price used": "Usage",
+    "Read document": "Read document",
     "Read intro": "Read intro",
     "Rename": "Rename",
     "Rename Failed": "Rename Failed",
@@ -125,12 +129,15 @@
     "Set Name": "Make a nice name",
     "Setting": "Setting",
     "Status": "Status",
+    "Submit failed": "Submit failed",
     "Submit success": "Update Success",
     "Team": "Team",
     "Test": "Test",
     "Time": "Time",
+    "Un used": "Unused",
     "UnKnow": "UnKnow",
     "UnKnow Source": "UnKnow Source",
+    "Unlimited": "Unlimited",
     "Update Failed": "Update Failed",
     "Update Success": "Update Success",
     "Update Successful": "Update Successful",
@@ -211,9 +218,15 @@
     },
     "app": {
       "Ai response": "Ai response",
+      "Api request": "Api request",
+      "Api request desc": "Access to the existing system through API, or enterprise micro, flying book, etc",
+      "App intro": "App intro",
       "App params config": "App Config",
       "Chat Variable": "",
+      "External using": "External use",
+      "Make a brief introduction of your app": "Make a brief introduction of your app",
       "Max tokens": "Max tokens",
+      "Name and avatar": "Avatar & Name",
       "Next Step Guide": "Next step guide",
       "Question Guide": "",
       "Question Guide Tip": "At the end of the conversation, three leading questions will be asked.",
@@ -224,6 +237,10 @@
       "Select TTS": "Select TTS",
       "Select app from template": "Select from the template",
       "Select quote template": "Select quote template",
+      "Set a name for your app": "App name",
+      "Share link": "Share",
+      "Share link desc": "Share links with other users and use them directly without logging in",
+      "Share link desc detail": "You can share the model directly with other users to have a conversation, and the other user can have a conversation directly without logging in. Note that this function will consume the balance of your account, please keep the link!",
       "Simple Config Tip": "Only basic functions are included. For complex agent functions, use advanced orchestration.",
       "TTS": "Audio Speech",
       "TTS Tip": "After this function is enabled, the voice playback function can be used after each conversation. Use of this feature may incur additional charges.",
@@ -272,6 +289,15 @@
         "Web Link": "Web Link"
       },
       "setting": "App Setting",
+      "share": {
+        "Amount limit tip": "A maximum of 10 groups can be created",
+        "Create link": "Create share",
+        "Create link tip": "The creation is successful. The share address has been copied and can be shared directly",
+        "Ip limit title": "IP limiting (person/minute)",
+        "Is response quote": "Response quote",
+        "Not share link": "No share link created",
+        "Role check": "Custom role check"
+      },
       "simple": {
         "mode template select": "Template"
       },
@@ -280,6 +306,12 @@
         "Common template tip": "Common template\nCan completely self-configure AI properties and knowledge base",
         "Simple template": "Simple",
         "Simple template tip": "Simple template\nHas built-in parameter details"
+      },
+      "templates": {
+        "Common template": "",
+        "Common template tip": "",
+        "Simple template": "",
+        "Simple template tip": ""
       },
       "tip": {
         "Add a intro to app": "Add a intro to app",
@@ -655,6 +687,7 @@
           "Http Request Header": "User-defined request header, please strictly fill in the JSON string.\n1. Make sure the last attribute has no commas\n2. Make sure key contains double quotes\nFor example: {\"Authorization\":\"Bearer xxx\"}",
           "Http Request Url": "New HTTP request address. If two 'request addresses' appear, the module can be deleted and rejoined, and the latest module configuration will be pulled.",
           "Quote": "Object array format, structure:\n[{q:' question ',a:' answer '}]",
+          "Response content": "",
           "TFSwitch textarea": "Allows you to define a number of strings to achieve false matching, one per line, and supports regular expressions.",
           "anyInput": "Can pass anything ",
           "cfr background": "Describes the scope of the current conversation, making it easier for the AI to complete first or vague questions, thereby enhancing the knowledge base's ability to continue conversations. If\nis empty, the question completion function is not used in the first conversation. ",
@@ -666,6 +699,8 @@
           "Http Request Method": "Request Method",
           "Http Request Url": "Request address ",
           "Quote": "Quote",
+          "Response content": "",
+          "Select dataset": "",
           "TFSwitch textarea": "Custom False matching rule ",
           "aiModel": "AI model ",
           "anyInput": "Any input ",
@@ -696,44 +731,46 @@
         "description": {
           "Ai response content": "Will be triggered after the stream reply is complete",
           "New context": "Concatenate the reply content with history and return it as a new context",
-          "running done": "Triggered when the module call finish",
-          "Quote": "Always return an array, if you want the search results to be empty to perform additional operations, you need to use the above two inputs and the trigger of the target module"
+          "Quote": "Always return an array, if you want the search results to be empty to perform additional operations, you need to use the above two inputs and the trigger of the target module",
+          "running done": "Triggered when the module call finish"
         },
         "label": {
           "Ai response content": "Response Content",
           "New context": "New context",
+          "Quote": "Quote",
+          "Search result empty": "Search result empty",
+          "Search result not empty": "Search result not empty",
           "cfr result": "Response text",
           "result false": "False",
           "result true": "True",
           "running done": "done",
-          "text": "Text output",
-          "Search result empty": "Search result empty",
-          "Search result not empty": "Search result not empty",
-          "Quote": "Quote"
+          "text": "Text output"
         }
       },
       "template": {
         "Ai chat": "LLM Chat",
         "Ai chat intro": "Request LLM chat",
+        "Assigned reply": "",
+        "Assigned reply intro": "",
+        "Chat entrance": "Chat entrance",
+        "Chat entrance intro": "When the user sends a content, the flow will start from this module.",
+        "Dataset search": "Dataset search",
+        "Dataset search intro": "Invoke the Dataset search capability to find content that may be relevant to the problem",
+        "External module": "External call",
+        "Function module": " Function call",
+        "Guide module": "Guides",
+        "My plugin module": "Personal plugins",
+        "Response module": "Text output",
+        "System input module": "System input",
         "TFSwitch": "TF Switch",
         "TFSwitch intro": "Output True False based on what is passed in. By default, false is printed when the content passed in is false, undefined, null, 0, none. You can also add some custom strings to supplement the output of false.",
+        "Tool module": "Tools",
         "UnKnow Module": "UnKnow Module",
+        "User guide": "User guide",
         "cfr": "Coreference resolution",
         "cfr intro": "Refine the current issue based on history, making it more conducive to knowledge base search, while improving continuous conversation capabilities.",
         "textEditor": "Text Editor",
-        "textEditor intro": "Output of fixed or incoming text after edit",
-        "Chat entrance": "Chat entrance",
-        "Chat entrance intro": "When the user sends a content, the flow will start from this module.",
-        "User guide": "User guide",
-        "Dataset search": "Dataset search",
-        "Dataset search intro": "Invoke the Dataset search capability to find content that may be relevant to the problem",
-        "Guide module": "Guides",
-        "System input module": "System input",
-        "Tool module": "Tools",
-        "Response module": "Text output",
-        "Function module": " Function call",
-        "External module": "External call",
-        "My plugin module": "Personal plugins"
+        "textEditor intro": "Output of fixed or incoming text after edit"
       },
       "textEditor": {
         "Text Edit": "Text Edit"
@@ -984,6 +1021,15 @@
     "Update Your Plugin": "Update Plugin"
   },
   "support": {
+    "openapi": {
+      "Api baseurl": "Baseurl",
+      "Api manager": "API key management",
+      "Copy success": "The API address has been copied",
+      "Max usage": "Max usage",
+      "New api key": "New API key",
+      "New api key tip": "Please keep your secret key, the secret key will not be displayed again~",
+      "Usage": "Usage"
+    },
     "outlink": {
       "share": {
         "Response Quote": "Show Quote",

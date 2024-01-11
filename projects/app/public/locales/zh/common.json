@@ -76,6 +76,7 @@
     "Course": "",
     "Create Failed": "创建异常",
     "Create Success": "创建成功",
+    "Create Time": "创建时间",
     "Custom Title": "自定义标题",
     "Delete": "删除",
     "Delete Failed": "删除失败",
@@ -91,6 +92,7 @@
     "Input": "输入",
     "Intro": "介绍",
     "Last Step": "上一步",
+    "Last use time": "最后使用时间",
     "Load Failed": "加载失败",
     "Loading": "加载中",
     "Max credit": "最大金额",
@@ -108,6 +110,8 @@
     "Params": "参数",
     "Password inconsistency": "两次密码不一致",
     "Please Input Name": "请输入名称",
+    "Price used": "金额消耗",
+    "Read document": "查看文档",
     "Read intro": "查看说明",
     "Rename": "重命名",
     "Rename Failed": "重命名失败",
@@ -125,12 +129,15 @@
     "Set Name": "取个名字",
     "Setting": "设置",
     "Status": "状态",
+    "Submit failed": "提交失败",
     "Submit success": "提交成功",
     "Team": "团队",
     "Test": "测试",
     "Time": "时间",
+    "Un used": "未使用",
     "UnKnow": "未知",
     "UnKnow Source": "未知来源",
+    "Unlimited": "无限制",
     "Update Failed": "更新异常",
     "Update Success": "更新成功",
     "Update Successful": "更新成功",
@@ -211,9 +218,15 @@
     },
     "app": {
       "Ai response": "返回AI内容",
+      "Api request": "API 访问",
+      "Api request desc": "通过 API 接入到已有系统中，或企微、飞书等",
+      "App intro": "应用介绍",
       "App params config": "应用配置",
       "Chat Variable": "对话框变量",
+      "External using": "外部使用途径",
+      "Make a brief introduction of your app": "给你的 AI 应用一个介绍",
       "Max tokens": "回复上限",
+      "Name and avatar": "头像 & 名称",
       "Next Step Guide": "下一步指引",
       "Question Guide": "问题引导",
       "Question Guide Tip": "对话结束后，会为生成 3 个引导性问题。",
@@ -224,6 +237,10 @@
       "Select TTS": "选择语音播放模式",
       "Select app from template": "从模板中选择",
       "Select quote template": "选择引用提示模板",
+      "Set a name for your app": "给应用设置一个名称",
+      "Share link": "免登录窗口",
+      "Share link desc": "分享链接给其他用户，无需登录即可直接进行使用",
+      "Share link desc detail": "可以直接分享该模型给其他用户去进行对话，对方无需登录即可直接进行对话。注意，这个功能会消耗你账号的余额，请保管好链接！",
       "Simple Config Tip": "仅包含基础功能，复杂 agent 功能请使用高级编排。",
       "TTS": "语音播报",
       "TTS Tip": "开启后，每次对话后可使用语音播放功能。使用该功能可能产生额外费用。",
@@ -272,8 +289,23 @@
         "Web Link": "网络链接"
       },
       "setting": "应用信息设置",
+      "share": {
+        "Amount limit tip": "最多创建10组",
+        "Create link": "创建新链接",
+        "Create link tip": "创建成功。已复制分享地址，可直接分享使用",
+        "Ip limit title": "IP限流（人/分钟）",
+        "Is response quote": "返回引用",
+        "Not share link": "没有创建分享链接",
+        "Role check": "身份校验"
+      },
       "simple": {
         "mode template select": "简易模板"
+      },
+      "template": {
+        "Common template": "",
+        "Common template tip": "",
+        "Simple template": "",
+        "Simple template tip": ""
       },
       "templates": {
         "Common template": "通用模板",
@@ -655,18 +687,20 @@
           "Http Request Header": "自定义请求头，请严格填入JSON字符串。\n1. 确保最后一个属性没有逗号\n2. 确保 key 包含双引号\n例如: {\"Authorization\":\"Bearer xxx\"}",
           "Http Request Url": "新的HTTP请求地址。如果出现两个“请求地址”，可以删除该模块重新加入，会拉取最新的模块配置。",
           "Quote": "对象数组格式，结构：\n [{q:'问题',a:'回答'}]",
+          "Response content": "可以使用 \\n 来实现连续换行。\n可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容。\n如传入非字符串类型数据将会自动转成字符串",
           "TFSwitch textarea": "允许定义一些字符串来实现 false 匹配，每行一个，支持正则表达式。",
           "anyInput": "可传入任意内容",
           "cfr background": "描述当前对话的范围，便于AI补全首次问题或模糊的问题，从而增强知识库连续对话的能力。\n为空时，表示【首次对话】不使用问题补全功能。",
           "dynamic input": "接收用户动态添加的参数，会在运行时将这些参数平铺传入",
-          "textEditor textarea": "可以通过 {{key}} 的方式引用传入的变量。变量仅支持字符串或数字。",
-          "Response content": "可以使用 \\n 来实现连续换行。\n可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容。\n如传入非字符串类型数据将会自动转成字符串"
+          "textEditor textarea": "可以通过 {{key}} 的方式引用传入的变量。变量仅支持字符串或数字。"
         },
         "label": {
           "Http Request Header": "请求头",
           "Http Request Method": "请求方式",
           "Http Request Url": "请求地址",
           "Quote": "引用内容",
+          "Response content": "回复的内容",
+          "Select dataset": "选择知识库",
           "TFSwitch textarea": "自定义 False 匹配规则",
           "aiModel": "AI 模型",
           "anyInput": "任意内容输入",
@@ -674,9 +708,7 @@
           "chat history": "聊天记录",
           "switch": "触发器",
           "textEditor textarea": "文本编辑",
-          "user question": "用户问题",
-          "Select dataset": "选择知识库",
-          "Response content": "回复的内容"
+          "user question": "用户问题"
         },
         "placeholder": {
           "cfr background": "关于 python 的介绍和使用等问题。\n当前对话与游戏《GTA5》有关。"
@@ -699,45 +731,46 @@
         "description": {
           "Ai response content": "将在 stream 回复完毕后触发",
           "New context": "将本次回复内容拼接上历史记录，作为新的上下文返回",
-          "running done": "模块调用结束时触发",
-          "Quote": "始终返回数组，如果希望搜索结果为空时执行额外操作，需要用到上面的两个输入以及目标模块的触发器"
+          "Quote": "始终返回数组，如果希望搜索结果为空时执行额外操作，需要用到上面的两个输入以及目标模块的触发器",
+          "running done": "模块调用结束时触发"
         },
         "label": {
           "Ai response content": "AI回复内容",
           "New context": "新的上下文",
+          "Quote": "引用内容",
+          "Search result empty": "搜索结果为空",
+          "Search result not empty": "搜索结果为空",
           "cfr result": "补全结果",
           "result false": "False",
           "result true": "True",
           "running done": "模块调用结束",
-          "text": "文本输出",
-          "Search result empty": "搜索结果为空",
-          "Search result not empty": "搜索结果为空",
-          "Quote": "引用内容"
+          "text": "文本输出"
         }
       },
       "template": {
         "Ai chat": "AI 对话",
         "Ai chat intro": "AI 大模型对话",
-        "TFSwitch": "判断器",
-        "TFSwitch intro": "根据传入的内容进行 True False 输出。默认情况下，当传入的内容为 false, undefined, null, 0, none 时，会输出 false。你也可以增加一些自定义的字符串来补充输出 false 的内容。",
-        "UnKnow Module": "未知模块",
-        "cfr": "问题补全",
-        "cfr intro": "根据历史记录，完善当前问题，使其更利于知识库搜索，同时提高连续对话能力。",
-        "textEditor": "文本加工",
-        "textEditor intro": "可对固定或传入的文本进行加工后输出",
+        "Assigned reply": "指定回复",
+        "Assigned reply intro": "该模块可以直接回复一段指定的内容。常用于引导、提示",
         "Chat entrance": "对话入口",
         "Chat entrance intro": "当用户发送一个内容后，流程将会从这个模块开始执行。",
         "Dataset search": "知识库搜索",
         "Dataset search intro": "调用知识库搜索能力，查找有可能与问题相关的内容",
-        "Assigned reply": "指定回复",
-        "Assigned reply intro": "该模块可以直接回复一段指定的内容。常用于引导、提示",
-        "Guide module": "引导模块",
-        "System input module": "系统输入",
-        "Tool module": "工具",
-        "Response module": "文本输出",
-        "Function module": "功能调用",
         "External module": "外部调用",
-        "My plugin module": "个人插件"
+        "Function module": "功能调用",
+        "Guide module": "引导模块",
+        "My plugin module": "个人插件",
+        "Response module": "文本输出",
+        "System input module": "系统输入",
+        "TFSwitch": "判断器",
+        "TFSwitch intro": "根据传入的内容进行 True False 输出。默认情况下，当传入的内容为 false, undefined, null, 0, none 时，会输出 false。你也可以增加一些自定义的字符串来补充输出 false 的内容。",
+        "Tool module": "工具",
+        "UnKnow Module": "未知模块",
+        "User guide": "",
+        "cfr": "问题补全",
+        "cfr intro": "根据历史记录，完善当前问题，使其更利于知识库搜索，同时提高连续对话能力。",
+        "textEditor": "文本加工",
+        "textEditor intro": "可对固定或传入的文本进行加工后输出"
       },
       "textEditor": {
         "Text Edit": "文本加工"
@@ -988,6 +1021,15 @@
     "Update Your Plugin": "更新插件"
   },
   "support": {
+    "openapi": {
+      "Api baseurl": "API根地址",
+      "Api manager": "API 秘钥管理",
+      "Copy success": "已复制 API 地址",
+      "Max usage": "最大额度(￥)",
+      "New api key": "新的 API 秘钥",
+      "New api key tip": "请保管好你的秘钥，秘钥不会再次展示~",
+      "Usage": "已用额度(￥)"
+    },
     "outlink": {
       "share": {
         "Response Quote": "返回引用",
