@@ -197,6 +197,11 @@
       "Help Chatbot": "Chatbot Helper",
       "Use Helper": "UsingHelp"
     },
+    "time": {
+      "Just now": "Just now",
+      "The day before yesterday": "2 days",
+      "Yesterday": "Yesterday"
+    },
     "ui": {
       "textarea": {
         "Magnifying": "Magnifying"
@@ -302,18 +307,18 @@
         "mode template select": "Template"
       },
       "template": {
+        "Classify and dataset": "Classification + Dataset",
+        "Classify and dataset desc": "Classify the user's problems first, then perform different actions according to the different types of problems.",
         "Common template": "Common",
         "Common template tip": "Common template\nCan completely self-configure AI properties and knowledge base",
-        "Simple template": "Simple",
-        "Simple template tip": "Simple template\nHas built-in parameter details",
-        "Simple chat": "Simple chat",
-        "Simple chat desc": "An extremely simple AI conversation application ",
         "Dataset and guide": "Dataset + dialogue guide",
         "Dataset and guide desc": "Conduct a knowledge base search each time a question is asked, inject the search results into the LLM model for reference answers ",
         "Guide and variables": "Dialogue guide + Variables ",
         "Guide and variables desc": "You can send a prompt at the beginning of the conversation, or ask the user to fill in something as a variable for the conversation ",
-        "Classify and dataset": "Classification + Dataset",
-        "Classify and dataset desc": "Classify the user's problems first, then perform different actions according to the different types of problems."
+        "Simple chat": "Simple chat",
+        "Simple chat desc": "An extremely simple AI conversation application ",
+        "Simple template": "Simple",
+        "Simple template tip": "Simple template\nHas built-in parameter details"
       },
       "tip": {
         "Add a intro to app": "Add a intro to app",
@@ -566,7 +571,7 @@
         "Fetch Url": "Url",
         "Fetch url placeholder": "Up to 10 links, one per line.",
         "Fetch url tip": "Only static links can be read, please check the results",
-        "Ideal chunk length": "Ideal chunk length",
+        "Ideal chunk length": "Chunk length",
         "Ideal chunk length Tips": "Segment by end symbol. We recommend that your document should be properly punctuated to ensure that each complete sentence length does not exceed this value \n Chinese document recommended 400~1000\n English document recommended 600~1200",
         "Import Failed": "Import Failed",
         "Import Success Tip": "The {{num}} group data is imported successfully. Please wait for training.",
@@ -611,10 +616,16 @@
         "score": {
           "embedding": "Embedding",
           "embedding desc": "Text correlation query using vectors",
+          "fullText": "FullText",
+          "fullText desc": "Calculate the score of the same keyword, ranging from 0 to infinity.",
           "fullTextRecall": "Full text recall",
           "fullTextRecall desc": "Using traditional full-text search, suitable for finding specific data with keywords and main predicates ",
           "mixedRecall": "Mixed recall",
-          "mixedRecall desc": "Returns the combined results of vector and full-text searches, sorted using the RRF algorithm."
+          "mixedRecall desc": "Returns the combined results of vector and full-text searches, sorted using the RRF algorithm.",
+          "reRank": "ReRank",
+          "reRank desc": "The correlation degree between sentences was calculated by ReRank model, ranging from 0 to 1.",
+          "rrf": "RRF",
+          "rrf desc": "Multiple search results are combined by inverting calculation."
         },
         "search mode": "Search Mode"
       },
@@ -684,6 +695,7 @@
         "Add Input": "Add Input",
         "Input Number": "Input: {{length}}",
         "description": {
+          "Background": "",
           "Http Request Header": "User-defined request header, please strictly fill in the JSON string.\n1. Make sure the last attribute has no commas\n2. Make sure key contains double quotes\nFor example: {\"Authorization\":\"Bearer xxx\"}",
           "Http Request Url": "New HTTP request address. If two 'request addresses' appear, the module can be deleted and rejoined, and the latest module configuration will be pulled.",
           "Quote": "Object array format, structure:\n[{q:' question ',a:' answer '}]",
@@ -695,22 +707,26 @@
           "textEditor textarea": "The passed variable can be referenced by {{key}}. Variables support only strings or numbers."
         },
         "label": {
+          "Background": "Background",
+          "Classify model": "Classify model",
           "Http Request Header": "Request header ",
           "Http Request Method": "Request Method",
           "Http Request Url": "Request address ",
+          "LLM": "",
           "Quote": "Quote",
           "Response content": "Response content",
           "Select dataset": "Select dataset",
           "TFSwitch textarea": "Custom False matching rule ",
           "aiModel": "AI model ",
           "anyInput": "Any input ",
-          "cfr background": "Background knowledge ",
+          "cfr background": "Background",
           "chat history": "chat history",
           "switch": "Trigger",
           "textEditor textarea": "Text edit",
           "user question": "User question"
         },
         "placeholder": {
+          "Classify background": "For example:\n1.AIGC (Artificial Intelligence Generates content) refers to the automatic or semi-automatic generation of digital content, such as text, images, music, videos, and so on, using artificial intelligence technologies. AIGC technologies include, but are not limited to, natural language processing, computer vision, machine learning, and deep learning. These technologies can create new content or modify existing content to meet specific creative, educational, entertainment or information needs.",
           "cfr background": "Questions about the introduction and use of python. \nThe current dialogue is related to the game GTA5."
         }
       },
@@ -754,13 +770,21 @@
         "Assigned reply intro": "The module can respond directly to a specified piece of content. Often used to guide and prompt",
         "Chat entrance": "Chat entrance",
         "Chat entrance intro": "When the user sends a content, the flow will start from this module.",
+        "Classify question": "Classify question",
+        "Classify question intro": "Determine the type of question based on the user's history and current issue. Multiple sets of question types can be added, here is a template example: \n type 1: Hello\ntype 2: Questions about 'use'\ntype 3: Questions about 'purchase'\ntype 4: Other questions",
         "Dataset search": "Dataset search",
         "Dataset search intro": "Invoke the Dataset search capability to find content that may be relevant to the problem",
         "External module": "External call",
+        "Extract field": "Text content extraction ",
+        "Extract field intro": "Can extract specified data from the text, such as: sql statements, search keywords, code, etc.",
         "Function module": " Function call",
         "Guide module": "Guides",
+        "Http request": "Http request",
+        "Http request intro": " Can issue an HTTP request to implement more complex operations (Internet search, database query, etc.)",
         "My plugin module": "Personal plugins",
         "Response module": "Text output",
+        "Running app": "Running app",
+        "Running app intro": "You can select a different app to run",
         "System input module": "System input",
         "TFSwitch": "TF Switch",
         "TFSwitch intro": "Output True False based on what is passed in. By default, false is printed when the content passed in is false, undefined, null, 0, none. You can also add some custom strings to supplement the output of false.",

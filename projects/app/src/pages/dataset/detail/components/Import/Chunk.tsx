@@ -55,7 +55,7 @@ const ChunkImport = () => {
           <Box>
             {t('core.dataset.import.Ideal chunk length')}
             <MyTooltip label={t('core.dataset.import.Ideal chunk length Tips')} forceShow>
-              <QuestionOutlineIcon />
+              <QuestionOutlineIcon ml={1} />
             </MyTooltip>
           </Box>
           <Box
@@ -95,7 +95,7 @@ const ChunkImport = () => {
           <Box>
             {t('core.dataset.import.Custom split char')}
             <MyTooltip label={t('core.dataset.import.Custom split char Tips')} forceShow>
-              <QuestionOutlineIcon />
+              <QuestionOutlineIcon ml={1} />
             </MyTooltip>
           </Box>
           <Box mt={1}>

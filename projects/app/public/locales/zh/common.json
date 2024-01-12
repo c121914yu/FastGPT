@@ -197,6 +197,11 @@
       "Help Chatbot": "机器人助手",
       "Use Helper": "使用帮助"
     },
+    "time": {
+      "Just now": "刚刚",
+      "The day before yesterday": "前天",
+      "Yesterday": "昨天"
+    },
     "ui": {
       "textarea": {
         "Magnifying": "放大"
@@ -302,18 +307,18 @@
         "mode template select": "简易模板"
       },
       "template": {
+        "Classify and dataset": "问题分类 + 知识库",
+        "Classify and dataset desc": "先对用户的问题进行分类，再根据不同类型问题，执行不同的操作",
         "Common template": "通用模板",
         "Common template tip": "通用模板\n可完全自行配置AI属性和知识库",
-        "Simple template": "简易模板",
-        "Simple template tip": "极简模板\n已内置参数细节",
-        "Simple chat": "简单的对话",
-        "Simple chat desc": "一个极其简单的 AI 对话应用",
         "Dataset and guide": "知识库 + 对话引导",
         "Dataset and guide desc": "每次提问时进行一次知识库搜索，将搜索结果注入 LLM 模型进行参考回答",
         "Guide and variables": "对话引导 + 变量",
         "Guide and variables desc": "可以在对话开始发送一段提示，或者让用户填写一些内容，作为本次对话的变量",
-        "Classify and dataset": "问题分类 + 知识库",
-        "Classify and dataset desc": "先对用户的问题进行分类，再根据不同类型问题，执行不同的操作"
+        "Simple chat": "简单的对话",
+        "Simple chat desc": "一个极其简单的 AI 对话应用",
+        "Simple template": "简易模板",
+        "Simple template tip": "极简模板\n已内置参数细节"
       },
       "tip": {
         "Add a intro to app": "快来给应用一个介绍~",
@@ -613,6 +618,10 @@
           "embedding desc": "通过计算向量之间的距离获取得分，范围为 0~1。",
           "fullText": "全文检索",
           "fullText desc": "计算相同关键词的得分，范围为 0~无穷。",
+          "fullTextRecall": "",
+          "fullTextRecall desc": "",
+          "mixedRecall": "",
+          "mixedRecall desc": "",
           "reRank": "结果重排",
           "reRank desc": "通过 ReRank 模型计算句子之间的关联度，范围为 0~1。",
           "rrf": "综合排名",
@@ -686,6 +695,7 @@
         "Add Input": "添加入参",
         "Input Number": "入参: {{length}}",
         "description": {
+          "Background": "你可以添加一些特定内容的介绍，从而更好的识别用户的问题类型。这个内容通常是给模型介绍一个它不知道的内容。",
           "Http Request Header": "自定义请求头，请严格填入JSON字符串。\n1. 确保最后一个属性没有逗号\n2. 确保 key 包含双引号\n例如: {\"Authorization\":\"Bearer xxx\"}",
           "Http Request Url": "新的HTTP请求地址。如果出现两个“请求地址”，可以删除该模块重新加入，会拉取最新的模块配置。",
           "Quote": "对象数组格式，结构：\n [{q:'问题',a:'回答'}]",
@@ -697,9 +707,12 @@
           "textEditor textarea": "可以通过 {{key}} 的方式引用传入的变量。变量仅支持字符串或数字。"
         },
         "label": {
+          "Background": "背景知识",
+          "Classify model": "分类模型",
           "Http Request Header": "请求头",
           "Http Request Method": "请求方式",
           "Http Request Url": "请求地址",
+          "LLM": "AI 模型",
           "Quote": "引用内容",
           "Response content": "回复的内容",
           "Select dataset": "选择知识库",
@@ -713,6 +726,7 @@
           "user question": "用户问题"
         },
         "placeholder": {
+          "Classify background": "例如: \n1. AIGC（人工智能生成内容）是指使用人工智能技术自动或半自动地生成数字内容，如文本、图像、音乐、视频等。\n2. AIGC技术包括但不限于自然语言处理、计算机视觉、机器学习和深度学习。这些技术可以创建新内容或修改现有内容，以满足特定的创意、教育、娱乐或信息需求。",
           "cfr background": "关于 python 的介绍和使用等问题。\n当前对话与游戏《GTA5》有关。"
         }
       },
@@ -756,13 +770,21 @@
         "Assigned reply intro": "该模块可以直接回复一段指定的内容。常用于引导、提示",
         "Chat entrance": "对话入口",
         "Chat entrance intro": "当用户发送一个内容后，流程将会从这个模块开始执行。",
+        "Classify question": "问题分类",
+        "Classify question intro": "根据用户的历史记录和当前问题判断该次提问的类型。可以添加多组问题类型，下面是一个模板例子：\n类型1: 打招呼\n类型2: 关于商品“使用”问题\n类型3: 关于商品“购买”问题\n类型4: 其他问题",
         "Dataset search": "知识库搜索",
         "Dataset search intro": "调用知识库搜索能力，查找有可能与问题相关的内容",
         "External module": "外部调用",
+        "Extract field": "文本内容提取",
+        "Extract field intro": "可从文本中提取指定的数据，例如：sql语句、搜索关键词、代码等",
         "Function module": "功能调用",
         "Guide module": "引导模块",
+        "Http request": "Http 请求",
+        "Http request intro": "可以发出一个 HTTP 请求，实现更为复杂的操作（联网搜索、数据库查询等）",
         "My plugin module": "个人插件",
         "Response module": "文本输出",
+        "Running app": "应用调用",
+        "Running app intro": "可以选择一个其他应用进行调用",
         "System input module": "系统输入",
         "TFSwitch": "判断器",
         "TFSwitch intro": "根据传入的内容进行 True False 输出。默认情况下，当传入的内容为 false, undefined, null, 0, none 时，会输出 false。你也可以增加一些自定义的字符串来补充输出 false 的内容。",
