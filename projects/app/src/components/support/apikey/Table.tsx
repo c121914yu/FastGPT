@@ -365,14 +365,14 @@ function EditKeyModal({
 
       <ModalFooter>
         <Button variant={'whiteBase'} mr={3} onClick={onClose}>
-          {t('Cancel')}
+          {t('common.Close')}
         </Button>
 
         <Button
           isLoading={creating || updating}
           onClick={submitShareChat((data) => (isEdit ? onclickUpdate(data) : onclickCreate(data)))}
         >
-          {t('Confirm')}
+          {t('common.Confirm')}
         </Button>
       </ModalFooter>
     </MyModal>

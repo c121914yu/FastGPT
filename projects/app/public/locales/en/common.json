@@ -1,8 +1,5 @@
 {
   "App": "App",
-  "Cancel": "No",
-  "Confirm": "Yes",
-  "Create New": "Create",
   "Export": "Export",
   "Folder": "Folder",
   "Move": "Move",
@@ -75,6 +72,7 @@
     "Copy Successful": "Copy Successful",
     "Course": "",
     "Create Failed": "Create Failed",
+    "Create New": "Create",
     "Create Success": "Create Success",
     "Create Time": "Create time",
     "Custom Title": "Custom Title",
@@ -480,6 +478,7 @@
       "Set Website Config": "Configuring Website",
       "Similarity": "Similarity",
       "Sync Time": "Update Time",
+      "Table collection": "Table collection",
       "Website Dataset": "Website Sync",
       "Website Dataset Desc": "Web site synchronization allows you to build a knowledge base directly from a web link",
       "collection": {

@@ -232,10 +232,10 @@ const AIChatSettingsModal = ({
       </ModalBody>
       <ModalFooter>
         <Button variant={'whiteBase'} onClick={onClose}>
-          {t('Cancel')}
+          {t('common.Close')}
         </Button>
         <Button ml={4} onClick={handleSubmit(onSuccess)}>
-          {t('Confirm')}
+          {t('common.Confirm')}
         </Button>
       </ModalFooter>
       {!!selectTemplateData && (

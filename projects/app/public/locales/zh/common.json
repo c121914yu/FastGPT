@@ -1,8 +1,6 @@
 {
   "App": "应用",
-  "Cancel": "取消",
-  "Confirm": "确认",
-  "Create New": "新建",
+  "Create New": "",
   "Export": "导出",
   "Folder": "文件夹",
   "Move": "移动",
@@ -75,6 +73,7 @@
     "Copy Successful": "复制成功",
     "Course": "",
     "Create Failed": "创建异常",
+    "Create New": "新建",
     "Create Success": "创建成功",
     "Create Time": "创建时间",
     "Custom Title": "自定义标题",
@@ -480,6 +479,7 @@
       "Set Website Config": "开始配置网站信息",
       "Similarity": "相关度",
       "Sync Time": "最后更新时间",
+      "Table collection": "表格数据集",
       "Website Dataset": "Web 站点同步",
       "Website Dataset Desc": "Web 站点同步允许你直接使用一个网页链接构建知识库",
       "collection": {

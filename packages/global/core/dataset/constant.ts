@@ -6,7 +6,7 @@ export enum DatasetTypeEnum {
 }
 export const DatasetTypeMap = {
   [DatasetTypeEnum.folder]: {
-    icon: 'core/dataset/folderDataset',
+    icon: 'common/folderFill',
     label: 'core.dataset.Folder Dataset',
     collectionLabel: 'common.Folder'
   },

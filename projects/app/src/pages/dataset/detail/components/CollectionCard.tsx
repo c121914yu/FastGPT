@@ -159,12 +159,14 @@ const CollectionCard = () => {
               statusText: t('dataset.collections.Collection Embedding', {
                 total: collection.trainingAmount
               }),
-              color: 'myGray.500'
+              color: 'myGray.600',
+              bg: 'myGray.50'
             };
           }
           return {
             statusText: t('core.dataset.collection.status.active'),
-            color: 'green.500'
+            color: 'green.600',
+            bg: 'green.50'
           };
         })();
 
@@ -405,7 +407,7 @@ const CollectionCard = () => {
                     {
                       child: (
                         <Flex>
-                          <Image src={FolderAvatarSrc} alt={''} w={'20px'} mr={2} />
+                          <MyIcon name={'common/folderFill'} w={'20px'} mr={2} />
                           {t('Folder')}
                         </Flex>
                       ),
@@ -414,7 +416,7 @@ const CollectionCard = () => {
                     {
                       child: (
                         <Flex>
-                          <Image src={'/imgs/files/collection.svg'} alt={''} w={'20px'} mr={2} />
+                          <MyIcon name={'core/dataset/manualCollection'} mr={2} w={'20px'} />
                           {t('core.dataset.Manual collection')}
                         </Flex>
                       ),
@@ -430,11 +432,20 @@ const CollectionCard = () => {
                     {
                       child: (
                         <Flex>
-                          <Image src={'/imgs/files/file.svg'} alt={''} w={'20px'} mr={2} />
+                          <MyIcon name={'core/dataset/fileCollection'} mr={2} w={'20px'} />
                           {t('core.dataset.File collection')}
                         </Flex>
                       ),
                       onClick: onOpenFileImportModal
+                    },
+                    {
+                      child: (
+                        <Flex>
+                          <MyIcon name={'core/dataset/tableCollection'} mr={2} w={'20px'} />
+                          {t('core.dataset.Table collection')}
+                        </Flex>
+                      ),
+                      onClick: () => {}
                     }
                   ]}
                 />
@@ -578,19 +589,26 @@ const CollectionCard = () => {
                   <Td fontSize={'md'}>{collection.dataAmount || '-'}</Td>
                   <Td>{dayjs(collection.updateTime).format('YYYY/MM/DD HH:mm')}</Td>
                   <Td>
-                    <Flex
+                    <Box
+                      display={'inline-flex'}
                       alignItems={'center'}
+                      w={'auto'}
+                      color={collection.color}
+                      bg={collection.bg}
+                      px={3}
+                      py={1}
+                      borderRadius={'md'}
                       _before={{
                         content: '""',
-                        w: '10px',
-                        h: '10px',
+                        w: '6px',
+                        h: '6px',
                         mr: 2,
                         borderRadius: 'lg',
                         bg: collection.color
                       }}
                     >
                       {t(collection.statusText)}
-                    </Flex>
+                    </Box>
                   </Td>
                   <Td onClick={(e) => e.stopPropagation()}>
                     {collection.canWrite && userInfo?.team?.role !== TeamMemberRoleEnum.visitor && (
@@ -739,7 +757,7 @@ const CollectionCard = () => {
         <ConfirmDeleteModal />
         <ConfirmSyncModal />
         <EditTitleModal />
-        <EditCreateVirtualFileModal />
+        <EditCreateVirtualFileModal iconSrc={'modal/manualDataset'} closeBtnText={''} />
         {isOpenFileImportModal && (
           <FileImportModal
             datasetId={datasetId}
