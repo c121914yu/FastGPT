@@ -1,6 +1,6 @@
 import type { Klass, LexicalEditor, LexicalNode } from 'lexical';
 import type { EntityMatch } from '@lexical/text';
-import { $createTextNode, $isTextNode, TextNode } from 'lexical';
+import { $createParagraphNode, $createTextNode, $getRoot, $isTextNode, TextNode } from 'lexical';
 
 export function registerLexicalTextEntity<T extends TextNode>(
   editor: LexicalEditor,
@@ -169,3 +169,71 @@ export function registerLexicalTextEntity<T extends TextNode>(
 
   return [removePlainTextTransform, removeReverseNodeTransform];
 }
+
+export function textToEditorState(text: string) {
+  const paragraph = text.split('\n');
+
+  return JSON.stringify({
+    root: {
+      children: paragraph.map((p) => {
+        return {
+          children: [
+            {
+              detail: 0,
+              format: 0,
+              mode: 'normal',
+              style: '',
+              text: p,
+              type: 'text',
+              version: 1
+            }
+          ],
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          type: 'paragraph',
+          version: 1
+        };
+      }),
+      direction: 'ltr',
+      format: '',
+      indent: 0,
+      type: 'root',
+      version: 1
+    }
+  });
+}
+
+export function editorStateToText(editor: LexicalEditor) {
+  const stringifiedEditorState = JSON.stringify(editor.getEditorState().toJSON());
+  const parsedEditorState = editor.parseEditorState(stringifiedEditorState);
+  const editorStateTextString = parsedEditorState.read(() => $getRoot().getTextContent());
+  const compressedText = editorStateTextString.replace(/\n+/g, '\n\n');
+
+  return compressedText;
+}
+
+const varRegex = /\{\{([a-zA-Z_][a-zA-Z0-9_]*)\}\}/g;
+export const getVars = (value: string) => {
+  if (!value) return [];
+  // .filter((item) => {
+  //   return ![CONTEXT_PLACEHOLDER_TEXT, HISTORY_PLACEHOLDER_TEXT, QUERY_PLACEHOLDER_TEXT, PRE_PROMPT_PLACEHOLDER_TEXT].includes(item)
+  // })
+  const keys =
+    value
+      .match(varRegex)
+      ?.map((item) => {
+        return item.replace('{{', '').replace('}}', '');
+      })
+      .filter((key) => key.length <= 10) || [];
+  const keyObj: Record<string, boolean> = {};
+  // remove duplicate keys
+  const res: string[] = [];
+  keys.forEach((key) => {
+    if (keyObj[key]) return;
+
+    keyObj[key] = true;
+    res.push(key);
+  });
+  return res;
+};

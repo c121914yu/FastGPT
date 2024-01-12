@@ -32,11 +32,15 @@ import MyTooltip from '@/components/MyTooltip';
 import Avatar from '@/components/Avatar';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { SimpleModeTemplate_FastGPT_Universal } from '@/global/core/app/constants';
-import VariableEdit from '@/components/core/module/Flow/components/modules/VariableEdit';
+import VariableEdit, {
+  defaultVariable
+} from '@/components/core/module/Flow/components/modules/VariableEdit';
 import PromptTextarea from '@/components/common/Textarea/PromptTextarea/index';
 import { DatasetSearchModeMap } from '@fastgpt/global/core/dataset/constants';
 import SelectAiModel from '@/components/Select/SelectAiModel';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
+import ComfirmVar from '@fastgpt/web/components/common/Textarea/PromptEditor/modules/ComfirmVar';
+import { editorStateToText } from '@fastgpt/web/components/common/Textarea/PromptEditor/utils';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/module/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/module/DatasetParamsModal'));
@@ -61,6 +65,7 @@ const EditForm = ({
   const { loadAllDatasets, allDatasets } = useDatasetStore();
   const { isPc } = useSystemStore();
   const [refresh, setRefresh] = useState(false);
+  const [newVariables] = useState<string[]>([]);
 
   const { register, setValue, getValues, reset, handleSubmit, control } =
     useForm<AppSimpleEditFormType>({
@@ -297,7 +302,18 @@ const EditForm = ({
                       <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
                     </MyTooltip>
                   </Box>
-                  <PromptEditor variables={getValues('userGuide.variables')} />
+                  <PromptEditor
+                    variables={getValues('userGuide.variables')}
+                    defaultValue={getValues('aiSettings.systemPrompt') || ''}
+                    onBlur={(text) => {
+                      setValue('aiSettings.systemPrompt', text);
+                    }}
+                    defaultVariable={defaultVariable}
+                    setVariable={(newVariablesList) => {
+                      setValue('userGuide.variables', newVariablesList);
+                      setRefresh(!refresh);
+                    }}
+                  />
                 </Flex>
               )}
             </Box>

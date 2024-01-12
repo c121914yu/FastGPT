@@ -18,7 +18,6 @@ export default function VariablePickerPlugin({ variables }: { variables: Variabl
   const [queryString, setQueryString] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  console.log('VariablePickerPlugin', variables);
   const checkForTriggerMatch = useBasicTypeaheadTriggerMatch('{', {
     minLength: 0
   });
