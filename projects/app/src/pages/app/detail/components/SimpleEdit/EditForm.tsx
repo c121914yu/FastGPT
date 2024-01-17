@@ -39,8 +39,6 @@ import PromptTextarea from '@/components/common/Textarea/PromptTextarea/index';
 import { DatasetSearchModeMap } from '@fastgpt/global/core/dataset/constants';
 import SelectAiModel from '@/components/Select/SelectAiModel';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
-import ComfirmVar from '@fastgpt/web/components/common/Textarea/PromptEditor/modules/ComfirmVar';
-import { editorStateToText } from '@fastgpt/web/components/common/Textarea/PromptEditor/utils';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/module/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/module/DatasetParamsModal'));
@@ -303,16 +301,18 @@ const EditForm = ({
                     </MyTooltip>
                   </Box>
                   <PromptEditor
-                    variables={getValues('userGuide.variables')}
                     defaultValue={getValues('aiSettings.systemPrompt') || ''}
                     onBlur={(text) => {
                       setValue('aiSettings.systemPrompt', text);
                     }}
-                    defaultVariable={defaultVariable}
-                    setVariable={(newVariablesList) => {
-                      setValue('userGuide.variables', newVariablesList);
-                      setRefresh(!refresh);
-                    }}
+                    variables={getValues('userGuide.variables')}
+                    // defaultVariable={defaultVariable}
+                    // setVariable={(newVariablesList) => {
+                    //   setValue('userGuide.variables', newVariablesList);
+                    //   setRefresh(!refresh);
+                    // }}
+                    placeholder={t('core.app.tip.chatNodeSystemPromptTip')}
+                    title={t('core.ai.Prompt')}
                   />
                 </Flex>
               )}

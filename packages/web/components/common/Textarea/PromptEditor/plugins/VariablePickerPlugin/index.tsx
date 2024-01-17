@@ -44,17 +44,17 @@ export default function VariablePickerPlugin({ variables }: { variables: Variabl
   );
 
   const options: Array<any> = useMemo(() => {
-    const newVariableOption = {
-      label: t('common.Add New'),
-      key: 'new_variable',
-      icon: 'core/app/variable/input'
-    };
+    // const newVariableOption = {
+    //   label: t('common.Add New') + "变量",
+    //   key: 'new_variable',
+    //   icon: 'core/modules/variable'
+    // };
     return [
       ...variables.map((item) => ({
         ...item,
         icon: VariableTypeList.find((type) => type.value === item.type)?.icon
-      })),
-      newVariableOption
+      }))
+      // newVariableOption
     ];
   }, [VariableTypeList, t, variables]);
 
@@ -62,18 +62,20 @@ export default function VariablePickerPlugin({ variables }: { variables: Variabl
     (selectedOption: any, nodeToRemove: TextNode | null, closeMenu: () => void) => {
       editor.update(() => {
         const selection = $getSelection();
-        console.log('onSelectOption', selectedOption);
         if (!$isRangeSelection(selection) || selectedOption == null) {
           return;
         }
         if (nodeToRemove) {
           nodeToRemove.remove();
         }
-        if (selectedOption.key === 'new_variable') {
-          selection.insertNodes([$createTextNode(`{{}}`)]);
-        } else {
-          selection.insertNodes([$createTextNode(`{{${selectedOption.label}}}`)]);
-        }
+        // if (selectedOption.key === 'new_variable') {
+        //   const prefixNode = $createTextNode('{{')
+        //   const suffixNode = $createTextNode('}}')
+        //   selection.insertNodes([prefixNode, suffixNode])
+        //   prefixNode.select()
+        // } else {
+        selection.insertNodes([$createTextNode(`{{${selectedOption.key}}}`)]);
+        // }
         closeMenu();
       });
     },
@@ -111,8 +113,14 @@ export default function VariablePickerPlugin({ variables }: { variables: Variabl
                         setHighlightedIndex(index);
                       }}
                     >
-                      <MyIcon name={option.icon} w={'14px'} color={'myGray.500'} />
-                      <span className={styles.variableText}>{option.label}</span>
+                      <MyIcon
+                        name={option.icon}
+                        w={'14px'}
+                        color={selectedIndex === index ? 'primary.500' : 'myGray.500'}
+                      />
+                      <span
+                        className={styles.variableText}
+                      >{`${option.key}(${option.label})`}</span>
                     </li>
                   ))}
                 </ul>

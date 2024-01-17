@@ -17,11 +17,13 @@ import OnBlurPlugin from './plugins/OnBlurPlugin';
 export default function Editor({
   variables,
   onBlur,
-  defaultValue
+  defaultValue,
+  placeholder = ''
 }: {
   variables: VariableItemType[];
   onBlur?: (editor: LexicalEditor) => void;
   defaultValue: string;
+  placeholder?: string;
 }) {
   const initialConfig = useMemo(
     () => ({
@@ -40,7 +42,7 @@ export default function Editor({
       <Box width={'full'} className={styles.editorWrapper}>
         <PlainTextPlugin
           contentEditable={<ContentEditable className={styles.contentEditable} />}
-          placeholder={<div className={styles.placeholder}>Enter some text...</div>}
+          placeholder={<div className={styles.placeholder}>{placeholder}</div>}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <HistoryPlugin />

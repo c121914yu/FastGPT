@@ -30,6 +30,10 @@ export default function ComfirmVar({
         bg={'white'}
         rounded={'lg'}
         boxShadow={'0 2px 4px rgba(0, 0, 0, 0.1)'}
+        display={'flex'}
+        flexDirection={'column'}
+        justifyContent={'space-between'}
+        pb={4}
       >
         <Box display={'flex'} mt={4} mr={4}>
           <Box
