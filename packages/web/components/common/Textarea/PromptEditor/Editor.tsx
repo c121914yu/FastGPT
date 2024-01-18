@@ -74,7 +74,7 @@ export default function Editor({
 
   return (
     <Box position={'relative'} width={'full'} h={`${height}px`}>
-      <LexicalComposer initialConfig={initialConfig} key={defaultValue}>
+      <LexicalComposer initialConfig={initialConfig} key={(variables as any) || defaultValue}>
         <PlainTextPlugin
           contentEditable={<ContentEditable className={styles.contentEditable} />}
           placeholder={
@@ -95,7 +95,7 @@ export default function Editor({
         <HistoryPlugin />
         <OnChangePlugin onChange={(e) => onChange?.(e)} />
         <VariablePickerPlugin variables={variables} />
-        <VariablePlugin />
+        <VariablePlugin variables={variables} />
         <OnBlurPlugin onBlur={onBlur} />
       </LexicalComposer>
       {showResize && (
