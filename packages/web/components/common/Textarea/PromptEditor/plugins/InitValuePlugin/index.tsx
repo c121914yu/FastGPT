@@ -1,22 +1,19 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { textToEditorState } from '../../utils';
+import { CLEAR_HISTORY_COMMAND } from 'lexical';
 
 export default function InitValuePlugin({ defaultValue }: { defaultValue: string | undefined }) {
   const [editor] = useLexicalComposerContext();
-  const isFirstRender = useRef(true);
+  const hasFocus = editor.getRootElement() === document.activeElement;
 
   useEffect(() => {
-    if (isFirstRender.current && defaultValue) {
-      isFirstRender.current = false;
+    if (!hasFocus && defaultValue) {
       const initialEditorState = editor.parseEditorState(textToEditorState(defaultValue));
       editor.setEditorState(initialEditorState);
+      editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
     }
-  }, [isFirstRender.current, editor, defaultValue]);
-
-  setTimeout(() => {
-    isFirstRender.current = false;
-  }, 200);
+  }, [editor, defaultValue]);
 
   return null;
 }
