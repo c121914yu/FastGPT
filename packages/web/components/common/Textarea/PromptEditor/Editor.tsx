@@ -72,7 +72,7 @@ export default function Editor({
 
   return (
     <Box position={'relative'} width={'full'} h={`${height}px`} cursor={'text'}>
-      <LexicalComposer initialConfig={initialConfig} key={key.current}>
+      <LexicalComposer initialConfig={initialConfig} key={key.current + variables.length}>
         <PlainTextPlugin
           contentEditable={<ContentEditable className={styles.contentEditable} />}
           placeholder={

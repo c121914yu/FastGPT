@@ -9,7 +9,6 @@ import RenderOutput from '../render/RenderOutput';
 
 const NodeSimple = (props: NodeProps<FlowModuleItemType>) => {
   const { moduleId, inputs, outputs } = props.data;
-  console.log(props);
 
   return (
     <NodeCard minW={'350px'} {...props.data}>
