@@ -25,6 +25,7 @@ import { dispatchCFR } from './tools/cfr';
 import { dispatchRunPlugin } from './plugin/run';
 import { dispatchPluginInput } from './plugin/runInput';
 import { dispatchPluginOutput } from './plugin/runOutput';
+import { valueTypeFormat } from './utils';
 
 const callbackMap: Record<`${FlowNodeTypeEnum}`, Function> = {
   [FlowNodeTypeEnum.historyNode]: dispatchHistory,
@@ -126,7 +127,6 @@ export async function dispatchModules({
   ): Promise<any> {
     pushStore(module, result);
 
-    //
     const nextRunModules: RunningModuleItemType[] = [];
 
     // Assign the output value to the next module
@@ -162,6 +162,8 @@ export async function dispatchModules({
   function checkModulesCanRun(modules: RunningModuleItemType[] = []) {
     return Promise.all(
       modules.map((module) => {
+        // console.log(module, '===');
+
         if (!module.inputs.find((item: any) => item.value === undefined)) {
           moduleInput(module, { [ModuleInputKeyEnum.switch]: undefined });
           return moduleRun(module);
@@ -182,8 +184,8 @@ export async function dispatchModules({
 
     // get module running params
     const params: Record<string, any> = {};
-    module.inputs.forEach((item: any) => {
-      params[item.key] = item.value;
+    module.inputs.forEach((item) => {
+      params[item.key] = valueTypeFormat(item.value, item.valueType);
     });
     const dispatchData: ModuleDispatchProps<Record<string, any>> = {
       ...props,
@@ -194,7 +196,8 @@ export async function dispatchModules({
       stream,
       detail,
       outputs: module.outputs,
-      inputs: params
+      inputs: module.inputs,
+      params
     };
 
     // run module
@@ -286,19 +289,13 @@ function loadModules(
               item.value !== undefined
           ) // filter unconnected target input
           .map((item) => {
-            if (typeof item.value !== 'string') {
-              return {
-                key: item.key,
-                value: item.value
-              };
-            }
-
-            // variables replace
-            const replacedVal = replaceVariable(item.value, variables);
+            const replace = ['string'].includes(typeof item.value);
 
             return {
               key: item.key,
-              value: replacedVal
+              // variables replace
+              value: replace ? replaceVariable(item.value, variables) : item.value,
+              valueType: item.valueType
             };
           }),
         outputs: module.outputs
@@ -306,6 +303,7 @@ function loadModules(
             key: item.key,
             answer: item.key === ModuleOutputKeyEnum.answerText,
             value: undefined,
+            valueType: item.valueType,
             targets: item.targets
           }))
           .sort((a, b) => {
