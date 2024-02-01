@@ -3,9 +3,10 @@ import Editor, { loader } from '@monaco-editor/react';
 import { useCallback, useRef, useState } from 'react';
 import { Box, BoxProps, useToast } from '@chakra-ui/react';
 import MyIcon from '../../Icon';
+import { EditorVariablePickerType } from '../PromptEditor/type';
 
 loader.config({
-  paths: { vs: '/js/monaco-editor.0.43.0' }
+  paths: { vs: 'https://cdn.staticfile.net/monaco-editor/0.43.0/min/vs' }
 });
 
 type Props = Omit<BoxProps, 'onChange' | 'resize' | 'height'> & {
@@ -14,6 +15,7 @@ type Props = Omit<BoxProps, 'onChange' | 'resize' | 'height'> & {
   defaultValue?: string;
   value?: string;
   onChange?: (e: string) => void;
+  variables?: EditorVariablePickerType[];
 };
 
 const options = {
@@ -38,7 +40,7 @@ const options = {
   tabSize: 2
 };
 
-const JSONEditor = ({ defaultValue, value, onChange, resize, ...props }: Props) => {
+const JSONEditor = ({ defaultValue, value, onChange, resize, variables, ...props }: Props) => {
   const toast = useToast();
   const [height, setHeight] = useState(props.height || 100);
   const initialY = useRef(0);
@@ -103,6 +105,28 @@ const JSONEditor = ({ defaultValue, value, onChange, resize, ...props }: Props) 
                 'scrollbarSlider.background': '#E8EAEC',
                 'editorIndentGuide.activeBackground': '#ddd',
                 'editorIndentGuide.background': '#eee'
+              }
+            });
+
+            monaco.languages.registerCompletionItemProvider('json', {
+              provideCompletionItems: function (model, position) {
+                var word = model.getWordUntilPosition(position);
+                var range = {
+                  startLineNumber: position.lineNumber,
+                  endLineNumber: position.lineNumber,
+                  startColumn: word.startColumn,
+                  endColumn: word.endColumn
+                };
+                return {
+                  suggestions:
+                    variables?.map((item) => ({
+                      label: `$${item.key}`,
+                      kind: monaco.languages.CompletionItemKind.Function,
+                      documentation: item.label,
+                      insertText: `${item.key}`,
+                      range: range
+                    })) || []
+                };
               }
             });
           }}
