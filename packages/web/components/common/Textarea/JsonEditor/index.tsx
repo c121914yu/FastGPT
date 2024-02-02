@@ -48,6 +48,7 @@ const JSONEditor = ({ defaultValue, value, onChange, resize, variables, ...props
   const monaco = useMonaco();
 
   useEffect(() => {
+    if (!!completionRegisterRef.current) return;
     completionRegisterRef.current = monaco?.languages.registerCompletionItemProvider('json', {
       provideCompletionItems: function (model, position) {
         var word = model.getWordUntilPosition(position);
@@ -66,7 +67,9 @@ const JSONEditor = ({ defaultValue, value, onChange, resize, variables, ...props
               insertText: `${item.key}`,
               range: range
             })) || [],
-          dispose: () => {}
+          dispose: () => {
+            completionRegisterRef.current = undefined;
+          }
         };
       }
     });
