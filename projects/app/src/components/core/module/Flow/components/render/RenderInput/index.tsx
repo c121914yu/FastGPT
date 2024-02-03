@@ -7,7 +7,16 @@ import dynamic from 'next/dynamic';
 import InputLabel from './Label';
 import type { RenderInputProps } from './type.d';
 import { useFlowProviderStore } from '../../../FlowProvider';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { DYNAMIC_INPUT_KEY, ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
+
+const JsonEditorNodes = [
+  ModuleInputKeyEnum.httpMethod,
+  ModuleInputKeyEnum.httpReqUrl,
+  ModuleInputKeyEnum.httpHeader,
+  ModuleInputKeyEnum.addInputParam,
+  DYNAMIC_INPUT_KEY,
+  FlowNodeInputTypeEnum.switch
+];
 
 const RenderList: {
   types: `${FlowNodeInputTypeEnum}`[];
@@ -78,7 +87,7 @@ type Props = {
   CustomComponent?: Record<string, (e: FlowNodeInputItemType) => React.ReactNode>;
 };
 const RenderInput = ({ flowInputList, moduleId, CustomComponent }: Props) => {
-  const { mode } = useFlowProviderStore();
+  const { mode, nodes } = useFlowProviderStore();
 
   const sortInputs = useMemo(
     () =>
@@ -120,6 +129,21 @@ const RenderInput = ({ flowInputList, moduleId, CustomComponent }: Props) => {
         const Component = RenderList.find((item) => item.types.includes(input.type))?.Component;
 
         if (!Component) return null;
+        if (input.type === FlowNodeInputTypeEnum.JSONEditor) {
+          const node = nodes.find((node) => node.id === moduleId);
+          return (
+            <Component
+              inputs={filterInputs}
+              item={{
+                ...input,
+                variables: node?.data.inputs.filter((e) => {
+                  return !JsonEditorNodes.includes(e.key);
+                })
+              }}
+              moduleId={moduleId}
+            />
+          );
+        }
         return <Component inputs={filterInputs} item={input} moduleId={moduleId} />;
       })();
 

@@ -32,7 +32,7 @@ const JsonEditor = ({ item, moduleId }: RenderInputProps) => {
       onChange={(e) => {
         update(e);
       }}
-      variables={[]}
+      variables={item.variables}
     />
   );
 };

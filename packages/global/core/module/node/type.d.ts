@@ -49,6 +49,8 @@ export type FlowNodeInputItemType = {
   step?: number; // slider
   max?: number; // slider, number input
   min?: number; // slider, number input
+
+  variables?: FlowNodeInputItemType[]; // JSONEditor
 };
 
 export type FlowNodeOutputTargetItemType = {
