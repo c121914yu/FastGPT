@@ -75,7 +75,7 @@ export const streamFetch = ({
       event === SseResponseEventEnum.answer || event === SseResponseEventEnum.fastAnswer;
     // animate response to make it looks smooth
     function animateResponseText() {
-      console.log("animateResponseText-abort", abortCtrl)
+      console.log('animateResponseText-abort', abortCtrl);
       // abort message
       if (abortCtrl.signal.aborted) {
         responseQueue.forEach((item) => {
