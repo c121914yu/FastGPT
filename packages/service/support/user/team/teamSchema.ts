@@ -33,6 +33,9 @@ const TeamSchema = new Schema({
   teamDomain: {
     type: String
   },
+  tagsUrl: {
+    type: String,
+  },
   limit: {
     lastExportDatasetTime: {
       type: Date
