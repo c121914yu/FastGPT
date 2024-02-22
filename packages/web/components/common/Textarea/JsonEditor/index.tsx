@@ -45,7 +45,15 @@ const options = {
   tabSize: 2
 };
 
-const JSONEditor = ({ defaultValue, value, onChange, resize, variables = [], ...props }: Props) => {
+const JSONEditor = ({
+  defaultValue,
+  value,
+  onChange,
+  resize,
+  variables = [],
+  placeholder,
+  ...props
+}: Props) => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const [height, setHeight] = useState(props.height || 100);
@@ -217,6 +225,7 @@ const JSONEditor = ({ defaultValue, value, onChange, resize, variables = [], ...
         borderColor={'myGray.200'}
         py={2}
         height={'auto'}
+        position={'relative'}
         {...props}
       >
         <Editor
@@ -227,11 +236,37 @@ const JSONEditor = ({ defaultValue, value, onChange, resize, variables = [], ...
           beforeMount={beforeMount}
           defaultValue={defaultValue}
           value={value}
-          onChange={(e) => onChange?.(e || '')}
+          onChange={(e) => {
+            onChange?.(e || '');
+            let placeholder = document.querySelector('.monaco-placeholder') as HTMLElement | null;
+            if (!e) {
+              placeholder!.style.display = 'block';
+            } else {
+              placeholder!.style.display = 'none';
+            }
+          }}
           wrapperProps={{
             onBlur
           }}
+          onMount={() => {
+            let placeholder = document.querySelector('.monaco-placeholder') as HTMLElement | null;
+            if (!value) {
+              placeholder!.style.display = 'block';
+            } else {
+              placeholder!.style.display = 'none';
+            }
+          }}
         />
+        <Box
+          className="monaco-placeholder"
+          position={'absolute'}
+          top={'2px'}
+          left={4}
+          opacity={0.5}
+          fontSize={'16px'}
+        >
+          {placeholder}
+        </Box>
       </Box>
     </Box>
   );

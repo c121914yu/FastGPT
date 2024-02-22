@@ -17,27 +17,41 @@ import { EditorVariablePickerType } from './type.d';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import FocusPlugin from './plugins/FocusPlugin';
 import { textToEditorState } from './utils';
+import { SingleLinePlugin } from './plugins/SingleLinePlugin';
+import DropDownMenu from './modules/DropDownMenu';
 
 export default function Editor({
   h = 200,
   showResize = true,
   showOpenModal = true,
+  isSingleLine = false,
+  hasVariablePlugin = true,
+  hasDropDownPlugin = false,
   onOpenModal,
   variables,
   onChange,
   onBlur,
   value,
-  placeholder = ''
+  currentValue,
+  placeholder = '',
+  setDropdownValue,
+  updateTrigger
 }: {
   h?: number;
   showResize?: boolean;
   showOpenModal?: boolean;
+  isSingleLine?: boolean;
+  hasVariablePlugin?: boolean;
+  hasDropDownPlugin?: boolean;
   onOpenModal?: () => void;
   variables: EditorVariablePickerType[];
   onChange?: (editorState: EditorState) => void;
   onBlur?: (editor: LexicalEditor) => void;
   value?: string;
+  currentValue?: string;
   placeholder?: string;
+  setDropdownValue?: (value: string) => void;
+  updateTrigger?: boolean;
 }) {
   const [key, setKey] = useState(getNanoid(6));
   const [_, startSts] = useTransition();
@@ -73,15 +87,19 @@ export default function Editor({
   };
 
   useEffect(() => {
-    if (focus) return;
+    if (focus && !setDropdownValue) return;
     setKey(getNanoid(6));
-  }, [value, variables, focus]);
+  }, [value, variables.length, updateTrigger]);
 
   return (
     <Box position={'relative'} width={'full'} h={`${height}px`} cursor={'text'}>
       <LexicalComposer initialConfig={initialConfig} key={key}>
         <PlainTextPlugin
-          contentEditable={<ContentEditable className={styles.contentEditable} />}
+          contentEditable={
+            <ContentEditable
+              className={isSingleLine ? styles.contentEditable_single_line : styles.contentEditable}
+            />
+          }
           placeholder={
             <Box
               position={'absolute'}
@@ -90,7 +108,7 @@ export default function Editor({
               right={0}
               bottom={0}
               py={3}
-              px={4}
+              px={isSingleLine ? 2 : 4}
               pointerEvents={'none'}
               overflow={'overlay'}
             >
@@ -117,10 +135,14 @@ export default function Editor({
             });
           }}
         />
-        <VariablePickerPlugin variables={variables} />
-        <VariablePlugin variables={variables} />
+        {hasVariablePlugin ? <VariablePickerPlugin variables={variables} /> : ''}
+        {hasVariablePlugin ? <VariablePlugin variables={variables} /> : ''}
         <OnBlurPlugin onBlur={onBlur} />
+        {isSingleLine ? <SingleLinePlugin /> : ''}
       </LexicalComposer>
+      {focus && !currentValue && hasDropDownPlugin && (
+        <DropDownMenu variables={variables} setDropdownValue={setDropdownValue} />
+      )}
       {showResize && (
         <Box
           position={'absolute'}
