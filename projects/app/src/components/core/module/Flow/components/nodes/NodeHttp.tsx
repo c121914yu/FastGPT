@@ -38,7 +38,6 @@ import {
 import { EditorVariablePickerType } from '@fastgpt/web/components/common/Textarea/PromptEditor/type';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import HttpImportModal from '../render/HttpImportModal';
-import JsonEditor from '../render/RenderInput/templates/JsonEditor';
 
 enum TabEnum {
   params = 'params',

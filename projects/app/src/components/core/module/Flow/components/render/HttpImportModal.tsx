@@ -36,11 +36,12 @@ export default function HttpImportModal({
     try {
       let data;
       try {
-        data = JSON.parse(importContent);
+        data = JSON.parse(content);
       } catch (jsonError) {
         try {
-          data = yaml.load(importContent);
+          data = yaml.load(content, { schema: yaml.FAILSAFE_SCHEMA });
         } catch (yamlError) {
+          console.error(yamlError);
           throw new Error();
         }
       }
@@ -50,10 +51,23 @@ export default function HttpImportModal({
       const firstRequestMethod = Object.keys(firstPathData)[0];
       const firstRequestMethodData = firstPathData[firstRequestMethod];
       const firstRequestParameters = firstRequestMethodData.parameters || [];
-      const processedParameters = firstRequestParameters.map((parameter: any) => ({
-        key: parameter.name,
-        type: parameter.schema.type
-      }));
+
+      const pathParams = [];
+      const headerParams = [];
+      for (const parameter of firstRequestParameters) {
+        if (parameter.in === 'path') {
+          pathParams.push({
+            key: parameter.name,
+            type: parameter.schema.type
+          });
+        } else {
+          headerParams.push({
+            key: parameter.name,
+            type: parameter.schema.type
+          });
+        }
+      }
+
       const requestBodySchema =
         firstRequestMethodData.requestBody?.content?.['application/json']?.schema;
       let requestBodyValue = '';
@@ -93,7 +107,7 @@ export default function HttpImportModal({
         key: ModuleInputKeyEnum.httpParams,
         value: {
           ...params,
-          value: processedParameters
+          value: pathParams
         }
       });
 
@@ -103,7 +117,7 @@ export default function HttpImportModal({
         key: ModuleInputKeyEnum.httpHeaders,
         value: {
           ...headers,
-          value: []
+          value: headerParams
         }
       });
 

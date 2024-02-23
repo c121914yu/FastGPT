@@ -57,6 +57,7 @@ const JSONEditor = ({
   const { toast } = useToast();
   const { t } = useTranslation();
   const [height, setHeight] = useState(props.height || 100);
+  const [placeholderDisplay, setPlaceholderDisplay] = useState('block');
   const initialY = useRef(0);
   const completionRegisterRef = useRef<any>();
   const monaco = useMonaco();
@@ -238,22 +239,20 @@ const JSONEditor = ({
           value={value}
           onChange={(e) => {
             onChange?.(e || '');
-            let placeholder = document.querySelector('.monaco-placeholder') as HTMLElement | null;
             if (!e) {
-              placeholder!.style.display = 'block';
+              setPlaceholderDisplay('block');
             } else {
-              placeholder!.style.display = 'none';
+              setPlaceholderDisplay('none');
             }
           }}
           wrapperProps={{
             onBlur
           }}
           onMount={() => {
-            let placeholder = document.querySelector('.monaco-placeholder') as HTMLElement | null;
             if (!value) {
-              placeholder!.style.display = 'block';
+              setPlaceholderDisplay('block');
             } else {
-              placeholder!.style.display = 'none';
+              setPlaceholderDisplay('none');
             }
           }}
         />
@@ -264,6 +263,7 @@ const JSONEditor = ({
           left={4}
           opacity={0.5}
           fontSize={'16px'}
+          display={placeholderDisplay}
         >
           {placeholder}
         </Box>
