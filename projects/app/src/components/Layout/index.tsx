@@ -105,6 +105,8 @@ const Layout = ({ children }: { children: JSX.Element }) => {
             )}
           </>
         )}
+
+        {!!userInfo && <UpdateInviteModal />}
       </Box>
       {feConfigs?.isPlus && (
         <>
