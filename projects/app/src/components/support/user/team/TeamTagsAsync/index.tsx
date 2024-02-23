@@ -40,8 +40,9 @@ const TeamTagsAsync = ({
   });
   const { copyData } = useCopyData();
   const baseUrl = global.feConfigs?.customSharePageDomain || location?.origin;
-  const linkUrl = `${baseUrl}/chat/team?teamId=${teamInfo?._id}${getValues('showHistory') ? '' : '&showHistory=0'
-    }`;
+  const linkUrl = `${baseUrl}/chat/team?teamId=${teamInfo?._id}${
+    getValues('showHistory') ? '' : '&showHistory=0'
+  }`;
 
   // tags Async
   const { mutate: onclickAsync, isLoading: creating } = useRequest({

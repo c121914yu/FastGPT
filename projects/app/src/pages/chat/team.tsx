@@ -364,23 +364,23 @@ const OutLink = ({
                 alignItems={'center'}
                 {...(item._id === appId
                   ? {
-                    bg: 'white',
-                    boxShadow: 'md'
-                  }
-                  : {
-                    _hover: {
-                      bg: 'myGray.200'
-                    },
-                    onClick: () => {
-                      router.replace({
-                        query: {
-                          appId: item._id,
-                          teamId: teamId,
-                          authToken: authToken
-                        }
-                      });
+                      bg: 'white',
+                      boxShadow: 'md'
                     }
-                  })}
+                  : {
+                      _hover: {
+                        bg: 'myGray.200'
+                      },
+                      onClick: () => {
+                        router.replace({
+                          query: {
+                            appId: item._id,
+                            teamId: teamId,
+                            authToken: authToken
+                          }
+                        });
+                      }
+                    })}
               >
                 <Avatar src={item.avatar} w={'24px'} />
                 <Box ml={2} className={'textEllipsis'}>
@@ -484,7 +484,7 @@ const OutLink = ({
                 userGuideModule={chatData.app?.userGuideModule}
                 showFileSelector={checkChatSupportSelectFileByChatModels(chatData.app.chatModels)}
                 feedbackType={'user'}
-                onUpdateVariable={(e) => { }}
+                onUpdateVariable={(e) => {}}
                 onStartChat={startChat}
                 onDelMessage={(e) =>
                   delOneHistoryItem({ ...e, appId: chatData.appId, chatId, outLinkUid })

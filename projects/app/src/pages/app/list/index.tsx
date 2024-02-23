@@ -183,10 +183,7 @@ const MyApps = () => {
       )}
       <ConfirmModal />
       {isOpenCreateModal && (
-        <CreateModal
-          onClose={onCloseCreateModal}
-          onSuccess={() => loadMyApps(true)}
-        />
+        <CreateModal onClose={onCloseCreateModal} onSuccess={() => loadMyApps(true)} />
       )}
     </PageContainer>
   );
