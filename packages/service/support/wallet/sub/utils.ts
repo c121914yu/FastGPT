@@ -51,6 +51,10 @@ export const getTeamSubPlans = async ({
     usedDatasetSize
   };
 };
+export const getUserStandDardList = async (teamId: string) => {
+  // 
+  return MongoTeamSub.find({ teamId });
+}
 export const getTeamStandPlan = async ({
   teamId,
   standardPlans

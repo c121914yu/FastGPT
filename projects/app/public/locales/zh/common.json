@@ -556,8 +556,7 @@
             "success": "开始同步"
           }
         },
-        "training": {
-        }
+        "training": {}
       },
       "data": {
         "Auxiliary Data": "辅助数据",
@@ -1175,6 +1174,13 @@
       "New api key": "新的 API 秘钥",
       "New api key tip": "请保管好你的秘钥，秘钥不会再次展示~",
       "Usage": "已用额度(￥)"
+    },
+    "standard": {
+      "type": "类型",
+      "storage": "存储量",
+      "AI Bonus Points": "AI 积分",
+      "Start Time": "开始时间",
+      "Expired Time": "结束时间"
     },
     "outlink": {
       "Max usage points": "积分上限",

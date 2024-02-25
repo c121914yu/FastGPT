@@ -50,6 +50,13 @@ export enum StandardSubLevelEnum {
   enterprise = 'enterprise',
   custom = 'custom'
 }
+export const StandardSubLevelMap = {
+  [StandardSubLevelEnum.free]: '免费',
+  [StandardSubLevelEnum.experience]: '体验',
+  [StandardSubLevelEnum.team]: '团队',
+  [StandardSubLevelEnum.enterprise]: '企业',
+  [StandardSubLevelEnum.custom]: '通用',
+}
 export const standardSubLevelMap = {
   [StandardSubLevelEnum.free]: {
     label: 'support.wallet.subscription.standardSubLevel.free',

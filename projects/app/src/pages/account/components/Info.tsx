@@ -221,7 +221,7 @@ const MyInfo = () => {
                 if (val === userInfo?.team?.memberName) return;
                 try {
                   putUpdateMemberName(val);
-                } catch (error) {}
+                } catch (error) { }
               }}
             />
           </Flex>
@@ -277,6 +277,12 @@ const PlanUsage = () => {
   const { reset } = useForm<UserUpdateParams>({
     defaultValues: userInfo as UserType
   });
+
+  const {
+    isOpen: isOpenStandardModal,
+    onClose: onCloseStandardModal,
+    onOpen: onOpenStandardModal
+  } = useDisclosure();
 
   const planName = useMemo(() => {
     if (!teamPlanStatus?.standard?.currentSubLevel) return '';
@@ -355,9 +361,9 @@ const PlanUsage = () => {
         >
           {t('support.user.Price')}
         </Button>
-        {/* <Button ml={4} variant={'whitePrimary'} size={'sm'}>
+        <Button ml={4} variant={'whitePrimary'} size={'sm'} onClick={onOpenStandardModal}>
           套餐详情
-        </Button> */}
+        </Button>
       </Flex>
       <Box
         mt={[3, 6]}
@@ -445,6 +451,7 @@ const PlanUsage = () => {
         </Box>
         <Flex></Flex>
       </Box>
+      {isOpenStandardModal && <StandDetailModal onClose={onCloseStandardModal} />}
     </Box>
   ) : null;
 };
