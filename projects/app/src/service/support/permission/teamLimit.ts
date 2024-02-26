@@ -50,7 +50,7 @@ export const checkTeamDatasetLimit = async (teamId: string) => {
     getTeamStandPlan({ teamId, standardPlans: getStandardSubPlan() }),
     MongoDataset.countDocuments({
       teamId,
-      type: DatasetTypeEnum.dataset
+      type: { $ne: DatasetTypeEnum.folder }
     })
   ]);
 
