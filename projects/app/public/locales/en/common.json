@@ -110,6 +110,7 @@
     "Number of words": "{{amount}} words",
     "OK": "OK",
     "Opened": "Opened",
+    "Other": "Other",
     "Output": "Output",
     "Params": "Params",
     "Password inconsistency": "Password inconsistency",
@@ -503,6 +504,7 @@
       "Manual collection": "Manual collection",
       "My Dataset": "My Dataset",
       "Name": "Name",
+      "Query extension intro": "If the problem completion function is enabled, the accuracy of knowledge base search can be improved in continuous conversations. After this function is enabled, when searching the knowledge base, AI will be used to complete the missing information of the problem according to the conversation records.",
       "Quote Length": "Quote Length",
       "Read Dataset": "Read Dataset",
       "Search score tip": "{{scoreText}}Here are the rankings and scores:\n----\n{{detailScore}}",
@@ -613,6 +615,7 @@
         "Embedding Estimated Price Tips": "Index billing: {{price}}/1k chars",
         "Estimated Price": "Estimated Price: : {{amount}}{{unit}}",
         "Estimated Price Tips": "QA charges\nInput: 1k chars={{charsPointsPrice}} points",
+        "Estimated points": "About {{points}} points",
         "Fetch Error": "Get link failed",
         "Fetch Url": "Url",
         "Fetch url placeholder": "Up to 10 links, one per line.",
@@ -682,7 +685,7 @@
         "Source name": "Source",
         "Top K": "Top K",
         "Using cfr": "Open query extension",
-        "Using query extension": "",
+        "Using query extension": "Open query extension",
         "mode": {
           "embedding": "Vector recall",
           "embedding desc": "Use vectors for text correlation queries",
@@ -846,8 +849,8 @@
         "dynamicTargetInput": "dynamic Target Input",
         "input": "Input",
         "selectApp": "App Selector",
-        "selectChatModel": "Select Chat Model",
         "selectDataset": "Dataset Selector",
+        "selectLLMModel": "Select Chat Model",
         "switch": "Switch",
         "target": "Target Data",
         "textarea": "Textarea"
@@ -859,6 +862,7 @@
           "Ai response content": "Will be triggered after the stream reply is complete",
           "New context": "Concatenate the reply content with history and return it as a new context",
           "Quote": "Always return an array, if you want the search results to be empty to perform additional operations, you need to use the above two inputs and the trigger of the target module",
+          "query extension result": "Output as an array of strings to connect the result directly to the 'Question' of the knowledge base search",
           "running done": "Triggered when the module call finish"
         },
         "label": {
@@ -867,7 +871,7 @@
           "Quote": "Quote",
           "Search result empty": "Search result empty",
           "Search result not empty": "Search result not empty",
-          "cfr result": "Response text",
+          "query extension result": "Response text",
           "result false": "False",
           "result true": "True",
           "running done": "done",
@@ -1182,9 +1186,16 @@
     "subscription": {
       "Cancel subscription": "Cancel"
     },
+    "team": {
+      "limit": {
+        "No permission rerank": "Not permission to rerank, please upgrade your plan"
+      }
+    },
     "user": {
+      "Avatar": "Avatar",
       "Need to login": "Please log in first",
       "Price": "Price",
+      "User self info": "My info",
       "auth": {
         "Sending Code": "Sending"
       },
@@ -1232,6 +1243,7 @@
       },
       "noBill": "Not Bills",
       "subscription": {
+        "AI points": "AI points",
         "Ai points": "AI Points Standard",
         "Buy now": "Buy now",
         "Change will take effect after the current subscription expires": "Change will take effect after the current subscription expires",
@@ -1258,9 +1270,11 @@
         "Standard update success": "Change subscription plan successful!",
         "Sub plan": "Pricing Plans",
         "Sub plan tip": "Use FastGPT for free or upgrade to a higher plan",
+        "Team plan and usage": "Plan and usage",
         "Training weight": "Training weight: {{weight}}",
         "Update extra ai points": "AI Points",
         "Update extra dataset size": "Dataset size",
+        "Upgrade plan": "Upgrade plan",
         "function": {
           "History store": "",
           "Max app": "",
@@ -1297,7 +1311,7 @@
         "Bill Module": "Bill Detail",
         "Chars length": "Chars length",
         "Data Length": "Data length",
-        "Dataset store": "",
+        "Dataset store": "Dataset store",
         "Duration": "Duration(s)",
         "Extension Input Token Length": "Extension input tokens",
         "Extension Output Token Length": "Extension output tokens",
@@ -1357,6 +1371,7 @@
     "Set OpenAI Account Failed": "Set OpenAI account failed",
     "Sign Out": "Sign Out",
     "Source": "Source",
+    "Standard Detail": "",
     "Team": "Team",
     "Time": "Time",
     "Timezone": "Timezone",
