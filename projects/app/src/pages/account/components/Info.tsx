@@ -221,7 +221,7 @@ const MyInfo = () => {
                 if (val === userInfo?.team?.memberName) return;
                 try {
                   putUpdateMemberName(val);
-                } catch (error) { }
+                } catch (error) {}
               }}
             />
           </Flex>
@@ -362,7 +362,7 @@ const PlanUsage = () => {
           {t('support.user.Price')}
         </Button>
         <Button ml={4} variant={'whitePrimary'} size={'sm'} onClick={onOpenStandardModal}>
-          套餐详情
+          {t('support.wallet.Standard Plan Detail')}
         </Button>
       </Flex>
       <Box

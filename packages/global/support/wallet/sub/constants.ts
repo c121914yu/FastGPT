@@ -3,15 +3,19 @@ export enum SubTypeEnum {
   extraDatasetSize = 'extraDatasetSize',
   extraPoints = 'extraPoints'
 }
+
 export const subTypeMap = {
   [SubTypeEnum.standard]: {
-    label: 'support.wallet.subscription.type.standard'
+    label: 'support.wallet.subscription.type.standard',
+    icon: 'acount/plans'
   },
   [SubTypeEnum.extraDatasetSize]: {
-    label: 'support.wallet.subscription.type.extraDatasetSize'
+    label: 'support.wallet.subscription.type.extraDatasetSize',
+    icon: 'core/app/simpleMode/database'
   },
   [SubTypeEnum.extraPoints]: {
-    label: 'support.wallet.subscription.type.extraPoints'
+    label: 'support.wallet.subscription.type.extraPoints',
+    icon: 'core/app/simpleMode/dataset'
   }
 };
 
@@ -49,13 +53,6 @@ export enum StandardSubLevelEnum {
   team = 'team',
   enterprise = 'enterprise',
   custom = 'custom'
-}
-export const StandardSubLevelMap = {
-  [StandardSubLevelEnum.free]: '免费',
-  [StandardSubLevelEnum.experience]: '体验',
-  [StandardSubLevelEnum.team]: '团队',
-  [StandardSubLevelEnum.enterprise]: '企业',
-  [StandardSubLevelEnum.custom]: '通用',
 }
 export const standardSubLevelMap = {
   [StandardSubLevelEnum.free]: {

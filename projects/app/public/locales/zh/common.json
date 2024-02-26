@@ -1219,6 +1219,7 @@
     },
     "wallet": {
       "Amount": "金额",
+      "Standard Plan Detail": "套餐详情",
       "Balance not enough tip": "余额不足，请先到账号页充值",
       "Bills": "账单",
       "Buy": "购买",
@@ -1379,7 +1380,6 @@
     "Set OpenAI Account Failed": "设置 OpenAI 账号异常",
     "Sign Out": "登出",
     "Source": "来源",
-    "Standard Detail": "套餐详情",
     "Team": "团队",
     "Time": "时间",
     "Timezone": "时区",
