@@ -156,7 +156,7 @@ const MyInfo = () => {
       {/* user info */}
       {isPc && (
         <Flex alignItems={'center'} fontSize={'xl'} h={'30px'}>
-          <MyIcon mr={2} name={'acount/user'} w={'20px'} />
+          <MyIcon mr={2} name={'support/user/userLight'} w={'20px'} />
           {t('support.user.User self info')}
         </Flex>
       )}
@@ -354,7 +354,7 @@ const PlanUsage = () => {
     <Box mt={[6, 0]}>
       <Flex fontSize={'xl'} h={'30px'}>
         <Flex alignItems={'center'}>
-          <MyIcon mr={2} name={'acount/plans'} w={'20px'} />
+          <MyIcon mr={2} name={'support/account/plans'} w={'20px'} />
           {t('support.wallet.subscription.Team plan and usage')}
         </Flex>
         <Button
