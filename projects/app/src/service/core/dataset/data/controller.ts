@@ -382,6 +382,10 @@ export async function searchDatasetData(props: SearchDatasetDataProps) {
 
     const formatResult = concatResults
       .map((data, index) => {
+        if (data.collectionId) {
+          console.log('Collection is not found', data);
+        }
+
         const result: SearchDataResponseItemType = {
           id: String(data._id),
           q: data.q,
@@ -389,7 +393,7 @@ export async function searchDatasetData(props: SearchDatasetDataProps) {
           chunkIndex: data.chunkIndex,
           datasetId: String(data.datasetId),
           collectionId: String(data.collectionId?._id),
-          sourceName: data.collectionId.name || '',
+          sourceName: data.collectionId?.name || '',
           sourceId: data.collectionId?.fileId || data.collectionId?.rawLink,
           score: [{ type: SearchScoreTypeEnum.embedding, value: data.score, index }]
         };
