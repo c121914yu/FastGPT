@@ -147,10 +147,7 @@ const InputDataModal = ({
         return Promise.reject(t('dataset.data.input is empty'));
       }
       if (countPromptTokens(e.q) >= maxToken) {
-        return toast({
-          title: t('core.dataset.data.Too Long'),
-          status: 'warning'
-        });
+        return Promise.reject(t('core.dataset.data.Too Long'));
       }
 
       const data = { ...e };

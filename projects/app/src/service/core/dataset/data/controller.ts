@@ -118,7 +118,7 @@ export async function insertData2Dataset({
     a,
     fullTextToken: jiebaSplit({ text: qaStr }),
     chunkIndex,
-    indexes: indexes.map((item, i) => ({
+    indexes: indexes?.map((item, i) => ({
       ...item,
       dataId: result[i].insertId
     }))
