@@ -22,13 +22,3 @@
   color: var(--chakra-colors-primary-600);
   padding: 0 2px;
 }
-
-.contentEditable_single_line {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: auto;
-  padding-left: 8px;
-  position: relative;
-}

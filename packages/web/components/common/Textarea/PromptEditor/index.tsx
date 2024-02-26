@@ -11,24 +11,16 @@ import { useCallback, useTransition } from 'react';
 const PromptEditor = ({
   showOpenModal = true,
   showResize = true,
-  isSingleLine = false,
-  hasVariablePlugin = true,
-  hasDropDownPlugin = false,
   variables = [],
   value,
   onChange,
   onBlur,
   h,
   placeholder,
-  title,
-  setDropdownValue,
-  updateTriger
+  title
 }: {
   showOpenModal?: boolean;
   showResize?: boolean;
-  isSingleLine?: boolean;
-  hasVariablePlugin?: boolean;
-  hasDropDownPlugin?: boolean;
   variables?: EditorVariablePickerType[];
   value?: string;
   onChange?: (text: string) => void;
@@ -36,11 +28,8 @@ const PromptEditor = ({
   h?: number;
   placeholder?: string;
   title?: string;
-  setDropdownValue?: (value: string) => void;
-  updateTriger?: boolean;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [currentValue, setCurrentValue] = React.useState(value);
 
   const [, startSts] = useTransition();
 
@@ -49,7 +38,6 @@ const PromptEditor = ({
   const onChangeInput = useCallback((editorState: EditorState) => {
     const text = editorState.read(() => $getRoot().getTextContent());
     const formatValue = text.replaceAll('\n\n', '\n').replaceAll('}}{{', '}} {{');
-    setCurrentValue(formatValue);
     onChange?.(formatValue);
   }, []);
   const onBlurInput = useCallback((editor: LexicalEditor) => {
@@ -58,28 +46,19 @@ const PromptEditor = ({
       onBlur?.(text);
     });
   }, []);
-  useEffect(() => {
-    setCurrentValue(value);
-  }, [value]);
 
   return (
     <>
       <Editor
         showResize={showResize}
         showOpenModal={showOpenModal}
-        isSingleLine={isSingleLine}
-        hasVariablePlugin={hasVariablePlugin}
-        hasDropDownPlugin={hasDropDownPlugin}
         onOpenModal={onOpen}
         variables={variables}
         h={h}
         value={value}
-        currentValue={currentValue}
         onChange={onChangeInput}
         onBlur={onBlurInput}
         placeholder={placeholder}
-        setDropdownValue={setDropdownValue}
-        updateTrigger={updateTriger}
       />
       <MyModal isOpen={isOpen} onClose={onClose} iconSrc="modal/edit" title={title} w={'full'}>
         <ModalBody>

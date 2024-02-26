@@ -36,7 +36,7 @@ import {
   splitGuideModule
 } from '@fastgpt/global/core/module/utils';
 import { EditorVariablePickerType } from '@fastgpt/web/components/common/Textarea/PromptEditor/type';
-import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
+import HttpInput from '@fastgpt/web/components/common/Input/HttpInput';
 import HttpImportModal from '../render/HttpImportModal';
 
 enum TabEnum {
@@ -396,10 +396,7 @@ const RenderForm = ({
           {list.map((item, index) => (
             <Tr key={`${input.key}${index}`}>
               <Td p={0} w={'150px'}>
-                <PromptEditor
-                  showOpenModal={false}
-                  showResize={false}
-                  isSingleLine={true}
+                <HttpInput
                   hasVariablePlugin={false}
                   hasDropDownPlugin={true}
                   setDropdownValue={(value) => {
@@ -407,7 +404,6 @@ const RenderForm = ({
                   }}
                   placeholder={t('core.module.http.Props name')}
                   value={item.key}
-                  h={40}
                   variables={variables}
                   onBlur={(val) => {
                     handleKeyChange(index, val);
@@ -417,13 +413,9 @@ const RenderForm = ({
               </Td>
               <Td p={0}>
                 <Box display={'flex'} alignItems={'center'}>
-                  <PromptEditor
-                    showOpenModal={false}
-                    showResize={false}
-                    isSingleLine={true}
+                  <HttpInput
                     placeholder={t('core.module.http.Props value')}
                     value={item.value}
-                    h={40}
                     variables={variables}
                     onBlur={(val) => {
                       setList((prevList) =>
@@ -448,10 +440,7 @@ const RenderForm = ({
           ))}
           <Tr>
             <Td p={0} w={'150px'}>
-              <PromptEditor
-                showOpenModal={false}
-                showResize={false}
-                isSingleLine={true}
+              <HttpInput
                 hasDropDownPlugin={true}
                 setDropdownValue={(val) => {
                   handleAddNewProps(val);
@@ -467,13 +456,7 @@ const RenderForm = ({
             </Td>
             <Td p={0}>
               <Box display={'flex'} alignItems={'center'}>
-                <PromptEditor
-                  showOpenModal={false}
-                  showResize={false}
-                  isSingleLine={true}
-                  value={''}
-                  h={40}
-                />
+                <HttpInput />
               </Box>
             </Td>
           </Tr>
