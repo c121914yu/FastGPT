@@ -15,7 +15,7 @@ import { checkInvalidChunkAndLock, checkTeamAiPointsAndLock } from './utils';
 const reduceQueue = () => {
   global.qaQueueLen = global.qaQueueLen > 0 ? global.qaQueueLen - 1 : 0;
 
-  return global.vectorQueueLen === 0;
+  return global.qaQueueLen === 0;
 };
 
 export async function generateQA(): Promise<any> {
@@ -86,6 +86,7 @@ export async function generateQA(): Promise<any> {
 
   // auth balance
   if (!(await checkTeamAiPointsAndLock(data.teamId, data.tmbId))) {
+    console.log('balance not enough');
     reduceQueue();
     return generateQA();
   }
