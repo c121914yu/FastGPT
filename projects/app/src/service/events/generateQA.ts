@@ -11,6 +11,7 @@ import type { PushDatasetDataChunkProps } from '@fastgpt/global/core/dataset/api
 import { pushDataToTrainingQueue } from '@/service/core/dataset/data/controller';
 import { getLLMModel } from '../core/ai/model';
 import { checkInvalidChunkAndLock, checkTeamAiPointsAndLock } from './utils';
+import { countGptMessagesChars } from '@fastgpt/service/core/chat/utils';
 
 const reduceQueue = () => {
   global.qaQueueLen = global.qaQueueLen > 0 ? global.qaQueueLen - 1 : 0;
@@ -145,7 +146,7 @@ ${replaceVariable(Prompt_AgentQA.fixedText, { text })}`;
       pushQAUsage({
         teamId: data.teamId,
         tmbId: data.tmbId,
-        charsLength: `${prompt}${answer}`.length,
+        charsLength: countGptMessagesChars(messages).length,
         billId: data.billId,
         model
       });

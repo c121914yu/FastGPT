@@ -59,7 +59,7 @@ export function ChatContextFilter({
   return [...systemPrompts, ...chats];
 }
 
-const replaceValidChars = (str: string) => {
+export const replaceValidChars = (str: string) => {
   const reg = /[\s\r\n]+/g;
   return str.replace(reg, '');
 };
