@@ -798,9 +798,15 @@
         "Field Setting Title": "提取字段配置"
       },
       "http": {
+        "Accept": "客户端接受的内容类型",
+        "Accept-Language": "客户端接受的语言",
         "Add props": "添加参数",
         "AppId": "应用的ID",
+        "Authorization": "身份验证凭据",
+        "Cache-Control": "缓存控制行为",
         "ChatId": "当前对话ID",
+        "Content-Type": "发送实体正文类型",
+        "Cookie": "客户端的 Cookie 信息",
         "Current time": "当前时间",
         "Histories": "历史纪录,最多取10条",
         "Key already exists": "Key 已经存在",

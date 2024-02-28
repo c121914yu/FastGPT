@@ -301,10 +301,22 @@ function RenderHttpProps({
         headers &&
         jsonBody &&
         {
-          [TabEnum.params]: <RenderForm moduleId={moduleId} input={params} variables={variables} />,
+          [TabEnum.params]: (
+            <RenderForm
+              moduleId={moduleId}
+              input={params}
+              variables={variables}
+              tabType={TabEnum.params}
+            />
+          ),
           [TabEnum.body]: <RenderJson moduleId={moduleId} variables={variables} input={jsonBody} />,
           [TabEnum.headers]: (
-            <RenderForm moduleId={moduleId} input={headers} variables={variables} />
+            <RenderForm
+              moduleId={moduleId}
+              input={headers}
+              variables={variables}
+              tabType={TabEnum.headers}
+            />
           )
         }[selectedTab]}
     </Box>
@@ -313,11 +325,13 @@ function RenderHttpProps({
 const RenderForm = ({
   moduleId,
   input,
-  variables
+  variables,
+  tabType
 }: {
   moduleId: string;
   input: FlowNodeInputItemType;
   variables: EditorVariablePickerType[];
+  tabType?: TabEnum;
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -327,11 +341,38 @@ const RenderForm = ({
   const [shouldUpdateNode, setShouldUpdateNode] = useState(false);
 
   const leftVariables = useMemo(() => {
-    return variables.filter((variable) => {
+    const HttpHeaders = [
+      {
+        key: 'Accept',
+        label: t('core.module.http.Accept')
+      },
+      {
+        key: 'Authorization',
+        label: t('core.module.http.Authorization')
+      },
+      {
+        key: 'Content-Type',
+        label: t('core.module.http.Content-Type')
+      },
+      {
+        key: 'Cookie',
+        label: t('core.module.http.Cookie')
+      },
+      {
+        key: 'Accept-Language',
+        label: t('core.module.http.Accept-Language')
+      },
+      {
+        key: 'Cache-Control',
+        label: t('core.module.http.Cache-Control')
+      }
+    ];
+
+    return HttpHeaders.filter((variable) => {
       const existVariables = list.map((item) => item.key);
       return !existVariables.includes(variable.key);
     });
-  }, [list, variables]);
+  }, [list, t]);
 
   useEffect(() => {
     setList(input.value || []);
@@ -378,16 +419,23 @@ const RenderForm = ({
   };
 
   const handleAddNewProps = (key: string, value: string = '') => {
-    const checkExist = list.find((item) => item.key === key);
-    if (checkExist) {
-      return toast({
-        status: 'warning',
-        title: t('core.module.http.Key already exists')
-      });
-    }
-    if (!key) return;
+    setList((prevList) => {
+      if (!key) {
+        return prevList;
+      }
 
-    setList((prevList) => [...prevList, { key, type: 'string', value }]);
+      const checkExist = prevList.find((item) => item.key === key);
+      if (checkExist) {
+        setUpdateTrigger((prev) => !prev);
+        toast({
+          status: 'warning',
+          title: t('core.module.http.Key already exists')
+        });
+        return prevList;
+      }
+      return [...prevList, { key, type: 'string', value }];
+    });
+
     setShouldUpdateNode(true);
   };
 
@@ -405,8 +453,8 @@ const RenderForm = ({
             <Tr key={`${input.key}${index}`}>
               <Td p={0} w={'150px'}>
                 <HttpInput
-                  hasVariablePlugin={false}
-                  hasDropDownPlugin={true}
+                  hasVariablePlugin={tabType !== TabEnum.headers}
+                  hasDropDownPlugin={tabType === TabEnum.headers}
                   setDropdownValue={(value) => {
                     handleKeyChange(index, value);
                     setUpdateTrigger((prev) => !prev);
@@ -450,16 +498,17 @@ const RenderForm = ({
           <Tr>
             <Td p={0} w={'150px'}>
               <HttpInput
-                hasDropDownPlugin={true}
+                hasDropDownPlugin={tabType === TabEnum.headers}
                 setDropdownValue={(val) => {
                   handleAddNewProps(val);
                 }}
                 placeholder={t('core.module.http.Add props')}
                 value={''}
-                h={40}
                 variables={leftVariables}
+                updateTrigger={updateTrigger}
                 onBlur={(val) => {
                   handleAddNewProps(val);
+                  setUpdateTrigger((prev) => !prev);
                 }}
               />
             </Td>
