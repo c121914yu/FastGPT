@@ -622,6 +622,7 @@ const ChatBox = (
                     {/* control icon */}
                     <Flex w={'100%'} alignItems={'center'} justifyContent={'flex-end'}>
                       <ChatControllerComponent
+                        isChatting={isChatting}
                         chat={item}
                         onDelete={
                           onDelMessage
@@ -654,6 +655,7 @@ const ChatBox = (
                       <ChatAvatar src={appAvatar} type={'AI'} />
                       {/* control icon */}
                       <ChatControllerComponent
+                        isChatting={isChatting}
                         ml={2}
                         chat={item}
                         setChatHistory={setChatHistory}
@@ -1239,6 +1241,7 @@ function Empty() {
 }
 
 const ChatControllerComponent = React.memo(function ChatControllerComponent({
+  isChatting,
   chat,
   setChatHistory,
   display,
@@ -1254,6 +1257,7 @@ const ChatControllerComponent = React.memo(function ChatControllerComponent({
   ml,
   mr
 }: {
+  isChatting: boolean;
   chat: ChatSiteItemType;
   setChatHistory?: React.Dispatch<React.SetStateAction<ChatSiteItemType[]>>;
   showVoiceIcon?: boolean;
@@ -1299,7 +1303,7 @@ const ChatControllerComponent = React.memo(function ChatControllerComponent({
           onClick={() => copyData(chat.value)}
         />
       </MyTooltip>
-      {!!onDelete && (
+      {!!onDelete && !isChatting && (
         <>
           {onRetry && (
             <MyTooltip label={t('core.chat.retry')}>
