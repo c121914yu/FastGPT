@@ -287,7 +287,9 @@ const TeamManageModal = ({ onClose }: { onClose: () => void }) => {
                       ) {
                         toast({
                           status: 'warning',
-                          title: t('user.team.Over Max Member Tip', { max: userInfo.team.maxSize })
+                          title: t('user.team.Over Max Member Tip', {
+                            max: teamPlanStatus.standardConstants.maxTeamMember
+                          })
                         });
                       } else {
                         onOpenInvite();
@@ -305,14 +307,7 @@ const TeamManageModal = ({ onClose }: { onClose: () => void }) => {
                   ml={3}
                   leftIcon={<DragHandleIcon w={'14px'} color={'primary.500'} />}
                   onClick={() => {
-                    if (userInfo.team.maxSize <= members.length) {
-                      toast({
-                        status: 'warning',
-                        title: t('user.team.Team Tags Async', { max: userInfo.team.maxSize })
-                      });
-                    } else {
-                      onOpenTeamTagsAsync();
-                    }
+                    onOpenTeamTagsAsync();
                   }}
                 >
                   {t('user.team.Team Tags Async')}

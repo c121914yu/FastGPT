@@ -8,7 +8,6 @@ export type TeamSchema = {
   avatar: string;
   createTime: Date;
   balance: number;
-  maxSize: number;
   teamDomain: string;
   limit: {
     lastExportDatasetTime: Date;
@@ -59,7 +58,6 @@ export type TeamItemType = {
   role: `${TeamMemberRoleEnum}`;
   status: `${TeamMemberStatusEnum}`;
   canWrite: boolean;
-  maxSize: number;
 };
 
 export type TeamMemberItemType = {
