@@ -271,7 +271,7 @@ const TeamManageModal = ({ onClose }: { onClose: () => void }) => {
               </Box>
               {userInfo.team.role === TeamMemberRoleEnum.owner &&
                 teamPlanStatus?.standardConstants &&
-                teamPlanStatus.standardConstants.maxTeamMember > members.length && (
+                teamPlanStatus.standardConstants.maxTeamMember && (
                   <Button
                     variant={'whitePrimary'}
                     size="sm"
@@ -281,7 +281,10 @@ const TeamManageModal = ({ onClose }: { onClose: () => void }) => {
                       <MyIcon name={'common/inviteLight'} w={'14px'} color={'primary.500'} />
                     }
                     onClick={() => {
-                      if (userInfo.team.maxSize <= members.length) {
+                      if (
+                        teamPlanStatus.standardConstants &&
+                        teamPlanStatus.standardConstants.maxTeamMember <= members.length
+                      ) {
                         toast({
                           status: 'warning',
                           title: t('user.team.Over Max Member Tip', { max: userInfo.team.maxSize })

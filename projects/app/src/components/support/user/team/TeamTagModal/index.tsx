@@ -52,7 +52,7 @@ const TeamTagsAsync = ({ onClose }: { onClose: () => void }) => {
   });
 
   const baseUrl = global.feConfigs?.customSharePageDomain || location?.origin;
-  const linkUrl = `${baseUrl}/chat/team?shareTeamId=${teamInfo.teamId}`;
+  const linkUrl = `${baseUrl}/chat/team?teamId=${teamInfo.teamId}&teamToken=`;
 
   // tags Async
   const { mutate: onclickUpdate, isLoading: isUpdating } = useRequest({

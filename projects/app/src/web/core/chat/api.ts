@@ -6,7 +6,8 @@ import type {
   InitChatProps,
   InitChatResponse,
   InitOutLinkChatProps,
-  getHistoriesProps
+  GetHistoriesProps,
+  InitTeamChatProps
 } from '@/global/core/chat/api.d';
 import type {
   AdminUpdateFeedbackParams,
@@ -16,23 +17,23 @@ import type {
   UpdateHistoryProps
 } from '@/global/core/chat/api.d';
 import { UpdateChatFeedbackProps } from '@fastgpt/global/core/chat/api';
+import { AuthTeamTagTokenProps } from '@fastgpt/global/support/user/team/tag';
+import { AppListItemType } from '@fastgpt/global/core/app/type';
 
 /**
  * 获取初始化聊天内容
  */
 export const getInitChatInfo = (data: InitChatProps) =>
   GET<InitChatResponse>(`/core/chat/init`, data);
-export const getInitChatInfoTeam = (data: InitChatProps) =>
-  GET<InitChatResponse>(`/core/chat/init`, data);
 export const getInitOutLinkChatInfo = (data: InitOutLinkChatProps) =>
   GET<InitChatResponse>(`/core/chat/outLink/init`, data);
-export const getTeamChatInfo = (data: { appId: string; chatId: string; outLinkUid?: string }) =>
+export const getTeamChatInfo = (data: InitTeamChatProps) =>
   GET<InitChatResponse>(`/core/chat/team/init`, data);
 
 /**
  * get current window history(appid or shareId)
  */
-export const getChatHistories = (data: getHistoriesProps) =>
+export const getChatHistories = (data: GetHistoriesProps) =>
   POST<ChatHistoryItemType[]>('/core/chat/getHistories', data);
 
 /**
@@ -68,10 +69,10 @@ export const closeCustomFeedback = (data: CloseCustomFeedbackParams) =>
 
 /* team chat */
 /**
- * 根据队伍ID和获取
+ * Get the app that can be used with this token
  */
-export const getChatListById = (data: { shareTeamId: string; authToken: string }) =>
-  POST<ChatAppListSchema>(`/proApi/core/chat/init`, data);
+export const getMyTokensApps = (data: AuthTeamTagTokenProps) =>
+  GET<AppListItemType[]>(`/proApi/support/user/team/tag/getAppsByTeamTokens`, data);
 
 /**
  * 获取团队分享的对话列表 initTeamChat

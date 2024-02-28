@@ -26,17 +26,6 @@ export type ChatSchema = {
   metadata?: Record<string, any>;
 };
 
-export type teamInfoType = {
-  avatar: string;
-  balance: number;
-  createTime: string;
-  maxSize: number;
-  name: string;
-  ownerId: string;
-  teamDomain: string;
-  _id: string;
-};
-
 export type ChatWithAppSchema = Omit<ChatSchema, 'appId'> & {
   appId: AppSchema;
 };

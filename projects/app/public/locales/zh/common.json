@@ -411,7 +411,7 @@
       "Stop Speak": "停止录音",
       "Type a message": "输入问题",
       "Unpin": "取消置顶",
-      "You need to a chat app": "鉴权失败，暂无权限访问应用",
+      "You need to a chat app": "你没有可用的应用",
       "error": {
         "Chat error": "对话出现异常",
         "Messages empty": "接口内容为空，可能文本超长了~",
@@ -561,8 +561,7 @@
             "success": "开始同步"
           }
         },
-        "training": {
-        }
+        "training": {}
       },
       "data": {
         "Auxiliary Data": "辅助数据",
@@ -1228,7 +1227,10 @@
       "team": {
         "Dataset usage": "知识库容量",
         "Team Tags Async Success": "同步完成",
-        "member": "成员"
+        "member": "成员",
+        "tag": {
+          "Have not opened": "未开通团队聊天功能"
+        }
       }
     },
     "wallet": {

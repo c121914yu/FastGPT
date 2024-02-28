@@ -411,7 +411,7 @@
       "Stop Speak": "Stop Speak",
       "Type a message": "Input problem",
       "Unpin": "Unpin",
-      "You need to a chat app": "You need to a chat app",
+      "You need to a chat app": "You don't have apps available",
       "error": {
         "Chat error": "Chat error",
         "Messages empty": "Interface content is empty, maybe the text is too long ~",
@@ -1226,7 +1226,10 @@
       "team": {
         "Dataset usage": "Dataset usage",
         "Team Tags Async Success": "Team async success",
-        "member": "Member"
+        "member": "Member",
+        "tag": {
+          "Have not opened": "Team chat is not enabled"
+        }
       }
     },
     "wallet": {
