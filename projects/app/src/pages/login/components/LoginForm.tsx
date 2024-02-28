@@ -99,6 +99,16 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
             redirectUrl: `https://accounts.google.com/o/oauth2/v2/auth?client_id=${feConfigs?.oauth?.google}&redirect_uri=${redirectUri}&state=${state.current}&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20openid&include_granted_scopes=true`
           }
         ]
+      : []),
+    ...(feConfigs?.oauth?.wechat
+      ? [
+          {
+            label: t('support.user.login.Wechat'),
+            provider: OAuthEnum.wechat,
+            icon: 'common/wechatFill',
+            pageType: PageTypeEnum.wechat
+          }
+        ]
       : [])
   ];
 
@@ -234,7 +244,8 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
                       lastRoute,
                       state: state.current
                     });
-                    router.replace(item.redirectUrl, '_self');
+                    item.redirectUrl && router.replace(item.redirectUrl, '_self');
+                    item.pageType && setPageType(item.pageType);
                   }}
                 >
                   {item.label}

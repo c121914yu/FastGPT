@@ -14,6 +14,7 @@ import CommunityModal from '@/components/CommunityModal';
 import Script from 'next/script';
 const RegisterForm = dynamic(() => import('./components/RegisterForm'));
 const ForgetPasswordForm = dynamic(() => import('./components/ForgetPasswordForm'));
+const WechatForm = dynamic(() => import('./components/WechatForm'));
 
 const Login = () => {
   const router = useRouter();
@@ -43,7 +44,8 @@ const Login = () => {
     const TypeMap = {
       [PageTypeEnum.login]: LoginForm,
       [PageTypeEnum.register]: RegisterForm,
-      [PageTypeEnum.forgetPassword]: ForgetPasswordForm
+      [PageTypeEnum.forgetPassword]: ForgetPasswordForm,
+      [PageTypeEnum.wechat]: WechatForm
     };
 
     const Component = TypeMap[type];
