@@ -29,8 +29,10 @@ type UserInfoType = {
 export async function getShareTeamUid(shareTeamId: string, authToken: string) {
   try {
     const teamInfo = await MongoTeam.findById(shareTeamId);
-    const tagsUrl = teamInfo?.tagsUrl;
-    const { data: userInfo } = await axios.post(tagsUrl + `/getUserInfo`, { autoken: authToken });
+    const teamDomain = teamInfo?.teamDomain;
+    const { data: userInfo } = await axios.post(teamDomain + `/getUserInfo`, {
+      autoken: authToken
+    });
 
     const uid = userInfo?.data?.uid;
     if (uid) {

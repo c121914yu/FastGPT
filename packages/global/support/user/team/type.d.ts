@@ -9,21 +9,19 @@ export type TeamSchema = {
   createTime: Date;
   balance: number;
   maxSize: number;
-  tagsUrl: string;
+  teamDomain: string;
   limit: {
     lastExportDatasetTime: Date;
     lastWebsiteSyncTime: Date;
   };
 };
 export type tagsType = {
-  label: string,
-  key: string
-}
-export type TeamTagsSchema = {
-  _id: string;
   label: string;
-  teamId: string;
   key: string;
+};
+export type TeamTagSchema = TeamTagItemType & {
+  _id: string;
+  teamId: string;
   createTime: Date;
 };
 
@@ -56,6 +54,7 @@ export type TeamItemType = {
   avatar: string;
   balance: number;
   tmbId: string;
+  teamDomain: string;
   defaultTeam: boolean;
   role: `${TeamMemberRoleEnum}`;
   status: `${TeamMemberStatusEnum}`;
@@ -71,4 +70,9 @@ export type TeamMemberItemType = {
   avatar: string;
   role: `${TeamMemberRoleEnum}`;
   status: `${TeamMemberStatusEnum}`;
+};
+
+export type TeamTagItemType = {
+  label: string;
+  key: string;
 };

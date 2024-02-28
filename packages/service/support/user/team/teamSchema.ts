@@ -29,7 +29,7 @@ const TeamSchema = new Schema({
     type: Number,
     default: 1
   },
-  tagsUrl: {
+  teamDomain: {
     type: String
   },
   limit: {

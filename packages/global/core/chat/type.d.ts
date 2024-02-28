@@ -33,14 +33,8 @@ export type teamInfoType = {
   maxSize: number;
   name: string;
   ownerId: string;
-  tagsUrl: string;
+  teamDomain: string;
   _id: string;
-};
-
-export type chatAppListSchema = {
-  apps: AppType[];
-  teamInfo: teamInfoSchema;
-  uid?: string;
 };
 
 export type ChatWithAppSchema = Omit<ChatSchema, 'appId'> & {
@@ -88,6 +82,13 @@ export type ChatSiteItemType = ChatItemType & {
   status: `${ChatStatusEnum}`;
   moduleName?: string;
   ttsBuffer?: Uint8Array;
+};
+
+/* --------- team chat --------- */
+export type ChatAppListSchema = {
+  apps: AppType[];
+  teamInfo: teamInfoSchema;
+  uid?: string;
 };
 
 /* ---------- history ------------- */

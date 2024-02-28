@@ -32,7 +32,7 @@ import { streamFetch } from '@/web/common/api/fetch';
 import { useTeamShareChatStore } from '@/web/core/chat/storeTeamChat';
 import type {
   ChatHistoryItemType,
-  chatAppListSchema,
+  ChatAppListSchema,
   teamInfoType
 } from '@fastgpt/global/core/chat/type.d';
 import { chatContentReplaceBlock } from '@fastgpt/global/core/chat/utils';
@@ -90,7 +90,7 @@ const OutLink = ({
 
   const outLinkUid: string = authToken || localUId;
 
-  // 纯网络获取流程
+  // get chat app list
   const loadApps = useCallback(async () => {
     try {
       if (!shareTeamId) {
@@ -100,7 +100,7 @@ const OutLink = ({
         });
         return;
       }
-      // 根据获取历史记录列表
+
       const res = await getChatListById({ shareTeamId, authToken });
       const { apps, teamInfo } = res;
       setMyApps(apps);
@@ -195,19 +195,30 @@ const OutLink = ({
 
       return { responseText, responseData, isNewChat: forbidRefresh.current };
     },
-    [appId, chatId, histories, pushHistory, router, setChatData, updateHistory]
+    [
+      appId,
+      authToken,
+      chatId,
+      histories,
+      outLinkUid,
+      pushHistory,
+      router,
+      setChatData,
+      shareTeamId,
+      t,
+      updateHistory
+    ]
   );
 
-  const { isFetching } = useQuery(['init', appId, shareTeamId], async () => {
-    console.log('res', 3);
+  useQuery(['init', appId, shareTeamId], async () => {
     if (!shareTeamId) {
       toast({
         status: 'error',
         title: t('core.chat.You need to a chat app')
       });
-      return;
+      return null;
     }
-    return shareTeamId && loadApps();
+    return loadApps();
   });
 
   useQuery(['loadHistories', appId], () => {
@@ -232,24 +243,13 @@ const OutLink = ({
       });
       return;
     }
-    // pc: redirect to latest model chat
-    if (!appId && lastChatAppId) {
-      return router.replace({
-        query: {
-          appId: lastChatAppId,
-          chatId: lastChatId,
-          shareTeamId,
-          authToken: authToken
-        } as routerQueryType
-      });
-    }
     if (!appId && myApps[0]) {
       return router.replace({
         query: {
           appId: myApps[0]._id,
           chatId: lastChatId,
           shareTeamId,
-          authToken: authToken
+          authToken
         } as routerQueryType
       });
     }

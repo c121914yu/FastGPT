@@ -23,6 +23,7 @@ async function getTeamMember(match: Record<string, any>): Promise<TeamItemType> 
     avatar: tmb.teamId.avatar,
     balance: tmb.teamId.balance,
     tmbId: String(tmb._id),
+    teamDomain: tmb.teamId?.teamDomain,
     role: tmb.role,
     status: tmb.status,
     defaultTeam: tmb.defaultTeam,
