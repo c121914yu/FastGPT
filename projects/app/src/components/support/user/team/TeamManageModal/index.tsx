@@ -269,36 +269,32 @@ const TeamManageModal = ({ onClose }: { onClose: () => void }) => {
               <Box ml={2} bg={'myGray.100'} borderRadius={'20px'} px={3} fontSize={'xs'}>
                 {members.length}
               </Box>
-              {userInfo.team.role === TeamMemberRoleEnum.owner &&
-                teamPlanStatus?.standardConstants &&
-                teamPlanStatus.standardConstants.maxTeamMember && (
-                  <Button
-                    variant={'whitePrimary'}
-                    size="sm"
-                    borderRadius={'md'}
-                    ml={3}
-                    leftIcon={
-                      <MyIcon name={'common/inviteLight'} w={'14px'} color={'primary.500'} />
+              {userInfo.team.role === TeamMemberRoleEnum.owner && (
+                <Button
+                  variant={'whitePrimary'}
+                  size="sm"
+                  borderRadius={'md'}
+                  ml={3}
+                  leftIcon={<MyIcon name={'common/inviteLight'} w={'14px'} color={'primary.500'} />}
+                  onClick={() => {
+                    if (
+                      teamPlanStatus?.standardConstants?.maxTeamMember &&
+                      teamPlanStatus.standardConstants.maxTeamMember <= members.length
+                    ) {
+                      toast({
+                        status: 'warning',
+                        title: t('user.team.Over Max Member Tip', {
+                          max: teamPlanStatus.standardConstants.maxTeamMember
+                        })
+                      });
+                    } else {
+                      onOpenInvite();
                     }
-                    onClick={() => {
-                      if (
-                        teamPlanStatus.standardConstants &&
-                        teamPlanStatus.standardConstants.maxTeamMember <= members.length
-                      ) {
-                        toast({
-                          status: 'warning',
-                          title: t('user.team.Over Max Member Tip', {
-                            max: teamPlanStatus.standardConstants.maxTeamMember
-                          })
-                        });
-                      } else {
-                        onOpenInvite();
-                      }
-                    }}
-                  >
-                    {t('user.team.Invite Member')}
-                  </Button>
-                )}
+                  }}
+                >
+                  {t('user.team.Invite Member')}
+                </Button>
+              )}
               {userInfo.team.role === TeamMemberRoleEnum.owner && feConfigs?.show_team_chat && (
                 <Button
                   variant={'whitePrimary'}
