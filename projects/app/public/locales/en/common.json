@@ -596,6 +596,7 @@
       "file": "File",
       "folder": "Folder",
       "import": {
+        "Auto mode Estimated Price Tips": "Enhanced processing calls the file processing model: {{price}} integral /1k characters",
         "Auto process": "Auto",
         "Auto process desc": "Automatically set segmentation and preprocessing rules",
         "CSV Import": "CSV QA Import",
@@ -739,6 +740,8 @@
       },
       "training": {
         "Agent queue": "QA wait list",
+        "Auto mode": "Enhancement process",
+        "Auto mode Tip": "Subindex and call model are used to generate relevant questions and abstracts to increase the semantic richness of data blocks and facilitate retrieval. It consumes more storage space and increases the number of AI calls.",
         "Chunk mode": "Chunk split",
         "Full": "Expect more than 5 minutes",
         "Leisure": "Leisure",

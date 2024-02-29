@@ -2,7 +2,7 @@ import { UsageSourceEnum } from '@fastgpt/global/support/wallet/usage/constants'
 import { ModelTypeEnum } from '@fastgpt/service/core/ai/model';
 import { addLog } from '@fastgpt/service/common/system/log';
 import { createUsage, concatUsage } from './controller';
-import { formatModelChars2Points } from '@/service/support/wallet/usage/utils';
+import { formatModelChars2Points } from '@fastgpt/service/support/wallet/usage/utils';
 import { ChatModuleUsageType } from '@fastgpt/global/support/wallet/bill/type';
 
 export const pushChatUsage = ({

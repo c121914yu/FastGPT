@@ -39,6 +39,12 @@ export const createTrainingUsage = async ({
             model: agentModel,
             charsLength: 0,
             amount: 0
+          },
+          {
+            moduleName: 'core.dataset.training.Auto mode',
+            model: agentModel,
+            charsLength: 0,
+            amount: 0
           }
         ]
       }
