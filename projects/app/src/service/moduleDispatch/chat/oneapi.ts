@@ -1,6 +1,6 @@
 import type { NextApiResponse } from 'next';
 import { ChatContextFilter, countMessagesChars } from '@fastgpt/service/core/chat/utils';
-import type { moduleDispatchResType, ChatItemType } from '@fastgpt/global/core/chat/type.d';
+import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { sseResponseEventEnum } from '@fastgpt/service/common/response/constant';
 import { textAdaptGptResponse } from '@/utils/adapt';
@@ -292,7 +292,7 @@ function getChatMessages({
 
   const filterMessages = ChatContextFilter({
     messages,
-    maxTokens: Math.ceil(model.maxContext - 300) // filter token. not response maxToken
+    maxTokens: model.maxContext - 300 // filter token. not response maxToken
   });
 
   const adaptMessages = adaptChat2GptMessages({ messages: filterMessages, reserveId: false });
