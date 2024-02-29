@@ -72,7 +72,7 @@ export const loginOut = () => GET('/support/user/account/loginout');
 
 export const putUserInfo = (data: UserUpdateParams) => PUT('/support/user/account/update', data);
 
-export const getWechatQR = () => GET('/support/user/account/publicWechat/getWechatQR');
+export const getWechatQR = () => GET('/proApi/support/user/account/publicWechat/getWechatQR');
 
 export const getWechatResult = (data: { code: string }) =>
-  GET(`/support/user/account/publicWechat/getWechatResult`, data);
+  GET(`/proApi/support/user/account/publicWechat/getWechatResult`, data);

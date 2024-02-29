@@ -1,5 +1,6 @@
 import { CodeModelSchema } from '@fastgpt/global/support/user/code/type';
 import { type Model, connectionMongo } from '../../../common/mongo';
+import { addMinutes } from 'date-fns';
 const { Schema, model, models } = connectionMongo;
 
 export const codesCollectionName = 'codes';
@@ -19,7 +20,7 @@ const CodeSchema = new Schema({
   },
   expireTime: {
     type: Date,
-    default: () => new Date(Date.now() + 5 * 60 * 1000)
+    default: () => addMinutes(new Date(), 5)
   }
 });
 

@@ -32,9 +32,6 @@ declare global {
 
   var simpleModeTemplates: AppSimpleEditConfigTemplateType[];
 
-  var WechatAccessToken: string;
-  var WechatExpiresIn: number;
-
   interface Window {
     grecaptcha: any;
     QRCode: any;

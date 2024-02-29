@@ -38,8 +38,6 @@ export type FastGPTFeConfigsType = {
   openAPIDocUrl?: string;
   systemTitle?: string;
   googleClientVerKey?: string;
-  wechatAppID?: string;
-  wechatAppSecret?: string;
   isPlus?: boolean;
   oauth?: {
     github?: string;

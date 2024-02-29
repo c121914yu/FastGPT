@@ -6,7 +6,7 @@ import type { ResLogin } from '@/global/support/api/userRes.d';
 import { useRouter } from 'next/router';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useChatStore } from '@/web/core/chat/storeChat';
-import LoginForm from './components/LoginForm';
+import LoginForm from './components/LoginForm/LoginForm';
 import dynamic from 'next/dynamic';
 import { serviceSideProps } from '@/web/common/utils/i18n';
 import { clearToken, setToken } from '@/web/support/user/auth';
@@ -14,7 +14,7 @@ import CommunityModal from '@/components/CommunityModal';
 import Script from 'next/script';
 const RegisterForm = dynamic(() => import('./components/RegisterForm'));
 const ForgetPasswordForm = dynamic(() => import('./components/ForgetPasswordForm'));
-const WechatForm = dynamic(() => import('./components/WechatForm'));
+const WechatForm = dynamic(() => import('./components/LoginForm/WechatForm'));
 
 const Login = () => {
   const router = useRouter();
