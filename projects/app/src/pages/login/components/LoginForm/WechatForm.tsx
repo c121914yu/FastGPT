@@ -1,13 +1,13 @@
 import React, { Dispatch, useCallback } from 'react';
 import { PageTypeEnum } from '@/constants/user';
 import type { ResLogin } from '@/global/support/api/userRes';
-import { Box, Center, Flex, Image, Spinner } from '@chakra-ui/react';
+import { Box, Center, Image, Spinner } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { getWechatQR, getWechatResult, oauthLogin } from '@/web/support/user/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useRouter } from 'next/router';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { FormLayout } from './components/FormLayout';
+import FormLayout from './components/FormLayout';
 
 interface Props {
   loginSuccess: (e: ResLogin) => void;

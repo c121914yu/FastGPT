@@ -17,7 +17,7 @@ interface Props {
   pageType: `${PageTypeEnum}`;
 }
 
-export const FormLayout = ({ children, setPageType, pageType }: Props) => {
+const FormLayout = ({ children, setPageType, pageType }: Props) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { setLoginStore, feConfigs } = useSystemStore();
@@ -132,3 +132,5 @@ export const FormLayout = ({ children, setPageType, pageType }: Props) => {
     </Flex>
   );
 };
+
+export default FormLayout;

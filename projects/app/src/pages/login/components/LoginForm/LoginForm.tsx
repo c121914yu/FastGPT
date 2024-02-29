@@ -8,7 +8,7 @@ import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { getDocPath } from '@/web/common/system/doc';
 import { useTranslation } from 'next-i18next';
-import { FormLayout } from './components/FormLayout';
+import FormLayout from './components/FormLayout';
 
 interface Props {
   setPageType: Dispatch<`${PageTypeEnum}`>;
