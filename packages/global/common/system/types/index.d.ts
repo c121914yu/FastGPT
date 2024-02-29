@@ -38,6 +38,8 @@ export type FastGPTFeConfigsType = {
   openAPIDocUrl?: string;
   systemTitle?: string;
   googleClientVerKey?: string;
+  showPhoneLogin?: boolean;
+  showEmailLogin?: boolean;
   isPlus?: boolean;
   oauth?: {
     github?: string;

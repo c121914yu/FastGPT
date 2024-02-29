@@ -1,7 +1,7 @@
 import Divider from '@/components/core/module/Flow/components/modules/Divider';
 import { PageTypeEnum } from '@/constants/user';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { AbsoluteCenter, Avatar, Box, Button, Flex } from '@chakra-ui/react';
+import { AbsoluteCenter, Box, Button, Flex, Image } from '@chakra-ui/react';
 import { LOGO_ICON } from '@fastgpt/global/common/system/constants';
 import { OAuthEnum } from '@fastgpt/global/support/user/constant';
 import MyIcon from '@fastgpt/web/components/common/Icon';
@@ -80,7 +80,7 @@ export const FormLayout = ({ children, setPageType, pageType }: Props) => {
           alignItems={'center'}
           justifyContent={'center'}
         >
-          <Avatar src={LOGO_ICON} w={'30px'} />
+          <Image src={LOGO_ICON} w={'24px'} alt={'icon'} />
         </Flex>
         <Box ml={3} fontSize={['2xl', '3xl']} fontWeight={'bold'}>
           {feConfigs?.systemTitle}

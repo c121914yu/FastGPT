@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Flex, Image, useDisclosure } from '@chakra-ui/react';
+import { Box, Center, Flex, Spinner, useDisclosure } from '@chakra-ui/react';
 import { PageTypeEnum } from '@/constants/user';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import type { ResLogin } from '@/global/support/api/userRes.d';
@@ -20,10 +20,15 @@ const Login = () => {
   const router = useRouter();
   const { lastRoute = '' } = router.query as { lastRoute: string };
   const { feConfigs } = useSystemStore();
-  const [pageType, setPageType] = useState<`${PageTypeEnum}`>(PageTypeEnum.login);
+  const [pageType, setPageType] = useState<`${PageTypeEnum}`>();
   const { setUserInfo } = useUserStore();
   const { setLastChatId, setLastChatAppId } = useChatStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (!feConfigs.oauth) return;
+    setPageType(feConfigs.oauth?.wechat ? PageTypeEnum.wechat : PageTypeEnum.login);
+  }, [feConfigs.oauth, feConfigs.oauth?.wechat]);
 
   const loginSuccess = useCallback(
     (res: ResLogin) => {
@@ -89,7 +94,13 @@ const Login = () => {
           ]}
         >
           <Box w={['100%', '380px']} flex={'1 0 0'}>
-            <DynamicComponent type={pageType} />
+            {pageType ? (
+              <DynamicComponent type={pageType} />
+            ) : (
+              <Center w={'full'} h={'full'}>
+                <Spinner />
+              </Center>
+            )}
           </Box>
           {feConfigs?.concatMd && (
             <Box

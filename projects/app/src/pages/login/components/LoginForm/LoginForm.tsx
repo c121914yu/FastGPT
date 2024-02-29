@@ -59,6 +59,10 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
 
   const isCommunityVersion = feConfigs?.show_register === false && feConfigs?.show_git;
 
+  const placeholder = isCommunityVersion
+    ? '使用root用户登录'
+    : `${feConfigs?.showPhoneLogin ? '手机号/' : ''}${feConfigs?.showEmailLogin ? '邮箱/' : ''}用户名`;
+
   return (
     <FormLayout setPageType={setPageType} pageType={PageTypeEnum.login}>
       <Box
@@ -72,9 +76,9 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
         <FormControl isInvalid={!!errors.username}>
           <Input
             bg={'myGray.50'}
-            placeholder={isCommunityVersion ? '使用root用户登录' : '邮箱/手机号/用户名'}
+            placeholder={placeholder}
             {...register('username', {
-              required: '邮箱/手机号/用户名不能为空'
+              required: `${placeholder}不能为空`
             })}
           ></Input>
         </FormControl>
