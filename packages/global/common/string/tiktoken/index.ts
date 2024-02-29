@@ -44,7 +44,8 @@ export function countPromptTokens(
 
   try {
     const encodeText = enc.encode(text);
-    return encodeText.length + role.length; // 补充 role 估算值
+    const supplementaryToken = role ? 4 : 0;
+    return encodeText.length + supplementaryToken;
   } catch (error) {
     return text.length;
   }
