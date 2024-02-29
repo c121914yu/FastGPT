@@ -104,7 +104,7 @@ export async function generateVector(): Promise<any> {
     }
 
     // insert to dataset
-    const { charsLength } = await insertData2Dataset({
+    const { tokens } = await insertData2Dataset({
       teamId: data.teamId,
       tmbId: data.tmbId,
       datasetId: data.datasetId,
@@ -120,7 +120,7 @@ export async function generateVector(): Promise<any> {
     pushGenerateVectorUsage({
       teamId: data.teamId,
       tmbId: data.tmbId,
-      charsLength,
+      tokens,
       model: data.model,
       billId: data.billId
     });

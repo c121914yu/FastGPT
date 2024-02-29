@@ -2,12 +2,12 @@ import { ModelTypeEnum, getModelMap } from '../../../core/ai/model';
 
 export const formatModelChars2Points = ({
   model,
-  charsLength = 0,
+  tokens = 0,
   modelType,
   multiple = 1000
 }: {
   model: string;
-  charsLength: number;
+  tokens: number;
   modelType: `${ModelTypeEnum}`;
   multiple?: number;
 }) => {
@@ -19,7 +19,7 @@ export const formatModelChars2Points = ({
     };
   }
 
-  const totalPoints = (modelData.charsPointsPrice || 0) * (charsLength / multiple);
+  const totalPoints = (modelData.charsPointsPrice || 0) * (tokens / multiple);
 
   return {
     modelName: modelData.name,

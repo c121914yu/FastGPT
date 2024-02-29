@@ -1,10 +1,7 @@
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import { ChatRoleEnum, IMG_BLOCK_KEY } from '@fastgpt/global/core/chat/constants';
 import { countMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
-import type {
-  ChatCompletionContentPart,
-  ChatMessageItemType
-} from '@fastgpt/global/core/ai/type.d';
+import type { ChatCompletionContentPart } from '@fastgpt/global/core/ai/type.d';
 import axios from 'axios';
 
 /* slice chat context by tokens */
@@ -31,9 +28,7 @@ export function ChatContextFilter({
   const chatPrompts: ChatItemType[] = messages.slice(chatStartIndex);
 
   // reduce token of systemPrompt
-  maxTokens -= countMessagesTokens({
-    messages: systemPrompts
-  });
+  maxTokens -= countMessagesTokens(systemPrompts);
 
   // Save the last chat prompt(question)
   const question = chatPrompts.pop();
@@ -50,9 +45,7 @@ export function ChatContextFilter({
       break;
     }
 
-    const tokens = countMessagesTokens({
-      messages: [assistant, user]
-    });
+    const tokens = countMessagesTokens([assistant, user]);
     maxTokens -= tokens;
     /* 整体 tokens 超出范围，截断  */
     if (maxTokens < 0) {
@@ -69,16 +62,6 @@ export function ChatContextFilter({
 
   return [...systemPrompts, ...chats];
 }
-
-export const replaceValidChars = (str: string) => {
-  const reg = /[\s\r\n]+/g;
-  return str.replace(reg, '');
-};
-export const countMessagesChars = (messages: ChatItemType[]) => {
-  return messages.reduce((sum, item) => sum + replaceValidChars(item.value).length, 0);
-};
-export const countGptMessagesChars = (messages: ChatMessageItemType[]) =>
-  messages.reduce((sum, item) => sum + replaceValidChars(item.content).length, 0);
 
 /**
     string to vision model. Follow the markdown code block rule for interception:
