@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback } from 'react';
+import React, { Dispatch, useCallback, useState } from 'react';
 import { PageTypeEnum } from '@/constants/user';
 import type { ResLogin } from '@/global/support/api/userRes';
 import { Box, Center, Image, Spinner } from '@chakra-ui/react';
@@ -15,11 +15,11 @@ interface Props {
 }
 
 const WechatForm = ({ setPageType, loginSuccess }: Props) => {
-  const [wechatInfo, setWechatInfo] = React.useState<{
+  const [wechatInfo, setWechatInfo] = useState<{
     code: string;
     codeUrl: string;
   }>();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 

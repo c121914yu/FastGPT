@@ -59,9 +59,13 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
 
   const isCommunityVersion = feConfigs?.show_register === false && feConfigs?.show_git;
 
-  const placeholder = isCommunityVersion
-    ? '使用root用户登录'
-    : `${feConfigs?.showPhoneLogin ? '手机号/' : ''}${feConfigs?.showEmailLogin ? '邮箱/' : ''}用户名`;
+  const loginOptions = [
+    feConfigs?.showPhoneLogin ? '手机号' : '',
+    feConfigs?.showEmailLogin ? '邮箱' : '',
+    '用户名'
+  ].filter(Boolean);
+
+  const placeholder = isCommunityVersion ? '使用root用户登录' : loginOptions.join('/');
 
   return (
     <FormLayout setPageType={setPageType} pageType={PageTypeEnum.login}>
