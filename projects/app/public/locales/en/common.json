@@ -798,15 +798,9 @@
         "Field Setting Title": "Extract field configuration"
       },
       "http": {
-        "Accept": "Accepted content types",
-        "Accept-Language": "Accepted languages",
         "Add props": "Add props",
         "AppId": "appId",
-        "Authorization": "Authentication credentials",
-        "Cache-Control": "Cache control",
         "ChatId": "chatId",
-        "Content-Type": "Entity body type",
-        "Cookie": "Client's Cookie info",
         "Current time": "Current time",
         "Histories": "histories",
         "Key already exists": "Key already exists",
