@@ -163,13 +163,17 @@ const Provider = ({
     [sources]
   );
   const predictPoints = useMemo(() => {
-    if (mode === TrainingModeEnum.qa || mode === TrainingModeEnum.auto) {
-      const charsLength = totalChunkChars * 1.5;
-      const price = (charsLength / 1000) * agentModel.charsPointsPrice;
+    const totalTokensPredict = totalChunkChars / 1000;
+    if (mode === TrainingModeEnum.auto) {
+      const price = totalTokensPredict * 1.3 * agentModel.charsPointsPrice;
+      return +price.toFixed(2);
+    }
+    if (mode === TrainingModeEnum.qa) {
+      const price = totalTokensPredict * 1.2 * agentModel.charsPointsPrice;
       return +price.toFixed(2);
     }
 
-    return +((totalChunkChars / 1000) * vectorModel.charsPointsPrice).toFixed(2);
+    return +(totalTokensPredict * vectorModel.charsPointsPrice).toFixed(2);
   }, [agentModel.charsPointsPrice, mode, totalChunkChars, vectorModel.charsPointsPrice]);
   const totalChunks = useMemo(
     () => sources.reduce((sum, file) => sum + file.chunks.length, 0),

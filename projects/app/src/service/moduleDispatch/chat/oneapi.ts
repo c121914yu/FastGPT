@@ -137,8 +137,6 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
 
   const response = await ai.chat.completions.create(
     {
-      presence_penalty: 0,
-      frequency_penalty: 0,
       ...modelConstantsData?.defaultConfig,
       model: modelConstantsData.model,
       temperature,
