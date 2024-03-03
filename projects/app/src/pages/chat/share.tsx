@@ -260,9 +260,9 @@ const OutLink = ({
         : { p: [0, 5] })}
     >
       <Head>
-        <link rel="icon" href={appAvatar || chatData.app?.avatar} />
         <title>{appName || chatData.app?.name}</title>
         <meta name="description" content={appIntro} />
+        <link rel="icon" href={appAvatar || chatData.app?.avatar} />
       </Head>
       <MyBox
         isLoading={isFetching}
