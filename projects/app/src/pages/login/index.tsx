@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Box, Center, Flex, useDisclosure } from '@chakra-ui/react';
-import { PageTypeEnum } from '@/constants/user';
+import { LoginPageTypeEnum } from '@/constants/user';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import type { ResLogin } from '@/global/support/api/userRes.d';
 import { useRouter } from 'next/router';
@@ -22,7 +22,7 @@ const Login = () => {
   const router = useRouter();
   const { lastRoute = '' } = router.query as { lastRoute: string };
   const { feConfigs } = useSystemStore();
-  const [pageType, setPageType] = useState<`${PageTypeEnum}`>();
+  const [pageType, setPageType] = useState<`${LoginPageTypeEnum}`>();
   const { setUserInfo } = useUserStore();
   const { setLastChatId, setLastChatAppId } = useChatStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,12 +42,12 @@ const Login = () => {
     [lastRoute, router, setLastChatId, setLastChatAppId, setUserInfo]
   );
 
-  function DynamicComponent({ type }: { type: `${PageTypeEnum}` }) {
+  function DynamicComponent({ type }: { type: `${LoginPageTypeEnum}` }) {
     const TypeMap = {
-      [PageTypeEnum.login]: LoginForm,
-      [PageTypeEnum.register]: RegisterForm,
-      [PageTypeEnum.forgetPassword]: ForgetPasswordForm,
-      [PageTypeEnum.wechat]: WechatForm
+      [LoginPageTypeEnum.passwordLogin]: LoginForm,
+      [LoginPageTypeEnum.register]: RegisterForm,
+      [LoginPageTypeEnum.forgetPassword]: ForgetPasswordForm,
+      [LoginPageTypeEnum.wechat]: WechatForm
     };
 
     const Component = TypeMap[type];
@@ -58,7 +58,9 @@ const Login = () => {
   /* default login type */
   useEffect(() => {
     if (!feConfigs.oauth) return;
-    setPageType(feConfigs.oauth?.wechat ? PageTypeEnum.wechat : PageTypeEnum.login);
+    setPageType(
+      feConfigs.oauth?.wechat ? LoginPageTypeEnum.wechat : LoginPageTypeEnum.passwordLogin
+    );
   }, [feConfigs.oauth, feConfigs.oauth?.wechat]);
   useEffect(() => {
     clearToken();

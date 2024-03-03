@@ -1,5 +1,5 @@
 import React, { Dispatch } from 'react';
-import { PageTypeEnum } from '@/constants/user';
+import { LoginPageTypeEnum } from '@/constants/user';
 import type { ResLogin } from '@/global/support/api/userRes';
 import { Box, Center, Image } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
@@ -13,7 +13,7 @@ import Loading from '@/components/Loading';
 
 interface Props {
   loginSuccess: (e: ResLogin) => void;
-  setPageType: Dispatch<`${PageTypeEnum}`>;
+  setPageType: Dispatch<`${LoginPageTypeEnum}`>;
 }
 
 const WechatForm = ({ setPageType, loginSuccess }: Props) => {
@@ -38,16 +38,9 @@ const WechatForm = ({ setPageType, loginSuccess }: Props) => {
   });
 
   return (
-    <FormLayout setPageType={setPageType} pageType={PageTypeEnum.wechat}>
+    <FormLayout setPageType={setPageType} pageType={LoginPageTypeEnum.wechat}>
       <Box>
-        <Box
-          fontSize={24}
-          fontWeight={600}
-          w={'full'}
-          display={'flex'}
-          justifyContent={'center'}
-          pt={12}
-        >
+        <Box w={'full'} textAlign={'center'} pt={5}>
           {t('support.user.login.Wx qr login')}
         </Box>
         <Box p={5} display={'flex'} w={'full'} justifyContent={'center'}>

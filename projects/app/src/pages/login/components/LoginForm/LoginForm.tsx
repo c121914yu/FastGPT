@@ -1,7 +1,7 @@
 import React, { useState, Dispatch, useCallback } from 'react';
 import { FormControl, Flex, Input, Button, Box, Link } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { PageTypeEnum } from '@/constants/user';
+import { LoginPageTypeEnum } from '@/constants/user';
 import { postLogin } from '@/web/support/user/api';
 import type { ResLogin } from '@/global/support/api/userRes';
 import { useToast } from '@fastgpt/web/hooks/useToast';
@@ -11,7 +11,7 @@ import { useTranslation } from 'next-i18next';
 import FormLayout from './components/FormLayout';
 
 interface Props {
-  setPageType: Dispatch<`${PageTypeEnum}`>;
+  setPageType: Dispatch<`${LoginPageTypeEnum}`>;
   loginSuccess: (e: ResLogin) => void;
 }
 
@@ -70,7 +70,7 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
     : loginOptions.join('/');
 
   return (
-    <FormLayout setPageType={setPageType} pageType={PageTypeEnum.login}>
+    <FormLayout setPageType={setPageType} pageType={LoginPageTypeEnum.passwordLogin}>
       <Box
         mt={'42px'}
         onKeyDown={(e) => {

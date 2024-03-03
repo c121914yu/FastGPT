@@ -1227,6 +1227,7 @@
         "Github": "Github",
         "Google": "Google",
         "Password": "Password",
+        "Password login": "Password login",
         "Phone": "Phone Login",
         "Phone number": "Phone",
         "Provider error": "Login exception, please try again",

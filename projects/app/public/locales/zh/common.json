@@ -1229,6 +1229,7 @@
         "Github": "Github 登录",
         "Google": "Google 登录",
         "Password": "密码",
+        "Password login": "密码登录",
         "Phone": "手机号登录",
         "Phone number": "手机号",
         "Provider error": "登录异常，请重试",
