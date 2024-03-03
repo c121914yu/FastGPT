@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Center, Flex, Spinner, useDisclosure } from '@chakra-ui/react';
+import { Box, Center, Flex, useDisclosure } from '@chakra-ui/react';
 import { PageTypeEnum } from '@/constants/user';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import type { ResLogin } from '@/global/support/api/userRes.d';
@@ -12,6 +12,8 @@ import { serviceSideProps } from '@/web/common/utils/i18n';
 import { clearToken, setToken } from '@/web/support/user/auth';
 import CommunityModal from '@/components/CommunityModal';
 import Script from 'next/script';
+import Loading from '@/components/Loading';
+
 const RegisterForm = dynamic(() => import('./components/RegisterForm'));
 const ForgetPasswordForm = dynamic(() => import('./components/ForgetPasswordForm'));
 const WechatForm = dynamic(() => import('./components/LoginForm/WechatForm'));
@@ -24,11 +26,6 @@ const Login = () => {
   const { setUserInfo } = useUserStore();
   const { setLastChatId, setLastChatAppId } = useChatStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    if (!feConfigs.oauth) return;
-    setPageType(feConfigs.oauth?.wechat ? PageTypeEnum.wechat : PageTypeEnum.login);
-  }, [feConfigs.oauth, feConfigs.oauth?.wechat]);
 
   const loginSuccess = useCallback(
     (res: ResLogin) => {
@@ -58,6 +55,11 @@ const Login = () => {
     return <Component setPageType={setPageType} loginSuccess={loginSuccess} />;
   }
 
+  /* default login type */
+  useEffect(() => {
+    if (!feConfigs.oauth) return;
+    setPageType(feConfigs.oauth?.wechat ? PageTypeEnum.wechat : PageTypeEnum.login);
+  }, [feConfigs.oauth, feConfigs.oauth?.wechat]);
   useEffect(() => {
     clearToken();
     router.prefetch('/app/list');
@@ -97,8 +99,8 @@ const Login = () => {
             {pageType ? (
               <DynamicComponent type={pageType} />
             ) : (
-              <Center w={'full'} h={'full'}>
-                <Spinner />
+              <Center w={'full'} h={'full'} position={'relative'}>
+                <Loading fixed={false} />
               </Center>
             )}
           </Box>

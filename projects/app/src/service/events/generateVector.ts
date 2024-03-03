@@ -71,7 +71,7 @@ export async function generateVector(): Promise<any> {
         }
       };
     } catch (error) {
-      console.log(`Get Training Data error`, error);
+      addLog.error(`Get Training Data error`, error);
       return {
         error: true
       };
@@ -80,7 +80,7 @@ export async function generateVector(): Promise<any> {
 
   if (done || !data) {
     if (reduceQueue()) {
-      console.log(`[Vector Queue] Done`);
+      addLog.info(`[Vector Queue] Done`);
     }
     return;
   }

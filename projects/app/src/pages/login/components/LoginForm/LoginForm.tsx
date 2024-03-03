@@ -57,15 +57,17 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
     [loginSuccess, toast]
   );
 
-  const isCommunityVersion = feConfigs?.show_register === false && feConfigs?.show_git;
+  const isCommunityVersion = feConfigs?.show_register === false && !feConfigs?.isPlus;
 
   const loginOptions = [
-    feConfigs?.showPhoneLogin ? '手机号' : '',
-    feConfigs?.showEmailLogin ? '邮箱' : '',
-    '用户名'
+    feConfigs?.show_phoneLogin ? t('support.user.login.Phone number') : '',
+    feConfigs?.show_emailLogin ? t('support.user.login.Email') : '',
+    t('support.user.login.Username')
   ].filter(Boolean);
 
-  const placeholder = isCommunityVersion ? '使用root用户登录' : loginOptions.join('/');
+  const placeholder = isCommunityVersion
+    ? t('support.user.login.Root login')
+    : loginOptions.join('/');
 
   return (
     <FormLayout setPageType={setPageType} pageType={PageTypeEnum.login}>
@@ -82,7 +84,7 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
             bg={'myGray.50'}
             placeholder={placeholder}
             {...register('username', {
-              required: `${placeholder}不能为空`
+              required: true
             })}
           ></Input>
         </FormControl>
@@ -90,25 +92,29 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
           <Input
             bg={'myGray.50'}
             type={'password'}
-            placeholder={isCommunityVersion ? 'root密码为你设置的环境变量' : '密码'}
+            placeholder={
+              isCommunityVersion
+                ? t('support.user.login.Root password placeholder')
+                : t('support.user.login.Password')
+            }
             {...register('password', {
-              required: '密码不能为空',
+              required: true,
               maxLength: {
-                value: 20,
-                message: '密码最多 20 位'
+                value: 60,
+                message: '密码最多 60 位'
               }
             })}
           ></Input>
         </FormControl>
         {feConfigs?.docUrl && (
           <Box mt={7} fontSize={'sm'}>
-            使用即代表你同意我们的{' '}
+            {t('support.user.login.User agreement tip')}{' '}
             <Link
               href={getDocPath('/docs/agreement/disclaimer/')}
               target={'_blank'}
               color={'primary.500'}
             >
-              免责声明
+              {t('support.user.login.User agreement')}
             </Link>
           </Box>
         )}
@@ -134,7 +140,7 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
                 onClick={() => setPageType('forgetPassword')}
                 fontSize="sm"
               >
-                忘记密码?
+                {t('support.user.login.Forget Password')}
               </Box>
               <Box mx={3} h={'16px'} w={'1.5px'} bg={'myGray.250'}></Box>
               <Box
@@ -143,7 +149,7 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
                 onClick={() => setPageType('register')}
                 fontSize="sm"
               >
-                注册账号
+                {t('support.user.login.Register')}
               </Box>
             </Flex>
           </>
