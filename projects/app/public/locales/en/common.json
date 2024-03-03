@@ -1222,6 +1222,7 @@
         "Sending Code": "Sending"
       },
       "login": {
+        "And": "&",
         "Email": "Email",
         "Forget Password": "Forget Password?",
         "Github": "Github",
@@ -1230,12 +1231,13 @@
         "Password login": "Password login",
         "Phone": "Phone Login",
         "Phone number": "Phone",
+        "Policy tip": "By using it, you agree with us",
+        "Privacy": "Privacy",
         "Provider error": "Login exception, please try again",
         "Register": "Register",
         "Root login": "Log in as the root user",
         "Root password placeholder": "root password is the environment variable you set",
-        "User agreement": "User agreement",
-        "User agreement tip": "By using it, you agree with us",
+        "Terms": "Terms",
         "Username": "Username",
         "Wechat": "Wechat",
         "Wx qr login": "Wechat scan code login"
