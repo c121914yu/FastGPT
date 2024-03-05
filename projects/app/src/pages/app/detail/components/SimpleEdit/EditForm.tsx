@@ -31,7 +31,7 @@ import Avatar from '@/components/Avatar';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import VariableEdit from '@/components/core/module/Flow/components/modules/VariableEdit';
 import MyTextarea from '@/components/common/Textarea/MyTextarea/index';
-import SelectAiModel from '@/components/Select/SelectAiModel';
+import SelectAiModel from '@fastgpt/web/components/common/MySelect/SelectAiModel';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import { formatEditorVariablePickerIcon } from '@fastgpt/global/core/module/utils';
 import SearchParamsTip from '@/components/core/dataset/SearchParamsTip';

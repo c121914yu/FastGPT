@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import type { RenderInputProps } from '../type';
 import { onChangeNode } from '../../../../FlowProvider';
-import SelectAiModel from '@/components/Select/SelectAiModel';
+import SelectAiModel from '@fastgpt/web/components/common/MySelect/SelectAiModel';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 
 const SelectAiModelRender = ({ item, inputs = [], moduleId }: RenderInputProps) => {
