@@ -36,6 +36,12 @@ const OutLink = ({ appId }: { appId: string }) => {
               title: t('core.app.Api request'),
               desc: t('core.app.Api request desc'),
               value: OutLinkTypeEnum.apikey
+            },
+            {
+              icon: 'core/chat/chatFill',
+              title: t('core.app.Wecom Kf'),
+              desc: t('core.app.Wecom Kf Desc'),
+              value: OutLinkTypeEnum.wecom
             }
             // {
             //   icon: 'support/outlink/iframeLight',
@@ -51,6 +57,7 @@ const OutLink = ({ appId }: { appId: string }) => {
 
       {linkType === OutLinkTypeEnum.share && <Share appId={appId} />}
       {linkType === OutLinkTypeEnum.apikey && <API appId={appId} />}
+      {linkType === OutLinkTypeEnum.wecom && <Share appId={appId} type='wecom' />}
     </Box>
   );
 };
