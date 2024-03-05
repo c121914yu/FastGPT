@@ -47,7 +47,11 @@ export function usePagination<T = any>({
         });
         setPageNum(num);
         res.total !== undefined && setTotal(res.total);
-        setData(res.data);
+        if (type === 'scroll') {
+          setData((prevData) => [...prevData, ...res.data]);
+        } else {
+          setData(res.data);
+        }
         onChange && onChange(num);
       } catch (error: any) {
         toast({
@@ -186,6 +190,7 @@ export function usePagination<T = any>({
     pageSize,
     total,
     data,
+    setData,
     isLoading,
     Pagination,
     ScrollData,
