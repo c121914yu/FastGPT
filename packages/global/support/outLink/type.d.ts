@@ -18,6 +18,15 @@ export type OutLinkSchema = {
     maxUsagePoints: number;
     hookUrl?: string;
   };
+  wecomConfig?: {
+    ReplyLimit: Boolean;
+    defaultResponse: string;
+    immediateResponse: boolean;
+    WXWORK_TOKEN: string;
+    WXWORK_AESKEY: string;
+    WXWORK_SECRET: string;
+    WXWORD_ID: string;
+  }
 };
 export type OutLinkWithAppType = Omit<OutLinkSchema, 'appId'> & {
   appId: AppSchema;
@@ -29,3 +38,10 @@ export type OutLinkEditType = {
   responseDetail: OutLinkSchema['responseDetail'];
   limit: OutLinkSchema['limit'];
 };
+
+export type OutLinkConfigEditType = {
+  _id?: string;
+  name: string;
+  wecomConfig: OutLinkSchema['wecomConfig'];
+  limit?: OutLinkSchema['limit'];
+}
