@@ -277,6 +277,7 @@ const Chat = ({ appId, chatId }: { appId: string; chatId: string }) => {
             );
           })(
             <ChatHistorySlider
+              apps={myApps}
               appId={appId}
               appName={chatData.app.name}
               appAvatar={chatData.app.avatar}

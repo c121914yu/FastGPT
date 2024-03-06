@@ -20,6 +20,7 @@ import { useTranslation } from 'next-i18next';
 import { useConfirm } from '@/web/common/hooks/useConfirm';
 import Tabs from '@/components/Tabs';
 import { useUserStore } from '@/web/support/user/useUserStore';
+import { AppListItemType } from '@fastgpt/global/core/app/type';
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '@/web/core/app/store/useAppStore';
 import { TeamMemberRoleEnum } from '@fastgpt/global/support/user/team/constant';
@@ -41,6 +42,8 @@ const ChatHistorySlider = ({
   appName,
   appAvatar,
   history,
+  isTeamShare,
+  apps,
   activeChatId,
   onChangeChat,
   onDelHistory,
@@ -54,6 +57,8 @@ const ChatHistorySlider = ({
   appAvatar: string;
   history: HistoryItemType[];
   activeChatId: string;
+  isTeamShare?: Boolean;
+  apps?: AppListItemType[];
   onChangeChat: (chatId?: string) => void;
   onDelHistory: (e: { chatId: string }) => void;
   onClearHistory: () => void;
@@ -140,7 +145,7 @@ const ChatHistorySlider = ({
 
       {/* menu */}
       <Flex w={'100%'} px={[2, 5]} h={'36px'} my={5} alignItems={'center'}>
-        {!isPc && !isShare && (
+        {!isPc && (!isShare || isTeamShare) && (
           <Tabs
             w={'120px'}
             mr={2}
@@ -165,7 +170,7 @@ const ChatHistorySlider = ({
           {t('core.chat.New Chat')}
         </Button>
 
-        {(isPc || isShare) && (
+        {(isPc || (isShare && !isTeamShare)) && (
           <IconButton
             ml={3}
             h={'100%'}
@@ -204,14 +209,14 @@ const ChatHistorySlider = ({
                 bg={item.top ? '#E6F6F6 !important' : ''}
                 {...(item.id === activeChatId
                   ? {
-                      backgroundColor: 'primary.50 !important',
-                      color: 'primary.600'
-                    }
+                    backgroundColor: 'primary.50 !important',
+                    color: 'primary.600'
+                  }
                   : {
-                      onClick: () => {
-                        onChangeChat(item.id);
-                      }
-                    })}
+                    onClick: () => {
+                      onChangeChat(item.id);
+                    }
+                  })}
               >
                 <MyIcon
                   name={item.id === activeChatId ? 'core/chat/chatFill' : 'core/chat/chatLight'}
@@ -286,7 +291,7 @@ const ChatHistorySlider = ({
         )}
         {currentTab === TabEnum.app && !isPc && (
           <>
-            {myApps.map((item) => (
+            {apps && apps.map((item) => (
               <Flex
                 key={item._id}
                 py={2}
@@ -296,19 +301,19 @@ const ChatHistorySlider = ({
                 alignItems={'center'}
                 {...(item._id === appId
                   ? {
-                      backgroundColor: 'primary.50 !important',
-                      color: 'primary.600'
-                    }
+                    backgroundColor: 'primary.50 !important',
+                    color: 'primary.600'
+                  }
                   : {
-                      onClick: () => {
-                        router.replace({
-                          query: {
-                            appId: item._id
-                          }
-                        });
-                        onClose();
-                      }
-                    })}
+                    onClick: () => {
+                      router.replace({
+                        query: {
+                          appId: item._id
+                        }
+                      });
+                      onClose();
+                    }
+                  })}
               >
                 <Avatar src={item.avatar} w={'24px'} />
                 <Box ml={2} className={'textEllipsis'}>
