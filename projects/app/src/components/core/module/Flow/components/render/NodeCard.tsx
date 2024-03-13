@@ -49,19 +49,23 @@ const NodeCard = (props: Props) => {
   const { toast } = useToast();
   const { setLoading } = useSystemStore();
   const { nodes, splitToolInputs } = useFlowProviderStore();
+  // edit intro
   const { onOpenModal: onOpenIntroModal, EditModal: EditIntroModal } = useEditTextarea({
     title: t('core.module.Edit intro'),
     tip: '调整该模块会对工具调用时机有影响。\n你可以通过精确的描述该模块功能，引导模型进行工具调用。',
     canEmpty: false
   });
-
   // custom title edit
   const { onOpenModal, EditModal: EditTitleModal } = useEditTitle({
     title: t('common.Custom Title'),
     placeholder: t('app.module.Custom Title Tip') || ''
   });
-  const { openConfirm, ConfirmModal } = useConfirm({
+  const { openConfirm: onOpenConfirmSync, ConfirmModal: ConfirmSyncModal } = useConfirm({
     content: t('module.Confirm Sync Plugin')
+  });
+  const { openConfirm: onOpenConfirmDeleteNode, ConfirmModal: ConfirmDeleteModal } = useConfirm({
+    content: t('core.module.Confirm Delete Node'),
+    type: 'delete'
   });
 
   const showToolHandle = useMemo(
@@ -86,7 +90,7 @@ const NodeCard = (props: Props) => {
                   (item) => item.key === ModuleInputKeyEnum.pluginId
                 )?.value;
                 if (!pluginId) return;
-                openConfirm(async () => {
+                onOpenConfirmSync(async () => {
                   try {
                     setLoading(true);
                     const pluginModule = await getPreviewPluginModule(pluginId);
@@ -140,7 +144,7 @@ const NodeCard = (props: Props) => {
         icon: 'delete',
         label: t('common.Delete'),
         variant: 'whiteDanger',
-        onClick: () => onDelNode(moduleId)
+        onClick: onOpenConfirmDeleteNode(() => onDelNode(moduleId))
       }
     ];
 
@@ -221,7 +225,7 @@ const NodeCard = (props: Props) => {
     name,
     onOpenIntroModal,
     onOpenModal,
-    openConfirm,
+    onOpenConfirmSync,
     setLoading,
     showToolHandle,
     t,
@@ -233,10 +237,11 @@ const NodeCard = (props: Props) => {
       <>
         <EditTitleModal maxLength={20} />
         {moduleIsTool && <EditIntroModal maxLength={500} />}
-        <ConfirmModal />
+        <ConfirmSyncModal />
+        <ConfirmDeleteModal />
       </>
     );
-  }, [ConfirmModal, EditIntroModal, EditTitleModal, moduleIsTool]);
+  }, [ConfirmDeleteModal, ConfirmSyncModal, EditIntroModal, EditTitleModal, moduleIsTool]);
 
   return (
     <Box
