@@ -20,6 +20,7 @@ import { useEditTextarea } from '@fastgpt/web/hooks/useEditTextarea';
 type Props = FlowModuleItemType & {
   children?: React.ReactNode | React.ReactNode[] | string;
   minW?: string | number;
+  maxW?: string | number;
   forbidMenu?: boolean;
   selected?: boolean;
 };
@@ -32,6 +33,7 @@ const NodeCard = (props: Props) => {
     name = t('core.module.template.UnKnow Module'),
     intro,
     minW = '300px',
+    maxW = '600px',
     moduleId,
     flowType,
     inputs,
@@ -209,21 +211,23 @@ const NodeCard = (props: Props) => {
       </Box>
     );
   }, [
-    avatar,
     flowType,
-    forbidMenu,
-    inputs,
-    intro,
+    t,
+    onOpenConfirmDeleteNode,
+    showToolHandle,
     moduleId,
-    moduleIsTool,
+    avatar,
     name,
-    onOpenIntroModal,
-    onOpenModal,
+    forbidMenu,
+    intro,
+    moduleIsTool,
+    inputs,
     onOpenConfirmSync,
     setLoading,
-    showToolHandle,
-    t,
-    toast
+    toast,
+    onOpenModal,
+    onDelNode,
+    onOpenIntroModal
   ]);
 
   const RenderModal = useMemo(() => {
@@ -240,7 +244,7 @@ const NodeCard = (props: Props) => {
   return (
     <Box
       minW={minW}
-      maxW={'600px'}
+      maxW={maxW}
       bg={'white'}
       borderWidth={'1px'}
       borderColor={selected ? 'primary.600' : 'borderColor.base'}

@@ -232,6 +232,23 @@ export const runToolWithToolChoice = async (
         return assistantResponses;
       })
       .flat();
+    // concat tool responses
+    const dispatchFlowResponse = response
+      ? response.dispatchFlowResponse.concat(flatToolsResponseData)
+      : flatToolsResponseData;
+
+    /* check stop signal */
+    const hasStopSignal = flatToolsResponseData.some(
+      (item) => !!item.flowResponses?.find((item) => item.toolStop)
+    );
+    if (hasStopSignal) {
+      return {
+        dispatchFlowResponse,
+        totalTokens: response?.totalTokens ? response.totalTokens + tokens : tokens,
+        completeMessages: filterMessages,
+        assistantResponses: toolAssistants
+      };
+    }
 
     return runToolWithToolChoice(
       {
@@ -239,9 +256,7 @@ export const runToolWithToolChoice = async (
         messages: [...concatToolMessages, ...toolsRunResponse.map((item) => item?.toolMsgParams)]
       },
       {
-        dispatchFlowResponse: response
-          ? response.dispatchFlowResponse.concat(flatToolsResponseData)
-          : flatToolsResponseData,
+        dispatchFlowResponse,
         totalTokens: response?.totalTokens ? response.totalTokens + tokens : tokens
       },
       [...assistantResponses, ...toolAssistants]
