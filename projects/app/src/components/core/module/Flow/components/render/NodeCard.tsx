@@ -6,13 +6,7 @@ import type { FlowModuleItemType } from '@fastgpt/global/core/module/type.d';
 import { useTranslation } from 'next-i18next';
 import { useEditTitle } from '@/web/common/hooks/useEditTitle';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import {
-  onChangeNode,
-  onCopyNode,
-  onResetNode,
-  onDelNode,
-  useFlowProviderStore
-} from '../../FlowProvider';
+import { onChangeNode, onCopyNode, onResetNode, useFlowProviderStore } from '../../FlowProvider';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -48,7 +42,7 @@ const NodeCard = (props: Props) => {
 
   const { toast } = useToast();
   const { setLoading } = useSystemStore();
-  const { nodes, splitToolInputs } = useFlowProviderStore();
+  const { nodes, splitToolInputs, onDelNode } = useFlowProviderStore();
   // edit intro
   const { onOpenModal: onOpenIntroModal, EditModal: EditIntroModal } = useEditTextarea({
     title: t('core.module.Edit intro'),

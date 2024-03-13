@@ -549,12 +549,6 @@ export const onResetNode = (e: Parameters<useFlowProviderStoreType['onResetNode'
     data: e
   });
 };
-export const onDelNode = (nodeId: string) => {
-  eventBus.emit(EventNameEnum.requestFlowEvent, {
-    type: 'onDelNode',
-    data: nodeId
-  });
-};
 export const onDelConnect = (e: Parameters<useFlowProviderStoreType['onDelConnect']>[0]) => {
   eventBus.emit(EventNameEnum.requestFlowEvent, {
     type: 'onDelConnect',

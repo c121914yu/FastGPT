@@ -93,7 +93,7 @@ export async function dispatchWorkFlow({
   let chatResponses: ChatHistoryItemResType[] = []; // response request and save to database
   let chatAssistantResponse: AIChatItemValueItemType[] = []; // The value will be returned to the user
   let chatNodeUsages: ChatNodeUsageType[] = [];
-  let toolRunResponse: ToolRunResponseItemType[] = [];
+  let toolRunResponse: ToolRunResponseItemType;
   let runningTime = Date.now();
 
   /* Store special response field  */
@@ -124,12 +124,12 @@ export async function dispatchWorkFlow({
     if (nodeDispatchUsages) {
       chatNodeUsages = chatNodeUsages.concat(nodeDispatchUsages);
     }
-    if (toolResponses) {
-      if (Array.isArray(toolResponses) && toolResponses.length > 0) {
-        toolRunResponse.push(toolResponses);
-      } else if (Object.keys(toolResponses).length > 0) {
-        toolRunResponse.push(toolResponses);
+    if (toolResponses !== undefined) {
+      if (Array.isArray(toolResponses) && toolResponses.length === 0) return;
+      if (typeof toolResponses === 'object' && Object.keys(toolResponses).length === 0) {
+        return;
       }
+      toolRunResponse = toolResponses;
     }
     if (assistantResponses) {
       chatAssistantResponse = chatAssistantResponse.concat(assistantResponses);
