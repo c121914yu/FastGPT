@@ -67,7 +67,7 @@ const CustomModal = ({
                 {iconSrc.startsWith('/') ? (
                   <Image mr={3} objectFit={'contain'} alt="" src={iconSrc} w={'20px'} />
                 ) : (
-                  <MyIcon mr={3} name={iconSrc as any} w={'20px'} />
+                  <MyIcon mr={3} name={iconSrc as any} color="#3370FF" w={'20px'} />
                 )}
               </>
             )}

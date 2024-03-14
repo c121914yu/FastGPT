@@ -26,7 +26,11 @@ export type OutLinkSchema = {
     WXWORK_AESKEY: string;
     WXWORK_SECRET: string;
     WXWORD_ID: string;
-  }
+  };
+  feiShuConfig?: {
+    appId: string;
+    appSecret: string;
+  };
 };
 export type OutLinkWithAppType = Omit<OutLinkSchema, 'appId'> & {
   appId: AppSchema;
@@ -42,10 +46,7 @@ export type OutLinkEditType = {
 export type OutLinkConfigEditType = {
   _id?: string;
   name: string;
-  wecomConfig: OutLinkSchema['wecomConfig'];
+  wecomConfig?: OutLinkSchema['wecomConfig'];
+  feiShuConfig?: OutLinkSchema['feiShuConfig'];
   limit?: OutLinkSchema['limit'];
-  WXWORK_TOKEN: string;
-  WXWORK_AESKEY: string;
-  WXWORK_SECRET: string;
-  WXWORD_ID: string;
-}
+};

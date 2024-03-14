@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 
 import MyRadio from '@/components/common/MyRadio';
 import Share from './Share';
+import FeiShu from './FeiShu';
 import { useTranslation } from 'next-i18next';
 const API = dynamic(() => import('./API'));
 
@@ -42,6 +43,12 @@ const OutLink = ({ appId }: { appId: string }) => {
               title: t('core.app.Wecom Kf'),
               desc: t('core.app.Wecom Kf Desc'),
               value: OutLinkTypeEnum.wecom
+            },
+            {
+              icon: 'feishu',
+              title: t('core.app.FeiShu Bot'),
+              desc: t('core.app.FeiShu Bot Desc'),
+              value: OutLinkTypeEnum.feishu
             }
             // {
             //   icon: 'support/outlink/iframeLight',
@@ -55,9 +62,10 @@ const OutLink = ({ appId }: { appId: string }) => {
         />
       </Box>
 
-      {linkType === OutLinkTypeEnum.share && <Share appId={appId} />}
+      {linkType === OutLinkTypeEnum.share && <Share appId={appId} type="share" />}
       {linkType === OutLinkTypeEnum.apikey && <API appId={appId} />}
-      {linkType === OutLinkTypeEnum.wecom && <Share appId={appId} type='wecom' />}
+      {linkType === OutLinkTypeEnum.wecom && <Share appId={appId} type="wecom" />}
+      {linkType === OutLinkTypeEnum.feishu && <FeiShu appId={appId} />}
     </Box>
   );
 };

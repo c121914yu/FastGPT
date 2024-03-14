@@ -13,7 +13,7 @@ import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { createWecomLinkChat, putWecomLinkChat } from '@/web/support/outLink/api';
 
-const WecomEditModal = ({
+const FeiShuEditModal = ({
   appId,
   type,
   defaultData,
@@ -143,41 +143,21 @@ const WecomEditModal = ({
           <Switch {...register('wecomConfig.immediateResponse')} size={'lg'} />
         </Flex>
         <Flex alignItems={'center'} mt={4}>
-          <Box flex={'0 0 90px'}>{t('outlink.WXWORK_TOKEN')}</Box>
+          <Box flex={'0 0 90px'}>{t('core.module.http.AppId')}</Box>
           <Input
-            placeholder={t('outlink.WXWORK_TOKEN') || 'Link Name'}
+            placeholder={t('core.module.http.appId') || 'Link Name'}
             maxLength={20}
-            {...register('wecomConfig.WXWORK_TOKEN', {
+            {...register('feiShuConfig.appId', {
               required: t('common.Name is empty') || 'Name is empty'
             })}
           />
         </Flex>
         <Flex alignItems={'center'} mt={4}>
-          <Box flex={'0 0 90px'}>{t('outlink.WXWORK_AESKEY')}</Box>
+          <Box flex={'0 0 90px'}>{t('core.module.http.AppSecret')}</Box>
           <Input
-            placeholder={t('outlink.WXWORK_AESKEY') || 'Link Name'}
+            placeholder={t('outlink.AppSecret') || 'Link Name'}
             maxLength={20}
-            {...register('wecomConfig.WXWORK_AESKEY', {
-              required: t('common.Name is empty') || 'Name is empty'
-            })}
-          />
-        </Flex>
-        <Flex alignItems={'center'} mt={4}>
-          <Box flex={'0 0 90px'}>{t('outlink.WXWORK_SECRET')}</Box>
-          <Input
-            placeholder={t('outlink.WXWORK_SECRET') || 'Link Name'}
-            maxLength={20}
-            {...register('wecomConfig.WXWORK_SECRET', {
-              required: t('common.Name is empty') || 'Name is empty'
-            })}
-          />
-        </Flex>
-        <Flex alignItems={'center'} mt={4}>
-          <Box flex={'0 0 90px'}>{t('outlink.WXWORD_ID')}</Box>
-          <Input
-            placeholder={t('outlink.WXWORD_ID') || 'Link Name'}
-            maxLength={20}
-            {...register('wecomConfig.WXWORD_ID', {
+            {...register('feiShuConfig.appSecret', {
               required: t('common.Name is empty') || 'Name is empty'
             })}
           />
@@ -204,4 +184,4 @@ const WecomEditModal = ({
   );
 };
 
-export default WecomEditModal;
+export default FeiShuEditModal;

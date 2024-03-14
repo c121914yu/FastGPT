@@ -65,26 +65,30 @@ const OutLinkSchema = new Schema({
   },
   wecomConfig: {
     ReplyLimit: {
-      type: Boolean,
+      type: Boolean
     },
     defaultResponse: {
-      type: String,
+      type: String
     },
     immediateResponse: {
-      type: Boolean,
+      type: Boolean
     },
     WXWORK_TOKEN: {
-      type: String,
+      type: String
     },
     WXWORK_AESKEY: {
-      type: String,
+      type: String
     },
     WXWORK_SECRET: {
-      type: String,
+      type: String
     },
     WXWORD_ID: {
-      type: String,
-    },
+      type: String
+    }
+  },
+  feiShuConfig: {
+    appId: { type: String },
+    appSecret: { type: String }
   }
 });
 

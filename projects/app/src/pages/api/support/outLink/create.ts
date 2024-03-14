@@ -3,7 +3,10 @@ import { jsonRes } from '@fastgpt/service/common/response';
 import { connectToDatabase } from '@/service/mongo';
 import { MongoOutLink } from '@fastgpt/service/support/outLink/schema';
 import { authApp } from '@fastgpt/service/support/permission/auth/app';
-import type { OutLinkEditType, OutLinkConfigEditType } from '@fastgpt/global/support/outLink/type.d';
+import type {
+  OutLinkEditType,
+  OutLinkConfigEditType
+} from '@fastgpt/global/support/outLink/type.d';
 import { customAlphabet } from 'nanoid';
 import { OutLinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 24);
@@ -12,10 +15,11 @@ const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 24);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connectToDatabase();
-    const { appId, ...props } = req.body as OutLinkEditType & OutLinkConfigEditType & {
-      appId: string;
-      type: `${OutLinkTypeEnum}`;
-    };
+    const { appId, ...props } = req.body as OutLinkEditType &
+      OutLinkConfigEditType & {
+        appId: string;
+        type: `${OutLinkTypeEnum}`;
+      };
 
     const { teamId, tmbId } = await authApp({ req, authToken: true, appId, per: 'w' });
 

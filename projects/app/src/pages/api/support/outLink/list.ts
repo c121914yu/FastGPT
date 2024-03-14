@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { appId, type } = req.query as {
       appId: string;
-      type: OutLinkSchema['type']
+      type: OutLinkSchema['type'];
     };
 
     const { teamId, tmbId, isOwner } = await authApp({ req, authToken: true, appId, per: 'w' });

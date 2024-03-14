@@ -130,6 +130,7 @@ export const iconPaths = {
   'file/pdf': () => import('./icons/file/pdf.svg'),
   'file/qaImport': () => import('./icons/file/qaImport.svg'),
   'file/uploadFile': () => import('./icons/file/uploadFile.svg'),
+  feishu: () => import('./icons/feishu.svg'),
   history: () => import('./icons/history.svg'),
   kbTest: () => import('./icons/kbTest.svg'),
   menu: () => import('./icons/menu.svg'),
