@@ -12,6 +12,8 @@ const FeedbackModal = ({
   teamId,
   teamToken,
   shareId,
+  teamId,
+  teamToken,
   outLinkUid,
   onSuccess,
   onClose
@@ -36,6 +38,8 @@ const FeedbackModal = ({
         appId,
         chatId,
         chatItemId,
+        teamId,
+        teamToken,
         shareId,
         teamId,
         teamToken,
