@@ -245,6 +245,7 @@
     "Total chars": "Total chars: {{total}}",
     "Total tokens": "Tokens: {{total}}",
     "ai": {
+      "AI settings": "AI settings",
       "Model": "Model",
       "Prompt": "Prompt",
       "model": {
@@ -902,6 +903,7 @@
         }
       },
       "template": {
+        "AI response switch tip": "If you want the current node not to output content, you can turn this switch off. AI output content will not be shown to the user, you can manually use the \"AI reply content\" for special processing.",
         "Ai chat": "LLM Chat",
         "Ai chat intro": "Request LLM chat",
         "Assigned reply": "Assigned reply",
@@ -922,7 +924,6 @@
         "Http request": "Http request",
         "Http request intro": " Can issue an HTTP request to implement more complex operations (Internet search, database query, etc.)",
         "My plugin module": "Personal plugins",
-        "Team Plugin": "Team Plugin",
         "Query extension": "Query extension",
         "Query extension intro": "If the problem completion function is enabled, the accuracy of knowledge base search can be improved in continuous conversations. After this function is enabled, when searching the knowledge base, AI will be used to complete the missing information of the problem according to the conversation records.",
         "Response module": "Text output",
@@ -932,6 +933,7 @@
         "System input module": "System input",
         "TFSwitch": "TF Switch",
         "TFSwitch intro": "Output True False based on what is passed in. By default, false is printed when the content passed in is false, undefined, null, 0, none. You can also add some custom strings to supplement the output of false.",
+        "Team Plugin": "Team Plugin",
         "Tool module": "Tools",
         "UnKnow Module": "UnKnow Module",
         "User guide": "User guide",

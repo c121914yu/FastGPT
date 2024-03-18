@@ -28,7 +28,7 @@ import Tabs from '@/components/Tabs';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import SelectAiModel from '@/components/Select/SelectAiModel';
+import SelectAiModel from '@/components/Select/AIModelSelector';
 
 export type DatasetParamsProps = {
   searchMode: `${DatasetSearchModeEnum}`;

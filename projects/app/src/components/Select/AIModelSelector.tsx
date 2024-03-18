@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { AI_POINT_USAGE_CARD_ROUTE } from '@/web/support/wallet/sub/constants';
 import MySelect, { SelectProps } from '@fastgpt/web/components/common/MySelect';
 
-const SelectAiModel = ({ list, ...props }: SelectProps) => {
+const AIModelSelector = ({ list, ...props }: SelectProps) => {
   const { t } = useTranslation();
   const { feConfigs } = useSystemStore();
   const router = useRouter();
@@ -37,4 +37,4 @@ const SelectAiModel = ({ list, ...props }: SelectProps) => {
   );
 };
 
-export default SelectAiModel;
+export default AIModelSelector;
