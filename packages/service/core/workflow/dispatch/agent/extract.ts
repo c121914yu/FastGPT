@@ -42,7 +42,7 @@ type Response = DispatchNodeResultType<{
 
 type ActionProps = Props & { extractModel: LLMModelItemType };
 
-const agentFunName = 'extract_json_data';
+const agentFunName = 'request_function';
 
 export async function dispatchContentExtract(props: Props): Promise<Response> {
   const {
@@ -156,13 +156,15 @@ const getFunctionCallSchema = ({
         {
           type: ChatItemValueTypeEnum.text,
           text: {
-            content: `你的任务是根据上下文获取适当的 JSON 字符串。要求：
-          """
-          - 字符串不要换行。
-          - 结合上下文和当前问题进行获取。
-          """
+            content: `我正在执行一个函数，需要你提供一些参数，请以 JSON 字符串格式返回这些参数，要求：
+"""
+- ${description}
+- 不是每个参数都是必须生成的，如果没有合适的参数值，不要生成该参数。
+- 需要结合前面的对话内容，一起生成合适的参数。
+"""
 
-          当前问题: "${content}"`
+本次输入内容: ${content}
+            `
           }
         }
       ]
@@ -191,7 +193,7 @@ const getFunctionCallSchema = ({
   // function body
   const agentFunction = {
     name: agentFunName,
-    description,
+    description: '需要执行的函数',
     parameters: {
       type: 'object',
       properties
@@ -249,7 +251,6 @@ const toolChoice = async (props: ActionProps) => {
       tool_calls: response.choices?.[0]?.message?.tool_calls
     }
   ];
-
   return {
     tokens: countGptMessagesTokens(completeMessages, tools),
     arg
