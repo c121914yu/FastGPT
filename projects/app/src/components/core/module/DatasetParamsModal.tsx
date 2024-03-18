@@ -75,7 +75,7 @@ const DatasetParamsModal = ({
       limit,
       similarity,
       searchMode,
-      usingReRank: !!usingReRank && !!teamPlanStatus?.standardConstants?.permissionReRank,
+      usingReRank: !!usingReRank && teamPlanStatus?.standardConstants?.permissionReRank !== false,
       datasetSearchUsingExtensionQuery,
       datasetSearchExtensionModel: datasetSearchExtensionModel ?? llmModelList[0]?.model,
       datasetSearchExtensionBg
