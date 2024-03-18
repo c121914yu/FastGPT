@@ -564,7 +564,8 @@
             "success": "开始同步"
           }
         },
-        "training": {}
+        "training": {
+        }
       },
       "data": {
         "Auxiliary Data": "辅助数据",
@@ -1194,8 +1195,10 @@
     "Get Plugin Module Detail Failed": "获取插件信息异常",
     "HTTP Plugin": "HTTP 插件",
     "Import Plugin": "导入 HTTP 插件",
+    "Import from URL": "从 URL 中导入",
     "Intro": "插件介绍",
     "Invalid Schema": "Schema 无效",
+    "Invalid URL": "URL 无效",
     "Key": "键",
     "Load Plugin Failed": "加载插件异常",
     "Method": "方法",

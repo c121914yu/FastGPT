@@ -19,6 +19,7 @@ export const getUserPlugins = (data: { parentId?: string; type?: `${PluginTypeEn
   GET<PluginListItemType[]>('/core/plugin/list', data);
 export const getPluginPaths = (parentId?: string) =>
   GET<ParentTreePathItemType[]>('/core/plugin/paths', { parentId });
+export const getSchema = (url: string) => GET<any>('/core/plugin/getSchema', { url });
 
 /* work flow */
 export const getTeamPlugTemplates = () =>

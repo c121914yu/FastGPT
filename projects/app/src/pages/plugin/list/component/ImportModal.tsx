@@ -13,7 +13,13 @@ import {
   Tbody,
   Tr,
   Td,
-  IconButton
+  IconButton,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
+  useDisclosure
 } from '@chakra-ui/react';
 import { useSelectFile } from '@/web/common/file/hooks/useSelectFile';
 import { useForm } from 'react-hook-form';
@@ -33,6 +39,7 @@ import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import yaml from 'js-yaml';
 import {
   delOnePlugin,
+  getSchema,
   postCreatePlugin,
   postImportPlugin,
   putUpdatePlugin
@@ -44,9 +51,9 @@ import { useConfirm } from '@/web/common/hooks/useConfirm';
 import { FormType, defaultForm } from './EditModal';
 import { debounce } from 'lodash';
 import dynamic from 'next/dynamic';
+import { AddIcon } from '@chakra-ui/icons';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 12);
-const PreviewPlugin = dynamic(() => import('../../edit/Preview'));
 
 type PathDataType = {
   name: string;
@@ -103,6 +110,11 @@ const ImportModal = ({
   );
   const [isOpen, setIsOpen] = useState(false);
   const isEdit = !!defaultPlugin.id;
+
+  const [schemaUrl, setSchemaUrl] = useState('');
+  const [urlLoading, setUrlLoading] = useState(false);
+
+  const { isOpen: isOpenUrl, onOpen: onOpenUrl, onClose: onCloseUrl } = useDisclosure();
 
   const { mutate: createPlugins, isLoading: creating } = useRequest({
     mutationFn: async (data: CreateOnePluginParams) => {
@@ -213,7 +225,7 @@ const ImportModal = ({
       isCentered={!isPc}
       w={['90vw', '600px']}
     >
-      <ModalBody>
+      <ModalBody pb={20}>
         <Box color={'myGray.800'} fontWeight={'bold'}>
           {t('plugin.Set Name')}
         </Box>
@@ -241,9 +253,74 @@ const ImportModal = ({
         <Box color={'myGray.800'} fontWeight={'bold'} mt={3}>
           {t('plugin.Intro')}
         </Box>
-        <Textarea {...register('intro')} bg={'myWhite.600'} rows={2} mt={3} />
-        <Box color={'myGray.800'} fontWeight={'bold'} mt={3}>
-          {'Schema'}
+        <Textarea {...register('intro')} bg={'myWhite.600'} rows={4} mt={3} />
+        <Box
+          color={'myGray.800'}
+          fontWeight={'bold'}
+          mt={3}
+          justifyContent={'space-between'}
+          w={'full'}
+          display={'flex'}
+        >
+          <Box my={'auto'}>{'Schema'}</Box>
+          <Box>
+            <Popover isOpen={isOpenUrl}>
+              <PopoverTrigger>
+                <Button
+                  variant={'whiteBase'}
+                  size={'sm'}
+                  fontSize={'xs'}
+                  leftIcon={<AddIcon fontSize={'xs'} />}
+                  onClick={isOpenUrl ? onCloseUrl : onOpenUrl}
+                >
+                  {t('plugin.Import from URL')}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverBody display={'flex'} h={12}>
+                  <Input
+                    h={'full'}
+                    mr={2}
+                    placeholder={'https://...'}
+                    onBlur={(e) => setSchemaUrl(e.target.value)}
+                  />
+                  <Button
+                    h={'full'}
+                    size={'sm'}
+                    isLoading={urlLoading}
+                    onClick={async () => {
+                      if (!schemaUrl || !schemaUrl.startsWith('https://')) {
+                        toast({
+                          title: t('plugin.Invalid URL'),
+                          status: 'warning'
+                        });
+                        return;
+                      }
+
+                      try {
+                        setUrlLoading(true);
+                        const schema = await getSchema(schemaUrl);
+
+                        setValue('schema', schema);
+                        const pathData = handleOpenAPI(schema);
+                        setApiData(pathData as ApiData);
+                      } catch (err) {
+                        toast({
+                          title: t('plugin.Invalid Schema'),
+                          status: 'warning'
+                        });
+                      }
+                      setUrlLoading(false);
+                      onCloseUrl();
+                    }}
+                  >
+                    {t('common.Confirm')}
+                  </Button>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Box>
         </Box>
         <Textarea
           {...register('schema')}
@@ -278,7 +355,9 @@ const ImportModal = ({
               {apiData?.pathData?.map((item, index) => (
                 <Tr key={index}>
                   <Td>{item.name}</Td>
-                  <Td>{item.description}</Td>
+                  <Td fontSize={'sm'} textColor={'gray.600'}>
+                    {item.description}
+                  </Td>
                   <Td>{item.method}</Td>
                   <Td>{item.path}</Td>
                 </Tr>
@@ -310,7 +389,16 @@ const ImportModal = ({
         </Box>
       </ModalBody>
 
-      <Flex px={5} py={4} alignItems={'center'}>
+      <Flex
+        px={5}
+        py={4}
+        alignItems={'center'}
+        position={'absolute'}
+        bottom={0}
+        w={'full'}
+        bg={'white'}
+        roundedBottom={'xl'}
+      >
         {isEdit && (
           <IconButton
             className="delete"
@@ -406,7 +494,7 @@ const handleOpenAPI = (content: string) => {
             path,
             method,
             name: methodInfo.operationId,
-            description: methodInfo.description,
+            description: methodInfo.summary,
             params: methodInfo.parameters
           };
           return result;
@@ -417,11 +505,6 @@ const handleOpenAPI = (content: string) => {
 
     return { pathData, serverPath };
   } catch (err) {
-    console.log(
-      '%cprojects/app/src/pages/plugin/list/component/ImportModal.tsx:383 err',
-      'color: #007acc;',
-      err
-    );
     throw new Error('Invalid Schema');
   }
 };
