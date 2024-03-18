@@ -159,6 +159,7 @@
     "Upload File Failed": "上传文件失败",
     "Username": "用户名",
     "Waiting": "等待中",
+    "Warning": "警告",
     "Website": "网站",
     "avatar": {
       "Select Avatar": "点击选择头像",
@@ -564,7 +565,8 @@
             "success": "开始同步"
           }
         },
-        "training": {}
+        "training": {
+        }
       },
       "data": {
         "Auxiliary Data": "辅助数据",
@@ -1278,9 +1280,11 @@
       "Buy": "购买",
       "Buy more": "扩容",
       "Confirm pay": "支付确认",
+      "Not sufficient": "您的 AI 积分不足，请先升级套餐或购买额外 AI 积分后继续使用。",
       "Pay error": "支付失败",
       "Pay success": "支付成功",
       "Standard Plan Detail": "套餐详情",
+      "To read plan": "查看套餐",
       "bill": {
         "AI Model": "AI 模型",
         "AI Type": "AI 类型",

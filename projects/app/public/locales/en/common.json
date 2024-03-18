@@ -159,6 +159,7 @@
     "Upload File Failed": "Upload File Failed",
     "Username": "UserName",
     "Waiting": "Waiting",
+    "Warning": "",
     "Website": "Website",
     "avatar": {
       "Select Avatar": "Select Avatar",
@@ -1277,9 +1278,11 @@
       "Buy": "Buy",
       "Buy more": "Buy more",
       "Confirm pay": "Confirm pay",
+      "Not sufficient": "Your AI points are insufficient, please upgrade the package or purchase additional AI points before continuing to use.",
       "Pay error": "Pay error",
       "Pay success": "Pay success",
       "Standard Plan Detail": "Standard Plan Detail",
+      "To read plan": "Read plan",
       "bill": {
         "AI Model": "AI Model",
         "AI Type": "AI Type",
