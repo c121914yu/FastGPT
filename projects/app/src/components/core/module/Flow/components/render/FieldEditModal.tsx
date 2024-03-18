@@ -265,10 +265,6 @@ const FieldEditModal = ({
               placeholder="appointment/sql"
               {...register('key', {
                 required: true,
-                pattern: {
-                  value: /^[a-zA-Z]+[0-9]*$/,
-                  message: '字段key必须是纯英文字母或数字，并且不能以数字开头。'
-                },
                 onChange: (e) => {
                   const value = e.target.value;
                   // auto fill label
