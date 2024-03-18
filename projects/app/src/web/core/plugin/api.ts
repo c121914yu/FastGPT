@@ -19,6 +19,13 @@ export const getUserPlugins = (data: { parentId?: string; type?: `${PluginTypeEn
   GET<PluginListItemType[]>('/core/plugin/list', data);
 export const getPluginPaths = (parentId?: string) =>
   GET<ParentTreePathItemType[]>('/core/plugin/paths', { parentId });
+
+/* work flow */
+export const getTeamPlugTemplates = () =>
+  GET<FlowNodeTemplateType[]>('/core/plugin/getTeamPluginTemplates');
+export const getSystemPlugTemplates = () =>
+  GET<FlowNodeTemplateType[]>('/core/plugin/getSystemPluginTemplates');
+
 export const getPreviewPluginModule = (id: string) =>
   GET<FlowNodeTemplateType>('/core/plugin/getPreviewModule', { id });
 export const getOnePlugin = (id: string) => GET<PluginItemSchema>('/core/plugin/detail', { id });
