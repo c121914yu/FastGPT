@@ -922,7 +922,7 @@
         "Http request": "Http request",
         "Http request intro": " Can issue an HTTP request to implement more complex operations (Internet search, database query, etc.)",
         "My plugin module": "Personal plugins",
-        "Personal Plugin": "Personal Plugin",
+        "Team Plugin": "Team Plugin",
         "Query extension": "Query extension",
         "Query extension intro": "If the problem completion function is enabled, the accuracy of knowledge base search can be improved in continuous conversations. After this function is enabled, when searching the knowledge base, AI will be used to complete the missing information of the problem according to the conversation records.",
         "Response module": "Text output",
@@ -938,6 +938,9 @@
         "http body placeholder": "Same syntax as APIFox",
         "textEditor": "Text Editor",
         "textEditor intro": "Output of fixed or incoming text after edit"
+      },
+      "templates": {
+        "Load plugin error": "Load plugin error"
       },
       "textEditor": {
         "Text Edit": "Text Edit"

@@ -39,7 +39,7 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
     chatId,
     responseChatItemId,
     variables,
-    module: { moduleId, outputs },
+    module: { outputs },
     histories,
     params: {
       system_httpMethod: httpMethod = 'POST',
@@ -65,6 +65,7 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
     ...body
   };
 
+  httpReqUrl = replaceVariable(httpReqUrl, concatVariables);
   // parse header
   const headers = await (() => {
     try {
