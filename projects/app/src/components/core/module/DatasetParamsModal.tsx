@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import MySlider from '@/components/Slider';
 import MyTooltip from '@/components/MyTooltip';
-import MyModal from '@/components/MyModal';
+import MyModal from '@fastgpt/web/components/common/MyModal';
 import { DatasetSearchModeEnum } from '@fastgpt/global/core/dataset/constants';
 import { useTranslation } from 'next-i18next';
 import { useSystemStore } from '@/web/common/system/useSystemStore';

@@ -18,10 +18,9 @@ export interface MyModalProps extends ModalContentProps {
   isCentered?: boolean;
   isOpen: boolean;
   onClose?: () => void;
-  isPc?: boolean;
 }
 
-const CustomModal = ({
+const MyModal = ({
   isOpen,
   onClose,
   iconSrc,
@@ -92,4 +91,4 @@ const CustomModal = ({
   );
 };
 
-export default CustomModal;
+export default React.memo(MyModal);

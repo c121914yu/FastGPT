@@ -10,7 +10,7 @@ import {
   Textarea
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import MyModal from '@/components/MyModal';
+import MyModal from '@fastgpt/web/components/common/MyModal';
 import { DYNAMIC_INPUT_KEY, ModuleIOValueTypeEnum } from '@fastgpt/global/core/module/constants';
 import { useTranslation } from 'next-i18next';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';

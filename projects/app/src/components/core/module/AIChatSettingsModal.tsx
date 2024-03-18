@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import MyModal from '@/components/MyModal';
+import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import {
