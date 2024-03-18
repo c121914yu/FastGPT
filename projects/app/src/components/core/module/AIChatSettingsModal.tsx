@@ -14,7 +14,10 @@ import {
 } from '@chakra-ui/react';
 import MyTooltip from '@/components/MyTooltip';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
-import { Prompt_QuotePromptList, Prompt_QuoteTemplateList } from '@/global/core/prompt/AIChat';
+import {
+  Prompt_QuotePromptList,
+  Prompt_QuoteTemplateList
+} from '@fastgpt/global/core/ai/prompt/AIChat';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MySlider from '@/components/Slider';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
