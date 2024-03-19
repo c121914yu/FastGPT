@@ -27,9 +27,11 @@ import { formatEditorVariablePickerIcon } from '@fastgpt/global/core/module/util
 import SearchParamsTip from '@/components/core/dataset/SearchParamsTip';
 import SettingLLMModel from '@/components/core/ai/SettingLLMModel';
 import { SettingAIDataType } from '@fastgpt/global/core/module/node/type';
+import DeleteIcon, { hoverDeleteStyles } from '@fastgpt/web/components/common/Icon/delete';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/module/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/module/DatasetParamsModal'));
+const ToolSelectModal = dynamic(() => import('./ToolSelectModal'));
 const TTSSelect = dynamic(
   () => import('@/components/core/module/Flow/components/modules/TTSSelect')
 );
@@ -60,6 +62,7 @@ const EditForm = ({
     control,
     name: 'dataset.datasets'
   });
+  const selectedTools = watch('selectedTools');
 
   const {
     isOpen: isOpenDatasetSelect,
@@ -70,6 +73,11 @@ const EditForm = ({
     isOpen: isOpenDatasetParams,
     onOpen: onOpenDatasetParams,
     onClose: onCloseDatasetParams
+  } = useDisclosure();
+  const {
+    isOpen: isOpenToolsSelect,
+    onOpen: onOpenToolsSelect,
+    onClose: onCloseToolsSelect
   } = useDisclosure();
 
   const { openConfirm: openConfirmSave, ConfirmModal: ConfirmSaveModal } = useConfirm({
@@ -106,7 +114,7 @@ const EditForm = ({
     errorToast: t('common.Save Failed')
   });
 
-  const { isSuccess: isInitd } = useQuery(
+  useQuery(
     ['init', appDetail],
     () => {
       const formatVal = appModules2Form({
@@ -299,6 +307,51 @@ const EditForm = ({
             </Grid>
           </Box>
 
+          {/* tool choice */}
+          <Box {...BoxStyles}>
+            <Flex alignItems={'center'}>
+              <Flex alignItems={'center'} flex={1}>
+                <MyIcon name={'core/app/toolCall'} w={'20px'} />
+                <Box ml={2}>{t('core.app.Tool call')}</Box>
+              </Flex>
+              <Flex alignItems={'center'} {...BoxBtnStyles} onClick={onOpenToolsSelect}>
+                <SmallAddIcon />
+                {t('common.Choose')}
+              </Flex>
+            </Flex>
+            <Grid gridTemplateColumns={'repeat(2, minmax(0, 1fr))'} gridGap={[2, 4]}>
+              {selectedTools.map((item) => (
+                <Flex
+                  key={item.id}
+                  overflow={'hidden'}
+                  alignItems={'center'}
+                  p={2}
+                  bg={'white'}
+                  boxShadow={'0 4px 8px -2px rgba(16,24,40,.1),0 2px 4px -2px rgba(16,24,40,.06)'}
+                  borderRadius={'md'}
+                  border={theme.borders.base}
+                  _hover={{
+                    ...hoverDeleteStyles,
+                    borderColor: 'primary.300'
+                  }}
+                >
+                  <Avatar src={item.avatar} w={'18px'} mr={1} />
+                  <Box flex={'1 0 0'} w={0} className={'textEllipsis'} fontSize={'sm'}>
+                    {item.name}
+                  </Box>
+                  <DeleteIcon
+                    onClick={() => {
+                      setValue(
+                        'selectedTools',
+                        selectedTools.filter((tool) => tool.id !== item.id)
+                      );
+                    }}
+                  />
+                </Flex>
+              ))}
+            </Grid>
+          </Box>
+
           {/* variable */}
           <Box {...BoxStyles}>
             <VariableEdit
@@ -382,6 +435,19 @@ const EditForm = ({
 
             setRefresh((state) => !state);
           }}
+        />
+      )}
+      {isOpenToolsSelect && (
+        <ToolSelectModal
+          selectedTools={selectedTools}
+          onAddTool={(e) => setValue('selectedTools', [...selectedTools, e])}
+          onRemoveTool={(e) => {
+            setValue(
+              'selectedTools',
+              selectedTools.filter((item) => item.id !== e.id)
+            );
+          }}
+          onClose={onCloseToolsSelect}
         />
       )}
     </Box>

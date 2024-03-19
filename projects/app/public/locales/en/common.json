@@ -122,6 +122,7 @@
     "Price used": "Usage",
     "Read document": "Read document",
     "Read intro": "Read intro",
+    "Remove": "Remove",
     "Rename": "Rename",
     "Rename Failed": "Rename Failed",
     "Rename Success": "Rename Success",
@@ -285,6 +286,12 @@
       "TTS Tip": "After this function is enabled, the voice playback function can be used after each conversation. Use of this feature may incur additional charges.",
       "Team tags": "Team tags",
       "Temperature": "Temperature",
+      "Tool call": "Tool call",
+      "ToolCall": {
+        "No plugin": "No plugins",
+        "Setting tool": "Setting tool",
+        "This plugin cannot be called as a tool": "This plug-in cannot be invoked as a tool"
+      },
       "Welcome Text": "Welcome Text",
       "create app": "Create App",
       "deterministic": "Deterministic",

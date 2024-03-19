@@ -1,6 +1,10 @@
 import type { AppSimpleEditFormType } from '../app/type';
 import { FlowNodeTypeEnum } from '../module/node/constant';
-import { ModuleOutputKeyEnum, ModuleInputKeyEnum } from '../module/constants';
+import {
+  ModuleOutputKeyEnum,
+  ModuleInputKeyEnum,
+  FlowNodeTemplateTypeEnum
+} from '../module/constants';
 import type { FlowNodeInputItemType } from '../module/node/type.d';
 import { getGuideModule, splitGuideModule } from '../module/utils';
 import { ModuleItemType } from '../module/type.d';
@@ -27,6 +31,7 @@ export const getDefaultAppForm = (): AppSimpleEditFormType => {
       datasetSearchUsingExtensionQuery: true,
       datasetSearchExtensionBg: ''
     },
+    selectedTools: [],
     userGuide: {
       welcomeText: '',
       variables: [],
@@ -128,6 +133,18 @@ export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
         questionGuide: questionGuide,
         tts: ttsConfig
       };
+    } else if (module.flowType === FlowNodeTypeEnum.pluginModule) {
+      defaultAppForm.selectedTools.push({
+        id: module.inputs.find((input) => input.key === ModuleInputKeyEnum.pluginId)?.value || '',
+        name: module.name,
+        avatar: module.avatar,
+        intro: module.intro || '',
+        flowType: module.flowType,
+        showStatus: module.showStatus,
+        inputs: module.inputs,
+        outputs: module.outputs,
+        templateType: FlowNodeTemplateTypeEnum.other
+      });
     }
   });
 

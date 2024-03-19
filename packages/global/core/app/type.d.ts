@@ -1,4 +1,9 @@
-import type { AppTTSConfigType, ModuleItemType, VariableItemType } from '../module/type.d';
+import type {
+  AppTTSConfigType,
+  FlowNodeTemplateType,
+  ModuleItemType,
+  VariableItemType
+} from '../module/type.d';
 import { AppTypeEnum } from './constants';
 import { PermissionTypeEnum } from '../../support/permission/constant';
 import type { DatasetModuleProps } from '../module/node/type.d';
@@ -58,6 +63,7 @@ export type AppSimpleEditFormType = {
     datasetSearchExtensionModel?: string;
     datasetSearchExtensionBg?: string;
   };
+  selectedTools: FlowNodeTemplateType[];
   userGuide: {
     welcomeText: string;
     variables: {
