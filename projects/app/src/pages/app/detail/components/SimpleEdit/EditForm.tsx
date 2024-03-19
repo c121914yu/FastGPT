@@ -311,14 +311,14 @@ const EditForm = ({
             <Flex alignItems={'center'}>
               <Flex alignItems={'center'} flex={1}>
                 <MyIcon name={'core/app/toolCall'} w={'20px'} />
-                <Box ml={2}>{t('core.app.Tool call')}</Box>
+                <Box ml={2}>{t('core.app.Tool call')}(实验功能)</Box>
               </Flex>
               <Flex alignItems={'center'} {...BoxBtnStyles} onClick={onOpenToolsSelect}>
                 <SmallAddIcon />
                 {t('common.Choose')}
               </Flex>
             </Flex>
-            <Grid gridTemplateColumns={'repeat(2, minmax(0, 1fr))'} gridGap={[2, 4]}>
+            <Grid mt={2} gridTemplateColumns={'repeat(2, minmax(0, 1fr))'} gridGap={[2, 4]}>
               {selectedTools.map((item) => (
                 <Flex
                   key={item.id}

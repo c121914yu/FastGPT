@@ -71,8 +71,10 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
       onClose={onClose}
       maxW={['90vw', '700px']}
       w={'700px'}
+      h={['90vh', '80vh']}
+      overflow={'none'}
     >
-      <ModalBody minH={'200px'}>
+      <Box px={[3, 6]} pt={4}>
         <RowTabs
           list={[
             {
@@ -91,10 +93,10 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
           value={templateType}
           onChange={onChangeTab}
         />
-        <Box mt={2}>
-          <RenderList templates={templates} {...props} />
-        </Box>
-      </ModalBody>
+      </Box>
+      <Box mt={2} px={[3, 6]} pb={3} flex={'1 0 0'} overflowY={'auto'}>
+        <RenderList templates={templates} {...props} />
+      </Box>
     </MyModal>
   );
 };
@@ -133,7 +135,7 @@ const RenderList = React.memo(function RenderList({
   });
 
   return templates.length === 0 ? (
-    <EmptyTip pt={'20px'} text={t('core.app.ToolCall.No plugin')} />
+    <EmptyTip text={t('core.app.ToolCall.No plugin')} />
   ) : (
     <MyBox isLoading={isLoading}>
       {templates.map((item, i) => {
@@ -142,16 +144,21 @@ const RenderList = React.memo(function RenderList({
           <Flex
             key={item.id}
             alignItems={'center'}
-            p={5}
+            p={[4, 5]}
             _notLast={{
               borderBottomWidth: '1px',
               borderBottomColor: 'myGray.150'
             }}
           >
-            <Avatar src={item.avatar} w={'34px'} objectFit={'contain'} borderRadius={'0'} />
+            <Avatar
+              src={item.avatar}
+              w={['26px', '32px']}
+              objectFit={'contain'}
+              borderRadius={'0'}
+            />
             <Box ml={5} flex={'1 0 0'}>
               <Box color={'black'}>{t(item.name)}</Box>
-              <Box className="textEllipsis3" color={'myGray.500'} fontSize={'sm'}>
+              <Box className="textEllipsis3" color={'myGray.500'} fontSize={['xs', 'sm']}>
                 {t(item.intro)}
               </Box>
             </Box>
