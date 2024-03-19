@@ -214,14 +214,14 @@ const EditForm = ({
               </Box>
             </Flex>
 
-            <Flex mt={10} alignItems={'flex-start'}>
+            <Box mt={3}>
               <Box {...LabelStyles}>
                 {t('core.ai.Prompt')}
                 <MyTooltip label={t(chatNodeSystemPromptTip)} forceShow>
                   <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
                 </MyTooltip>
               </Box>
-              {isInitd && (
+              <Box mt={1}>
                 <PromptEditor
                   value={aiSystemPrompt}
                   onChange={(text) => {
@@ -233,8 +233,8 @@ const EditForm = ({
                   placeholder={t('core.app.tip.chatNodeSystemPromptTip')}
                   title={t('core.ai.Prompt')}
                 />
-              )}
-            </Flex>
+              </Box>
+            </Box>
           </Box>
 
           {/* dataset */}

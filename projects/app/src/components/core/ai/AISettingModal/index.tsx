@@ -42,6 +42,7 @@ const AIChatSettingsModal = ({
   });
   const model = watch('model');
   const showResponseAnswerText = watch(ModuleInputKeyEnum.aiChatIsResponseText) !== undefined;
+  const selectedModel = llmModelList.find((item) => item.model === model) || llmModelList[0];
 
   const tokenLimit = useMemo(() => {
     return llmModelList.find((item) => item.model === model)?.maxResponse || 4096;
@@ -105,7 +106,14 @@ const AIChatSettingsModal = ({
             onchange={onChangeModel}
           />
         </Flex>
-
+        <Flex mt={8}>
+          <Box {...LabelStyles} mr={2}>
+            {t('core.ai.Max context')}
+          </Box>
+          <Box flex={1} ml={'10px'}>
+            {selectedModel?.maxContext || 4096}Tokens
+          </Box>
+        </Flex>
         <Flex mt={8}>
           <Box {...LabelStyles} mr={2}>
             {t('core.app.Temperature')}

@@ -246,6 +246,7 @@
     "Total tokens": "Tokens: {{total}}",
     "ai": {
       "AI settings": "AI settings",
+      "Max context": "Max context",
       "Model": "Model",
       "Prompt": "Prompt",
       "model": {
