@@ -235,13 +235,7 @@ const HttpPluginEditModal = ({
             <Box color={'myGray.800'} fontWeight={'bold'} mt={3}>
               {t('plugin.Intro')}
             </Box>
-            <Textarea
-              {...register('intro')}
-              bg={'myWhite.600'}
-              rows={4}
-              mt={3}
-              placeholder={t('core.plugin.Intro placeholder')}
-            />
+            <Textarea {...register('intro')} bg={'myWhite.600'} rows={3} mt={3} />
           </>
           <Box mt={4}>
             <Box
