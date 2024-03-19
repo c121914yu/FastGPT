@@ -1270,6 +1270,7 @@
       }
     },
     "user": {
+      "AI point standard": "AI points price",
       "Avatar": "Avatar",
       "Need to login": "Please log in first",
       "Price": "Price",

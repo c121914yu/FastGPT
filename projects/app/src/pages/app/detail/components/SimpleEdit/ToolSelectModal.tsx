@@ -42,7 +42,7 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
 
   const templates = useMemo(() => {
     const map = {
-      [TemplateTypeEnum.systemPlugin]: systemNodeTemplates,
+      [TemplateTypeEnum.systemPlugin]: systemNodeTemplates.filter((item) => item.isTool),
       [TemplateTypeEnum.teamPlugin]: teamPluginNodeTemplates
     };
     return map[templateType];
@@ -72,7 +72,7 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
       maxW={['90vw', '700px']}
       w={'700px'}
     >
-      <ModalBody>
+      <ModalBody minH={'200px'}>
         <RowTabs
           list={[
             {

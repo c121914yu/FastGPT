@@ -574,7 +574,8 @@
             "success": "开始同步"
           }
         },
-        "training": {}
+        "training": {
+        }
       },
       "data": {
         "Auxiliary Data": "辅助数据",
@@ -806,6 +807,7 @@
         "tip": "描述当前对话的范围，便于AI补全首次问题或模糊的问题，从而增强知识库连续对话的能力。建议开启该功能后，都简单的描述在对话的背景，否则容易造成补全对象不准确。"
       },
       "Quote prompt setting": "引用提示词配置",
+      "Qupte prompt setting": "",
       "Setting quote prompt": "配置引用提示词",
       "Unlink tip": "【{{name}}】存在未填或未连接参数",
       "Variable": "全局变量",
@@ -1270,6 +1272,7 @@
       }
     },
     "user": {
+      "AI point standard": "AI积分标准",
       "Avatar": "头像",
       "Need to login": "请先登录",
       "Price": "计费标准",
