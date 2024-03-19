@@ -134,18 +134,20 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
             onChange={onChangeTab}
           />
           {templateType === TemplateTypeEnum.teamPlugin && (
-            <Flex mt={2} alignItems={'center'}>
+            <Flex mt={2} alignItems={'center'} h={10}>
               {currentParent.parentId !== 'null' && (
-                <ParentPaths
-                  paths={[
-                    { parentId: currentParent.parentId, parentName: currentParent.parentName }
-                  ]}
-                  FirstPathDom={null}
-                  onClick={() => {
-                    setCurrentParent({ parentId: 'null', parentName: '' });
-                  }}
-                  fontSize="md"
-                />
+                <Flex alignItems={'center'} h={'full'} pt={1}>
+                  <ParentPaths
+                    paths={[
+                      { parentId: currentParent.parentId, parentName: currentParent.parentName }
+                    ]}
+                    FirstPathDom={null}
+                    onClick={() => {
+                      setCurrentParent({ parentId: 'null', parentName: '' });
+                    }}
+                    fontSize="md"
+                  />
+                </Flex>
               )}
               <Box flex={1} />
               <Flex
