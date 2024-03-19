@@ -49,8 +49,7 @@ export type AppSimpleEditFormType = {
     temperature: number;
     maxToken: number;
     isResponseAnswerText: boolean;
-    quoteTemplate?: string | undefined;
-    quotePrompt?: string | undefined;
+    maxHistories: number;
   };
   dataset: {
     datasets: SelectedDatasetType;

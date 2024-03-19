@@ -100,6 +100,7 @@ const EditForm = ({
     return llmModelList.find((item) => item.model === selectLLMModel)?.quoteMaxToken || 3000;
   }, [selectLLMModel, llmModelList]);
 
+  /* on save app */
   const { mutate: onSubmitSave, isLoading: isSaving } = useRequest({
     mutationFn: async (data: AppSimpleEditFormType) => {
       const modules = await postForm2Modules(data);
@@ -211,12 +212,14 @@ const EditForm = ({
                   defaultData={{
                     model: getValues('aiSettings.model'),
                     temperature: getValues('aiSettings.temperature'),
-                    maxToken: getValues('aiSettings.maxToken')
+                    maxToken: getValues('aiSettings.maxToken'),
+                    maxHistories: getValues('aiSettings.maxHistories')
                   }}
-                  onChange={({ model, temperature, maxToken }: SettingAIDataType) => {
+                  onChange={({ model, temperature, maxToken, maxHistories }: SettingAIDataType) => {
                     setValue('aiSettings.model', model);
                     setValue('aiSettings.maxToken', maxToken);
                     setValue('aiSettings.temperature', temperature);
+                    setValue('aiSettings.maxHistories', maxHistories ?? 6);
                   }}
                 />
               </Box>

@@ -179,7 +179,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             valueType: 'string',
             showTargetInApp: false,
             showTargetInPlugin: false,
-            value: formData.aiSettings.quoteTemplate,
+            value: '',
             connected: false
           },
           {
@@ -189,7 +189,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             valueType: 'string',
             showTargetInApp: false,
             showTargetInPlugin: false,
-            value: formData.aiSettings.quotePrompt,
+            value: '',
             connected: false
           },
           {
@@ -224,7 +224,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             min: 0,
             max: 30,
             valueType: 'chatHistory',
-            value: 6,
+            value: formData.aiSettings.maxHistories,
             showTargetInApp: true,
             showTargetInPlugin: true,
             connected: false
@@ -559,7 +559,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             min: 0,
             max: 30,
             valueType: 'chatHistory',
-            value: 6,
+            value: formData.aiSettings.maxHistories,
             showTargetInApp: true,
             showTargetInPlugin: true,
             connected: false

@@ -17,8 +17,7 @@ export const getDefaultAppForm = (): AppSimpleEditFormType => {
       systemPrompt: '',
       temperature: 0,
       isResponseAnswerText: true,
-      quotePrompt: '',
-      quoteTemplate: '',
+      maxHistories: 6,
       maxToken: 4000
     },
     dataset: {
@@ -71,13 +70,9 @@ export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
         module.inputs,
         ModuleInputKeyEnum.aiChatMaxToken
       );
-      defaultAppForm.aiSettings.quoteTemplate = findInputValueByKey(
+      defaultAppForm.aiSettings.maxHistories = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.aiChatQuoteTemplate
-      );
-      defaultAppForm.aiSettings.quotePrompt = findInputValueByKey(
-        module.inputs,
-        ModuleInputKeyEnum.aiChatQuotePrompt
+        ModuleInputKeyEnum.history
       );
     } else if (module.flowType === FlowNodeTypeEnum.datasetSearchNode) {
       defaultAppForm.dataset.datasets = findInputValueByKey(
