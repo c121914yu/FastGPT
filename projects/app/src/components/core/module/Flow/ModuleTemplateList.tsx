@@ -32,6 +32,8 @@ type ModuleTemplateListProps = {
 type RenderListProps = {
   templates: FlowNodeTemplateType[];
   onClose: () => void;
+  currentParent: { parentId: string; parentName: string };
+  setCurrentParent: (e: { parentId: string; parentName: string }) => void;
 };
 
 enum TemplateTypeEnum {
@@ -45,6 +47,8 @@ const sliderWidth = 380;
 const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const [currentParent, setCurrentParent] = useState({ parentId: 'null', parentName: '' });
+
   const {
     basicNodeTemplates,
     systemNodeTemplates,
@@ -131,6 +135,18 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
           />
           {templateType === TemplateTypeEnum.teamPlugin && (
             <Flex mt={2} alignItems={'center'}>
+              {currentParent.parentId !== 'null' && (
+                <ParentPaths
+                  paths={[
+                    { parentId: currentParent.parentId, parentName: currentParent.parentName }
+                  ]}
+                  FirstPathDom={null}
+                  onClick={() => {
+                    setCurrentParent({ parentId: 'null', parentName: '' });
+                  }}
+                  fontSize="md"
+                />
+              )}
               <Box flex={1} />
               <Flex
                 alignItems={'center'}
@@ -146,7 +162,12 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
             </Flex>
           )}
         </Box>
-        <RenderList templates={templates} onClose={onClose} />
+        <RenderList
+          templates={templates}
+          onClose={onClose}
+          currentParent={currentParent}
+          setCurrentParent={setCurrentParent}
+        />
       </Flex>
     </>
   );
@@ -154,14 +175,18 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
 
 export default React.memo(ModuleTemplateList);
 
-const RenderList = React.memo(function RenderList({ templates, onClose }: RenderListProps) {
+const RenderList = React.memo(function RenderList({
+  templates,
+  onClose,
+  currentParent,
+  setCurrentParent
+}: RenderListProps) {
   const { t } = useTranslation();
   const { isPc } = useSystemStore();
   const { x, y, zoom } = useViewport();
   const { setLoading } = useSystemStore();
   const { toast } = useToast();
   const { reactFlowWrapper, nodes } = useFlowProviderStore();
-  const [currentParent, setCurrentParent] = useState({ parentId: 'null', parentName: '' });
 
   const formatTemplates = useMemo<moduleTemplateListType>(() => {
     const copy: moduleTemplateListType = JSON.parse(JSON.stringify(moduleTemplatesList));
@@ -222,18 +247,7 @@ const RenderList = React.memo(function RenderList({ templates, onClose }: Render
     <EmptyTip text={t('app.module.No Modules')} />
   ) : (
     <Box flex={'1 0 0'} overflow={'overlay'} px={'20px'}>
-      {currentParent.parentId !== 'null' && (
-        <Box position={'absolute'} bg={'white'} w={'full'}>
-          <ParentPaths
-            paths={[{ parentId: currentParent.parentId, parentName: currentParent.parentName }]}
-            FirstPathDom={null}
-            onClick={() => {
-              setCurrentParent({ parentId: 'null', parentName: '' });
-            }}
-          />
-        </Box>
-      )}
-      <Box mx={'auto'} mt={currentParent.parentId !== 'null' ? 10 : 0}>
+      <Box mx={'auto'}>
         {formatTemplates.map((item, i) => (
           <Box key={item.type}>
             {item.label && (

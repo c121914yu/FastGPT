@@ -1,7 +1,7 @@
-import MyModal from '@/components/MyModal';
 import MyRadio from '@/components/common/MyRadio';
 import { Box, Button, Input, ModalBody, ModalFooter } from '@chakra-ui/react';
 import { MethodType } from '@fastgpt/global/core/plugin/controller';
+import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
