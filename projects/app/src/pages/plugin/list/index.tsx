@@ -94,8 +94,8 @@ const MyModules = () => {
               },
               {
                 label: (
-                  <Flex>
-                    <Image src={'/imgs/files/folder.svg'} alt={''} w={'18px'} mr={1} />
+                  <Flex display={'flex'} alignItems={'center'}>
+                    <Image src={'/imgs/module/http.png'} alt={''} w={'18px'} h={'14px'} mr={1} />
                     {t('plugin.HTTP Plugin')}
                   </Flex>
                 ),

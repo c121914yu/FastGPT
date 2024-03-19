@@ -21,7 +21,7 @@ import { moduleTemplatesList } from '@fastgpt/global/core/module/template/consta
 import RowTabs from '@fastgpt/web/components/common/Tabs/RowTabs';
 import { useWorkflowStore } from '@/web/core/workflow/store/workflow';
 import { useRequest } from '@/web/common/hooks/useRequest';
-import MyBox from '@/components/common/MyBox';
+import ParentPaths from '@/components/common/ParentPaths';
 
 type ModuleTemplateListProps = {
   isOpen: boolean;
@@ -140,6 +140,7 @@ const RenderList = React.memo(function RenderList({ templates, onClose }: Render
   const { setLoading } = useSystemStore();
   const { toast } = useToast();
   const { reactFlowWrapper, nodes } = useFlowProviderStore();
+  const [currentParent, setCurrentParent] = useState({ parentId: 'null', parentName: '' });
 
   const formatTemplates = useMemo<moduleTemplateListType>(() => {
     const copy: moduleTemplateListType = JSON.parse(JSON.stringify(moduleTemplatesList));
@@ -149,7 +150,8 @@ const RenderList = React.memo(function RenderList({ templates, onClose }: Render
       copy[index].list.push(item);
     });
     return copy.filter((item) => item.list.length > 0);
-  }, [templates]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [templates, currentParent]);
 
   const onAddNode = useCallback(
     async ({ template, position }: { template: FlowNodeTemplateType; position: XYPosition }) => {
@@ -199,7 +201,18 @@ const RenderList = React.memo(function RenderList({ templates, onClose }: Render
     <EmptyTip text={t('app.module.No Modules')} />
   ) : (
     <Box flex={'1 0 0'} overflow={'overlay'} px={'20px'}>
-      <Box mx={'auto'}>
+      {currentParent.parentId !== 'null' && (
+        <Box position={'absolute'} bg={'white'} w={'full'}>
+          <ParentPaths
+            paths={[{ parentId: currentParent.parentId, parentName: currentParent.parentName }]}
+            FirstPathDom={null}
+            onClick={() => {
+              setCurrentParent({ parentId: 'null', parentName: '' });
+            }}
+          />
+        </Box>
+      )}
+      <Box mx={'auto'} mt={currentParent.parentId !== 'null' ? 10 : 0}>
         {formatTemplates.map((item, i) => (
           <Box key={item.type}>
             <Flex>
@@ -208,45 +221,55 @@ const RenderList = React.memo(function RenderList({ templates, onClose }: Render
               </Box>
             </Flex>
             <>
-              {item.list.map((template) => (
-                <Flex
-                  key={template.id}
-                  alignItems={'center'}
-                  p={5}
-                  cursor={'pointer'}
-                  _hover={{ bg: 'myWhite.600' }}
-                  borderRadius={'sm'}
-                  draggable
-                  onDragEnd={(e) => {
-                    if (e.clientX < 360) return;
-                    onAddNode({
-                      template: template,
-                      position: { x: e.clientX, y: e.clientY }
-                    });
-                  }}
-                  onClick={(e) => {
-                    if (isPc) return;
-                    onClose();
-                    onAddNode({
-                      template: template,
-                      position: { x: e.clientX, y: e.clientY }
-                    });
-                  }}
-                >
-                  <Avatar
-                    src={template.avatar}
-                    w={'34px'}
-                    objectFit={'contain'}
-                    borderRadius={'0'}
-                  />
-                  <Box ml={5} flex={'1 0 0'}>
-                    <Box color={'black'}>{t(template.name)}</Box>
-                    <Box className="textEllipsis3" color={'myGray.500'} fontSize={'sm'}>
-                      {t(template.intro)}
+              {item.list
+                .filter((template: any) =>
+                  item.type === 'personalPlugin'
+                    ? template.parentId === currentParent.parentId
+                    : true
+                )
+                .map((template: any) => (
+                  <Flex
+                    key={template.id}
+                    alignItems={'center'}
+                    p={5}
+                    cursor={'pointer'}
+                    _hover={{ bg: 'myWhite.600' }}
+                    borderRadius={'sm'}
+                    draggable={template.type === 'plugin'}
+                    onDragEnd={(e) => {
+                      if (e.clientX < 360) return;
+                      onAddNode({
+                        template: template,
+                        position: { x: e.clientX, y: e.clientY }
+                      });
+                    }}
+                    onClick={(e) => {
+                      if (isPc && template.type === 'plugin') return;
+                      if (template.type === 'plugin') {
+                        onClose();
+                        onAddNode({
+                          template: template,
+                          position: { x: e.clientX, y: e.clientY }
+                        });
+                      } else {
+                        setCurrentParent({ parentId: template.id, parentName: template.name });
+                      }
+                    }}
+                  >
+                    <Avatar
+                      src={template.avatar}
+                      w={'34px'}
+                      objectFit={'contain'}
+                      borderRadius={'0'}
+                    />
+                    <Box ml={5} flex={'1 0 0'}>
+                      <Box color={'black'}>{t(template.name)}</Box>
+                      <Box className="textEllipsis3" color={'myGray.500'} fontSize={'sm'}>
+                        {t(template.intro)}
+                      </Box>
                     </Box>
-                  </Box>
-                </Flex>
-              ))}
+                  </Flex>
+                ))}
             </>
           </Box>
         ))}

@@ -357,7 +357,8 @@ export const getModulesData = ({
           inputType: true,
           isToolInput: true
         },
-        connected: true
+        connected: true,
+        toolDescription: param.description
       };
     }) || []),
     ...(propsKeys &&
@@ -380,7 +381,8 @@ export const getModulesData = ({
             inputType: true,
             isToolInput: true
           },
-          connected: true
+          connected: true,
+          toolDescription: prop.description
         };
       }))
   ];
@@ -485,17 +487,14 @@ export const getModulesData = ({
     const properties = item.request?.content?.['application/json']?.schema?.properties;
     const keys = Object.keys(properties);
     if (keys.length > 0) {
-      const obj = keys.reduce((prev: any, key) => {
-        prev[key] = `{{${key}}}`;
-        return prev;
-      }, {});
-      body =
-        `{
-  ` +
-        keys.map((key) => `  "${key}": {{${key}}}`).join(`,
-  `) +
-        `
-}`;
+      body = JSON.stringify(
+        keys.reduce((acc: any, key) => {
+          acc[key] = `{{${key}}}`;
+          return acc;
+        }, {}),
+        null,
+        2
+      );
     }
   }
 

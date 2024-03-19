@@ -49,7 +49,7 @@ import {
   getPluginsData,
   handleOpenAPI,
   text2json
-} from '../../../../service/core/plugin/getModules';
+} from '@/service/core/plugin/getModules';
 import AuthMethodModal from './AuthMethodModal';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useConfirm } from '@/web/common/hooks/useConfirm';
@@ -58,7 +58,7 @@ import { debounce } from 'lodash';
 import { AddIcon } from '@chakra-ui/icons';
 
 export const defaultHttpPlugin: CreateOnePluginParams = {
-  avatar: '/imgs/files/folder.svg',
+  avatar: '/imgs/module/http.png',
   name: '',
   intro: '',
   parentId: null,
