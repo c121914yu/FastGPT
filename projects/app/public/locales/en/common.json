@@ -702,6 +702,7 @@
         "Search type": "Type",
         "Source id": "Source ID",
         "Source name": "Source",
+        "Tool description": "Description",
         "Top K": "Top K",
         "Using cfr": "Open query extension",
         "Using query extension": "Open query extension",

@@ -25,7 +25,6 @@ export const getDefaultAppForm = (): AppSimpleEditFormType => {
       datasets: [],
       similarity: 0.4,
       limit: 1500,
-      searchEmptyText: '',
       searchMode: DatasetSearchModeEnum.embedding,
       usingReRank: false,
       datasetSearchUsingExtensionQuery: true,
@@ -112,17 +111,6 @@ export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
         module.inputs,
         ModuleInputKeyEnum.datasetSearchExtensionBg
       );
-
-      // empty text
-      const emptyOutputs =
-        module.outputs.find((item) => item.key === ModuleOutputKeyEnum.datasetIsEmpty)?.targets ||
-        [];
-      const emptyOutput = emptyOutputs[0];
-      if (emptyOutput) {
-        const target = modules.find((item) => item.moduleId === emptyOutput.moduleId);
-        defaultAppForm.dataset.searchEmptyText =
-          target?.inputs?.find((item) => item.key === ModuleInputKeyEnum.answerText)?.value || '';
-      }
     } else if (module.flowType === FlowNodeTypeEnum.userGuide) {
       const { welcomeText, variableModules, questionGuide, ttsConfig } = splitGuideModule(
         getGuideModule(modules)

@@ -225,7 +225,7 @@ const EditForm = ({
             <Box mt={3}>
               <Box {...LabelStyles}>
                 {t('core.ai.Prompt')}
-                <MyTooltip label={t(chatNodeSystemPromptTip)} forceShow>
+                <MyTooltip label={t('core.app.tip.chatNodeSystemPromptTip')} forceShow>
                   <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
                 </MyTooltip>
               </Box>
@@ -269,7 +269,6 @@ const EditForm = ({
                   limit={getValues('dataset.limit')}
                   usingReRank={getValues('dataset.usingReRank')}
                   usingQueryExtension={getValues('dataset.datasetSearchUsingExtensionQuery')}
-                  responseEmptyText={getValues('dataset.searchEmptyText')}
                 />
               </Box>
             )}
