@@ -804,6 +804,9 @@
         "placeholder": "Questions about python introduction and usage, etc. The current conversation is related to the game GTA5.",
         "tip": "Describes the scope of the current conversation, making it easier for the AI to complete first or vague questions, thereby enhancing the knowledge base's ability to continue conversations.If \n is empty, the question completion function is not used in the first conversation. "
       },
+      "Quote prompt setting": "Quote prompt setting",
+      "Qupte prompt setting": "",
+      "Setting quote prompt": "Setting quote prompt",
       "Unlink tip": "[{{name}}] An unfilled or unconnected parameter exists",
       "Variable": "Variables",
       "Variable Setting": "Variable Setting",
@@ -1435,7 +1438,7 @@
     "Help Document": "Document"
   },
   "template": {
-    "Quote Content Tip": "This configuration takes effect only when reference content is passed in (knowledge base search).\nYou can customize the structure of the reference content to better suit different scenarios. Some variables can be used for template configuration:\n{{q}} - retrieve content, {{a}} - expected content, {{source}} - source, {{sourceId}} - source file name, {{index}} - the first n references, {{with}} - the reference points (0-1), they are optional, Here are the default values:\n{{default}}",
+    "Quote Content Tip": "This configuration takes effect only when reference content is passed in (knowledge base search).\nYou can customize the structure of the reference content to better suit different scenarios. Some variables can be used for template configuration:\n{{q}} - retrieve content, {{a}} - expected content, {{source}} - source, {{sourceId}} - source file name, {{index}} - the first n references, they are optional, Here are the default values:\n{{default}}",
     "Quote Prompt Tip": "This configuration takes effect only when the knowledge base is searched.\nYou can use {{quote}} to insert the reference content template and {{question}} to insert the question. Here are the default values:\n{{default}}"
   },
   "user": {
