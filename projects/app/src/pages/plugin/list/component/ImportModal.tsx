@@ -44,7 +44,12 @@ import {
   postImportPlugin,
   putUpdatePlugin
 } from '@/web/core/plugin/api';
-import { ApiData, PathDataType, getPluginsData, handleOpenAPI, text2json } from './getModules';
+import {
+  ApiData,
+  getPluginsData,
+  handleOpenAPI,
+  text2json
+} from '../../../../service/core/plugin/getModules';
 import AuthMethodModal from './AuthMethodModal';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useConfirm } from '@/web/common/hooks/useConfirm';
