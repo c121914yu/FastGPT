@@ -11,7 +11,7 @@ weight: 708
 
 **开发环境下**，你需要将示例配置文件 `config.json` 复制成 `config.local.json` 文件才会生效。
 
-这个配置文件中包含了系统级参数、AI 对话的模型、function 模型等……
+这个配置文件中包含了系统参数和各个模型配置，使用时务必去掉注释。
 
 ## 4.6.8+ 版本新配置文件
 
@@ -40,8 +40,8 @@ llm模型全部合并
       "usedInExtractFields": true, // 是否用于内容提取（务必保证至少有一个为true）
       "usedInToolCall": true, // 是否用于工具调用（务必保证至少有一个为true）
       "usedInQueryExtension": true, // 是否用于问题优化（务必保证至少有一个为true）
-      "toolChoice": true, // 是否支持工具选择（务必保证至少有一个为true）
-      "functionCall": false, // 是否支持函数调用（特殊功能，会优先使用 toolChoice，如果为false，则使用 functionCall，如果仍为 false，则使用提示词模式）
+      "toolChoice": true, // 是否支持工具选择（分类，内容提取，工具调用会用到。目前只有gpt支持）
+      "functionCall": false, // 是否支持函数调用（分类，内容提取，工具调用会用到。会优先使用 toolChoice，如果为false，则使用 functionCall，如果仍为 false，则使用提示词模式）
       "customCQPrompt": "", // 自定义文本分类提示词（不支持工具和函数调用的模型
       "customExtractPrompt": "", // 自定义内容提取提示词
       "defaultSystemChatPrompt": "", // 对话默认携带的系统提示词
