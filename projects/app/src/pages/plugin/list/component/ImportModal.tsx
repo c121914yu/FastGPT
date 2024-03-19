@@ -19,7 +19,9 @@ import {
   PopoverContent,
   PopoverArrow,
   PopoverBody,
-  useDisclosure
+  useDisclosure,
+  Center,
+  Spinner
 } from '@chakra-ui/react';
 import { useSelectFile } from '@/web/common/file/hooks/useSelectFile';
 import { useForm } from 'react-hook-form';
@@ -33,10 +35,8 @@ import MyTooltip from '@/components/MyTooltip';
 import MyModal from '@/components/MyModal';
 import { useTranslation } from 'next-i18next';
 import { CreateOnePluginParams, MethodType } from '@fastgpt/global/core/plugin/controller';
-import { customAlphabet } from 'nanoid';
 import { MongoImageTypeEnum } from '@fastgpt/global/common/file/image/constants';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
-import yaml from 'js-yaml';
 import {
   delOnePlugin,
   getSchema,
@@ -44,29 +44,13 @@ import {
   postImportPlugin,
   putUpdatePlugin
 } from '@/web/core/plugin/api';
-import getModules from './getModules';
+import { ApiData, PathDataType, getPluginsData, handleOpenAPI, text2json } from './getModules';
 import AuthMethodModal from './AuthMethodModal';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useConfirm } from '@/web/common/hooks/useConfirm';
 import { FormType, defaultForm } from './EditModal';
 import { debounce } from 'lodash';
-import dynamic from 'next/dynamic';
 import { AddIcon } from '@chakra-ui/icons';
-
-const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 12);
-
-type PathDataType = {
-  name: string;
-  description: string;
-  method: string;
-  path: string;
-  params: any[];
-};
-
-type ApiData = {
-  pathData: PathDataType[];
-  serverPath: string;
-};
 
 export const defaultHttpPlugin: CreateOnePluginParams = {
   avatar: '/imgs/files/folder.svg',
@@ -95,7 +79,7 @@ const ImportModal = ({
   const [refresh, setRefresh] = useState(false);
   const [apiData, setApiData] = useState<ApiData>(() => {
     try {
-      return handleOpenAPI(defaultPlugin.schema || '') as ApiData;
+      return handleOpenAPI(text2json(defaultPlugin.schema || '')) as ApiData;
     } catch (err) {
       return { pathData: [], serverPath: '' };
     }
@@ -113,6 +97,7 @@ const ImportModal = ({
 
   const [schemaUrl, setSchemaUrl] = useState('');
   const [urlLoading, setUrlLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const { isOpen: isOpenUrl, onOpen: onOpenUrl, onClose: onCloseUrl } = useDisclosure();
 
@@ -201,6 +186,7 @@ const ImportModal = ({
   const onclickDelApp = useCallback(async () => {
     if (!defaultPlugin.id) return;
     try {
+      setDeleteLoading(true);
       await delOnePlugin(defaultPlugin.id);
       toast({
         title: t('common.Delete Success'),
@@ -213,6 +199,7 @@ const ImportModal = ({
         status: 'error'
       });
     }
+    setDeleteLoading(false);
     onClose();
   }, [defaultPlugin.id, onClose, toast, t, onDelete]);
 
@@ -224,6 +211,7 @@ const ImportModal = ({
       title={isEdit ? t('plugin.Edit Http Plugin') : t('plugin.Import Plugin')}
       isCentered={!isPc}
       w={['90vw', '600px']}
+      position={'relative'}
     >
       <ModalBody pb={20}>
         <Box color={'myGray.800'} fontWeight={'bold'}>
@@ -302,7 +290,13 @@ const ImportModal = ({
                         setUrlLoading(true);
                         const schema = await getSchema(schemaUrl);
 
-                        setValue('schema', schema);
+                        console.log(
+                          '%cprojects/app/src/pages/plugin/list/component/ImportModal.tsx:304 schema',
+                          'color: #007acc;',
+                          schema
+                        );
+
+                        setValue('schema', JSON.stringify(schema));
                         const pathData = handleOpenAPI(schema);
                         setApiData(pathData as ApiData);
                       } catch (err) {
@@ -330,7 +324,8 @@ const ImportModal = ({
           onChange={debounce((e) => {
             const content = e.target.value;
             try {
-              const pathData = handleOpenAPI(content);
+              const schema = text2json(content);
+              const pathData = handleOpenAPI(schema);
               setApiData(pathData as ApiData);
             } catch (err) {
               toast({
@@ -355,7 +350,13 @@ const ImportModal = ({
               {apiData?.pathData?.map((item, index) => (
                 <Tr key={index}>
                   <Td>{item.name}</Td>
-                  <Td fontSize={'sm'} textColor={'gray.600'}>
+                  <Td
+                    fontSize={'sm'}
+                    textColor={'gray.600'}
+                    w={'auto'}
+                    maxW={80}
+                    whiteSpace={'pre-wrap'}
+                  >
                     {item.description}
                   </Td>
                   <Td>{item.method}</Td>
@@ -451,6 +452,22 @@ const ImportModal = ({
         )}
       </Flex>
 
+      {deleteLoading && (
+        <Center
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          borderRadius={'xl'}
+          position={'absolute'}
+          bg={'white'}
+          zIndex={'999'}
+          opacity={0.8}
+        >
+          <Spinner />
+        </Center>
+      )}
+
       <File onSelect={onSelectFile} />
       {isOpen && (
         <AuthMethodModal
@@ -467,188 +484,3 @@ const ImportModal = ({
 };
 
 export default ImportModal;
-
-const handleOpenAPI = (content: string) => {
-  if (!content) return { pathData: [], serverPath: '' };
-  try {
-    let data: any = {};
-    try {
-      data = JSON.parse(content);
-    } catch (jsonError) {
-      try {
-        data = yaml.load(content, { schema: yaml.FAILSAFE_SCHEMA });
-      } catch (yamlError) {
-        console.error(yamlError);
-        throw new Error();
-      }
-    }
-
-    const serverPath = data.servers?.[0].url;
-    const pathData = Object.keys(data.paths)
-      .map((path) => {
-        const methodData = data.paths[path];
-        return Object.keys(methodData).map((method) => {
-          const methodInfo = methodData[method];
-          if (methodInfo.deprecated) return false;
-          const result = {
-            path,
-            method,
-            name: methodInfo.operationId,
-            description: methodInfo.summary,
-            params: methodInfo.parameters
-          };
-          return result;
-        });
-      })
-      .flat()
-      .filter(Boolean);
-
-    return { pathData, serverPath };
-  } catch (err) {
-    throw new Error('Invalid Schema');
-  }
-};
-
-const getModulesData = ({
-  item,
-  authMethod,
-  apiData
-}: {
-  item: PathDataType;
-  authMethod: MethodType;
-  apiData: ApiData;
-}) => {
-  const inputId = nanoid();
-  const outputId = nanoid();
-  const httpId = nanoid();
-
-  const inputInputs =
-    item.params?.map((param: any) => {
-      return {
-        key: param.name,
-        valueType: param.schema.type,
-        label: param.name,
-        type: 'target',
-        required: param.required,
-        description: param.description,
-        edit: true,
-        editField: {
-          key: true,
-          name: true,
-          description: true,
-          required: true,
-          dataType: true,
-          inputType: true,
-          isToolInput: true
-        },
-        connected: true
-      };
-    }) || [];
-
-  const inputOutputs =
-    item.params?.map((param: any) => {
-      return {
-        key: param.name,
-        valueType: param.schema.type,
-        label: param.name,
-        type: 'source',
-        edit: true,
-        targets: [
-          {
-            moduleId: httpId,
-            key: param.name
-          }
-        ]
-      };
-    }) || [];
-
-  const httpInputs =
-    item.params?.map((param: any) => {
-      return {
-        key: param.name,
-        valueType: param.schema.type,
-        label: param.name,
-        type: 'target',
-        description: param.description,
-        edit: true,
-        editField: {
-          key: true,
-          description: true,
-          dataType: true
-        },
-        connected: true
-      };
-    }) || [];
-
-  const headers = [];
-  let body = '{}';
-  const params = [];
-
-  if (item.params && item.params.length > 0) {
-    for (const param of item.params) {
-      if (param.in === 'header') {
-        headers.push({
-          key: param.name,
-          type: param.schema.type,
-          value: `{{${param.name}}}`
-        });
-      } else if (param.in === 'body') {
-        body = JSON.stringify({ ...JSON.parse(body), [param.name]: `{{${param.name}}}` }, null, 2);
-      } else if (param.in === 'query') {
-        params.push({
-          key: param.name,
-          type: param.schema.type,
-          value: `{{${param.name}}}`
-        });
-      }
-    }
-  }
-
-  if (authMethod.name === 'API Key') {
-    headers.push({
-      key: authMethod.key,
-      type: 'string',
-      value: `${authMethod.prefix} ${authMethod.value}`
-    });
-  }
-
-  return getModules({
-    inputId,
-    outputId,
-    httpId,
-    item,
-    inputInputs,
-    inputOutputs,
-    method: item.method.toUpperCase(),
-    path: apiData.serverPath + item.path,
-    headers,
-    body,
-    params,
-    httpInputs
-  });
-};
-
-const getPluginsData = ({
-  id,
-  apiData,
-  authMethod
-}: {
-  id: string;
-  apiData: ApiData;
-  authMethod: MethodType;
-}) => {
-  return apiData.pathData.map((item) => {
-    const modules = getModulesData({ item, authMethod, apiData });
-
-    return {
-      avatar: '/icon/logo.svg',
-      name: item.name,
-      intro: item.description,
-      parentId: id,
-      type: PluginTypeEnum.plugin,
-      schema: null,
-      authMethod: null,
-      modules
-    };
-  });
-};
