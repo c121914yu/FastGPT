@@ -125,7 +125,7 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
         userSelect={'none'}
         overflow={isOpen ? 'none' : 'hidden'}
       >
-        <Box mb={2} pl={'20px'} pr={'10px'} whiteSpace={'nowrap'}>
+        <Box mb={2} pl={'20px'} pr={'10px'} whiteSpace={'nowrap'} overflow={'hidden'}>
           <Flex flex={'1 0 0'} alignItems={'center'} gap={3}>
             <RowTabs
               list={[
