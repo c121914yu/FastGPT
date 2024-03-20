@@ -35,8 +35,8 @@ type ModuleTemplateListProps = {
 type RenderListProps = {
   templates: FlowNodeTemplateType[];
   onClose: () => void;
-  currentParent: { parentId: string | null; parentName: string };
-  setCurrentParent: (e: { parentId: string | null; parentName: string }) => void;
+  currentParent?: { parentId: string; parentName: string };
+  setCurrentParent: (e: { parentId: string; parentName: string }) => void;
 };
 
 enum TemplateTypeEnum {
@@ -50,10 +50,7 @@ const sliderWidth = 380;
 const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [currentParent, setCurrentParent] = useState<{
-    parentId: string | null;
-    parentName: string;
-  }>({ parentId: null, parentName: '' });
+  const [currentParent, setCurrentParent] = useState<RenderListProps['currentParent']>();
   const [searchKey, setSearchKey] = useState('');
 
   const {
@@ -74,7 +71,7 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
       )
     };
     return map[templateType];
-  }, [basicNodeTemplates, systemNodeTemplates, teamPluginNodeTemplates, templateType]);
+  }, [basicNodeTemplates, searchKey, systemNodeTemplates, teamPluginNodeTemplates, templateType]);
 
   const { mutate: onChangeTab } = useRequest({
     mutationFn: async (e: any) => {
@@ -82,15 +79,21 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
       if (val === TemplateTypeEnum.systemPlugin) {
         await loadSystemNodeTemplates();
       } else if (val === TemplateTypeEnum.teamPlugin) {
-        await loadTeamPluginNodeTemplates(currentParent.parentId);
+        await loadTeamPluginNodeTemplates({
+          parentId: currentParent?.parentId
+        });
       }
       setTemplateType(val);
     },
     errorToast: t('core.module.templates.Load plugin error')
   });
 
-  useQuery(['teamNodeTemplate', currentParent.parentId, searchKey], () =>
-    loadTeamPluginNodeTemplates(currentParent.parentId, searchKey, true)
+  useQuery(['teamNodeTemplate', currentParent?.parentId, searchKey], () =>
+    loadTeamPluginNodeTemplates({
+      parentId: currentParent?.parentId,
+      searchKey,
+      init: true
+    })
   );
 
   return (
@@ -169,7 +172,6 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
                   bg={'myGray.50'}
                   placeholder={t('plugin.Search plugin')}
                   onChange={debounce((e) => setSearchKey(e.target.value), 200)}
-                  fontSize={'lg'}
                 />
               </InputGroup>
               <Box flex={1} />
@@ -186,15 +188,13 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
               </Flex>
             </Flex>
           )}
-          {templateType === TemplateTypeEnum.teamPlugin && !searchKey && (
+          {templateType === TemplateTypeEnum.teamPlugin && !searchKey && currentParent && (
             <Flex alignItems={'center'} mt={2}>
               <ParentPaths
-                paths={[
-                  { parentId: currentParent.parentId || '', parentName: currentParent.parentName }
-                ]}
+                paths={[currentParent]}
                 FirstPathDom={null}
                 onClick={() => {
-                  setCurrentParent({ parentId: null, parentName: '' });
+                  setCurrentParent(undefined);
                 }}
                 fontSize="md"
               />
