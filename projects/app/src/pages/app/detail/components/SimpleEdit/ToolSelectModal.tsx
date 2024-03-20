@@ -81,7 +81,7 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
     errorToast: t('core.module.templates.Load plugin error')
   });
 
-  useQuery(['teamNodeTemplate', currentParent.parentId, searchKey], () =>
+  const { isLoading } = useQuery(['teamNodeTemplate', currentParent.parentId, searchKey], () =>
     loadTeamPluginNodeTemplates(currentParent.parentId, searchKey, true)
   );
 
@@ -127,7 +127,7 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
           />
         </InputGroup>
       </Box>
-      <Box mt={2} px={[3, 6]} pb={3} flex={'1 0 0'} overflowY={'auto'}>
+      <MyBox isLoading={isLoading} mt={2} px={[3, 6]} pb={3} flex={'1 0 0'} overflowY={'auto'}>
         {templateType === TemplateTypeEnum.teamPlugin && !searchKey && (
           <Flex px={[4, 5]}>
             <ParentPaths
@@ -142,8 +142,13 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
             />
           </Flex>
         )}
-        <RenderList templates={templates} {...props} setCurrentParent={setCurrentParent} />
-      </Box>
+        <RenderList
+          templates={templates}
+          {...props}
+          isLoadingData={isLoading}
+          setCurrentParent={setCurrentParent}
+        />
+      </MyBox>
     </MyModal>
   );
 };
@@ -153,11 +158,13 @@ export default React.memo(ToolSelectModal);
 const RenderList = React.memo(function RenderList({
   templates,
   selectedTools,
+  isLoadingData,
   onAddTool,
   onRemoveTool,
   setCurrentParent
 }: Props & {
   templates: FlowNodeTemplateType[];
+  isLoadingData: boolean;
   setCurrentParent: (e: { parentId: string | null; parentName: string }) => void;
 }) {
   const { t } = useTranslation();
@@ -185,7 +192,7 @@ const RenderList = React.memo(function RenderList({
     errorToast: t('core.module.templates.Load plugin error')
   });
 
-  return templates.length === 0 ? (
+  return templates.length === 0 && !isLoadingData ? (
     <EmptyTip text={t('core.app.ToolCall.No plugin')} />
   ) : (
     <MyBox isLoading={isLoading}>
