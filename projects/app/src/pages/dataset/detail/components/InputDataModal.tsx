@@ -27,6 +27,7 @@ import RawSourceBox from '@/components/core/dataset/RawSourceBox';
 import MyBox from '@/components/common/MyBox';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
+import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 
 export type InputDataType = {
   q: string;
@@ -395,14 +396,10 @@ const InputTab = ({
   return (
     <HStack h={'100%'} spacing={6}>
       <Flex flexDirection={'column'} w={'50%'} h={'100%'}>
-        <Flex pt={3} pb={2} fontWeight={'medium'} fontSize={'md'}>
+        <Flex pt={3} pb={2} fontWeight={'medium'} fontSize={'md'} alignItems={'center'}>
           <Box color={'red.600'}>*</Box>
           <Box color={'myGray.900'}>{t('core.dataset.data.Main Content')}</Box>
-          <MyTooltip label={t('core.dataset.data.Data Content Tip')}>
-            <Flex alignItems={'center'} h={'full'}>
-              <MyIcon name={'help'} w={'16px'} h={'16px'} ml={1} />
-            </Flex>
-          </MyTooltip>
+          <QuestionTip label={t('core.dataset.data.Data Content Tip')} ml={1} />
         </Flex>
         <Box flex={'1 0 0'}>
           <Textarea
@@ -417,13 +414,9 @@ const InputTab = ({
         </Box>
       </Flex>
       <Flex flexDirection={'column'} w={'50%'} h={'100%'}>
-        <Flex pt={3} pb={2} fontWeight={'medium'} fontSize={'md'}>
+        <Flex pt={3} pb={2} fontWeight={'medium'} fontSize={'md'} alignItems={'center'}>
           <Box color={'myGray.900'}>{t('core.dataset.data.Auxiliary Data')}</Box>
-          <MyTooltip label={t('core.dataset.data.Auxiliary Data Tip')}>
-            <Flex alignItems={'center'} h={'full'}>
-              <MyIcon name={'help'} w={'16px'} h={'16px'} ml={1} />
-            </Flex>
-          </MyTooltip>
+          <QuestionTip label={t('core.dataset.data.Auxiliary Data Tip')} ml={1} />
         </Flex>
         <Box flex={'1 0 0'}>
           <Textarea
