@@ -53,13 +53,6 @@ const Navbar = ({ unread }: { unread: number }) => {
         activeIcon: 'core/dataset/datasetFill',
         link: `/dataset/list`,
         activeLink: ['/dataset/list', '/dataset/detail']
-      },
-      {
-        label: t('navbar.Account'),
-        icon: 'support/user/userLight',
-        activeIcon: 'support/user/userFill',
-        link: '/account',
-        activeLink: ['/account']
       }
     ],
     [lastChatAppId, lastChatId, t]
@@ -93,7 +86,7 @@ const Navbar = ({ unread }: { unread: number }) => {
       userSelect={'none'}
     >
       {/* logo */}
-      <Box
+      {/* <Box
         flex={'0 0 auto'}
         mb={5}
         border={'2px solid #fff'}
@@ -103,7 +96,7 @@ const Navbar = ({ unread }: { unread: number }) => {
         onClick={() => router.push('/account')}
       >
         <Avatar w={'36px'} h={'36px'} src={userInfo?.avatar} fallbackSrc={HUMAN_ICON} />
-      </Box>
+      </Box> */}
       {/* 导航列表 */}
       <Box flex={1}>
         {navbarList.map((item) => (
