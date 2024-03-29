@@ -20,6 +20,10 @@ export type UserModelSchema = {
     key: string;
     baseUrl: string;
   };
+  lafAccount?: {
+    token: string;
+    appid: string;
+  };
 };
 
 export type UserType = {
@@ -29,6 +33,7 @@ export type UserType = {
   timezone: string;
   promotionRate: UserModelSchema['promotionRate'];
   openaiAccount: UserModelSchema['openaiAccount'];
+  lafAccount: UserModelSchema['lafAccount'];
   team: TeamItemType;
   standardInfo?: standardInfoType;
 };

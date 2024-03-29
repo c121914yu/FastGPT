@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-export const defaultEnv = 'api.laf.dev';
 export const pat2Token = async (env: string, pat: string) => {
   try {
     return await axios.post(`https://${env}/v1/auth/pat2token`, {

@@ -8,7 +8,8 @@ import {
   Input,
   Link,
   Progress,
-  Grid
+  Grid,
+  Image
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { UserUpdateParams } from '@/types/user';
@@ -47,6 +48,7 @@ const TeamMenu = dynamic(() => import('@/components/support/user/team/TeamMenu')
 const PayModal = dynamic(() => import('./PayModal'));
 const UpdatePswModal = dynamic(() => import('./UpdatePswModal'));
 const OpenAIAccountModal = dynamic(() => import('./OpenAIAccountModal'));
+const LafAccountModal = dynamic(() => import('./LafAccountModal'));
 const CommunityModal = dynamic(() => import('@/components/CommunityModal'));
 
 const Account = () => {
@@ -118,7 +120,8 @@ const MyInfo = () => {
       await updateUserInfo({
         avatar: data.avatar,
         timezone: data.timezone,
-        openaiAccount: data.openaiAccount
+        openaiAccount: data.openaiAccount,
+        lafAccount: data.lafAccount
       });
       reset(data);
       toast({
@@ -511,6 +514,7 @@ const Other = () => {
     defaultValues: userInfo as UserType
   });
 
+  const { isOpen: isOpenLaf, onClose: onCloseLaf, onOpen: onOpenLaf } = useDisclosure();
   const { isOpen: isOpenOpenai, onClose: onCloseOpenai, onOpen: onOpenOpenai } = useDisclosure();
   const { isOpen: isOpenConcat, onClose: onCloseConcat, onOpen: onOpenConcat } = useDisclosure();
 
@@ -519,7 +523,8 @@ const Other = () => {
       await updateUserInfo({
         avatar: data.avatar,
         timezone: data.timezone,
-        openaiAccount: data.openaiAccount
+        openaiAccount: data.openaiAccount,
+        lafAccount: data.lafAccount
       });
       reset(data);
       toast({
@@ -574,6 +579,32 @@ const Other = () => {
           </Box>
         </Link>
 
+        {feConfigs?.laf_env && (
+          <Flex
+            bg={'white'}
+            py={4}
+            px={6}
+            border={theme.borders.sm}
+            borderWidth={'1.5px'}
+            borderRadius={'md'}
+            alignItems={'center'}
+            cursor={'pointer'}
+            userSelect={'none'}
+            onClick={onOpenLaf}
+          >
+            <Image src="/imgs/module/laf.png" w={'18px'} alt="laf" />
+            <Box ml={2} flex={1}>
+              laf 账号
+            </Box>
+            <Box
+              w={'9px'}
+              h={'9px'}
+              borderRadius={'50%'}
+              bg={userInfo?.lafAccount?.token ? '#67c13b' : 'myGray.500'}
+            />
+          </Flex>
+        )}
+
         {feConfigs?.show_openai_account && (
           <Flex
             bg={'white'}
@@ -612,6 +643,18 @@ const Other = () => {
         )}
       </Grid>
 
+      {isOpenLaf && userInfo && (
+        <LafAccountModal
+          defaultData={userInfo?.lafAccount}
+          onSuccess={(data) =>
+            onclickSave({
+              ...userInfo,
+              lafAccount: data
+            })
+          }
+          onClose={onCloseLaf}
+        />
+      )}
       {isOpenOpenai && userInfo && (
         <OpenAIAccountModal
           defaultData={userInfo?.openaiAccount}

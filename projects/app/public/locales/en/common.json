@@ -1224,6 +1224,7 @@
     "Auth Type": "Auth Type",
     "Confirm Delete": "Confirm to delete the plugin?",
     "Create Your Plugin": "Create Plugin",
+    "Currentapp": "CurrentApp",
     "Custom Plugin": "Custom plugin",
     "Description": "Description",
     "Edit Http Plugin": "Edit HTTP plugin",
@@ -1251,6 +1252,7 @@
     "Privacy Agreement": "privacy agreement",
     "Search plugin": "Search plugins",
     "Set Name": "Plugin Name",
+    "Synchronous app": "Sync App",
     "Synchronous version": "Sync Version",
     "To Edit Plugin": "To Edit",
     "Update Your Plugin": "Update Plugin",
@@ -1492,10 +1494,13 @@
     "Bill Detail": "Bill Detail",
     "Change": "Change",
     "Copy invite url": "Copy invitation link",
+    "Current laf Env": "Current laf Env",
     "Edit name": "Click to modify nickname",
     "Invite Url": "Invite Url",
     "Invite url tip": "Friends who register through this link will be permanently bound to you, and you will get a certain balance reward when they recharge. In addition, when friends register with their mobile phone number, you will get 5 yuan reward immediately.",
+    "Laf Account Setting": "laf account setting",
     "Language": "Language",
+    "Learn More": "Learn More",
     "Member Name": "Name",
     "Notice": "Notice",
     "Old password is error": "Old password is error",
@@ -1510,6 +1515,7 @@
     "Promotion rate tip": "You will be rewarded with a percentage of the balance when your friends top up",
     "Recharge Record": "Recharge",
     "Replace": "Replace",
+    "Set Laf Account Failed": "set laf accout failed",
     "Set OpenAI Account Failed": "Set OpenAI account failed",
     "Sign Out": "Sign Out",
     "Source": "Source",
@@ -1525,6 +1531,7 @@
     "apikey": {
       "key": "API Keys"
     },
+    "laf intro": "",
     "promotion": {
       "pay": "",
       "register": ""

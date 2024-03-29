@@ -1226,6 +1226,7 @@
     "Auth Type": "鉴权类型",
     "Confirm Delete": "确认删除该插件？",
     "Create Your Plugin": "创建你的插件",
+    "Currentapp": "当前应用",
     "Custom Plugin": "自定义插件",
     "Description": "描述",
     "Edit Http Plugin": "编辑 HTTP 插件",
@@ -1253,6 +1254,7 @@
     "Privacy Agreement": "隐私协议",
     "Search plugin": "搜索插件",
     "Set Name": "给插件取个名字",
+    "Synchronous app": "同步应用",
     "Synchronous version": "同步版本",
     "To Edit Plugin": "去编辑",
     "Update Your Plugin": "更新插件",
@@ -1494,10 +1496,13 @@
     "Bill Detail": "账单详情",
     "Change": "变更",
     "Copy invite url": "复制邀请链接",
+    "Current laf Env": "当前 laf 环境",
     "Edit name": "点击修改昵称",
     "Invite Url": "邀请链接",
     "Invite url tip": "通过该链接注册的好友将永久与你绑定，其充值时你会获得一定余额奖励。\n此外，好友使用手机号注册时，你将立即获得 5 元奖励。\n奖励会发送到您的默认团队中。",
+    "Laf Account Setting": "laf 账号配置",
     "Language": "语言",
+    "Learn More": "查看文档",
     "Member Name": "昵称",
     "Notice": "通知",
     "Old password is error": "旧密码错误",
@@ -1512,6 +1517,7 @@
     "Promotion rate tip": "好友充值时你将获得一定比例的余额奖励",
     "Recharge Record": "支付记录",
     "Replace": "更换",
+    "Set Laf Account Failed": "设置 laf 账号异常",
     "Set OpenAI Account Failed": "设置 OpenAI 账号异常",
     "Sign Out": "登出",
     "Source": "来源",
@@ -1527,6 +1533,7 @@
     "apikey": {
       "key": "API 秘钥"
     },
+    "laf intro": "laf 是开源的云开发平台，提供云函数、云数据库、云存储等开箱即用的应用资源。             让开发者专注于业务开发，无需折腾服务器，快速释放创意。",
     "promotion": {
       "pay": "好友充值",
       "register": "好友注册"
