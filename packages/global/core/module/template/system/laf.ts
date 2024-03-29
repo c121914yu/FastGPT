@@ -11,7 +11,6 @@ import {
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_Switch } from '../input';
-import { Output_Template_AddOutput, Output_Template_Finish } from '../output';
 
 export const lafModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.lafModule,
@@ -81,28 +80,11 @@ export const lafModule: FlowNodeTemplateType = {
   outputs: [
     {
       key: ModuleOutputKeyEnum.httpRawResponse,
-      label: '原始响应',
-      description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',
+      label: 'result',
+      description: 'laf 函数请求的原始响应。只能接受字符串或JSON类型响应数据。',
       valueType: ModuleIOValueTypeEnum.any,
       type: FlowNodeOutputTypeEnum.source,
       targets: []
-    },
-    {
-      ...Output_Template_AddOutput,
-      editField: {
-        key: true,
-        description: true,
-        dataType: true,
-        defaultValue: true
-      },
-      defaultEditField: {
-        label: '',
-        key: '',
-        description: '',
-        outputType: FlowNodeOutputTypeEnum.source,
-        valueType: ModuleIOValueTypeEnum.string
-      }
-    },
-    Output_Template_Finish
+    }
   ]
 };

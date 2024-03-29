@@ -6,7 +6,7 @@ import Divider from '../modules/Divider';
 import Container from '../modules/Container';
 import RenderInput from '../render/RenderInput';
 import RenderOutput from '../render/RenderOutput';
-import { Box, Button, Center, Spinner, useDisclosure, useToast } from '@chakra-ui/react';
+import { Box, Center, Spinner, useToast } from '@chakra-ui/react';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
 import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
 import { useTranslation } from 'next-i18next';
@@ -35,7 +35,7 @@ type TFunc = {
   request: any;
 };
 
-const NodeHttp = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
   const { t } = useTranslation();
   const { moduleId, inputs, outputs } = data;
   const { splitToolInputs, hasToolNode } = useFlowProviderStore();
@@ -150,6 +150,7 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                         });
                       });
                       func?.params?.forEach((param) => {
+                        console.log(param);
                         onChangeNode({
                           moduleId,
                           type: 'addInput',
@@ -158,7 +159,7 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                             key: param.name,
                             label: param.name,
                             required: param.required,
-                            toolDescription: 'param.description',
+                            toolDescription: param?.description || 'description',
                             type: 'hidden',
                             valueType: 'string'
                           }
@@ -176,7 +177,7 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                             key,
                             label: key,
                             required: true,
-                            toolDescription: 'properties[key].description',
+                            toolDescription: properties?.[key].description || 'description',
                             type: 'hidden',
                             valueType: 'string'
                           }
@@ -214,4 +215,4 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
     </NodeCard>
   );
 };
-export default React.memo(NodeHttp);
+export default React.memo(NodeLaf);
