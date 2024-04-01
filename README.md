@@ -60,7 +60,7 @@ fastgpt.run 域名会弃用。
    - [x] 混合检索 & 重排
    - [x] Tool 模块
    - [ ] 嵌入 [Laf](https://github.com/labring/laf)，实现在线编写 HTTP 模块
-   - [ ] 插件封装功能
+   - [ ] 插件封装功能，支持低代码渲染
 
 `2` 知识库能力
    - [x] 多库复用，混用
