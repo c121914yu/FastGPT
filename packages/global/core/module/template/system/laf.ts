@@ -11,6 +11,7 @@ import {
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_Switch } from '../input';
+import { Output_Template_Finish } from '../output';
 
 export const lafModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.lafModule,
@@ -85,6 +86,7 @@ export const lafModule: FlowNodeTemplateType = {
       valueType: ModuleIOValueTypeEnum.any,
       type: FlowNodeOutputTypeEnum.source,
       targets: []
-    }
+    },
+    Output_Template_Finish
   ]
 };

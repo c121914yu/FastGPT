@@ -19,6 +19,7 @@ import { str2OpenApiSchema } from '@fastgpt/global/core/plugin/httpPlugin/utils'
 import { upperCase } from 'lodash';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
+import { RenderHttpProps } from './NodeHttp';
 
 type TAppDetail = {
   domain: {
@@ -44,6 +45,8 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
 
   const requestUrl = inputs.find((item) => item.key === ModuleInputKeyEnum.httpReqUrl);
   const requestMethods = inputs.find((item) => item.key === ModuleInputKeyEnum.httpMethod);
+  const inputParams = inputs.find((item) => item.key === ModuleInputKeyEnum.httpParams);
+  const jsonBody = inputs.find((item) => item.key === ModuleInputKeyEnum.httpJsonBody);
 
   const [currentFunc, setCurrentFunc] = useState<TFunc | null>(null);
   const [appDetailData, setAppDetailData] = useState<TAppDetail | null>(null);
@@ -88,10 +91,21 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
     }
   }, [appid, getFuncList, token]);
 
+  const CustomComponents = useMemo(
+    () => ({
+      [ModuleInputKeyEnum.httpHeaders]: () => (
+        <>
+          <RenderHttpProps moduleId={moduleId} inputs={inputs} />
+        </>
+      )
+    }),
+    [inputs, moduleId]
+  );
+
   return (
     <NodeCard minW={'350px'} selected={selected} {...data}>
       {!userInfo?.lafAccount?.appid ? (
-        <Center minH={200}>请先绑定 laf 账号</Center>
+        <Center minH={200}>{t('plugin.Please bind laf accout first')}</Center>
       ) : (
         <>
           <Container>
@@ -111,78 +125,109 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                     }
                     placeholder={t('plugin.Func')}
                     onchange={(e) => {
-                      onChangeNode({
-                        moduleId,
-                        type: 'updateInput',
-                        key: ModuleInputKeyEnum.httpReqUrl,
-                        value: {
+                      const findFuncByName = (name: string) =>
+                        funcList.find((func) => func.name === name);
+
+                      const updateNode = (key: string, value: any) => {
+                        onChangeNode({ moduleId, type: 'updateInput', key, value });
+                      };
+
+                      const addNode = (key: string, value: any) => {
+                        onChangeNode({ moduleId, type: 'addInput', key, value });
+                      };
+
+                      const currentFunc = findFuncByName(e);
+
+                      if (currentFunc) {
+                        const { domain } = appDetailData || {};
+                        const { method, path, params, request } = currentFunc;
+
+                        updateNode(ModuleInputKeyEnum.httpReqUrl, {
                           ...requestUrl,
-                          value: `https://${appDetailData?.domain.domain}${
-                            funcList.find((func) => func.name === e)?.path
-                          }`
-                        }
-                      });
-                      onChangeNode({
-                        moduleId,
-                        type: 'updateInput',
-                        key: ModuleInputKeyEnum.httpMethod,
-                        value: {
+                          value: `https://${domain?.domain || ''}${path || ''}`
+                        });
+
+                        updateNode(ModuleInputKeyEnum.httpMethod, {
                           ...requestMethods,
-                          value: upperCase(funcList.find((func) => func.name === e)?.method)
-                        }
-                      });
-                      const func = funcList.find((func) => func.name === e);
-                      const delNode = toolInputs.filter(
-                        (input) =>
-                          !(
-                            func?.params?.find((param) => param.name === input.key) ||
-                            func?.request?.content?.['application/json']?.schema?.properties?.[
-                              input.key
-                            ]
+                          value: upperCase(method)
+                        });
+
+                        const properties =
+                          request?.content?.['application/json']?.schema?.properties || {};
+
+                        const delNodeKeys = commonInputs
+                          .filter(
+                            (input) =>
+                              input.edit &&
+                              !(
+                                params?.some((param) => param.name === input.key) ||
+                                properties[input.key]
+                              )
                           )
-                      );
-                      delNode.forEach((input) => {
-                        onChangeNode({
-                          moduleId,
-                          type: 'delInput',
-                          key: input.key,
-                          value: ''
+                          .map((input) => input.key);
+
+                        delNodeKeys.forEach((key) => {
+                          onChangeNode({ moduleId, type: 'delInput', key, value: '' });
                         });
-                      });
-                      func?.params?.forEach((param) => {
-                        console.log(param);
-                        onChangeNode({
-                          moduleId,
-                          type: 'addInput',
-                          key: e.key,
-                          value: {
+
+                        const concatParams =
+                          params?.map((param) => ({
                             key: param.name,
+                            type: 'string',
+                            value: `{{${param.name}}}`
+                          })) || [];
+
+                        updateNode(ModuleInputKeyEnum.httpParams, {
+                          ...inputParams,
+                          value: concatParams
+                        });
+
+                        params?.forEach((param) => {
+                          addNode(e.key, {
+                            key: param.name,
+                            valueType: param.schema.type,
                             label: param.name,
+                            type: 'target',
+                            description: param.description || '',
+                            edit: true,
+                            editField: {
+                              key: true,
+                              description: true,
+                              dataType: true
+                            },
                             required: param.required,
-                            toolDescription: param?.description || 'description',
-                            type: 'hidden',
-                            valueType: 'string'
-                          }
+                            connected: false
+                          });
                         });
-                      });
-                      const properties =
-                        func?.request?.content?.['application/json']?.schema?.properties;
-                      const propsKeys = properties ? Object.keys(properties) : [];
-                      propsKeys.forEach((key) => {
-                        onChangeNode({
-                          moduleId,
-                          type: 'addInput',
-                          key: e.key,
-                          value: {
+
+                        Object.keys(properties).forEach((key) => {
+                          addNode(e.key, {
                             key,
+                            valueType: 'string',
                             label: key,
-                            required: true,
-                            toolDescription: properties?.[key].description || 'description',
-                            type: 'hidden',
-                            valueType: 'string'
-                          }
+                            type: 'target',
+                            required: properties[key].required || false,
+                            description: properties[key].description || '',
+                            edit: true,
+                            editField: {
+                              key: true,
+                              description: true,
+                              dataType: true
+                            },
+                            connected: false
+                          });
                         });
-                      });
+
+                        const bodyJson = Object.keys(properties).reduce((acc: any, key) => {
+                          acc[key] = `{{${key}}}`;
+                          return acc;
+                        }, {});
+
+                        updateNode(ModuleInputKeyEnum.httpJsonBody, {
+                          ...jsonBody,
+                          value: JSON.stringify(bodyJson, null, 2)
+                        });
+                      }
                     }}
                     value={currentFunc?.name}
                   />
@@ -190,26 +235,34 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
               </Box>
             </Box>
           </Container>
-          {hasToolNode && (
+          {!isLoadingAppApi && (
             <>
-              <Divider text={t('core.module.tool.Tool input')} />
-              <Container>
-                <RenderToolInput moduleId={moduleId} inputs={toolInputs} canEdit />
-              </Container>
+              {hasToolNode && (
+                <>
+                  <Divider text={t('core.module.tool.Tool input')} />
+                  <Container>
+                    <RenderToolInput moduleId={moduleId} inputs={toolInputs} canEdit />
+                  </Container>
+                </>
+              )}
+              <>
+                <Divider text={t('common.Input')} />
+                <Container>
+                  <RenderInput
+                    moduleId={moduleId}
+                    flowInputList={commonInputs}
+                    CustomComponent={CustomComponents}
+                  />
+                </Container>
+              </>
+              <>
+                <Divider text={t('common.Output')} />
+                <Container>
+                  <RenderOutput moduleId={moduleId} flowOutputList={outputs} />
+                </Container>
+              </>
             </>
           )}
-          <>
-            <Divider text={t('common.Input')} />
-            <Container>
-              <RenderInput moduleId={moduleId} flowInputList={commonInputs} />
-            </Container>
-          </>
-          <>
-            <Divider text={t('common.Output')} />
-            <Container>
-              <RenderOutput moduleId={moduleId} flowOutputList={outputs} />
-            </Container>
-          </>
         </>
       )}
     </NodeCard>

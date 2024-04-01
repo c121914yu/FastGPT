@@ -56,6 +56,7 @@ const callbackMap: Record<`${FlowNodeTypeEnum}`, Function> = {
   [FlowNodeTypeEnum.queryExtension]: dispatchQueryExtension,
   [FlowNodeTypeEnum.tools]: dispatchRunTools,
   [FlowNodeTypeEnum.stopTool]: dispatchStopToolCall,
+  [FlowNodeTypeEnum.lafModule]: dispatchHttp468Request,
 
   // none
   [FlowNodeTypeEnum.userGuide]: () => Promise.resolve()
