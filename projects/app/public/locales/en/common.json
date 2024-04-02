@@ -1258,7 +1258,9 @@
     "To Edit Plugin": "To Edit",
     "Update Your Plugin": "Update Plugin",
     "Value": "Value",
-    "path": ""
+    "go to laf": "go to laf",
+    "path": "",
+    "update params": "update params"
   },
   "support": {
     "account": {

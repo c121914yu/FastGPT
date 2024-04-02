@@ -42,6 +42,7 @@ import {
 } from '@/web/support/wallet/sub/constants';
 
 import StandardPlanContentList from '@/components/support/wallet/StandardPlanContentList';
+import { TeamMemberRoleEnum } from '@fastgpt/global/support/user/team/constant';
 
 const StandDetailModal = dynamic(() => import('./standardDetailModal'));
 const TeamMenu = dynamic(() => import('@/components/support/user/team/TeamMenu'));
@@ -120,8 +121,7 @@ const MyInfo = () => {
       await updateUserInfo({
         avatar: data.avatar,
         timezone: data.timezone,
-        openaiAccount: data.openaiAccount,
-        lafAccount: data.lafAccount
+        openaiAccount: data.openaiAccount
       });
       reset(data);
       toast({
@@ -513,7 +513,6 @@ const Other = () => {
   const { reset } = useForm<UserUpdateParams>({
     defaultValues: userInfo as UserType
   });
-
   const { isOpen: isOpenLaf, onClose: onCloseLaf, onOpen: onOpenLaf } = useDisclosure();
   const { isOpen: isOpenOpenai, onClose: onCloseOpenai, onOpen: onOpenOpenai } = useDisclosure();
   const { isOpen: isOpenConcat, onClose: onCloseConcat, onOpen: onOpenConcat } = useDisclosure();
@@ -523,8 +522,7 @@ const Other = () => {
       await updateUserInfo({
         avatar: data.avatar,
         timezone: data.timezone,
-        openaiAccount: data.openaiAccount,
-        lafAccount: data.lafAccount
+        openaiAccount: data.openaiAccount
       });
       reset(data);
       toast({
@@ -534,7 +532,6 @@ const Other = () => {
     },
     [reset, toast, updateUserInfo]
   );
-
   return (
     <Box>
       <Grid gridGap={4} mt={3}>
@@ -579,7 +576,7 @@ const Other = () => {
           </Box>
         </Link>
 
-        {feConfigs?.laf_env && (
+        {feConfigs?.lafEnv && userInfo?.team.role === TeamMemberRoleEnum.owner && (
           <Flex
             bg={'white'}
             py={4}
@@ -600,7 +597,7 @@ const Other = () => {
               w={'9px'}
               h={'9px'}
               borderRadius={'50%'}
-              bg={userInfo?.lafAccount?.token ? '#67c13b' : 'myGray.500'}
+              bg={userInfo?.team.lafAccount?.token ? '#67c13b' : 'myGray.500'}
             />
           </Flex>
         )}
@@ -644,16 +641,7 @@ const Other = () => {
       </Grid>
 
       {isOpenLaf && userInfo && (
-        <LafAccountModal
-          defaultData={userInfo?.lafAccount}
-          onSuccess={(data) =>
-            onclickSave({
-              ...userInfo,
-              lafAccount: data
-            })
-          }
-          onClose={onCloseLaf}
-        />
+        <LafAccountModal defaultData={userInfo?.team.lafAccount} onClose={onCloseLaf} />
       )}
       {isOpenOpenai && userInfo && (
         <OpenAIAccountModal

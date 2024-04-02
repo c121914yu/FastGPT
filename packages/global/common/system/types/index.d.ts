@@ -56,7 +56,7 @@ export type FastGPTFeConfigsType = {
   customSharePageDomain?: string;
 
   uploadFileMaxSize?: number;
-  laf_env?: string;
+  lafEnv?: string;
 };
 
 export type SystemEnvType = {

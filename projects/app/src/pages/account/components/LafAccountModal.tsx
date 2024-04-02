@@ -7,7 +7,6 @@ import {
   ModalFooter,
   Button,
   Link,
-  useToast,
   Center,
   Spinner
 } from '@chakra-ui/react';
@@ -20,6 +19,10 @@ import { getLafApplications, pat2Token } from '@/web/support/laf/api';
 import { useQuery } from '@tanstack/react-query';
 import MySelect from '@fastgpt/web/components/common/MySelect';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
+import { useToast } from '@fastgpt/web/hooks/useToast';
+import { putUpdateTeam } from '@/web/support/user/team/api';
+import { useUserStore } from '@/web/support/user/useUserStore';
+import { lafAccount } from '@fastgpt/global/support/user/team/controller';
 
 type TApp = {
   name: string;
@@ -29,11 +32,9 @@ type TApp = {
 
 const LafAccountModal = ({
   defaultData,
-  onSuccess,
   onClose
 }: {
-  defaultData: UserType['lafAccount'];
-  onSuccess: (e: UserType['lafAccount']) => Promise<any>;
+  defaultData: lafAccount;
   onClose: () => void;
 }) => {
   const { t } = useTranslation();
@@ -41,11 +42,11 @@ const LafAccountModal = ({
     defaultValues: defaultData
   });
   const { feConfigs } = useSystemStore();
-  const toast = useToast();
+  const { toast } = useToast();
   const [pat, setPat] = useState('');
   const [token, setToken] = useState(getValues('token'));
-
-  const lafEnv = feConfigs.laf_env || '';
+  const { userInfo } = useUserStore();
+  const lafEnv = feConfigs.lafEnv || '';
 
   const { mutate: pat2TokenMutate, isLoading: isPatLoading } = useRequest({
     mutationFn: async (pat) => {
@@ -76,13 +77,21 @@ const LafAccountModal = ({
   );
 
   const { mutate: onSubmit, isLoading } = useRequest({
-    mutationFn: async (data: UserType['lafAccount']) => onSuccess(data),
-    onSuccess(res) {
+    mutationFn: async (data: any) => {
+      if (!userInfo?.team.teamId) return;
+      return putUpdateTeam({
+        teamId: userInfo?.team.teamId || '',
+        name: userInfo?.team.teamName || '',
+        avatar: userInfo?.team.avatar || '',
+        lafAccount: data
+      });
+    },
+    onSuccess() {
       onClose();
     },
-    errorToast: t('user.Set Laf Account Failed')
+    successToast: t('common.Update Success'),
+    errorToast: t('common.Update Failed')
   });
-
   return (
     <MyModal
       isOpen
@@ -100,8 +109,8 @@ const LafAccountModal = ({
           </Box>
           <Flex>
             {t('user.Current laf Env')}
-            <Link ml={2} href={`https://${feConfigs.laf_env}/`} isExternal>
-              {`https://${feConfigs.laf_env}/`}
+            <Link ml={2} href={`https://${feConfigs.lafEnv}/`} isExternal>
+              {`https://${feConfigs.lafEnv}/`}
             </Link>
           </Flex>
         </Box>

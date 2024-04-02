@@ -1260,7 +1260,9 @@
     "To Edit Plugin": "去编辑",
     "Update Your Plugin": "更新插件",
     "Value": "值",
-    "path": ""
+    "go to laf": "去编写",
+    "path": "",
+    "update params": "更新参数"
   },
   "support": {
     "account": {

@@ -57,12 +57,6 @@ const UserSchema = new Schema({
       baseUrl: String
     }
   },
-  lafAccount: {
-    type: {
-      token: String,
-      appid: String
-    }
-  },
   timezone: {
     type: String,
     default: 'Asia/Shanghai'

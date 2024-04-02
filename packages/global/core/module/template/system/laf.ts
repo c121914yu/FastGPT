@@ -10,7 +10,11 @@ import {
   ModuleOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
-import { Input_Template_Switch } from '../input';
+import {
+  Input_Template_DynamicInput,
+  Input_Template_Switch,
+  Input_Template_AddInputParam
+} from '../input';
 import { Output_Template_Finish } from '../output';
 
 export const lafModule: FlowNodeTemplateType = {
@@ -76,6 +80,22 @@ export const lafModule: FlowNodeTemplateType = {
       required: false,
       showTargetInApp: false,
       showTargetInPlugin: false
+    },
+    Input_Template_DynamicInput,
+    {
+      ...Input_Template_AddInputParam,
+      editField: {
+        key: true,
+        description: true,
+        dataType: true
+      },
+      defaultEditField: {
+        label: '',
+        key: '',
+        description: '',
+        inputType: FlowNodeInputTypeEnum.target,
+        valueType: ModuleIOValueTypeEnum.string
+      }
     }
   ],
   outputs: [

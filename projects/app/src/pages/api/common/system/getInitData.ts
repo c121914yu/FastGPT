@@ -50,7 +50,7 @@ const defaultFeConfigs: FastGPTFeConfigsType = {
   scripts: [],
   favicon: '/favicon.ico',
   uploadFileMaxSize: 500,
-  laf_env: 'api.laf.dev'
+  lafEnv: 'laf.dev'
 };
 
 export async function getInitConfig() {

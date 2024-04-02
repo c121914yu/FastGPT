@@ -6,7 +6,7 @@ import Divider from '../modules/Divider';
 import Container from '../modules/Container';
 import RenderInput from '../render/RenderInput';
 import RenderOutput from '../render/RenderOutput';
-import { Box, Center, Spinner, useToast } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Spinner } from '@chakra-ui/react';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
 import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
 import { useTranslation } from 'next-i18next';
@@ -19,11 +19,13 @@ import { str2OpenApiSchema } from '@fastgpt/global/core/plugin/httpPlugin/utils'
 import { upperCase } from 'lodash';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { RenderHttpProps } from './NodeHttp';
+import { ChevronRightIcon } from '@chakra-ui/icons';
+import { useToast } from '@fastgpt/web/hooks/useToast';
 
 type TAppDetail = {
   domain: {
     domain: string;
+    appid: string;
   };
 };
 
@@ -45,19 +47,17 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
 
   const requestUrl = inputs.find((item) => item.key === ModuleInputKeyEnum.httpReqUrl);
   const requestMethods = inputs.find((item) => item.key === ModuleInputKeyEnum.httpMethod);
-  const inputParams = inputs.find((item) => item.key === ModuleInputKeyEnum.httpParams);
-  const jsonBody = inputs.find((item) => item.key === ModuleInputKeyEnum.httpJsonBody);
 
   const [currentFunc, setCurrentFunc] = useState<TFunc | null>(null);
   const [appDetailData, setAppDetailData] = useState<TAppDetail | null>(null);
   const [funcList, setFuncList] = useState<TFunc[]>([]);
 
-  const toast = useToast();
+  const { toast } = useToast();
   const { userInfo } = useUserStore();
 
-  const lafEnv = feConfigs.laf_env || '';
-  const token = useMemo(() => userInfo?.lafAccount?.token || '', [userInfo]);
-  const appid = useMemo(() => userInfo?.lafAccount?.appid || '', [userInfo]);
+  const lafEnv = feConfigs.lafEnv || '';
+  const token = useMemo(() => userInfo?.team.lafAccount?.token || '', [userInfo]);
+  const appid = useMemo(() => userInfo?.team.lafAccount?.appid || '', [userInfo]);
 
   const { mutate: getFuncList, isLoading: isLoadingAppApi } = useRequest({
     mutationFn: async (appid) => {
@@ -74,7 +74,7 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
       }
       const schema = await getApiSchemaByUrl(schemaUrl);
       const openApiSchema = await str2OpenApiSchema(JSON.stringify(schema));
-      setFuncList(openApiSchema.pathData);
+      setFuncList(openApiSchema.pathData.filter((item) => item.method === 'post'));
     },
     errorToast: t('plugin.Invalid Schema')
   });
@@ -91,21 +91,14 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
     }
   }, [appid, getFuncList, token]);
 
-  const CustomComponents = useMemo(
-    () => ({
-      [ModuleInputKeyEnum.httpHeaders]: () => (
-        <>
-          <RenderHttpProps moduleId={moduleId} inputs={inputs} />
-        </>
-      )
-    }),
-    [inputs, moduleId]
-  );
-
   return (
     <NodeCard minW={'350px'} selected={selected} {...data}>
-      {!userInfo?.lafAccount?.appid ? (
-        <Center minH={200}>{t('plugin.Please bind laf accout first')}</Center>
+      {!userInfo?.team.lafAccount?.appid ? (
+        <Center minH={200}>
+          <Button variant={'link'} onClick={() => window.open('/account')}>
+            {t('plugin.Please bind laf accout first')} <ChevronRightIcon />
+          </Button>
+        </Center>
       ) : (
         <>
           <Container>
@@ -116,121 +109,158 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                     <Spinner />
                   </Center>
                 ) : (
-                  <MySelect
-                    list={
-                      funcList.map((func) => ({
-                        label: func.description ? `${func.name} (${func.description})` : func.name,
-                        value: func.name
-                      })) || []
-                    }
-                    placeholder={t('plugin.Func')}
-                    onchange={(e) => {
-                      const findFuncByName = (name: string) =>
-                        funcList.find((func) => func.name === name);
-
-                      const updateNode = (key: string, value: any) => {
-                        onChangeNode({ moduleId, type: 'updateInput', key, value });
-                      };
-
-                      const addNode = (key: string, value: any) => {
-                        onChangeNode({ moduleId, type: 'addInput', key, value });
-                      };
-
-                      const currentFunc = findFuncByName(e);
-
-                      if (currentFunc) {
-                        const { domain } = appDetailData || {};
-                        const { method, path, params, request } = currentFunc;
-
-                        updateNode(ModuleInputKeyEnum.httpReqUrl, {
-                          ...requestUrl,
-                          value: `https://${domain?.domain || ''}${path || ''}`
-                        });
-
-                        updateNode(ModuleInputKeyEnum.httpMethod, {
-                          ...requestMethods,
-                          value: upperCase(method)
-                        });
-
-                        const properties =
-                          request?.content?.['application/json']?.schema?.properties || {};
-
-                        const delNodeKeys = commonInputs
-                          .filter(
-                            (input) =>
-                              input.edit &&
-                              !(
-                                params?.some((param) => param.name === input.key) ||
-                                properties[input.key]
-                              )
-                          )
-                          .map((input) => input.key);
-
-                        delNodeKeys.forEach((key) => {
-                          onChangeNode({ moduleId, type: 'delInput', key, value: '' });
-                        });
-
-                        const concatParams =
-                          params?.map((param) => ({
-                            key: param.name,
-                            type: 'string',
-                            value: `{{${param.name}}}`
-                          })) || [];
-
-                        updateNode(ModuleInputKeyEnum.httpParams, {
-                          ...inputParams,
-                          value: concatParams
-                        });
-
-                        params?.forEach((param) => {
-                          addNode(e.key, {
-                            key: param.name,
-                            valueType: param.schema.type,
-                            label: param.name,
-                            type: 'target',
-                            description: param.description || '',
-                            edit: true,
-                            editField: {
-                              key: true,
-                              description: true,
-                              dataType: true
-                            },
-                            required: param.required,
-                            connected: false
-                          });
-                        });
-
-                        Object.keys(properties).forEach((key) => {
-                          addNode(e.key, {
-                            key,
-                            valueType: 'string',
-                            label: key,
-                            type: 'target',
-                            required: properties[key].required || false,
-                            description: properties[key].description || '',
-                            edit: true,
-                            editField: {
-                              key: true,
-                              description: true,
-                              dataType: true
-                            },
-                            connected: false
-                          });
-                        });
-
-                        const bodyJson = Object.keys(properties).reduce((acc: any, key) => {
-                          acc[key] = `{{${key}}}`;
-                          return acc;
-                        }, {});
-
-                        updateNode(ModuleInputKeyEnum.httpJsonBody, {
-                          ...jsonBody,
-                          value: JSON.stringify(bodyJson, null, 2)
-                        });
+                  <>
+                    <MySelect
+                      list={
+                        funcList.map((func) => ({
+                          label: func.description
+                            ? `${func.name} (${func.description})`
+                            : func.name,
+                          value: func.name
+                        })) || []
                       }
-                    }}
-                    value={currentFunc?.name}
-                  />
+                      placeholder={t('plugin.Func')}
+                      onchange={(e) => {
+                        const func = funcList.find((func) => func.name === e);
+
+                        if (func) {
+                          const { domain } = appDetailData || {};
+                          const { method, path } = func;
+
+                          onChangeNode({
+                            moduleId,
+                            type: 'updateInput',
+                            key: ModuleInputKeyEnum.httpReqUrl,
+                            value: {
+                              ...requestUrl,
+                              value: `https://${domain?.domain || ''}${path || ''}`
+                            }
+                          });
+
+                          onChangeNode({
+                            moduleId,
+                            type: 'updateInput',
+                            key: ModuleInputKeyEnum.httpMethod,
+                            value: {
+                              ...requestMethods,
+                              value: upperCase(method)
+                            }
+                          });
+
+                          setCurrentFunc(func);
+                        }
+                      }}
+                      value={currentFunc?.name}
+                    />
+                    <Flex justifyContent={'flex-end'} mt={2}>
+                      <Button
+                        variant={'ghost'}
+                        size={'sm'}
+                        textColor={'myGray.500'}
+                        onClick={() => {
+                          const bodyParams =
+                            currentFunc?.request?.content?.['application/json']?.schema
+                              ?.properties || {};
+
+                          const requiredParams =
+                            currentFunc?.request?.content?.['application/json']?.schema?.required ||
+                            [];
+
+                          const jsonBody = inputs.find(
+                            (item) => item.key === ModuleInputKeyEnum.httpJsonBody
+                          );
+
+                          const allParams = [
+                            ...Object.keys(bodyParams).map((key) => ({
+                              name: key,
+                              desc: bodyParams[key].description,
+                              required: requiredParams?.includes(key) || false,
+                              value: `{{${key}}}`,
+                              type: 'string'
+                            }))
+                          ];
+
+                          const paramsObject = [
+                            ...allParams,
+                            {
+                              name: 'systemParams',
+                              value: {
+                                appId: '{{appId}}',
+                                chatId: '{{chatId}}',
+                                responseChatItemId: '{{responseChatItemId}}',
+                                variables: '{{variables}}',
+                                histories: '{{histories}}',
+                                cTime: '{{cTime}}'
+                              }
+                            }
+                          ].reduce((obj: { [key: string]: any }, item) => {
+                            obj[item.name] = item.value;
+                            return obj;
+                          }, {});
+
+                          onChangeNode({
+                            moduleId,
+                            type: 'updateInput',
+                            key: ModuleInputKeyEnum.httpJsonBody,
+                            value: {
+                              ...jsonBody,
+                              value: JSON.stringify(paramsObject)
+                            }
+                          });
+
+                          allParams
+                            .filter(
+                              (param) =>
+                                !(
+                                  toolInputs.find((input) => input.key === param.name) ||
+                                  commonInputs.find((input) => input.key === param.name)
+                                )
+                            )
+                            .forEach((param) => {
+                              onChangeNode({
+                                moduleId,
+                                type: 'addInput',
+                                key: param.name,
+                                value: {
+                                  key: param.name,
+                                  valueType: 'string',
+                                  label: param.name,
+                                  type: 'target',
+                                  required: param.required,
+                                  description: param.desc || 'description',
+                                  edit: true,
+                                  editField: {
+                                    key: true,
+                                    name: true,
+                                    description: true,
+                                    required: true,
+                                    dataType: true,
+                                    inputType: true,
+                                    isToolInput: true
+                                  },
+                                  connected: false,
+                                  toolDescription: param.desc || 'description',
+                                  value: ''
+                                }
+                              });
+                            });
+                        }}
+                      >
+                        {t('plugin.update params')}
+                      </Button>
+                      <Button
+                        variant={'ghost'}
+                        size={'sm'}
+                        textColor={'myGray.500'}
+                        onClick={() => {
+                          const url = `https://${feConfigs.lafEnv}/app/${appDetailData?.domain.appid}/function${currentFunc?.path}`;
+                          window.open(url, '_blank');
+                        }}
+                      >
+                        {t('plugin.go to laf')}
+                      </Button>
+                    </Flex>
+                  </>
                 )}
               </Box>
             </Box>
@@ -248,11 +278,7 @@ const NodeLaf = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
               <>
                 <Divider text={t('common.Input')} />
                 <Container>
-                  <RenderInput
-                    moduleId={moduleId}
-                    flowInputList={commonInputs}
-                    CustomComponent={CustomComponents}
-                  />
+                  <RenderInput moduleId={moduleId} flowInputList={commonInputs} />
                 </Container>
               </>
               <>
