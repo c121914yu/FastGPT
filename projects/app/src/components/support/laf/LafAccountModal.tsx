@@ -1,20 +1,9 @@
-import React, { useMemo, useState } from 'react';
-import {
-  ModalBody,
-  Box,
-  Flex,
-  Input,
-  ModalFooter,
-  Button,
-  Link,
-  Center,
-  Spinner
-} from '@chakra-ui/react';
+import React, { useCallback } from 'react';
+import { ModalBody, Box, Flex, Input, ModalFooter, Button, Link } from '@chakra-ui/react';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
-import { getLafApplications, pat2Token } from '@/web/support/laf/api';
 import { useQuery } from '@tanstack/react-query';
 import MySelect from '@fastgpt/web/components/common/MySelect';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -22,12 +11,8 @@ import { useToast } from '@fastgpt/web/hooks/useToast';
 import { putUpdateTeam } from '@/web/support/user/team/api';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import type { LafAccountType } from '@fastgpt/global/support/user/team/type.d';
-
-type TApp = {
-  name: string;
-  appid: string;
-  state: string;
-};
+import { postLafPat2Token, getLafApplications } from '@/web/support/laf/api';
+import { getErrText } from '@fastgpt/global/common/error/utils';
 
 const LafAccountModal = ({
   defaultData = {
@@ -47,41 +32,53 @@ const LafAccountModal = ({
     }
   });
 
-  const lafToken = getValues('token');
-  const pat = getValues('pat');
+  const lafToken = watch('token');
+  const pat = watch('pat');
+  const appid = watch('appid');
 
   const { feConfigs } = useSystemStore();
   const { toast } = useToast();
   const { userInfo, initUserInfo } = useUserStore();
-  const lafEnv = feConfigs.lafEnv || '';
 
-  const { mutate: pat2TokenMutate, isLoading: isPatLoading } = useRequest({
+  const onResetForm = useCallback(() => {
+    reset({
+      token: '',
+      appid: '',
+      pat: ''
+    });
+  }, [reset]);
+
+  const { mutate: authLafPat, isLoading: isPatLoading } = useRequest({
     mutationFn: async (pat) => {
-      const { data } = await pat2Token(lafEnv, pat);
-      const lafToken = data.data;
-      setValue('token', lafToken);
+      const token = await postLafPat2Token(pat);
+      setValue('token', token);
     },
     errorToast: t('plugin.Invalid Env')
   });
 
-  const { data: appListData, isLoading: isAppListLoading } = useQuery(
+  const { data: appListData = [] } = useQuery(
     ['appList', lafToken],
     () => {
-      return getLafApplications(lafEnv, lafToken);
+      return getLafApplications(lafToken);
     },
     {
       enabled: !!lafToken,
-      onSuccess: (data) => {},
+      onSuccess: (data) => {
+        if (!getValues('appid') && data.length > 0) {
+          setValue('appid', data[0].appid);
+        }
+      },
       onError: (err) => {
+        onResetForm();
         toast({
-          title: '获取应用列表失败',
+          title: getErrText(err, '获取应用列表失败'),
           status: 'error'
         });
       }
     }
   );
 
-  const { mutate: onSubmit, isLoading } = useRequest({
+  const { mutate: onSubmit, isLoading: isUpdating } = useRequest({
     mutationFn: async (data: LafAccountType) => {
       if (!userInfo?.team.teamId) return;
       return putUpdateTeam({
@@ -98,56 +95,67 @@ const LafAccountModal = ({
   });
 
   return (
-    <MyModal
-      isOpen
-      onClose={onClose}
-      iconSrc="/imgs/module/laf.png"
-      title={t('user.Laf Account Setting')}
-    >
+    <MyModal isOpen iconSrc="/imgs/module/laf.png" title={t('user.Laf Account Setting')}>
       <ModalBody>
         <Box fontSize={'sm'} color={'myGray.500'}>
-          <Box>
-            {t('support.user.Laf account intro')}
+          <Box>{t('support.user.Laf account intro')}</Box>
+          <Box textDecoration={'underline'}>
             <Link href={`https://doc.laf.run/zh/`} isExternal>
-              {t('user.Learn More')}
+              {t('support.user.Laf account course')}
             </Link>
           </Box>
-          <Flex>
+          <Box>
             <Link textDecoration={'underline'} href={`${feConfigs.lafEnv}/`} isExternal>
               {t('support.user.Go laf env')}
             </Link>
-          </Flex>
+          </Box>
         </Box>
-        {!lafToken ? (
-          <Flex alignItems={'center'} mt={5}>
-            <Box flex={'0 0 65px'}>PAT:</Box>
-            <Input flex={1} {...register('pat')} placeholder={t('plugin.Enter PAT')} />
+        <Flex alignItems={'center'} mt={5}>
+          <Box flex={'0 0 70px'}>PAT:</Box>
+          {!lafToken ? (
+            <>
+              <Input
+                flex={'1 0 0'}
+                size={'sm'}
+                {...register('pat')}
+                placeholder={t('plugin.Enter PAT')}
+              />
+              <Button
+                ml={2}
+                variant={'whitePrimary'}
+                isDisabled={!pat}
+                onClick={() => {
+                  authLafPat(pat);
+                }}
+                isLoading={isPatLoading}
+              >
+                验证
+              </Button>
+            </>
+          ) : (
             <Button
-              ml={2}
-              flex={'0 0 65px'}
-              variant={'whiteBase'}
-              isDisabled={!pat}
+              variant={'whitePrimary'}
               onClick={() => {
-                pat2TokenMutate(pat);
+                onResetForm();
+                putUpdateTeam({
+                  teamId: userInfo?.team.teamId || '',
+                  lafAccount: { token: '', appid: '' }
+                });
               }}
-              isLoading={isPatLoading}
             >
-              {t('common.Confirm')}
+              已验证，点击取消绑定
             </Button>
-          </Flex>
-        ) : isAppListLoading ? (
-          <Center mt={5}>
-            <Spinner color={'myGray.500'} />
-          </Center>
-        ) : (
+          )}
+        </Flex>
+        {!!lafToken && (
           <Flex alignItems={'center'} mt={5}>
-            <Box flex={'0 0 65px'}>{t('plugin.Currentapp')}</Box>
+            <Box flex={'0 0 70px'}>{t('plugin.Currentapp')}</Box>
             <MySelect
               minW={'200px'}
               list={
-                appListData?.data.data
-                  .filter((app: TApp) => app.state === 'Running')
-                  .map((app: TApp) => ({
+                appListData
+                  .filter((app) => app.state === 'Running')
+                  .map((app) => ({
                     label: `${app.name}`,
                     value: app.appid
                   })) || []
@@ -159,27 +167,15 @@ const LafAccountModal = ({
               }}
               {...(register('appid'), { required: true })}
             />
-            <Button
-              variant={'link'}
-              onClick={() => {
-                reset({
-                  token: '',
-                  appid: ''
-                });
-              }}
-              ml={4}
-            >
-              {t('user.Sign Out')}
-            </Button>
           </Flex>
         )}
       </ModalBody>
       <ModalFooter>
         <Button mr={3} variant={'whiteBase'} onClick={onClose}>
-          {t('common.Cancel')}
+          {t('common.Close')}
         </Button>
-        <Button isLoading={isLoading} onClick={handleSubmit((data) => onSubmit(data))}>
-          {t('common.Confirm')}
+        <Button isLoading={isUpdating} onClick={handleSubmit((data) => onSubmit(data))}>
+          {t('common.Update')}
         </Button>
       </ModalFooter>
     </MyModal>
