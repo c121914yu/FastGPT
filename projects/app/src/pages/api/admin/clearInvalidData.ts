@@ -62,7 +62,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     (async () => {
       try {
         console.log('执行脏数据清理任务');
-        const end = addHours(new Date(), -1);
+        // 360天 ~ 2小时前
+        const end = addHours(new Date(), -2);
         const start = addHours(new Date(), -360 * 24);
         await checkInvalidDatasetFiles(start, end);
         await checkInvalidImg(start, end);
