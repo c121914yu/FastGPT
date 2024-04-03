@@ -19,6 +19,9 @@ llm模型全部合并
 
 ```json
 {
+  "feConfigs": {
+    "lafEnv": "https://laf.dev" // laf环境
+  },
   "systemEnv": {
     "vectorMaxProcess": 15,
     "qaMaxProcess": 15,
