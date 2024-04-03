@@ -1316,6 +1316,8 @@
     "user": {
       "AI point standard": "AI积分标准",
       "Avatar": "头像",
+      "Go laf env": "点击前往 laf 获取 PAT 凭证。",
+      "Laf account intro": "绑定你的laf账号后，你将可以在工作流中使用 laf 模块，实现在线编写代码。",
       "Need to login": "请先登录",
       "Price": "计费标准",
       "User self info": "个人信息",
@@ -1545,7 +1547,6 @@
     "apikey": {
       "key": "API 秘钥"
     },
-    "laf intro": "laf 是开源的云开发平台，提供云函数、云数据库、云存储等开箱即用的应用资源。             让开发者专注于业务开发，无需折腾服务器，快速释放创意。",
     "promotion": {
       "pay": "好友充值",
       "register": "好友注册"

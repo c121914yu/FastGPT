@@ -14,7 +14,6 @@ import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
-import type { UserType } from '@fastgpt/global/support/user/type.d';
 import { getLafApplications, pat2Token } from '@/web/support/laf/api';
 import { useQuery } from '@tanstack/react-query';
 import MySelect from '@fastgpt/web/components/common/MySelect';
@@ -22,7 +21,7 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { putUpdateTeam } from '@/web/support/user/team/api';
 import { useUserStore } from '@/web/support/user/useUserStore';
-import { lafAccount } from '@fastgpt/global/support/user/team/controller';
+import type { LafAccountType } from '@fastgpt/global/support/user/team/type.d';
 
 type TApp = {
   name: string;
@@ -31,67 +30,73 @@ type TApp = {
 };
 
 const LafAccountModal = ({
-  defaultData,
+  defaultData = {
+    token: '',
+    appid: ''
+  },
   onClose
 }: {
-  defaultData: lafAccount;
+  defaultData?: LafAccountType;
   onClose: () => void;
 }) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, setValue, getValues, watch } = useForm({
-    defaultValues: defaultData
+  const { register, handleSubmit, setValue, getValues, watch, reset } = useForm({
+    defaultValues: {
+      ...defaultData,
+      pat: ''
+    }
   });
+
+  const lafToken = getValues('token');
+  const pat = getValues('pat');
+
   const { feConfigs } = useSystemStore();
   const { toast } = useToast();
-  const [pat, setPat] = useState('');
-  const [token, setToken] = useState(getValues('token'));
-  const { userInfo } = useUserStore();
+  const { userInfo, initUserInfo } = useUserStore();
   const lafEnv = feConfigs.lafEnv || '';
 
   const { mutate: pat2TokenMutate, isLoading: isPatLoading } = useRequest({
     mutationFn: async (pat) => {
       const { data } = await pat2Token(lafEnv, pat);
       const lafToken = data.data;
-      setToken(lafToken);
       setValue('token', lafToken);
     },
     errorToast: t('plugin.Invalid Env')
   });
 
   const { data: appListData, isLoading: isAppListLoading } = useQuery(
-    ['appList', token],
+    ['appList', lafToken],
     () => {
-      return getLafApplications(lafEnv, token);
+      return getLafApplications(lafEnv, lafToken);
     },
     {
-      enabled: !!token,
+      enabled: !!lafToken,
       onSuccess: (data) => {},
       onError: (err) => {
         toast({
           title: '获取应用列表失败',
           status: 'error'
         });
-        setToken('');
       }
     }
   );
 
   const { mutate: onSubmit, isLoading } = useRequest({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: LafAccountType) => {
       if (!userInfo?.team.teamId) return;
       return putUpdateTeam({
-        teamId: userInfo?.team.teamId || '',
-        name: userInfo?.team.teamName || '',
-        avatar: userInfo?.team.avatar || '',
+        teamId: userInfo?.team.teamId,
         lafAccount: data
       });
     },
     onSuccess() {
+      initUserInfo();
       onClose();
     },
     successToast: t('common.Update Success'),
     errorToast: t('common.Update Failed')
   });
+
   return (
     <MyModal
       isOpen
@@ -102,37 +107,27 @@ const LafAccountModal = ({
       <ModalBody>
         <Box fontSize={'sm'} color={'myGray.500'}>
           <Box>
-            {t('user.laf intro')}
+            {t('support.user.Laf account intro')}
             <Link href={`https://doc.laf.run/zh/`} isExternal>
               {t('user.Learn More')}
             </Link>
           </Box>
           <Flex>
-            {t('user.Current laf Env')}
-            <Link ml={2} href={`https://${feConfigs.lafEnv}/`} isExternal>
-              {`https://${feConfigs.lafEnv}/`}
+            <Link textDecoration={'underline'} href={`${feConfigs.lafEnv}/`} isExternal>
+              {t('support.user.Go laf env')}
             </Link>
           </Flex>
         </Box>
-        {!token ? (
+        {!lafToken ? (
           <Flex alignItems={'center'} mt={5}>
             <Box flex={'0 0 65px'}>PAT:</Box>
-            <Input
-              flex={1}
-              onChange={(e) => setPat(e.target.value)}
-              placeholder={t('plugin.Enter PAT')}
-            ></Input>
+            <Input flex={1} {...register('pat')} placeholder={t('plugin.Enter PAT')} />
             <Button
               ml={2}
               flex={'0 0 65px'}
               variant={'whiteBase'}
-              onClick={async () => {
-                if (!pat) {
-                  return toast({
-                    title: 'pat is empty',
-                    status: 'warning'
-                  });
-                }
+              isDisabled={!pat}
+              onClick={() => {
                 pat2TokenMutate(pat);
               }}
               isLoading={isPatLoading}
@@ -148,11 +143,12 @@ const LafAccountModal = ({
           <Flex alignItems={'center'} mt={5}>
             <Box flex={'0 0 65px'}>{t('plugin.Currentapp')}</Box>
             <MySelect
+              minW={'200px'}
               list={
                 appListData?.data.data
                   .filter((app: TApp) => app.state === 'Running')
                   .map((app: TApp) => ({
-                    label: `${app.name} (${app.appid})`,
+                    label: `${app.name}`,
                     value: app.appid
                   })) || []
               }
@@ -166,8 +162,10 @@ const LafAccountModal = ({
             <Button
               variant={'link'}
               onClick={() => {
-                setToken('');
-                setValue('token', '');
+                reset({
+                  token: '',
+                  appid: ''
+                });
               }}
               ml={4}
             >

@@ -1314,6 +1314,8 @@
     "user": {
       "AI point standard": "AI points price",
       "Avatar": "Avatar",
+      "Go laf env": "Click to go to laf to get PAT certificate.",
+      "Laf account intro": "After binding your laf account, you will be able to use the laf module in your workflow to write code online.",
       "Need to login": "Please log in first",
       "Price": "Price",
       "User self info": "My info",
@@ -1543,7 +1545,6 @@
     "apikey": {
       "key": "API Keys"
     },
-    "laf intro": "",
     "promotion": {
       "pay": "",
       "register": ""
