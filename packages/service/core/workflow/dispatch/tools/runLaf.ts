@@ -43,7 +43,6 @@ export const dispatchLafRequest = async (props: LafRequestProps): Promise<LafRes
     chatId,
     responseChatItemId,
     ...variables,
-    histories: histories.slice(0, 10),
     ...body
   };
 
