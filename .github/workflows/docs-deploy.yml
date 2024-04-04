@@ -1,4 +1,4 @@
-name: deploy-docs
+name: Deploy FastGPT docs
 
 on:
   workflow_dispatch:

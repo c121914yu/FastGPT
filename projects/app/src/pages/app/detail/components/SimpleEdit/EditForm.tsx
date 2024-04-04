@@ -20,7 +20,7 @@ import dynamic from 'next/dynamic';
 import MyTooltip from '@/components/MyTooltip';
 import Avatar from '@/components/Avatar';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import VariableEdit from '@/components/core/module/Flow/components/modules/VariableEdit';
+import VariableEdit from '@/components/core/app/VariableEdit';
 import MyTextarea from '@/components/common/Textarea/MyTextarea/index';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import { formatEditorVariablePickerIcon } from '@fastgpt/global/core/module/utils';
@@ -32,10 +32,8 @@ import DeleteIcon, { hoverDeleteStyles } from '@fastgpt/web/components/common/Ic
 const DatasetSelectModal = dynamic(() => import('@/components/core/module/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/module/DatasetParamsModal'));
 const ToolSelectModal = dynamic(() => import('./ToolSelectModal'));
-const TTSSelect = dynamic(
-  () => import('@/components/core/module/Flow/components/modules/TTSSelect')
-);
-const QGSwitch = dynamic(() => import('@/components/core/module/Flow/components/modules/QGSwitch'));
+const TTSSelect = dynamic(() => import('@/components/core/app/TTSSelect'));
+const QGSwitch = dynamic(() => import('@/components/core/app/QGSwitch'));
 
 const EditForm = ({
   divRef,

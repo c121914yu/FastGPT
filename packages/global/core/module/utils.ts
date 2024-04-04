@@ -6,7 +6,8 @@ import {
   variableMap
 } from './constants';
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from './node/type';
-import { AppTTSConfigType, ModuleItemType, VariableItemType } from './type';
+import { ModuleItemType } from './type';
+import type { VariableItemType, AppTTSConfigType } from '../app/type';
 import { Input_Template_Switch } from './template/input';
 import { EditorVariablePickerType } from '../../../web/components/common/Textarea/PromptEditor/type';
 import { Output_Template_Finish } from './template/output';

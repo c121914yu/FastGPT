@@ -2,7 +2,7 @@ import { useCopyData } from '@/web/common/hooks/useCopyData';
 import { useAudioPlay } from '@/web/common/utils/voice';
 import { Flex, FlexProps, Image, css, useTheme } from '@chakra-ui/react';
 import { ChatSiteItemType } from '@fastgpt/global/core/chat/type';
-import { AppTTSConfigType } from '@fastgpt/global/core/module/type';
+import { AppTTSConfigType } from '@fastgpt/global/core/app/type';
 import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import React from 'react';

@@ -1,4 +1,4 @@
-name: preview-docs
+name: Preview FastGPT docs
 
 on:
   pull_request_target:
