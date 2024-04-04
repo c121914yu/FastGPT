@@ -6,7 +6,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { appModules2Form, getDefaultAppForm } from '@fastgpt/global/core/app/utils';
 import type { AppSimpleEditFormType } from '@fastgpt/global/core/app/type.d';
-import { chatNodeSystemPromptTip, welcomeTextTip } from '@fastgpt/global/core/module/template/tip';
+import { welcomeTextTip } from '@fastgpt/global/core/module/template/tip';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { useRouter } from 'next/router';
@@ -34,6 +34,7 @@ const DatasetParamsModal = dynamic(() => import('@/components/core/module/Datase
 const ToolSelectModal = dynamic(() => import('./ToolSelectModal'));
 const TTSSelect = dynamic(() => import('@/components/core/app/TTSSelect'));
 const QGSwitch = dynamic(() => import('@/components/core/app/QGSwitch'));
+const WhisperConfig = dynamic(() => import('@/components/core/app/WhisperConfig'));
 
 const EditForm = ({
   divRef,
@@ -407,6 +408,18 @@ const EditForm = ({
               value={getValues('userGuide.tts')}
               onChange={(e) => {
                 setValue('userGuide.tts', e);
+                setRefresh((state) => !state);
+              }}
+            />
+          </Box>
+
+          {/* whisper */}
+          <Box {...BoxStyles}>
+            <WhisperConfig
+              value={getValues('userGuide.whisper')}
+              onChange={(e) => {
+                console.log(e);
+                setValue('userGuide.whisper', e);
                 setRefresh((state) => !state);
               }}
             />

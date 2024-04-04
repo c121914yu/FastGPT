@@ -275,6 +275,7 @@
       "App intro": "App intro",
       "App params config": "App Config",
       "Chat Variable": "",
+      "Config whisper": "Config whisper",
       "External using": "External use",
       "Make a brief introduction of your app": "Make a brief introduction of your app",
       "Max histories": "Dialog round",
@@ -309,6 +310,9 @@
         "This plugin cannot be called as a tool": "This tool cannot be used in easy mode"
       },
       "Welcome Text": "Welcome Text",
+      "Whisper": "Whisper",
+      "Whisper Tip": "",
+      "Whisper config": "Whisper config",
       "create app": "Create App",
       "deterministic": "Deterministic",
       "edit": {
@@ -395,6 +399,15 @@
         "Test Listen": "Test",
         "Test Listen Text": "Hello, this is a voice test, if you can hear this sentence, it means that the voice playback function is normal",
         "Web": "Browser (free)"
+      },
+      "whisper": {
+        "Auto send": "Auto send",
+        "Auto send tip": "After the voice input is completed, you can send it directly, without manually clicking the send button",
+        "Auto tts response": "Auto tts response",
+        "Auto tts response tip": "Questions sent through voice input will be answered directly in the form of voice. Please ensure that the voice broadcast function is enabled.",
+        "Close": "Close",
+        "Open": "Open",
+        "Switch": "Open whisper"
       }
     },
     "chat": {

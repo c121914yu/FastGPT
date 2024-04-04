@@ -78,6 +78,7 @@ export type AppSimpleEditFormType = {
       voice?: string | undefined;
       speed?: number | undefined;
     };
+    whisper: AppWhisperConfigType;
   };
 };
 

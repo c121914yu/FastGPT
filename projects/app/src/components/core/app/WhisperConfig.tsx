@@ -1,84 +1,54 @@
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
-import { QuestionOutlineIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, ModalBody, useDisclosure, Image } from '@chakra-ui/react';
-import React, { useCallback, useMemo } from 'react';
+import { Box, Button, Flex, ModalBody, useDisclosure, Switch } from '@chakra-ui/react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
-import { TTSTypeEnum } from '@/constants/app';
-import type { AppTTSConfigType } from '@fastgpt/global/core/app/type.d';
-import { useAudioPlay } from '@/web/common/utils/voice';
-import { useSystemStore } from '@/web/common/system/useSystemStore';
+import type { AppWhisperConfigType } from '@fastgpt/global/core/app/type.d';
 import MyModal from '@fastgpt/web/components/common/MyModal';
-import MySlider from '@/components/Slider';
-import MySelect from '@fastgpt/web/components/common/MySelect';
+import { useForm } from 'react-hook-form';
+import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 
 const WhisperConfig = ({
   value,
   onChange
 }: {
-  value: AppTTSConfigType;
-  onChange: (e: AppTTSConfigType) => void;
+  value: AppWhisperConfigType;
+  onChange: (e: AppWhisperConfigType) => void;
 }) => {
   const { t } = useTranslation();
-  const { audioSpeechModelList } = useSystemStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { register, watch } = useForm({
+    defaultValues: value
+  });
+  const isOpenWhisper = watch('open');
 
-  const list = useMemo(
-    () => [
-      { label: t('core.app.tts.Close'), value: TTSTypeEnum.none },
-      { label: t('core.app.tts.Web'), value: TTSTypeEnum.web },
-      ...audioSpeechModelList.map((item) => item?.voices || []).flat()
-    ],
-    [audioSpeechModelList, t]
-  );
-
-  const formatValue = useMemo(() => {
-    if (!value || !value.type) {
-      return TTSTypeEnum.none;
+  const formLabel = useMemo(() => {
+    if (!isOpenWhisper) {
+      return t('core.app.whisper.Close');
     }
-    if (value.type === TTSTypeEnum.none || value.type === TTSTypeEnum.web) {
-      return value.type;
-    }
-    return value.voice;
-  }, [value]);
-  const formLabel = useMemo(
-    () => list.find((item) => item.value === formatValue)?.label || t('common.UnKnow'),
-    [formatValue, list, t]
-  );
+    return t('core.app.whisper.Open');
+  }, [t, isOpenWhisper]);
 
-  const { playAudio, cancelAudio, audioLoading, audioPlaying } = useAudioPlay({ ttsConfig: value });
+  useEffect(() => {
+    const watchSign = watch((data) =>
+      onChange({
+        autoSend: data.autoSend ?? false,
+        autoTTSResponse: data.autoTTSResponse ?? false,
+        open: data.open ?? false
+      })
+    );
 
-  const onclickChange = useCallback(
-    (e: string) => {
-      if (e === TTSTypeEnum.none || e === TTSTypeEnum.web) {
-        onChange({ type: e as `${TTSTypeEnum}` });
-      } else {
-        const audioModel = audioSpeechModelList.find((item) =>
-          item.voices?.find((voice) => voice.value === e)
-        );
-        if (!audioModel) {
-          return;
-        }
-        onChange({
-          ...value,
-          type: TTSTypeEnum.model,
-          model: audioModel.model,
-          voice: e
-        });
-      }
-    },
-    [audioSpeechModelList, onChange, value]
-  );
+    return () => {
+      watchSign.unsubscribe();
+    };
+  });
 
   return (
     <Flex alignItems={'center'}>
-      <MyIcon name={'core/app/simpleMode/tts'} mr={2} w={'20px'} />
-      <Box>{t('core.app.TTS')}</Box>
-      <MyTooltip label={t('core.app.TTS Tip')} forceShow>
-        <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
-      </MyTooltip>
+      <MyIcon name={'core/app/simpleMode/whisper'} mr={2} w={'20px'} />
+      <Box>{t('core.app.Whisper')}</Box>
       <Box flex={1} />
-      <MyTooltip label={t('core.app.Select TTS')}>
+      <MyTooltip label={t('core.app.Config whisper')}>
         <Button
           variant={'transparentBase'}
           iconSpacing={1}
@@ -91,73 +61,31 @@ const WhisperConfig = ({
         </Button>
       </MyTooltip>
       <MyModal
-        title={
-          <>
-            <MyIcon name={'core/app/simpleMode/tts'} mr={2} w={'20px'} />
-            {t('core.app.TTS')}
-          </>
-        }
+        title={t('core.app.Whisper config')}
+        iconSrc="core/app/simpleMode/whisper"
         isOpen={isOpen}
         onClose={onClose}
-        w={'500px'}
       >
         <ModalBody px={[5, 16]} py={[4, 8]}>
           <Flex justifyContent={'space-between'} alignItems={'center'}>
-            {t('core.app.tts.Speech model')}
-            <MySelect w={'220px'} value={formatValue} list={list} onchange={onclickChange} />
+            {t('core.app.whisper.Switch')}
+            <Switch {...register('open')} size={'lg'} />
           </Flex>
-          <Flex mt={8} justifyContent={'space-between'}>
-            {t('core.app.tts.Speech speed')}
-            <MySlider
-              markList={[
-                { label: '0.3', value: 0.3 },
-                { label: '2', value: 2 }
-              ]}
-              width={'220px'}
-              min={0.3}
-              max={2}
-              step={0.1}
-              value={value.speed || 1}
-              onChange={(e) => {
-                onChange({
-                  ...value,
-                  speed: e
-                });
-              }}
-            />
-          </Flex>
-          {formatValue !== TTSTypeEnum.none && (
-            <Flex mt={10} justifyContent={'end'}>
-              {audioPlaying ? (
-                <Flex>
-                  <Image src="/icon/speaking.gif" w={'24px'} alt={''} />
-                  <Button
-                    ml={2}
-                    variant={'grayBase'}
-                    color={'primary.600'}
-                    isLoading={audioLoading}
-                    leftIcon={<MyIcon name={'core/chat/stopSpeech'} w={'16px'} />}
-                    onClick={() => {
-                      cancelAudio();
-                    }}
-                  >
-                    {t('core.chat.tts.Stop Speech')}
-                  </Button>
-                </Flex>
-              ) : (
-                <Button
-                  isLoading={audioLoading}
-                  leftIcon={<MyIcon name={'core/app/headphones'} w={'16px'} />}
-                  onClick={() => {
-                    playAudio({
-                      text: t('core.app.tts.Test Listen Text')
-                    });
-                  }}
-                >
-                  {t('core.app.tts.Test Listen')}
-                </Button>
-              )}
-            </Flex>
+          {isOpenWhisper && (
+            <>
+              <Flex mt={8} alignItems={'center'}>
+                {t('core.app.whisper.Auto send')}
+                <QuestionTip label={t('core.app.whisper.Auto send tip')} />
+                <Box flex={'1 0 0'} />
+                <Switch {...register('autoSend')} size={'lg'} />
+              </Flex>
+              <Flex mt={8} alignItems={'center'}>
+                {t('core.app.whisper.Auto tts response')}
+                <QuestionTip label={t('core.app.whisper.Auto tts response tip')} />
+                <Box flex={'1 0 0'} />
+                <Switch {...register('autoTTSResponse')} size={'lg'} />
+              </Flex>
+            </>
           )}
         </ModalBody>
       </MyModal>
