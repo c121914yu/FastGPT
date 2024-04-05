@@ -74,9 +74,9 @@ python app.py
 
 **镜像名分别为:**
 
-1. registry.cn-hangzhou.aliyuncs.com/fastgpt/bge-rerank-base:v0.1
-2. registry.cn-hangzhou.aliyuncs.com/fastgpt/bge-rerank-large:v0.1
-3. registry.cn-hangzhou.aliyuncs.com/fastgpt/bge-rerank-v2-m3:v0.1
+1. registry.cn-hangzhou.aliyuncs.com/fastgpt/bge-rerank-base:v0.1 (4 GB+)
+2. registry.cn-hangzhou.aliyuncs.com/fastgpt/bge-rerank-large:v0.1 (5 GB+)
+3. registry.cn-hangzhou.aliyuncs.com/fastgpt/bge-rerank-v2-m3:v0.1 (5 GB+)
 
 **端口**
 
