@@ -16,6 +16,7 @@ import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
 import { ChatBoxInputFormType, ChatBoxInputType, UserInputFileItemType } from './type';
 import { textareaMinH } from './constants';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { AppWhisperConfigType } from '@fastgpt/global/core/app/type';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
 const MessageInput = ({
@@ -29,7 +30,9 @@ const MessageInput = ({
   outLinkUid,
   teamId,
   teamToken,
-  chatForm
+  chatForm,
+  whisperConfig,
+  appId
 }: OutLinkChatAuthProps & {
   onSendMessage: (val: ChatBoxInputType) => void;
   onStop: () => void;
@@ -38,6 +41,8 @@ const MessageInput = ({
   TextareaDom: React.MutableRefObject<HTMLTextAreaElement | null>;
   resetInputVal: (val: ChatBoxInputType) => void;
   chatForm: UseFormReturn<ChatBoxInputFormType>;
+  whisperConfig: AppWhisperConfigType;
+  appId?: string;
 }) => {
   const { setValue, watch, control } = chatForm;
   const inputValue = watch('input');
@@ -52,15 +57,6 @@ const MessageInput = ({
     name: 'files'
   });
 
-  const {
-    isSpeaking,
-    isTransCription,
-    stopSpeak,
-    startSpeak,
-    speakingTimeString,
-    renderAudioGraph,
-    stream
-  } = useSpeech({ shareId, outLinkUid, teamId, teamToken });
   const { isPc, whisperModel } = useSystemStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { t } = useTranslation();
@@ -163,6 +159,16 @@ const MessageInput = ({
     replaceFile([]);
   }, [TextareaDom, fileList, onSendMessage, replaceFile]);
 
+  /* whisper init */
+  const {
+    isSpeaking,
+    isTransCription,
+    stopSpeak,
+    startSpeak,
+    speakingTimeString,
+    renderAudioGraph,
+    stream
+  } = useSpeech({ appId, shareId, outLinkUid, teamId, teamToken });
   useEffect(() => {
     if (!stream) {
       return;
@@ -369,7 +375,7 @@ const MessageInput = ({
             bottom={['10px', '12px']}
           >
             {/* voice-input */}
-            {!shareId && !havInput && !isChatting && !!whisperModel && (
+            {whisperConfig.open && !havInput && !isChatting && !!whisperModel && (
               <>
                 <canvas
                   ref={canvasRef}

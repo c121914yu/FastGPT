@@ -36,6 +36,18 @@ const TTSSelect = dynamic(() => import('@/components/core/app/TTSSelect'));
 const QGSwitch = dynamic(() => import('@/components/core/app/QGSwitch'));
 const WhisperConfig = dynamic(() => import('@/components/core/app/WhisperConfig'));
 
+const BoxStyles: BoxProps = {
+  px: 5,
+  py: '16px',
+  borderBottomWidth: '1px',
+  borderBottomColor: 'borderColor.low'
+};
+const LabelStyles: BoxProps = {
+  w: ['60px', '100px'],
+  flexShrink: 0,
+  fontSize: ['sm', 'md']
+};
+
 const EditForm = ({
   divRef,
   isSticky
@@ -129,18 +141,6 @@ const EditForm = ({
     }
   );
   useQuery(['loadAllDatasets'], loadAllDatasets);
-
-  const BoxStyles: BoxProps = {
-    px: 5,
-    py: '16px',
-    borderBottomWidth: '1px',
-    borderBottomColor: 'borderColor.low'
-  };
-  const LabelStyles: BoxProps = {
-    w: ['60px', '100px'],
-    flexShrink: 0,
-    fontSize: ['sm', 'md']
-  };
 
   return (
     <Box>
@@ -418,7 +418,6 @@ const EditForm = ({
             <WhisperConfig
               value={getValues('userGuide.whisper')}
               onChange={(e) => {
-                console.log(e);
                 setValue('userGuide.whisper', e);
                 setRefresh((state) => !state);
               }}

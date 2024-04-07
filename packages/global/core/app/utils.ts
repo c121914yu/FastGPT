@@ -111,6 +111,7 @@ export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
     } else if (module.flowType === FlowNodeTypeEnum.userGuide) {
       const { welcomeText, variableModules, questionGuide, ttsConfig, whisperConfig } =
         splitGuideModule(getGuideModule(modules));
+
       defaultAppForm.userGuide = {
         welcomeText: welcomeText,
         variables: variableModules,

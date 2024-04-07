@@ -84,7 +84,7 @@ type Props = OutLinkChatAuthProps & {
   active?: boolean; // can use
 
   // not chat test params
-  appId?: string;
+  appId: string;
   chatId?: string;
 
   onUpdateVariable?: (e: Record<string, any>) => void;
@@ -153,7 +153,7 @@ const ChatBox = (
     [chatHistories]
   );
 
-  const { welcomeText, variableModules, questionGuide, ttsConfig } = useMemo(
+  const { welcomeText, variableModules, questionGuide, ttsConfig, whisperConfig } = useMemo(
     () => splitGuideModule(userGuideModule),
     [userGuideModule]
   );
@@ -959,6 +959,7 @@ const ChatBox = (
           onStop={() => chatController.current?.abort('stop')}
           isChatting={isChatting}
           TextareaDom={TextareaDom}
+          whisperConfig={whisperConfig}
           resetInputVal={resetInputVal}
           showFileSelector={showFileSelector}
           shareId={shareId}
@@ -966,6 +967,7 @@ const ChatBox = (
           teamId={teamId}
           teamToken={teamToken}
           chatForm={chatForm}
+          appId={appId}
         />
       )}
       {/* user feedback modal */}
