@@ -1,7 +1,7 @@
 import { useSpeech } from '@/web/common/hooks/useSpeech';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { Box, Flex, Image, Spinner, Textarea } from '@chakra-ui/react';
-import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'next-i18next';
 import MyTooltip from '../MyTooltip';
 import MyIcon from '@fastgpt/web/components/common/Icon';
@@ -186,6 +186,27 @@ const MessageInput = ({
     };
     renderCurve();
   }, [renderAudioGraph, stream]);
+  const finishWhisperTranscription = useCallback(
+    (text: string) => {
+      if (!text) return;
+      if (whisperConfig?.autoSend) {
+        onSendMessage({
+          text,
+          files: fileList
+        });
+        replaceFile([]);
+      } else {
+        resetInputVal({ text });
+      }
+    },
+    [fileList, onSendMessage, replaceFile, resetInputVal, whisperConfig?.autoSend]
+  );
+  const onWhisperRecord = useCallback(() => {
+    if (isSpeaking) {
+      return stopSpeak();
+    }
+    startSpeak(finishWhisperTranscription);
+  }, [finishWhisperTranscription, isSpeaking, startSpeak, stopSpeak]);
 
   return (
     <Box m={['0 auto', '10px auto']} w={'100%'} maxW={['auto', 'min(800px, 100%)']} px={[0, 5]}>
@@ -396,12 +417,7 @@ const MessageInput = ({
                   borderRadius={'md'}
                   cursor={'pointer'}
                   _hover={{ bg: '#F5F5F8' }}
-                  onClick={() => {
-                    if (isSpeaking) {
-                      return stopSpeak();
-                    }
-                    startSpeak((text) => resetInputVal({ text }));
-                  }}
+                  onClick={onWhisperRecord}
                 >
                   <MyTooltip label={isSpeaking ? t('core.chat.Stop Speak') : t('core.chat.Record')}>
                     <MyIcon

@@ -147,6 +147,13 @@ export const useSpeech = (props?: OutLinkChatAuthProps & { appId?: string }) => 
     };
   }, []);
 
+  // listen minuted. over 60 seconds, stop speak
+  useEffect(() => {
+    if (audioSecond >= 60) {
+      stopSpeak();
+    }
+  }, [audioSecond]);
+
   return {
     startSpeak,
     stopSpeak,
