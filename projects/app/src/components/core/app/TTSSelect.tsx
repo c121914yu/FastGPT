@@ -46,7 +46,9 @@ const TTSSelect = ({
     [formatValue, list, t]
   );
 
-  const { playAudio, cancelAudio, audioLoading, audioPlaying } = useAudioPlay({ ttsConfig: value });
+  const { playAudioByText, cancelAudio, audioLoading, audioPlaying } = useAudioPlay({
+    ttsConfig: value
+  });
 
   const onclickChange = useCallback(
     (e: string) => {
@@ -137,9 +139,7 @@ const TTSSelect = ({
                     color={'primary.600'}
                     isLoading={audioLoading}
                     leftIcon={<MyIcon name={'core/chat/stopSpeech'} w={'16px'} />}
-                    onClick={() => {
-                      cancelAudio();
-                    }}
+                    onClick={cancelAudio}
                   >
                     {t('core.chat.tts.Stop Speech')}
                   </Button>
@@ -149,7 +149,7 @@ const TTSSelect = ({
                   isLoading={audioLoading}
                   leftIcon={<MyIcon name={'core/app/headphones'} w={'16px'} />}
                   onClick={() => {
-                    playAudio({
+                    playAudioByText({
                       text: t('core.app.tts.Test Listen Text')
                     });
                   }}

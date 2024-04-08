@@ -15,6 +15,7 @@ export const useSpeech = (props?: OutLinkChatAuthProps & { appId?: string }) => 
   const [audioSecond, setAudioSecond] = useState(0);
   const intervalRef = useRef<any>();
   const startTimestamp = useRef(0);
+  const cancelWhisperSignal = useRef(false);
 
   const speakingTimeString = useMemo(() => {
     const minutes: number = Math.floor(audioSecond / 60);
@@ -51,6 +52,8 @@ export const useSpeech = (props?: OutLinkChatAuthProps & { appId?: string }) => 
 
   const startSpeak = async (onFinish: (text: string) => void) => {
     try {
+      cancelWhisperSignal.current = false;
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setMediaStream(stream);
 
@@ -73,42 +76,45 @@ export const useSpeech = (props?: OutLinkChatAuthProps & { appId?: string }) => 
       };
 
       mediaRecorder.current.onstop = async () => {
-        const formData = new FormData();
-        let options = {};
-        if (MediaRecorder.isTypeSupported('audio/webm')) {
-          options = { type: 'audio/webm' };
-        } else if (MediaRecorder.isTypeSupported('video/mp3')) {
-          options = { type: 'video/mp3' };
-        } else {
-          console.error('no suitable mimetype found for this device');
-        }
-        const blob = new Blob(chunks, options);
-        const duration = Math.round((Date.now() - startTimestamp.current) / 1000);
+        if (!cancelWhisperSignal.current) {
+          const formData = new FormData();
+          let options = {};
+          if (MediaRecorder.isTypeSupported('audio/webm')) {
+            options = { type: 'audio/webm' };
+          } else if (MediaRecorder.isTypeSupported('video/mp3')) {
+            options = { type: 'video/mp3' };
+          } else {
+            console.error('no suitable mimetype found for this device');
+          }
+          const blob = new Blob(chunks, options);
+          const duration = Math.round((Date.now() - startTimestamp.current) / 1000);
 
-        formData.append('file', blob, 'recording.mp3');
-        formData.append(
-          'data',
-          JSON.stringify({
-            ...props,
-            duration
-          })
-        );
+          formData.append('file', blob, 'recording.mp3');
+          formData.append(
+            'data',
+            JSON.stringify({
+              ...props,
+              duration
+            })
+          );
 
-        setIsTransCription(true);
-        try {
-          const result = await POST<string>('/v1/audio/transcriptions', formData, {
-            timeout: 60000,
-            headers: {
-              'Content-Type': 'multipart/form-data; charset=utf-8'
-            }
-          });
-          onFinish(result);
-        } catch (error) {
-          toast({
-            status: 'warning',
-            title: getErrText(error, t('common.speech.error tip'))
-          });
+          setIsTransCription(true);
+          try {
+            const result = await POST<string>('/v1/audio/transcriptions', formData, {
+              timeout: 60000,
+              headers: {
+                'Content-Type': 'multipart/form-data; charset=utf-8'
+              }
+            });
+            onFinish(result);
+          } catch (error) {
+            toast({
+              status: 'warning',
+              title: getErrText(error, t('common.speech.error tip'))
+            });
+          }
         }
+
         setIsTransCription(false);
         setIsSpeaking(false);
       };
@@ -128,7 +134,8 @@ export const useSpeech = (props?: OutLinkChatAuthProps & { appId?: string }) => 
     }
   };
 
-  const stopSpeak = () => {
+  const stopSpeak = (cancel = false) => {
+    cancelWhisperSignal.current = cancel;
     if (mediaRecorder.current) {
       mediaRecorder.current?.stop();
       clearInterval(intervalRef.current);

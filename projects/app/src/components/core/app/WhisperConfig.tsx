@@ -18,6 +18,7 @@ const WhisperConfig = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const isOpenWhisper = value.open;
+  const isAutoSend = value.autoSend;
 
   const formLabel = useMemo(() => {
     if (!isOpenWhisper) {
@@ -64,38 +65,38 @@ const WhisperConfig = ({
             />
           </Flex>
           {isOpenWhisper && (
-            <>
-              <Flex mt={8} alignItems={'center'}>
-                {t('core.app.whisper.Auto send')}
-                <QuestionTip label={t('core.app.whisper.Auto send tip')} />
-                <Box flex={'1 0 0'} />
-                <Switch
-                  isChecked={value.autoSend}
-                  size={'lg'}
-                  onChange={(e) => {
-                    onChange({
-                      ...value,
-                      autoSend: e.target.checked
-                    });
-                  }}
-                />
-              </Flex>
-              <Flex mt={8} alignItems={'center'}>
-                {t('core.app.whisper.Auto tts response')}
-                <QuestionTip label={t('core.app.whisper.Auto tts response tip')} />
-                <Box flex={'1 0 0'} />
-                <Switch
-                  isChecked={value.autoTTSResponse}
-                  size={'lg'}
-                  onChange={(e) => {
-                    onChange({
-                      ...value,
-                      autoTTSResponse: e.target.checked
-                    });
-                  }}
-                />
-              </Flex>
-            </>
+            <Flex mt={8} alignItems={'center'}>
+              {t('core.app.whisper.Auto send')}
+              <QuestionTip label={t('core.app.whisper.Auto send tip')} />
+              <Box flex={'1 0 0'} />
+              <Switch
+                isChecked={value.autoSend}
+                size={'lg'}
+                onChange={(e) => {
+                  onChange({
+                    ...value,
+                    autoSend: e.target.checked
+                  });
+                }}
+              />
+            </Flex>
+          )}
+          {isOpenWhisper && isAutoSend && (
+            <Flex mt={8} alignItems={'center'}>
+              {t('core.app.whisper.Auto tts response')}
+              <QuestionTip label={t('core.app.whisper.Auto tts response tip')} />
+              <Box flex={'1 0 0'} />
+              <Switch
+                isChecked={value.autoTTSResponse}
+                size={'lg'}
+                onChange={(e) => {
+                  onChange({
+                    ...value,
+                    autoTTSResponse: e.target.checked
+                  });
+                }}
+              />
+            </Flex>
           )}
         </ModalBody>
       </MyModal>

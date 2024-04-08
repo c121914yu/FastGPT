@@ -1,4 +1,4 @@
-name: Deploy FastGPT docs
+name: Deploy image to vercel
 
 on:
   workflow_dispatch:

@@ -153,7 +153,7 @@ const EditForm = ({
         py={4}
         justifyContent={'space-between'}
         alignItems={'center'}
-        zIndex={10}
+        zIndex={100}
         px={4}
         {...(isSticky && {
           borderBottom: theme.borders.base,
