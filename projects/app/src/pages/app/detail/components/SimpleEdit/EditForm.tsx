@@ -28,6 +28,7 @@ import SearchParamsTip from '@/components/core/dataset/SearchParamsTip';
 import SettingLLMModel from '@/components/core/ai/SettingLLMModel';
 import { SettingAIDataType } from '@fastgpt/global/core/module/node/type';
 import DeleteIcon, { hoverDeleteStyles } from '@fastgpt/web/components/common/Icon/delete';
+import { TTSTypeEnum } from '@/constants/app';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/module/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/module/DatasetParamsModal'));
@@ -416,6 +417,7 @@ const EditForm = ({
           {/* whisper */}
           <Box {...BoxStyles}>
             <WhisperConfig
+              isOpenAudio={getValues('userGuide.tts').type !== TTSTypeEnum.none}
               value={getValues('userGuide.whisper')}
               onChange={(e) => {
                 setValue('userGuide.whisper', e);

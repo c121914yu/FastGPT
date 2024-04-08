@@ -407,6 +407,7 @@
         "Auto tts response": "Auto tts response",
         "Auto tts response tip": "Questions sent through voice input will be answered directly in the form of voice. Please ensure that the voice broadcast function is enabled.",
         "Close": "Close",
+        "Not tts tip": "You have not turned on Voice playback and the feature is not available",
         "Open": "Open",
         "Switch": "Open whisper"
       }

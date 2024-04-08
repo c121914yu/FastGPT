@@ -8,9 +8,11 @@ import MyModal from '@fastgpt/web/components/common/MyModal';
 import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 
 const WhisperConfig = ({
+  isOpenAudio,
   value,
   onChange
 }: {
+  isOpenAudio: boolean;
   value: AppWhisperConfigType;
   onChange: (e: AppWhisperConfigType) => void;
 }) => {
@@ -82,21 +84,28 @@ const WhisperConfig = ({
             </Flex>
           )}
           {isOpenWhisper && isAutoSend && (
-            <Flex mt={8} alignItems={'center'}>
-              {t('core.app.whisper.Auto tts response')}
-              <QuestionTip label={t('core.app.whisper.Auto tts response tip')} />
-              <Box flex={'1 0 0'} />
-              <Switch
-                isChecked={value.autoTTSResponse}
-                size={'lg'}
-                onChange={(e) => {
-                  onChange({
-                    ...value,
-                    autoTTSResponse: e.target.checked
-                  });
-                }}
-              />
-            </Flex>
+            <>
+              <Flex mt={8} alignItems={'center'}>
+                {t('core.app.whisper.Auto tts response')}
+                <QuestionTip label={t('core.app.whisper.Auto tts response tip')} />
+                <Box flex={'1 0 0'} />
+                <Switch
+                  isChecked={value.autoTTSResponse}
+                  size={'lg'}
+                  onChange={(e) => {
+                    onChange({
+                      ...value,
+                      autoTTSResponse: e.target.checked
+                    });
+                  }}
+                />
+              </Flex>
+              {!isOpenAudio && (
+                <Box mt={1} color={'myGray.600'} fontSize={'sm'}>
+                  {t('core.app.whisper.Not tts tip')}
+                </Box>
+              )}
+            </>
           )}
         </ModalBody>
       </MyModal>

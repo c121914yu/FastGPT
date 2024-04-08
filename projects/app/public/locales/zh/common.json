@@ -296,7 +296,7 @@
       "Share link desc": "分享链接给其他用户，无需登录即可直接进行使用",
       "Share link desc detail": "可以直接分享该模型给其他用户去进行对话，对方无需登录即可直接进行对话。注意，这个功能会消耗你账号的余额，请保管好链接！",
       "Simple Config Tip": "仅包含基础功能，复杂 agent 功能请使用高级编排。",
-      "TTS": "语音播报",
+      "TTS": "语音播放",
       "TTS Tip": "开启后，每次对话后可使用语音播放功能。使用该功能可能产生额外费用。",
       "TTS start": "朗读内容",
       "Team tags": "团队标签",
@@ -407,6 +407,7 @@
         "Auto tts response": "自动语音回复",
         "Auto tts response tip": "通过语音输入发送的问题，会直接以语音的形式响应，请确保打开了语音播报功能。",
         "Close": "关闭",
+        "Not tts tip": "你没有开启语音播放，该功能无法使用",
         "Open": "开启",
         "Switch": "开启语音输入"
       }
@@ -1490,7 +1491,7 @@
       "usage": {
         "Ai model": "AI模型",
         "App name": "应用名",
-        "Audio Speech": "语音播报",
+        "Audio Speech": "语音播放",
         "Bill Module": "扣费模块",
         "Chars length": "文本长度",
         "Data Length": "数据长度",
