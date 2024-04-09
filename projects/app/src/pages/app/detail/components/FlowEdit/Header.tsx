@@ -17,6 +17,7 @@ import { useAppStore } from '@/web/core/app/store/useAppStore';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { getErrText } from '@fastgpt/global/common/error/utils';
+import MyMenu from '@/components/MyMenu';
 
 const ImportSettings = dynamic(() => import('@/components/core/module/Flow/ImportSettings'));
 
@@ -142,31 +143,30 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
           {app.name}
         </Box>
 
-        <MyTooltip label={t('app.Import Configs')}>
-          <IconButton
-            mr={[3, 5]}
-            size={'smSquare'}
-            icon={<MyIcon name={'common/importLight'} w={['14px', '16px']} />}
-            variant={'whitePrimary'}
-            aria-label={'save'}
-            onClick={onOpenImport}
-          />
-        </MyTooltip>
-        <MyTooltip label={t('app.Export Configs')}>
-          <IconButton
-            mr={[3, 5]}
-            icon={<MyIcon name={'export'} w={['14px', '16px']} />}
-            size={'smSquare'}
-            variant={'whitePrimary'}
-            aria-label={'save'}
-            onClick={async () => {
-              const modules = await flow2ModulesAndCheck();
-              if (modules) {
-                copyData(filterExportModules(modules), t('app.Export Config Successful'));
+        <MyMenu
+          Button={
+            <IconButton
+              mr={[3, 5]}
+              icon={<MyIcon name={'more'} w={'14px'} p={2} />}
+              aria-label={''}
+              size={'sm'}
+              variant={'whitePrimary'}
+            />
+          }
+          menuList={[
+            { label: t('app.Import Configs'), icon: 'common/importLight', onClick: onOpenImport },
+            {
+              label: t('app.Export Configs'),
+              icon: 'export',
+              onClick: async () => {
+                const modules = await flow2ModulesAndCheck();
+                if (modules) {
+                  copyData(filterExportModules(modules), t('app.Export Config Successful'));
+                }
               }
-            }}
-          />
-        </MyTooltip>
+            }
+          ]}
+        />
 
         {!testModules && (
           <Button
