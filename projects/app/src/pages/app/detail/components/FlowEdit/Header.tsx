@@ -1,6 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Box, Flex, IconButton, useTheme, useDisclosure } from '@chakra-ui/react';
-import { SmallCloseIcon } from '@chakra-ui/icons';
+import { Box, Flex, IconButton, useTheme, useDisclosure, Button } from '@chakra-ui/react';
 import { ModuleItemType } from '@fastgpt/global/core/module/type';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { AppSchema } from '@fastgpt/global/core/app/type.d';
@@ -145,7 +144,7 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
 
         <MyTooltip label={t('app.Import Configs')}>
           <IconButton
-            mr={[3, 6]}
+            mr={[3, 5]}
             size={'smSquare'}
             icon={<MyIcon name={'common/importLight'} w={['14px', '16px']} />}
             variant={'whitePrimary'}
@@ -155,7 +154,7 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
         </MyTooltip>
         <MyTooltip label={t('app.Export Configs')}>
           <IconButton
-            mr={[3, 6]}
+            mr={[3, 5]}
             icon={<MyIcon name={'export'} w={['14px', '16px']} />}
             size={'smSquare'}
             variant={'whitePrimary'}
@@ -169,47 +168,36 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
           />
         </MyTooltip>
 
-        {testModules ? (
-          <IconButton
-            mr={[3, 6]}
-            icon={<SmallCloseIcon fontSize={'25px'} />}
+        {!testModules && (
+          <Button
+            mr={[3, 5]}
+            size={'sm'}
+            leftIcon={<MyIcon name={'core/chat/chatLight'} w={['14px', '16px']} />}
             variant={'whitePrimary'}
-            size={'smSquare'}
-            aria-label={''}
-            onClick={() => setTestModules(undefined)}
-          />
-        ) : (
-          <MyTooltip label={t('core.Chat test')}>
-            <IconButton
-              mr={[3, 6]}
-              icon={<MyIcon name={'core/chat/chatLight'} w={['14px', '16px']} />}
-              size={'smSquare'}
-              aria-label={'save'}
-              variant={'whitePrimary'}
-              onClick={async () => {
-                const modules = await flow2ModulesAndCheck();
-                if (modules) {
-                  setTestModules(modules);
-                }
-              }}
-            />
-          </MyTooltip>
-        )}
-
-        <MyTooltip label={t('common.Save')}>
-          <IconButton
-            icon={<MyIcon name={'common/saveFill'} w={['14px', '16px']} />}
-            size={'smSquare'}
-            isLoading={isSaving}
-            aria-label={'save'}
             onClick={async () => {
               const modules = await flow2ModulesAndCheck();
               if (modules) {
-                onclickSave(modules);
+                setTestModules(modules);
               }
             }}
-          />
-        </MyTooltip>
+          >
+            {t('core.Chat test')}
+          </Button>
+        )}
+
+        <Button
+          size={'sm'}
+          isLoading={isSaving}
+          leftIcon={<MyIcon name={'common/saveFill'} w={['14px', '16px']} />}
+          onClick={async () => {
+            const modules = await flow2ModulesAndCheck();
+            if (modules) {
+              onclickSave(modules);
+            }
+          }}
+        >
+          {t('common.Save')}
+        </Button>
       </Flex>
       {isOpenImport && <ImportSettings onClose={onCloseImport} />}
       <ConfirmModal
