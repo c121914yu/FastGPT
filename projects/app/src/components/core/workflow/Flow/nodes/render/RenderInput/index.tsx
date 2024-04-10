@@ -5,7 +5,7 @@ import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/consta
 import dynamic from 'next/dynamic';
 
 import InputLabel from './Label';
-import type { RenderInputProps } from './type.d';
+import type { RenderInputProps } from './type';
 import { useFlowProviderStore } from '../../../FlowProvider';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 

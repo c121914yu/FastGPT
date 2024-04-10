@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { NodeProps } from 'reactflow';
-import NodeCard from '../render/NodeCard';
+import NodeCard from './render/NodeCard';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
-import Container from '../modules/Container';
-import RenderInput from '../render/RenderInput';
+import Container from '../components/Container';
+import RenderInput from './render/RenderInput';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import { AddIcon } from '@chakra-ui/icons';
@@ -13,10 +13,10 @@ import {
   ModuleOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { getOneQuoteInputTemplate } from '@fastgpt/global/core/workflow/template/system/datasetConcat';
-import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
-import TargetHandle from '../render/TargetHandle';
+import { onChangeNode, useFlowProviderStore } from '../FlowProvider';
+import TargetHandle from './render/TargetHandle';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import SourceHandle from '../render/SourceHandle';
+import SourceHandle from './render/SourceHandle';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MySlider from '@/components/Slider';

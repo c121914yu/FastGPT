@@ -14,20 +14,20 @@ import {
 import { NodeProps } from 'reactflow';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
 import { useTranslation } from 'next-i18next';
-import NodeCard from '../../render/NodeCard';
-import Container from '../../modules/Container';
+import NodeCard from '../render/NodeCard';
+import Container from '../../components/Container';
 import { AddIcon } from '@chakra-ui/icons';
-import RenderInput from '../../render/RenderInput';
-import Divider from '../../modules/Divider';
+import RenderInput from '../render/RenderInput';
+import Divider from '../../components/Divider';
 import type { ContextExtractAgentItemType } from '@fastgpt/global/core/workflow/type';
-import RenderOutput from '../../render/RenderOutput';
+import RenderOutput from '../render/RenderOutput';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import ExtractFieldModal, { defaultField } from './ExtractFieldModal';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
-import { onChangeNode, useFlowProviderStore } from '../../../FlowProvider';
-import RenderToolInput from '../../render/RenderToolInput';
+import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
+import RenderToolInput from '../render/RenderToolInput';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
 
 const NodeExtract = ({ data }: NodeProps<FlowModuleItemType>) => {

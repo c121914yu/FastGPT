@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import { NodeProps } from 'reactflow';
-import NodeCard from '../render/NodeCard';
+import NodeCard from './render/NodeCard';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
-import Divider from '../modules/Divider';
-import Container from '../modules/Container';
-import RenderInput from '../render/RenderInput';
-import RenderOutput from '../render/RenderOutput';
-import RenderToolInput from '../render/RenderToolInput';
+import Divider from '../components/Divider';
+import Container from '../components/Container';
+import RenderInput from './render/RenderInput';
+import RenderOutput from './render/RenderOutput';
+import RenderToolInput from './render/RenderToolInput';
 import { useTranslation } from 'next-i18next';
-import { useFlowProviderStore } from '../../FlowProvider';
+import { useFlowProviderStore } from '../FlowProvider';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 
 const NodeSimple = ({

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { BezierEdge, getBezierPath, EdgeLabelRenderer, EdgeProps } from 'reactflow';
-import { onDelConnect, useFlowProviderStore } from '../../FlowProvider';
+import { onDelConnect, useFlowProviderStore } from '../FlowProvider';
 import { Flex } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';

@@ -12,7 +12,7 @@ import { appModule2FlowNode } from '@/utils/adapt';
 
 const nodeTypes = {
   [FlowNodeTypeEnum.pluginModule]: dynamic(
-    () => import('@/components/core/workflow/Flow/components/nodes/NodeSimple')
+    () => import('@/components/core/workflow/Flow/nodes/NodeSimple')
   )
 };
 
