@@ -1,13 +1,13 @@
 import React from 'react';
 import { NodeProps } from 'reactflow';
-import NodeCard from '../render/NodeCard';
+import NodeCard from './render/NodeCard';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
-import Container from '../modules/Container';
-import RenderInput from '../render/RenderInput';
-import RenderOutput from '../render/RenderOutput';
-import { useFlowProviderStore } from '../../FlowProvider';
-import Divider from '../modules/Divider';
-import RenderToolInput from '../render/RenderToolInput';
+import Container from '../components/Container';
+import RenderInput from './render/RenderInput';
+import RenderOutput from './render/RenderOutput';
+import { useFlowProviderStore } from '../FlowProvider';
+import Divider from '../components/Divider';
+import RenderToolInput from './render/RenderToolInput';
 import { useTranslation } from 'next-i18next';
 
 const NodeAnswer = ({ data, selected }: NodeProps<FlowModuleItemType>) => {

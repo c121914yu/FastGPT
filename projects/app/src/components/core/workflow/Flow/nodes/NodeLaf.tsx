@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import { NodeProps } from 'reactflow';
-import NodeCard from '../render/NodeCard';
+import NodeCard from './render/NodeCard';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
-import Container from '../modules/Container';
+import Container from '../components/Container';
 import { Box, Button, Center, Flex, useDisclosure } from '@chakra-ui/react';
 import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
+import { onChangeNode, useFlowProviderStore } from '../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import { getLafAppDetail } from '@/web/support/laf/api';
 import MySelect from '@fastgpt/web/components/common/MySelect';
@@ -21,10 +21,10 @@ import {
   FlowNodeOutputTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import Divider from '../modules/Divider';
-import RenderToolInput from '../render/RenderToolInput';
-import RenderInput from '../render/RenderInput';
-import RenderOutput from '../render/RenderOutput';
+import Divider from '../components/Divider';
+import RenderToolInput from './render/RenderToolInput';
+import RenderInput from './render/RenderInput';
+import RenderOutput from './render/RenderOutput';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 

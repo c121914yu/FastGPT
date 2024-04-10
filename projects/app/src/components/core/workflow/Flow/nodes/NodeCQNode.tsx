@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { NodeProps } from 'reactflow';
 import { Box, Button, Flex, Textarea } from '@chakra-ui/react';
-import NodeCard from '../render/NodeCard';
+import NodeCard from './render/NodeCard';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
-import Divider from '../modules/Divider';
-import Container from '../modules/Container';
-import RenderInput from '../render/RenderInput';
+import Divider from '../components/Divider';
+import Container from '../components/Container';
+import RenderInput from './render/RenderInput';
 import type { ClassifyQuestionAgentItemType } from '@fastgpt/global/core/workflow/type.d';
 import { customAlphabet } from 'nanoid';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 4);
@@ -13,9 +13,9 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
-import SourceHandle from '../render/SourceHandle';
+import SourceHandle from './render/SourceHandle';
 import MyTooltip from '@/components/MyTooltip';
-import { onChangeNode } from '../../FlowProvider';
+import { onChangeNode } from '../FlowProvider';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
 
 const NodeCQNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {

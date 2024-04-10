@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { NodeProps } from 'reactflow';
-import NodeCard from '../render/NodeCard';
+import NodeCard from './render/NodeCard';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
-import { onChangeNode } from '../../FlowProvider';
+import { onChangeNode } from '../FlowProvider';
 import dynamic from 'next/dynamic';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
@@ -10,20 +10,20 @@ import {
   FlowNodeInputTypeEnum,
   FlowNodeOutputTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
-import Container from '../modules/Container';
+import Container from '../components/Container';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
-import TargetHandle from '../render/TargetHandle';
-import { useToast } from '@fastgpt/web/hooks/useToast';
-import {
+import SourceHandle from './render/SourceHandle';
+import type {
+  EditInputFieldMap,
   EditNodeFieldType,
   FlowNodeInputItemType,
   FlowNodeOutputItemType
-} from '@fastgpt/global/core/workflow/node/type';
+} from '@fastgpt/global/core/workflow/node/type.d';
 import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 
-const FieldEditModal = dynamic(() => import('../render/FieldEditModal'));
+const FieldEditModal = dynamic(() => import('./render/FieldEditModal'));
 
 const defaultCreateField: EditNodeFieldType = {
   label: '',
@@ -33,16 +33,17 @@ const defaultCreateField: EditNodeFieldType = {
   valueType: ModuleIOValueTypeEnum.string,
   required: true
 };
-const createEditField = {
+const createEditField: EditInputFieldMap = {
   key: true,
   name: true,
   description: true,
-  required: false,
+  required: true,
   dataType: true,
-  inputType: false
+  inputType: true,
+  isToolInput: true
 };
 
-const NodePluginOutput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
   const { t } = useTranslation();
   const { moduleId, inputs, outputs } = data;
   const [createField, setCreateField] = useState<EditNodeFieldType>();
@@ -56,70 +57,76 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowModuleItemType>) => 
             key={item.key}
             className="nodrag"
             cursor={'default'}
-            justifyContent={'left'}
+            justifyContent={'right'}
             alignItems={'center'}
             position={'relative'}
             mb={7}
           >
-            <TargetHandle handleKey={item.key} valueType={item.valueType} />
-            <Box position={'relative'}>
-              {t(item.label)}
-              <Box
-                position={'absolute'}
-                right={'-6px'}
-                top={'-3px'}
-                color={'red.500'}
-                fontWeight={'bold'}
-              >
-                *
-              </Box>
-            </Box>
+            {item.edit && (
+              <>
+                <MyIcon
+                  name={'common/settingLight'}
+                  w={'14px'}
+                  cursor={'pointer'}
+                  mr={3}
+                  _hover={{ color: 'primary.500' }}
+                  onClick={() =>
+                    setEditField({
+                      inputType: item.type,
+                      valueType: item.valueType,
+                      key: item.key,
+                      label: item.label,
+                      description: item.description,
+                      required: item.required,
+                      isToolInput: !!item.toolDescription
+                    })
+                  }
+                />
+                <MyIcon
+                  className="delete"
+                  name={'delete'}
+                  w={'14px'}
+                  cursor={'pointer'}
+                  mr={3}
+                  _hover={{ color: 'red.500' }}
+                  onClick={() => {
+                    onChangeNode({
+                      moduleId,
+                      type: 'delInput',
+                      key: item.key
+                    });
+                    onChangeNode({
+                      moduleId,
+                      type: 'delOutput',
+                      key: item.key
+                    });
+                  }}
+                />
+              </>
+            )}
             {item.description && (
               <MyTooltip label={t(item.description)} forceShow>
-                <QuestionOutlineIcon display={['none', 'inline']} ml={2} />
+                <QuestionOutlineIcon display={['none', 'inline']} mr={1} />
               </MyTooltip>
             )}
-            <MyIcon
-              name={'common/settingLight'}
-              w={'14px'}
-              cursor={'pointer'}
-              ml={3}
-              _hover={{ color: 'primary.500' }}
-              onClick={() =>
-                setEditField({
-                  inputType: item.type,
-                  valueType: item.valueType,
-                  key: item.key,
-                  label: item.label,
-                  description: item.description,
-                  required: item.required
-                })
-              }
-            />
-            <MyIcon
-              className="delete"
-              name={'delete'}
-              w={'14px'}
-              cursor={'pointer'}
-              ml={2}
-              _hover={{ color: 'red.500' }}
-              onClick={() => {
-                onChangeNode({
-                  moduleId,
-                  type: 'delInput',
-                  key: item.key,
-                  value: ''
-                });
-                onChangeNode({
-                  moduleId,
-                  type: 'delOutput',
-                  key: item.key
-                });
-              }}
-            />
+            <Box position={'relative'}>
+              {t(item.label)}
+              {item.required && (
+                <Box
+                  position={'absolute'}
+                  right={'-6px'}
+                  top={'-3px'}
+                  color={'red.500'}
+                  fontWeight={'bold'}
+                >
+                  *
+                </Box>
+              )}
+            </Box>
+            <SourceHandle handleKey={item.key} valueType={item.valueType} />
           </Flex>
         ))}
-        <Box textAlign={'left'} mt={5}>
+        <Box textAlign={'right'} mt={5}>
           <Button
             variant={'whitePrimary'}
             leftIcon={<SmallAddIcon />}
@@ -127,7 +134,7 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowModuleItemType>) => 
               setCreateField(defaultCreateField);
             }}
           >
-            {t('core.module.output.Add Output')}
+            {t('core.module.input.Add Input')}
           </Button>
         </Box>
       </Container>
@@ -148,6 +155,7 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowModuleItemType>) => 
                 type: data.inputType,
                 required: data.required,
                 description: data.description,
+                toolDescription: data.isToolInput ? data.description : undefined,
                 edit: true,
                 editField: createEditField
               }
@@ -190,7 +198,28 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowModuleItemType>) => 
               key: data.key,
               required: data.required,
               label: data.label,
-              description: data.description
+              description: data.description,
+              toolDescription: data.isToolInput ? data.description : undefined,
+              ...(data.inputType === FlowNodeInputTypeEnum.addInputParam
+                ? {
+                    editField: {
+                      key: true,
+                      name: true,
+                      description: true,
+                      required: true,
+                      dataType: true,
+                      inputType: false
+                    },
+                    defaultEditField: {
+                      label: '',
+                      key: '',
+                      description: '',
+                      inputType: FlowNodeInputTypeEnum.target,
+                      valueType: ModuleIOValueTypeEnum.string,
+                      required: true
+                    }
+                  }
+                : {})
             };
             const newOutput: FlowNodeOutputItemType = {
               ...memOutput,
@@ -198,7 +227,7 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowModuleItemType>) => 
               key: data.key,
               label: data.label
             };
-
+            console.log(data);
             if (changeKey) {
               onChangeNode({
                 moduleId,
@@ -234,5 +263,4 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowModuleItemType>) => 
     </NodeCard>
   );
 };
-
-export default React.memo(NodePluginOutput);
+export default React.memo(NodePluginInput);
