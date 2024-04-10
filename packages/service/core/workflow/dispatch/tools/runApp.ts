@@ -1,17 +1,17 @@
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
-import { SelectAppItemType } from '@fastgpt/global/core/module/type';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
+import { SelectAppItemType } from '@fastgpt/global/core/workflow/type';
 import { dispatchWorkFlow } from '../index';
 import { MongoApp } from '../../../../core/app/schema';
 import { responseWrite } from '../../../../common/response';
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
-import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/constants';
-import { textAdaptGptResponse } from '@fastgpt/global/core/module/runtime/utils';
-import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
+import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
+import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getHistories, setEntryEntries } from '../utils';
 import { chatValue2RuntimePrompt, runtimePrompt2ChatsValue } from '@fastgpt/global/core/chat/adapt';
-import { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
+import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 
 type Props = ModuleDispatchProps<{
   [ModuleInputKeyEnum.userChatInput]: string;

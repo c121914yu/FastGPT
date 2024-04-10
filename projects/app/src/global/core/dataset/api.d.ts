@@ -9,7 +9,7 @@ import {
   DatasetDataIndexItemType,
   SearchDataResponseItemType
 } from '@fastgpt/global/core/dataset/type';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 /* ================= dataset ===================== */
 export type CreateDatasetParams = {

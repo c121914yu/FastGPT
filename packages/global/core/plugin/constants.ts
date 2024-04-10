@@ -1,4 +1,4 @@
-import { ModuleItemType } from '../module/type';
+import { ModuleItemType } from '../workflow/type';
 
 export const defaultModules: ModuleItemType[] = [
   {

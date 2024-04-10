@@ -1,4 +1,4 @@
-import { ClassifyQuestionAgentItemType } from '../module/type';
+import { ClassifyQuestionAgentItemType } from '../workflow/type';
 import { SearchDataResponseItemType } from '../dataset/type';
 import {
   ChatFileTypeEnum,
@@ -7,14 +7,14 @@ import {
   ChatSourceEnum,
   ChatStatusEnum
 } from './constants';
-import { FlowNodeTypeEnum } from '../module/node/constant';
-import { ModuleOutputKeyEnum } from '../module/constants';
-import { DispatchNodeResponseKeyEnum } from '../module/runtime/constants';
+import { FlowNodeTypeEnum } from '../workflow/node/constant';
+import { ModuleOutputKeyEnum } from '../workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '../workflow/runtime/constants';
 import { AppSchema } from '../app/type';
 import type { AppSchema as AppType } from '@fastgpt/global/core/app/type.d';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 import { ChatBoxInputType } from '../../../../projects/app/src/components/ChatBox/type';
-import { DispatchNodeResponseType } from '../module/runtime/type.d';
+import { DispatchNodeResponseType } from '../workflow/runtime/type.d';
 
 export type ChatSchema = {
   _id: string;

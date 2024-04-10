@@ -1,13 +1,13 @@
 import type { AppSimpleEditFormType } from '../app/type';
-import { FlowNodeTypeEnum } from '../module/node/constant';
+import { FlowNodeTypeEnum } from '../workflow/node/constant';
 import {
   ModuleOutputKeyEnum,
   ModuleInputKeyEnum,
   FlowNodeTemplateTypeEnum
-} from '../module/constants';
-import type { FlowNodeInputItemType } from '../module/node/type.d';
-import { getGuideModule, splitGuideModule } from '../module/utils';
-import { ModuleItemType } from '../module/type.d';
+} from '../workflow/constants';
+import type { FlowNodeInputItemType } from '../workflow/node/type.d';
+import { getGuideModule, splitGuideModule } from '../workflow/utils';
+import { ModuleItemType } from '../workflow/type.d';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 import { defaultWhisperConfig } from './constants';
 

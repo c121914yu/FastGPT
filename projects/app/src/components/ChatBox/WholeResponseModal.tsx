@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Box, useTheme, Flex, Image } from '@chakra-ui/react';
 import type { ChatHistoryItemResType } from '@fastgpt/global/core/chat/type.d';
 import { useTranslation } from 'next-i18next';
-import { moduleTemplatesFlat } from '@fastgpt/global/core/module/template/constants';
+import { moduleTemplatesFlat } from '@fastgpt/global/core/workflow/template/constants';
 
 import Tabs from '../Tabs';
 import MyModal from '@fastgpt/web/components/common/MyModal';

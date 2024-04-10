@@ -1,15 +1,15 @@
 import {
   DispatchNodeResponseType,
   DispatchNodeResultType
-} from '@fastgpt/global/core/module/runtime/type.d';
+} from '@fastgpt/global/core/workflow/runtime/type.d';
 import { formatModelChars2Points } from '../../../../support/wallet/usage/utils';
-import type { SelectedDatasetType } from '@fastgpt/global/core/module/api.d';
+import type { SelectedDatasetType } from '@fastgpt/global/core/workflow/api.d';
 import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
 import { ModelTypeEnum, getLLMModel, getVectorModel } from '../../../ai/model';
 import { searchDatasetData } from '../../../dataset/search/controller';
-import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
+import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { DatasetSearchModeEnum } from '@fastgpt/global/core/dataset/constants';
 import { getHistories } from '../utils';
 import { datasetSearchQueryExtension } from '../../../dataset/search/utils';

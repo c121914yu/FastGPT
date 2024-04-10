@@ -4,8 +4,8 @@ import { connectToDatabase } from '@/service/mongo';
 import { MongoApp } from '@fastgpt/service/core/app/schema';
 import type { AppUpdateParams } from '@fastgpt/global/core/app/api';
 import { authApp } from '@fastgpt/service/support/permission/auth/app';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { getLLMModel } from '@fastgpt/service/core/ai/model';
 
 /* 获取我的模型 */

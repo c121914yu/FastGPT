@@ -13,8 +13,8 @@ import {
   responseWriteController,
   responseWriteNodeStatus
 } from '../../../../../common/response';
-import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/constants';
-import { textAdaptGptResponse } from '@fastgpt/global/core/module/runtime/utils';
+import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import { dispatchWorkFlow } from '../../index';
 import { DispatchToolModuleProps, RunToolResponse, ToolModuleItemType } from './type.d';

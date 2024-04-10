@@ -1,9 +1,9 @@
-import type { ModuleItemType, FlowModuleItemType } from '@fastgpt/global/core/module/type.d';
+import type { ModuleItemType, FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
 import type { Edge, Node } from 'reactflow';
 import { customAlphabet } from 'nanoid';
-import { moduleTemplatesFlat } from '@fastgpt/global/core/module/template/constants';
-import { EDGE_TYPE } from '@fastgpt/global/core/module/node/constant';
-import { UserInputModule } from '@fastgpt/global/core/module/template/system/userInput';
+import { moduleTemplatesFlat } from '@fastgpt/global/core/workflow/template/constants';
+import { EDGE_TYPE } from '@fastgpt/global/core/workflow/node/constant';
+import { UserInputModule } from '@fastgpt/global/core/workflow/template/system/userInput';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
 export const appModule2FlowNode = ({

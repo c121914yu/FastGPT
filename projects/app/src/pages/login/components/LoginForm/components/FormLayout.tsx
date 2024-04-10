@@ -1,4 +1,4 @@
-import Divider from '@/components/core/module/Flow/components/modules/Divider';
+import Divider from '@/components/core/workflow/Flow/components/modules/Divider';
 import { LoginPageTypeEnum } from '@/constants/user';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { AbsoluteCenter, Box, Button, Flex, Image } from '@chakra-ui/react';

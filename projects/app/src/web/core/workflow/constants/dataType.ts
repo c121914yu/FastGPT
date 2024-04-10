@@ -1,4 +1,4 @@
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/module/constants';
+import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 
 export const FlowValueTypeMap = {
   [ModuleIOValueTypeEnum.string]: {

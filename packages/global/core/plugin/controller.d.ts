@@ -1,4 +1,4 @@
-import type { ModuleItemType } from '../module/type.d';
+import type { ModuleItemType } from '../workflow/type.d';
 import { PluginTypeEnum } from './constants';
 import { HttpAuthMethodType } from './httpPlugin/type';
 
