@@ -1,6 +1,6 @@
 import { AppItemType } from '@/types/app';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
-import { Dataset_SEARCH_DESC } from '@fastgpt/global/core/module/template/system/datasetSearch';
+import { Dataset_SEARCH_DESC } from '@fastgpt/global/core/workflow/template/system/datasetSearch';
 
 // template
 export const appTemplates: (AppItemType & {
@@ -10,7 +10,7 @@ export const appTemplates: (AppItemType & {
 })[] = [
   {
     id: 'simpleChat',
-    avatar: '/imgs/module/AI.png',
+    avatar: '/imgs/workflow/AI.png',
     name: '简易模板',
     intro: '一个极其简单的 AI 应用，你可以绑定知识库或工具。',
     type: AppTypeEnum.simple,
@@ -18,7 +18,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'userGuide',
         name: 'core.module.template.App system setting',
-        avatar: '/imgs/module/userGuide.png',
+        avatar: '/imgs/workflow/userGuide.png',
         flowType: 'userGuide',
         position: {
           x: 454.98510354678695,
@@ -68,7 +68,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
-        avatar: '/imgs/module/userChatInput.png',
+        avatar: '/imgs/workflow/userChatInput.png',
         flowType: 'questionInput',
         position: {
           x: 464.32198615344566,
@@ -103,7 +103,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'chatModule',
         name: 'AI 对话',
-        avatar: '/imgs/module/AI.png',
+        avatar: '/imgs/workflow/AI.png',
         flowType: 'chatNode',
         showStatus: true,
         position: {
@@ -293,7 +293,7 @@ export const appTemplates: (AppItemType & {
   },
   {
     id: 'chatGuide',
-    avatar: '/imgs/module/userGuide.png',
+    avatar: '/imgs/workflow/userGuide.png',
     name: '对话引导 + 变量',
     intro: '可以在对话开始发送一段提示，或者让用户填写一些内容，作为本次对话的变量',
     type: AppTypeEnum.simple,
@@ -301,7 +301,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'userGuide',
         name: 'core.module.template.App system setting',
-        avatar: '/imgs/module/userGuide.png',
+        avatar: '/imgs/workflow/userGuide.png',
         flowType: 'userGuide',
         position: {
           x: 447.98520778293346,
@@ -383,7 +383,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
-        avatar: '/imgs/module/userChatInput.png',
+        avatar: '/imgs/workflow/userChatInput.png',
         flowType: 'questionInput',
         position: {
           x: 464.32198615344566,
@@ -418,7 +418,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'chatModule',
         name: 'AI 对话',
-        avatar: '/imgs/module/AI.png',
+        avatar: '/imgs/workflow/AI.png',
         flowType: 'chatNode',
         showStatus: true,
         position: {
@@ -609,7 +609,7 @@ export const appTemplates: (AppItemType & {
   },
   {
     id: 'simpleDatasetChat',
-    avatar: '/imgs/module/db.png',
+    avatar: '/imgs/workflow/db.png',
     name: '知识库+对话引导',
     intro: '每次提问时进行一次知识库搜索，将搜索结果注入 LLM 模型进行参考回答',
     type: AppTypeEnum.advanced,
@@ -618,7 +618,7 @@ export const appTemplates: (AppItemType & {
         moduleId: 'userGuide',
         name: 'core.module.template.App system setting',
         intro: 'core.app.tip.userGuideTip',
-        avatar: '/imgs/module/userGuide.png',
+        avatar: '/imgs/workflow/userGuide.png',
         flowType: 'userGuide',
         position: {
           x: 447.98520778293346,
@@ -674,7 +674,7 @@ export const appTemplates: (AppItemType & {
         moduleId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
         intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
-        avatar: '/imgs/module/userChatInput.svg',
+        avatar: '/imgs/workflow/userChatInput.svg',
         flowType: 'questionInput',
         position: {
           x: 324.81436595478294,
@@ -710,7 +710,7 @@ export const appTemplates: (AppItemType & {
         moduleId: '63toub',
         name: 'AI 对话',
         intro: 'AI 大模型对话',
-        avatar: '/imgs/module/AI.png',
+        avatar: '/imgs/workflow/AI.png',
         flowType: 'chatNode',
         showStatus: true,
         position: {
@@ -878,7 +878,7 @@ export const appTemplates: (AppItemType & {
         moduleId: '0voh5n',
         name: '知识库搜索',
         intro: Dataset_SEARCH_DESC,
-        avatar: '/imgs/module/db.png',
+        avatar: '/imgs/workflow/db.png',
         flowType: 'datasetSearchNode',
         showStatus: true,
         position: {
@@ -1042,7 +1042,7 @@ export const appTemplates: (AppItemType & {
   },
   {
     id: 'CQ',
-    avatar: '/imgs/module/cq.png',
+    avatar: '/imgs/workflow/cq.png',
     name: '问题分类 + 知识库',
     intro: '先对用户的问题进行分类，再根据不同类型问题，执行不同的操作',
     type: AppTypeEnum.advanced,

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import ReactFlow, { Background, ReactFlowProvider, useNodesState } from 'reactflow';
-import { FlowModuleItemType, ModuleItemType } from '@fastgpt/global/core/module/type';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
+import { FlowModuleItemType, ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import dynamic from 'next/dynamic';
-import { plugin2ModuleIO } from '@fastgpt/global/core/module/utils';
+import { plugin2ModuleIO } from '@fastgpt/global/core/workflow/utils';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
@@ -12,7 +12,7 @@ import { appModule2FlowNode } from '@/utils/adapt';
 
 const nodeTypes = {
   [FlowNodeTypeEnum.pluginModule]: dynamic(
-    () => import('@/components/core/module/Flow/components/nodes/NodeSimple')
+    () => import('@/components/core/workflow/Flow/components/nodes/NodeSimple')
   )
 };
 

@@ -32,7 +32,7 @@ export const defaultForm: EditFormType = {
     {
       moduleId: nanoid(),
       name: '定义插件输入',
-      avatar: '/imgs/module/input.png',
+      avatar: '/imgs/workflow/input.png',
       flowType: 'pluginInput',
       showStatus: false,
       position: {
@@ -45,7 +45,7 @@ export const defaultForm: EditFormType = {
     {
       moduleId: nanoid(),
       name: '定义插件输出',
-      avatar: '/imgs/module/output.png',
+      avatar: '/imgs/workflow/output.png',
       flowType: 'pluginOutput',
       showStatus: false,
       position: {

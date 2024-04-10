@@ -14,8 +14,8 @@ import {
 } from '@chakra-ui/react';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MySlider from '@/components/Slider';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
-import type { SettingAIDataType } from '@fastgpt/global/core/module/node/type.d';
+import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import type { SettingAIDataType } from '@fastgpt/global/core/workflow/node/type.d';
 import { getDocPath } from '@/web/common/system/doc';
 import AIModelSelector from '@/components/Select/AIModelSelector';
 import { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
@@ -72,7 +72,7 @@ const AIChatSettingsModal = ({
   return (
     <MyModal
       isOpen
-      iconSrc="/imgs/module/AI.png"
+      iconSrc="/imgs/workflow/AI.png"
       onClose={onClose}
       title={
         <>

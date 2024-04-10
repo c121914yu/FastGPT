@@ -29,7 +29,7 @@ weight: 404
     "moduleId": "userGuide",
     "name": "core.module.template.App system setting",
     "intro": "core.app.tip.userGuideTip",
-    "avatar": "/imgs/module/userGuide.png",
+    "avatar": "/imgs/workflow/userGuide.png",
     "flowType": "userGuide",
     "position": {
       "x": -92.26884681344463,
@@ -85,7 +85,7 @@ weight: 404
     "moduleId": "userChatInput",
     "name": "core.module.template.Chat entrance",
     "intro": "当用户发送一个内容后，流程将会从这个模块开始执行。",
-    "avatar": "/imgs/module/userChatInput.svg",
+    "avatar": "/imgs/workflow/userChatInput.svg",
     "flowType": "questionInput",
     "position": {
       "x": 241.60980819261408,
@@ -121,7 +121,7 @@ weight: 404
     "moduleId": "n84rvg",
     "name": "工具调用（实验）",
     "intro": "通过AI模型自动选择一个或多个功能块进行调用，也可以对插件进行调用。",
-    "avatar": "/imgs/module/tool.svg",
+    "avatar": "/imgs/workflow/tool.svg",
     "flowType": "tools",
     "showStatus": true,
     "position": {
@@ -246,7 +246,7 @@ weight: 404
     "moduleId": "3mbu91",
     "name": "HTTP 请求",
     "intro": "调用飞书webhook，发送一个通知",
-    "avatar": "/imgs/module/http.png",
+    "avatar": "/imgs/workflow/http.png",
     "flowType": "httpRequest468",
     "showStatus": true,
     "position": {
@@ -427,7 +427,7 @@ weight: 404
     "moduleId": "rzx4mj",
     "name": "工具调用终止",
     "intro": "该模块需配置工具调用使用。当该模块被执行时，本次工具调用将会强制结束，并且不再调用AI针对工具调用结果回答问题。",
-    "avatar": "/imgs/module/toolStop.svg",
+    "avatar": "/imgs/workflow/toolStop.svg",
     "flowType": "stopTool",
     "position": {
       "x": 2145.5070710160267,
@@ -451,7 +451,7 @@ weight: 404
     "moduleId": "psdhs1",
     "name": "指定回复",
     "intro": "该模块可以直接回复一段指定的内容。常用于引导、提示。非字符串内容传入时，会转成字符串进行输出。",
-    "avatar": "/imgs/module/reply.png",
+    "avatar": "/imgs/workflow/reply.png",
     "flowType": "answerNode",
     "position": {
       "x": 2117.0429459850598,

@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Box, Flex, IconButton, useTheme, useDisclosure, Button } from '@chakra-ui/react';
-import { ModuleItemType } from '@fastgpt/global/core/module/type';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { AppSchema } from '@fastgpt/global/core/app/type.d';
 import { useTranslation } from 'next-i18next';
@@ -10,16 +10,16 @@ import dynamic from 'next/dynamic';
 
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
-import ChatTest, { type ChatTestComponentRef } from '@/components/core/module/Flow/ChatTest';
-import { useFlowProviderStore } from '@/components/core/module/Flow/FlowProvider';
-import { flowNode2Modules, filterExportModules } from '@/components/core/module/utils';
+import ChatTest, { type ChatTestComponentRef } from '@/components/core/workflow/Flow/ChatTest';
+import { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
+import { flowNode2Modules, filterExportModules } from '@/components/core/workflow/utils';
 import { useAppStore } from '@/web/core/app/store/useAppStore';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import MyMenu from '@/components/MyMenu';
 
-const ImportSettings = dynamic(() => import('@/components/core/module/Flow/ImportSettings'));
+const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 
 type Props = { app: AppSchema; onClose: () => void };
 

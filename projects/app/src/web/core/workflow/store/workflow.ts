@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/module/type';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type';
 import { getTeamPlugTemplates, getSystemPlugTemplates } from '../../plugin/api';
 
 type State = {

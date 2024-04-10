@@ -103,7 +103,7 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
 
   return (
     <MyModal
-      iconSrc="/imgs/module/ai.svg"
+      iconSrc="/imgs/workflow/ai.svg"
       title={t('core.app.create app')}
       isOpen
       onClose={onClose}

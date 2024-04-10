@@ -7,10 +7,10 @@ import {
 } from '@fastgpt/global/common/string/tiktoken';
 import { ChatItemValueTypeEnum, ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAIApi } from '../../../ai/config';
-import type { ContextExtractAgentItemType } from '@fastgpt/global/core/module/type';
-import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import type { ContextExtractAgentItemType } from '@fastgpt/global/core/workflow/type';
+import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
 import { Prompt_ExtractJson } from '@fastgpt/global/core/ai/prompt/agent';
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
 import { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
@@ -24,7 +24,7 @@ import {
   ChatCompletionTool
 } from '@fastgpt/global/core/ai/type';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
-import { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
+import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 
 type Props = ModuleDispatchProps<{

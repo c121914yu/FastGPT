@@ -1,9 +1,9 @@
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
+import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import type {
   DispatchNodeResultType,
   RunningModuleItemType
-} from '@fastgpt/global/core/module/runtime/type';
+} from '@fastgpt/global/core/workflow/runtime/type';
 import { ModelTypeEnum, getLLMModel } from '../../../../ai/model';
 import { getHistories } from '../../utils';
 import { runToolWithToolChoice } from './toolChoice';

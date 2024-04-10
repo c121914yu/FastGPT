@@ -1,10 +1,10 @@
 import { MongoPlugin } from './schema';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/module/type';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { plugin2ModuleIO } from '@fastgpt/global/core/module/utils';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { plugin2ModuleIO } from '@fastgpt/global/core/workflow/utils';
 import { PluginSourceEnum } from '@fastgpt/global/core/plugin/constants';
 import type { PluginRuntimeType, PluginTemplateType } from '@fastgpt/global/core/plugin/type.d';
-import { FlowNodeTemplateTypeEnum } from '@fastgpt/global/core/module/constants';
+import { FlowNodeTemplateTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import type { PluginItemSchema } from '@fastgpt/global/core/plugin/type.d';
 
 /* 

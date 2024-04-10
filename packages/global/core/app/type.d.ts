@@ -1,10 +1,10 @@
-import type { FlowNodeTemplateType, ModuleItemType } from '../module/type.d';
+import type { FlowNodeTemplateType, ModuleItemType } from '../workflow/type.d';
 
 import { AppTypeEnum } from './constants';
 import { PermissionTypeEnum } from '../../support/permission/constant';
-import type { DatasetModuleProps } from '../module/node/type.d';
-import { VariableInputEnum } from '../module/constants';
-import { SelectedDatasetType } from '../module/api';
+import type { DatasetModuleProps } from '../workflow/node/type.d';
+import { VariableInputEnum } from '../workflow/constants';
+import { SelectedDatasetType } from '../workflow/api';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 import { TeamTagSchema as TeamTagsSchemaType } from '@fastgpt/global/support/user/team/type.d';
 export interface AppSchema {
@@ -14,6 +14,7 @@ export interface AppSchema {
   tmbId: string;
   name: string;
   type: `${AppTypeEnum}`;
+  version?: 'v1' | 'v2';
   avatar: string;
   intro: string;
   updateTime: number;

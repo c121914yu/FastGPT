@@ -1,17 +1,20 @@
 import { NextApiResponse } from 'next';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
-import type { ChatDispatchProps } from '@fastgpt/global/core/module/type.d';
-import type { RunningModuleItemType } from '@fastgpt/global/core/module/runtime/type.d';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import type { ChatDispatchProps } from '@fastgpt/global/core/workflow/type.d';
+import type { RunningModuleItemType } from '@fastgpt/global/core/workflow/runtime/type.d';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
 import type {
   AIChatItemValueItemType,
   ChatHistoryItemResType,
   ToolRunResponseItemType
 } from '@fastgpt/global/core/chat/type.d';
-import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { ModuleItemType } from '@fastgpt/global/core/module/type';
+import {
+  FlowNodeInputTypeEnum,
+  FlowNodeTypeEnum
+} from '@fastgpt/global/core/workflow/node/constant';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
 import { responseWriteNodeStatus } from '../../../common/response';
 import { getSystemTime } from '@fastgpt/global/common/time/timezone';

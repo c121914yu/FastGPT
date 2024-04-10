@@ -2,7 +2,7 @@
   "author": "FastGPT Team",
   "templateType": "tools",
   "name": "获取当前时间",
-  "avatar": "/imgs/module/getCurrentTime.svg",
+  "avatar": "/imgs/workflow/getCurrentTime.svg",
   "intro": "获取用户当前时区的时间。",
   "showStatus": false,
   "isTool": true,
@@ -12,7 +12,7 @@
       "moduleId": "m8dupj",
       "name": "定义插件输入",
       "intro": "自定义配置外部输入，使用插件时，仅暴露自定义配置的输入",
-      "avatar": "/imgs/module/input.png",
+      "avatar": "/imgs/workflow/input.png",
       "flowType": "pluginInput",
       "showStatus": false,
       "position": {
@@ -50,7 +50,7 @@
       "moduleId": "bjsa7r",
       "name": "定义插件输出",
       "intro": "自定义配置外部输出，使用插件时，仅暴露自定义配置的输出",
-      "avatar": "/imgs/module/output.png",
+      "avatar": "/imgs/workflow/output.png",
       "flowType": "pluginOutput",
       "showStatus": false,
       "position": {
@@ -92,7 +92,7 @@
       "moduleId": "cv13yt",
       "name": "文本加工",
       "intro": "可对固定或传入的文本进行加工后输出，非字符串类型数据最终会转成字符串类型。",
-      "avatar": "/imgs/module/textEditor.svg",
+      "avatar": "/imgs/workflow/textEditor.svg",
       "flowType": "pluginModule",
       "showStatus": false,
       "position": {

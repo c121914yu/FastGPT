@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { HttpBodyType } from '@fastgpt/global/core/module/api.d';
+import type { HttpBodyType } from '@fastgpt/global/core/workflow/api.d';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { addCustomFeedbacks } from '@fastgpt/service/core/chat/controller';
 import { authRequestFromLocal } from '@fastgpt/service/support/permission/auth/common';

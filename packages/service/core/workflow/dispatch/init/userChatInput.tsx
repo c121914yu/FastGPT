@@ -1,5 +1,5 @@
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
 export type UserChatInputProps = ModuleDispatchProps<{
   [ModuleInputKeyEnum.userChatInput]: string;
 }>;

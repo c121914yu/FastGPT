@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Header from './Header';
-import Flow from '@/components/core/module/Flow';
-import FlowProvider, { useFlowProviderStore } from '@/components/core/module/Flow/FlowProvider';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/module/type.d';
-import { pluginSystemModuleTemplates } from '@fastgpt/global/core/module/template/constants';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
+import Flow from '@/components/core/workflow/Flow';
+import FlowProvider, { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type.d';
+import { pluginSystemModuleTemplates } from '@fastgpt/global/core/workflow/template/constants';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { serviceSideProps } from '@/web/common/utils/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { getOnePlugin } from '@/web/core/plugin/api';

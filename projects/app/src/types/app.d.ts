@@ -1,5 +1,5 @@
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/module/constants';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { XYPosition } from 'reactflow';
 import { AppModuleItemTypeEnum, ModulesInputItemTypeEnum } from '../constants/app';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
@@ -7,8 +7,8 @@ import type {
   FlowNodeInputItemType,
   FlowNodeOutputItemType,
   FlowNodeOutputTargetItemType
-} from '@fastgpt/global/core/module/node/type.d';
-import type { FlowNodeTemplateType, ModuleItemType } from '@fastgpt/global/core/module/type.d';
+} from '@fastgpt/global/core/workflow/node/type.d';
+import type { FlowNodeTemplateType, ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
 import type { ChatSchema } from '@fastgpt/global/core/chat/type';
 import type { AppSchema } from '@fastgpt/global/core/app/type';
 import { ChatModelType } from '@/constants/model';
