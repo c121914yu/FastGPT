@@ -1,9 +1,9 @@
-import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/constants';
+import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { responseWrite } from '../../../../common/response';
-import { textAdaptGptResponse } from '@fastgpt/global/core/module/runtime/utils';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
+import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
+import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 export type AnswerProps = ModuleDispatchProps<{
   text: string;
 }>;

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { type ChatHistoryItemResType } from '@fastgpt/global/core/chat/type.d';
-import { DispatchNodeResponseType } from '@fastgpt/global/core/module/runtime/type.d';
+import { DispatchNodeResponseType } from '@fastgpt/global/core/workflow/runtime/type.d';
 import type { ChatItemType } from '@fastgpt/global/core/chat/type';
 import { Flex, BoxProps, useDisclosure, useTheme, Box } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
@@ -9,7 +9,7 @@ import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/ty
 import dynamic from 'next/dynamic';
 import Tag from '../Tag';
 import MyTooltip from '../MyTooltip';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { getSourceNameIcon } from '@fastgpt/global/core/dataset/utils';
 import ChatBoxDivider from '@/components/core/chat/Divider';
 import { strIsLink } from '@fastgpt/global/common/string/tools';

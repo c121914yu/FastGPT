@@ -6,7 +6,7 @@ import { jsonRes } from '@fastgpt/service/common/response';
 import { connectToDatabase } from '@/service/mongo';
 import { getPluginPreviewModule } from '@fastgpt/service/core/plugin/controller';
 import { authPluginCanUse } from '@fastgpt/service/support/permission/auth/plugin';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/module/type';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {

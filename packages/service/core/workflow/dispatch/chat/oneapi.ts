@@ -6,8 +6,8 @@ import {
 } from '../../../chat/utils';
 import type { ChatItemType, UserChatItemValueItemType } from '@fastgpt/global/core/chat/type.d';
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
-import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/constants';
-import { textAdaptGptResponse } from '@fastgpt/global/core/module/runtime/utils';
+import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
 import { getAIApi } from '../../../ai/config';
 import type {
   ChatCompletion,
@@ -18,8 +18,8 @@ import { formatModelChars2Points } from '../../../../support/wallet/usage/utils'
 import type { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { postTextCensor } from '../../../../common/api/requestPlusApi';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
-import type { ModuleItemType } from '@fastgpt/global/core/module/type.d';
-import type { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
+import type { ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import type { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 import {
   countGptMessagesTokens,
   countMessagesTokens
@@ -34,14 +34,14 @@ import {
   Prompt_QuotePromptList,
   Prompt_QuoteTemplateList
 } from '@fastgpt/global/core/ai/prompt/AIChat';
-import type { AIChatModuleProps } from '@fastgpt/global/core/module/node/type.d';
+import type { AIChatModuleProps } from '@fastgpt/global/core/workflow/node/type.d';
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
 import { responseWrite, responseWriteController } from '../../../../common/response';
 import { getLLMModel, ModelTypeEnum } from '../../../ai/model';
 import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
-import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
+import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getHistories } from '../utils';
 import { filterSearchResultsByMaxChars } from '@fastgpt/global/core/dataset/search/utils';
 import { getHistoryPreview } from '@fastgpt/global/core/chat/utils';

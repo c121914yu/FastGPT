@@ -86,7 +86,7 @@ export default async function (ctx: FunctionContext) {
     "moduleId": "userGuide",
     "name": "core.module.template.App system setting",
     "intro": "core.app.tip.userGuideTip",
-    "avatar": "/imgs/module/userGuide.png",
+    "avatar": "/imgs/workflow/userGuide.png",
     "flowType": "userGuide",
     "position": {
       "x": -92.26884681344463,
@@ -142,7 +142,7 @@ export default async function (ctx: FunctionContext) {
     "moduleId": "userChatInput",
     "name": "core.module.template.Chat entrance",
     "intro": "当用户发送一个内容后，流程将会从这个模块开始执行。",
-    "avatar": "/imgs/module/userChatInput.svg",
+    "avatar": "/imgs/workflow/userChatInput.svg",
     "flowType": "questionInput",
     "position": {
       "x": 241.60980819261408,
@@ -178,7 +178,7 @@ export default async function (ctx: FunctionContext) {
     "moduleId": "n84rvg",
     "name": "工具调用（实验）",
     "intro": "通过AI模型自动选择一个或多个功能块进行调用，也可以对插件进行调用。",
-    "avatar": "/imgs/module/tool.svg",
+    "avatar": "/imgs/workflow/tool.svg",
     "flowType": "tools",
     "showStatus": true,
     "position": {
@@ -303,7 +303,7 @@ export default async function (ctx: FunctionContext) {
     "moduleId": "3mbu91",
     "name": "HTTP 请求",
     "intro": "调用谷歌搜索，查询相关内容。",
-    "avatar": "/imgs/module/http.png",
+    "avatar": "/imgs/workflow/http.png",
     "flowType": "httpRequest468",
     "showStatus": true,
     "position": {

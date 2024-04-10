@@ -1,15 +1,15 @@
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
 import {
   DYNAMIC_INPUT_KEY,
   ModuleInputKeyEnum,
   ModuleOutputKeyEnum
-} from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
+} from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import axios from 'axios';
 import { valueTypeFormat } from '../utils';
 import { SERVICE_LOCAL_HOST } from '../../../../common/system/tools';
 import { addLog } from '../../../../common/system/log';
-import { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
+import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 
 type LafRequestProps = ModuleDispatchProps<{
   [ModuleInputKeyEnum.httpReqUrl]: string;

@@ -1,5 +1,5 @@
-import { ModuleTemplateTypeEnum } from 'core/module/constants';
-import type { FlowModuleTemplateType, ModuleItemType } from '../module/type.d';
+import { ModuleTemplateTypeEnum } from '../workflow/constants';
+import type { FlowModuleTemplateType, ModuleItemType } from '../workflow/type.d';
 import { PluginSourceEnum, PluginTypeEnum } from './constants';
 import { MethodType } from './controller';
 

@@ -1,7 +1,10 @@
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
-import { ModuleIOValueTypeEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { ModuleItemType } from '@fastgpt/global/core/module/type.d';
+import {
+  ModuleIOValueTypeEnum,
+  ModuleOutputKeyEnum
+} from '@fastgpt/global/core/workflow/constants';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
 
 export const setEntryEntries = (modules: ModuleItemType[]) => {
   const initRunningModuleType: Record<string, boolean> = {

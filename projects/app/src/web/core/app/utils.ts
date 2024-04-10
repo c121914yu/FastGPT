@@ -1,13 +1,16 @@
 import { AppSimpleEditFormType } from '@fastgpt/global/core/app/type';
-import { ModuleItemType } from '@fastgpt/global/core/module/type';
-import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { UserInputModule } from '@fastgpt/global/core/module/template/system/userInput';
-import { ToolModule } from '@fastgpt/global/core/module/template/system/tools';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import {
+  FlowNodeInputTypeEnum,
+  FlowNodeTypeEnum
+} from '@fastgpt/global/core/workflow/node/constant';
+import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { UserInputModule } from '@fastgpt/global/core/workflow/template/system/userInput';
+import { ToolModule } from '@fastgpt/global/core/workflow/template/system/tools';
 import {
   DatasetSearchModule,
   Dataset_SEARCH_DESC
-} from '@fastgpt/global/core/module/template/system/datasetSearch';
+} from '@fastgpt/global/core/workflow/template/system/datasetSearch';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 export async function postForm2Modules(data: AppSimpleEditFormType) {
@@ -62,7 +65,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
       {
         moduleId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
-        avatar: '/imgs/module/userChatInput.png',
+        avatar: '/imgs/workflow/userChatInput.png',
         flowType: 'questionInput',
         position: {
           x: 464.32198615344566,
@@ -97,7 +100,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
       {
         moduleId: 'chatModule',
         name: 'AI 对话',
-        avatar: '/imgs/module/AI.png',
+        avatar: '/imgs/workflow/AI.png',
         flowType: 'chatNode',
         showStatus: true,
         position: {
@@ -294,7 +297,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
         moduleId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
         intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
-        avatar: '/imgs/module/userChatInput.svg',
+        avatar: '/imgs/workflow/userChatInput.svg',
         flowType: 'questionInput',
         position: {
           x: 324.81436595478294,
@@ -330,7 +333,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
         moduleId: '63toub',
         name: 'AI 对话',
         intro: 'AI 大模型对话',
-        avatar: '/imgs/module/AI.png',
+        avatar: '/imgs/workflow/AI.png',
         flowType: 'chatNode',
         showStatus: true,
         position: {
@@ -499,7 +502,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
         moduleId: '0voh5n',
         name: '知识库搜索',
         intro: Dataset_SEARCH_DESC,
-        avatar: '/imgs/module/db.png',
+        avatar: '/imgs/workflow/db.png',
         flowType: 'datasetSearchNode',
         showStatus: true,
         position: {

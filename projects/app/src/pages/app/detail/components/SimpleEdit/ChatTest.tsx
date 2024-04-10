@@ -5,12 +5,12 @@ import { useTranslation } from 'next-i18next';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ChatBox from '@/components/ChatBox';
 import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d';
-import { ModuleItemType } from '@fastgpt/global/core/module/type';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { streamFetch } from '@/web/common/api/fetch';
 import MyTooltip from '@/components/MyTooltip';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { getGuideModule } from '@fastgpt/global/core/module/utils';
+import { getGuideModule } from '@fastgpt/global/core/workflow/utils';
 import { checkChatSupportSelectFileByModules } from '@/web/core/chat/utils';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 

@@ -1,5 +1,5 @@
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { ModuleItemType } from '@fastgpt/global/core/module/type.d';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 
 export function checkChatSupportSelectFileByChatModels(models: string[] = []) {

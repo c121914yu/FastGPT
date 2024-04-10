@@ -7,16 +7,16 @@ import { useCopyData } from '@/web/common/hooks/useCopyData';
 import dynamic from 'next/dynamic';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
-import { getFlowStore } from '@/components/core/module/Flow/FlowProvider';
-import { filterExportModules, flowNode2Modules } from '@/components/core/module/utils';
+import { getFlowStore } from '@/components/core/workflow/Flow/FlowProvider';
+import { filterExportModules, flowNode2Modules } from '@/components/core/workflow/utils';
 import { putUpdatePlugin } from '@/web/core/plugin/api';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { ModuleItemType } from '@fastgpt/global/core/module/type';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import MyMenu from '@/components/MyMenu';
 
-const ImportSettings = dynamic(() => import('@/components/core/module/Flow/ImportSettings'));
+const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 const PreviewPlugin = dynamic(() => import('./Preview'));
 
 type Props = { plugin: PluginItemSchema; onClose: () => void };

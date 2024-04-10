@@ -1,12 +1,12 @@
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
 import { dispatchWorkFlow } from '../index';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
-import { DYNAMIC_INPUT_KEY, ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { DYNAMIC_INPUT_KEY, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getPluginRuntimeById } from '../../../plugin/controller';
 import { authPluginCanUse } from '../../../../support/permission/auth/plugin';
 import { setEntryEntries } from '../utils';
-import { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
+import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 
 type RunPluginProps = ModuleDispatchProps<{
   [ModuleInputKeyEnum.pluginId]: string;

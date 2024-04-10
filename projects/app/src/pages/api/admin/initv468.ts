@@ -10,8 +10,8 @@ import { delay } from '@fastgpt/global/common/system/utils';
 import { MongoDatasetCollection } from '@fastgpt/service/core/dataset/collection/schema';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { MongoApp } from '@fastgpt/service/core/app/schema';
-import { ModuleItemType } from '@fastgpt/global/core/module/type';
-import { DYNAMIC_INPUT_KEY, ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { DYNAMIC_INPUT_KEY, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 let success = 0;
 let deleteImg = 0;

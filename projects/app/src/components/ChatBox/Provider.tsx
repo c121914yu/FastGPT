@@ -1,8 +1,8 @@
 import React, { useContext, createContext, useState, useMemo, useEffect, useCallback } from 'react';
 import { useAudioPlay } from '@/web/common/utils/voice';
 import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
-import { ModuleItemType } from '@fastgpt/global/core/module/type';
-import { splitGuideModule } from '@fastgpt/global/core/module/utils';
+import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { splitGuideModule } from '@fastgpt/global/core/workflow/utils';
 import {
   AppTTSConfigType,
   AppWhisperConfigType,

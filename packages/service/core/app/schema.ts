@@ -34,6 +34,10 @@ const AppSchema = new Schema({
     default: 'advanced',
     enum: Object.keys(AppTypeMap)
   },
+  version: {
+    type: String,
+    enum: ['v1', 'v2']
+  },
   avatar: {
     type: String,
     default: '/icon/logo.svg'
