@@ -40,7 +40,7 @@ import MyModal from '@fastgpt/web/components/common/MyModal';
 import { EditFormType } from './type';
 import { FolderImgUrl } from '@fastgpt/global/common/file/image/constants';
 import HttpInput from '@fastgpt/web/components/common/Input/HttpInput';
-import { HttpHeaders } from '@/components/core/workflow/Flow/components/nodes/NodeHttp';
+import { HttpHeaders } from '@/components/core/workflow/Flow/nodes/NodeHttp';
 import { OpenApiJsonSchema } from '@fastgpt/global/core/plugin/httpPlugin/type';
 
 export const defaultHttpPlugin: CreateOnePluginParams = {

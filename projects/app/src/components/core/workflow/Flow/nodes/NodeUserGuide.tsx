@@ -5,13 +5,13 @@ import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { FlowModuleItemType, ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { welcomeTextTip } from '@fastgpt/global/core/workflow/template/tip';
-import { onChangeNode } from '../../FlowProvider';
+import { onChangeNode } from '../FlowProvider';
 
-import VariableEdit from '../../../../app/VariableEdit';
+import VariableEdit from '../../../app/VariableEdit';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
-import Container from '../modules/Container';
-import NodeCard from '../render/NodeCard';
+import Container from '../components/Container';
+import NodeCard from './render/NodeCard';
 import type { VariableItemType } from '@fastgpt/global/core/app/type.d';
 import QGSwitch from '@/components/core/app/QGSwitch';
 import TTSSelect from '@/components/core/app/TTSSelect';

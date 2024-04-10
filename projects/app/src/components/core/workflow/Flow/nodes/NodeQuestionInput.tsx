@@ -1,10 +1,10 @@
 import React from 'react';
 import { NodeProps } from 'reactflow';
-import NodeCard from '../render/NodeCard';
+import NodeCard from './render/NodeCard';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
-import Container from '../modules/Container';
+import Container from '../components/Container';
 
-import RenderOutput from '../render/RenderOutput';
+import RenderOutput from './render/RenderOutput';
 
 const QuestionInputNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
   const { moduleId, outputs } = data;

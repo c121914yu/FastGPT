@@ -15,7 +15,7 @@ import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/
 
 import dynamic from 'next/dynamic';
 
-import ButtonEdge from './components/modules/ButtonEdge';
+import ButtonEdge from './components/ButtonEdge';
 import ModuleTemplateList from './ModuleTemplateList';
 import { useFlowProviderStore } from './FlowProvider';
 
@@ -26,31 +26,29 @@ import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
 
-const NodeSimple = dynamic(() => import('./components/nodes/NodeSimple'));
+const NodeSimple = dynamic(() => import('./nodes/NodeSimple'));
 const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
-  [FlowNodeTypeEnum.userGuide]: dynamic(() => import('./components/nodes/NodeUserGuide')),
-  [FlowNodeTypeEnum.questionInput]: dynamic(() => import('./components/nodes/NodeQuestionInput')),
+  [FlowNodeTypeEnum.userGuide]: dynamic(() => import('./nodes/NodeUserGuide')),
+  [FlowNodeTypeEnum.questionInput]: dynamic(() => import('./nodes/NodeQuestionInput')),
   [FlowNodeTypeEnum.historyNode]: NodeSimple,
   [FlowNodeTypeEnum.chatNode]: NodeSimple,
   [FlowNodeTypeEnum.datasetSearchNode]: NodeSimple,
-  [FlowNodeTypeEnum.datasetConcatNode]: dynamic(
-    () => import('./components/nodes/NodeDatasetConcat')
-  ),
-  [FlowNodeTypeEnum.answerNode]: dynamic(() => import('./components/nodes/NodeAnswer')),
-  [FlowNodeTypeEnum.classifyQuestion]: dynamic(() => import('./components/nodes/NodeCQNode')),
-  [FlowNodeTypeEnum.contentExtract]: dynamic(() => import('./components/nodes/NodeExtract')),
-  [FlowNodeTypeEnum.httpRequest468]: dynamic(() => import('./components/nodes/NodeHttp')),
+  [FlowNodeTypeEnum.datasetConcatNode]: dynamic(() => import('./nodes/NodeDatasetConcat')),
+  [FlowNodeTypeEnum.answerNode]: dynamic(() => import('./nodes/NodeAnswer')),
+  [FlowNodeTypeEnum.classifyQuestion]: dynamic(() => import('./nodes/NodeCQNode')),
+  [FlowNodeTypeEnum.contentExtract]: dynamic(() => import('./nodes/NodeExtract')),
+  [FlowNodeTypeEnum.httpRequest468]: dynamic(() => import('./nodes/NodeHttp')),
   [FlowNodeTypeEnum.httpRequest]: NodeSimple,
   [FlowNodeTypeEnum.runApp]: NodeSimple,
-  [FlowNodeTypeEnum.pluginInput]: dynamic(() => import('./components/nodes/NodePluginInput')),
-  [FlowNodeTypeEnum.pluginOutput]: dynamic(() => import('./components/nodes/NodePluginOutput')),
+  [FlowNodeTypeEnum.pluginInput]: dynamic(() => import('./nodes/NodePluginInput')),
+  [FlowNodeTypeEnum.pluginOutput]: dynamic(() => import('./nodes/NodePluginOutput')),
   [FlowNodeTypeEnum.pluginModule]: NodeSimple,
   [FlowNodeTypeEnum.queryExtension]: NodeSimple,
-  [FlowNodeTypeEnum.tools]: dynamic(() => import('./components/nodes/NodeTools')),
+  [FlowNodeTypeEnum.tools]: dynamic(() => import('./nodes/NodeTools')),
   [FlowNodeTypeEnum.stopTool]: (data: NodeProps<FlowModuleItemType>) => (
     <NodeSimple {...data} minW={'100px'} maxW={'300px'} />
   ),
-  [FlowNodeTypeEnum.lafModule]: dynamic(() => import('./components/nodes/NodeLaf'))
+  [FlowNodeTypeEnum.lafModule]: dynamic(() => import('./nodes/NodeLaf'))
 };
 const edgeTypes = {
   [EDGE_TYPE]: ButtonEdge

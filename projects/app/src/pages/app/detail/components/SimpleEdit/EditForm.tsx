@@ -30,8 +30,8 @@ import { SettingAIDataType } from '@fastgpt/global/core/workflow/node/type';
 import DeleteIcon, { hoverDeleteStyles } from '@fastgpt/web/components/common/Icon/delete';
 import { TTSTypeEnum } from '@/constants/app';
 
-const DatasetSelectModal = dynamic(() => import('@/components/core/workflow/DatasetSelectModal'));
-const DatasetParamsModal = dynamic(() => import('@/components/core/workflow/DatasetParamsModal'));
+const DatasetSelectModal = dynamic(() => import('@/components/core/app/DatasetSelectModal'));
+const DatasetParamsModal = dynamic(() => import('@/components/core/app/DatasetParamsModal'));
 const ToolSelectModal = dynamic(() => import('./ToolSelectModal'));
 const TTSSelect = dynamic(() => import('@/components/core/app/TTSSelect'));
 const QGSwitch = dynamic(() => import('@/components/core/app/QGSwitch'));

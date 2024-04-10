@@ -1,6 +1,6 @@
 import React from 'react';
 import { NodeProps } from 'reactflow';
-import NodeCard from '../render/NodeCard';
+import NodeCard from './render/NodeCard';
 import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
 
 const NodeEmpty = ({ data, selected }: NodeProps<FlowModuleItemType>) => {

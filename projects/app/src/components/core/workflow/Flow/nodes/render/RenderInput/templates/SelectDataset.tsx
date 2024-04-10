@@ -15,8 +15,7 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import dynamic from 'next/dynamic';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 
-const DatasetSelectModal = dynamic(() => import('@/components/core/workflow/DatasetSelectModal'));
-const DatasetParamsModal = dynamic(() => import('@/components/core/workflow/DatasetParamsModal'));
+const DatasetSelectModal = dynamic(() => import('@/components/core/app/DatasetSelectModal'));
 
 const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) => {
   const { t } = useTranslation();
