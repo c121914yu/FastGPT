@@ -22,7 +22,7 @@ import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
 
 const EditFieldModal = ({
   defaultValue = defaultEditFormData,
-  moduleId,
+  nodeId,
   onClose
 }: EditFieldModalProps) => {
   const { t } = useTranslation();
@@ -48,7 +48,7 @@ const EditFieldModal = ({
       if (defaultValue.key) {
         // edit
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'replaceInput',
           key: defaultValue.key,
           value: inputConfig
@@ -56,7 +56,7 @@ const EditFieldModal = ({
       } else {
         // create
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'addInput',
           key: e.key,
           value: {

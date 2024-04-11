@@ -57,7 +57,7 @@ const Render = ({ pluginId }: Props) => {
     nodes.forEach((node) => {
       if (node.type && filterType[node.type]) {
         copyTemplates.forEach((module, index) => {
-          if (module.flowType === node.type) {
+          if (module.flowNodeType === node.type) {
             copyTemplates.splice(index, 1);
           }
         });

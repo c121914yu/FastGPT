@@ -1,10 +1,10 @@
-import { ModuleItemType } from '../workflow/type';
+import { StoreNodeItemType } from '../workflow/type';
 
-export const defaultModules: ModuleItemType[] = [
+export const defaultModules: StoreNodeItemType[] = [
   {
-    moduleId: 'custom-output',
+    nodeId: 'custom-output',
     name: '自定义输出',
-    flowType: 'pluginOutput',
+    flowNodeType: 'pluginOutput',
     showStatus: false,
     position: {
       x: 994.1266684738011,
@@ -14,9 +14,9 @@ export const defaultModules: ModuleItemType[] = [
     outputs: []
   },
   {
-    moduleId: 'custom-input',
+    nodeId: 'custom-input',
     name: '自定义输入',
-    flowType: 'pluginInput',
+    flowNodeType: 'pluginInput',
     showStatus: false,
     position: {
       x: 457.57860319995154,

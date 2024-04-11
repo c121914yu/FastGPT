@@ -18,13 +18,15 @@ import {
   Input_Template_UserChatInput
 } from '../input';
 import { chatNodeSystemPromptTip } from '../tip';
-import { Output_Template_Finish, Output_Template_UserChatInput } from '../output';
 import { LLMModelTypeEnum } from '../../../ai/constants';
+import { getHandleConfig } from '../utils';
 
 export const ToolModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.tools,
-  flowType: FlowNodeTypeEnum.tools,
+  flowNodeType: FlowNodeTypeEnum.tools,
   templateType: FlowNodeTemplateTypeEnum.functionCall,
+  sourceHandle: getHandleConfig(false, true, false, false),
+  targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/tool.svg',
   name: '工具调用（实验）',
   intro: '通过AI模型自动选择一个或多个功能块进行调用，也可以对插件进行调用。',
@@ -43,9 +45,7 @@ export const ToolModule: FlowNodeTemplateType = {
       valueType: ModuleIOValueTypeEnum.number,
       min: 0,
       max: 10,
-      step: 1,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      step: 1
     },
     {
       key: ModuleInputKeyEnum.aiChatMaxToken,
@@ -55,9 +55,7 @@ export const ToolModule: FlowNodeTemplateType = {
       valueType: ModuleIOValueTypeEnum.number,
       min: 100,
       max: 4000,
-      step: 50,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      step: 50
     },
     {
       ...Input_Template_System_Prompt,
@@ -69,13 +67,10 @@ export const ToolModule: FlowNodeTemplateType = {
     Input_Template_UserChatInput
   ],
   outputs: [
-    Output_Template_UserChatInput,
     {
       key: ModuleOutputKeyEnum.selectedTools,
       valueType: ModuleIOValueTypeEnum.tools,
-      type: FlowNodeOutputTypeEnum.hidden,
-      targets: []
-    },
-    Output_Template_Finish
+      type: FlowNodeOutputTypeEnum.hidden
+    }
   ]
 };

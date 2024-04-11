@@ -16,13 +16,15 @@ import {
   Input_Template_UserChatInput,
   Input_Template_SelectAIModel
 } from '../input';
-import { Output_Template_UserChatInput } from '../output';
 import { LLMModelTypeEnum } from '../../../ai/constants';
+import { getHandleConfig } from '../utils';
 
 export const AiQueryExtension: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.chatNode,
   templateType: FlowNodeTemplateTypeEnum.other,
-  flowType: FlowNodeTypeEnum.queryExtension,
+  flowNodeType: FlowNodeTypeEnum.queryExtension,
+  sourceHandle: getHandleConfig(false, true, false, false),
+  targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/cfr.svg',
   name: '问题优化',
   intro:
@@ -41,22 +43,18 @@ export const AiQueryExtension: FlowNodeTemplateType = {
       max: 300,
       valueType: ModuleIOValueTypeEnum.string,
       description: 'core.app.edit.Query extension background tip',
-      placeholder: 'core.module.QueryExtension.placeholder',
-      showTargetInApp: true,
-      showTargetInPlugin: true
+      placeholder: 'core.module.QueryExtension.placeholder'
     },
     Input_Template_History,
     Input_Template_UserChatInput
   ],
   outputs: [
-    Output_Template_UserChatInput,
     {
       key: ModuleOutputKeyEnum.text,
       label: 'core.module.output.label.query extension result',
       description: 'core.module.output.description.query extension result',
       valueType: ModuleIOValueTypeEnum.string,
-      type: FlowNodeOutputTypeEnum.source,
-      targets: []
+      type: FlowNodeOutputTypeEnum.source
     }
   ]
 };

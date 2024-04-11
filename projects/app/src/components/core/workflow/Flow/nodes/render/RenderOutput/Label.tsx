@@ -13,13 +13,13 @@ import dynamic from 'next/dynamic';
 const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 
 const OutputLabel = ({
-  moduleId,
+  nodeId,
   outputKey,
   outputs,
   ...item
 }: FlowNodeOutputItemType & {
   outputKey: string;
-  moduleId: string;
+  nodeId: string;
   outputs: FlowNodeOutputItemType[];
 }) => {
   const { t } = useTranslation();
@@ -63,7 +63,7 @@ const OutputLabel = ({
             _hover={{ color: 'red.500' }}
             onClick={() => {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'delOutput',
                 key: outputKey
               });
@@ -117,14 +117,14 @@ const OutputLabel = ({
 
             if (changeKey) {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'replaceOutput',
                 key: editField.key,
                 value: newOutput
               });
             } else {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'updateOutput',
                 key: newOutput.key,
                 value: newOutput

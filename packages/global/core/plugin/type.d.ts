@@ -1,5 +1,5 @@
 import { ModuleTemplateTypeEnum } from '../workflow/constants';
-import type { FlowModuleTemplateType, ModuleItemType } from '../workflow/type.d';
+import type { FlowModuleTemplateType, StoreNodeItemType } from '../workflow/type.d';
 import { PluginSourceEnum, PluginTypeEnum } from './constants';
 import { MethodType } from './controller';
 
@@ -12,7 +12,7 @@ export type PluginItemSchema = {
   avatar: string;
   intro: string;
   updateTime: Date;
-  modules: ModuleItemType[];
+  modules: StoreNodeItemType[];
   parentId: string;
   type: `${PluginTypeEnum}`;
   metadata?: {
@@ -29,7 +29,7 @@ export type PluginTemplateType = PluginRuntimeType & {
   source: `${PluginSourceEnum}`;
   templateType: FlowNodeTemplateType['templateType'];
   intro: string;
-  modules: ModuleItemType[];
+  modules: StoreNodeItemType[];
 };
 
 export type PluginRuntimeType = {
@@ -38,5 +38,5 @@ export type PluginRuntimeType = {
   avatar: string;
   showStatus?: boolean;
   isTool?: boolean;
-  modules: ModuleItemType[];
+  modules: StoreNodeItemType[];
 };

@@ -11,7 +11,7 @@ import { PluginOutputModule } from '../../workflow/template/system/pluginOutput'
 import { HttpModule468 } from '../../workflow/template/system/http468';
 import { HttpParamAndHeaderItemType } from '../../workflow/api';
 import { CreateOnePluginParams } from '../controller';
-import { ModuleItemType } from '../../workflow/type';
+import { StoreNodeItemType } from '../../workflow/type';
 import { HttpImgUrl } from '../../../common/file/image/constants';
 import SwaggerParser from '@apidevtools/swagger-parser';
 
@@ -137,7 +137,7 @@ export const httpApiSchema2Plugins = async ({
           edit: true,
           targets: [
             {
-              moduleId: httpId,
+              nodeId: httpId,
               key: param.name
             }
           ]
@@ -152,7 +152,7 @@ export const httpApiSchema2Plugins = async ({
           edit: true,
           targets: [
             {
-              moduleId: httpId,
+              nodeId: httpId,
               key
             }
           ]
@@ -258,13 +258,13 @@ export const httpApiSchema2Plugins = async ({
     }
 
     /* Combine complete modules */
-    const modules: ModuleItemType[] = [
+    const modules: StoreNodeItemType[] = [
       {
-        moduleId: getNanoid(),
+        nodeId: getNanoid(),
         name: PluginInputModule.name,
         intro: PluginInputModule.intro,
         avatar: PluginInputModule.avatar,
-        flowType: PluginInputModule.flowType,
+        flowNodeType: PluginInputModule.flowNodeType,
         showStatus: PluginInputModule.showStatus,
         position: {
           x: 616.4226348688949,
@@ -294,7 +294,7 @@ export const httpApiSchema2Plugins = async ({
               pluginOutputs.length === 0
                 ? [
                     {
-                      moduleId: httpId,
+                      nodeId: httpId,
                       key: 'switch'
                     }
                   ]
@@ -304,11 +304,11 @@ export const httpApiSchema2Plugins = async ({
         ]
       },
       {
-        moduleId: pluginOutputId,
+        nodeId: pluginOutputId,
         name: PluginOutputModule.name,
         intro: PluginOutputModule.intro,
         avatar: PluginOutputModule.avatar,
-        flowType: PluginOutputModule.flowType,
+        flowNodeType: PluginOutputModule.flowNodeType,
         showStatus: PluginOutputModule.showStatus,
         position: {
           x: 1607.7142331269126,
@@ -346,11 +346,11 @@ export const httpApiSchema2Plugins = async ({
         ]
       },
       {
-        moduleId: httpId,
+        nodeId: httpId,
         name: HttpModule468.name,
         intro: HttpModule468.intro,
         avatar: HttpModule468.avatar,
-        flowType: HttpModule468.flowType,
+        flowNodeType: HttpModule468.flowNodeType,
         showStatus: true,
         position: {
           x: 1042.549746602742,
@@ -479,7 +479,7 @@ export const httpApiSchema2Plugins = async ({
             type: 'source',
             targets: [
               {
-                moduleId: pluginOutputId,
+                nodeId: pluginOutputId,
                 key: pluginOutputKey
               }
             ]

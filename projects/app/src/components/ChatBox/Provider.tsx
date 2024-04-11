@@ -1,7 +1,7 @@
 import React, { useContext, createContext, useState, useMemo, useEffect, useCallback } from 'react';
 import { useAudioPlay } from '@/web/common/utils/voice';
 import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
-import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { splitGuideModule } from '@fastgpt/global/core/workflow/utils';
 import {
   AppTTSConfigType,
@@ -91,7 +91,7 @@ const StateContext = createContext<useChatStoreType>({
 });
 
 export type ChatProviderProps = OutLinkChatAuthProps & {
-  userGuideModule?: ModuleItemType;
+  userGuideModule?: StoreNodeItemType;
 
   // not chat test params
   chatId?: string;

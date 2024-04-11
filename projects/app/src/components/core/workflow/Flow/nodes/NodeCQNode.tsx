@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { NodeProps } from 'reactflow';
 import { Box, Button, Flex, Textarea } from '@chakra-ui/react';
 import NodeCard from './render/NodeCard';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import Divider from '../components/Divider';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
@@ -18,9 +18,9 @@ import MyTooltip from '@/components/MyTooltip';
 import { onChangeNode } from '../FlowProvider';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
 
-const NodeCQNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
-  const { moduleId, inputs } = data;
+  const { nodeId, inputs } = data;
 
   const CustomComponent = useMemo(
     () => ({
@@ -46,7 +46,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                       _hover={{ color: 'red.600' }}
                       onClick={() => {
                         onChangeNode({
-                          moduleId,
+                          nodeId,
                           type: 'updateInput',
                           key: agentKey,
                           value: {
@@ -56,7 +56,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                           }
                         });
                         onChangeNode({
-                          moduleId,
+                          nodeId,
                           type: 'delOutput',
                           key: item.key
                         });
@@ -80,7 +80,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                           : val
                       );
                       onChangeNode({
-                        moduleId,
+                        nodeId,
                         type: 'updateInput',
                         key: agentKey,
                         value: {
@@ -100,7 +100,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                 const key = nanoid();
 
                 onChangeNode({
-                  moduleId,
+                  nodeId,
                   type: 'updateInput',
                   key: agentKey,
                   value: {
@@ -111,7 +111,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                 });
 
                 onChangeNode({
-                  moduleId,
+                  nodeId,
                   type: 'addOutput',
                   value: {
                     key,
@@ -128,14 +128,14 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
         );
       }
     }),
-    [moduleId, t]
+    [nodeId, t]
   );
 
   return (
     <NodeCard minW={'400px'} selected={selected} {...data}>
       <Divider text={t('common.Input')} />
       <Container>
-        <RenderInput moduleId={moduleId} flowInputList={inputs} CustomComponent={CustomComponent} />
+        <RenderInput nodeId={nodeId} flowInputList={inputs} CustomComponent={CustomComponent} />
       </Container>
     </NodeCard>
   );

@@ -3,14 +3,14 @@ import type { RenderInputProps } from '../type';
 import { Switch } from '@chakra-ui/react';
 import { onChangeNode } from '../../../../FlowProvider';
 
-const SwitchRender = ({ item, moduleId }: RenderInputProps) => {
+const SwitchRender = ({ item, nodeId }: RenderInputProps) => {
   return (
     <Switch
       size={'lg'}
       isChecked={item.value}
       onChange={(e) => {
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'updateInput',
           key: item.key,
           value: {

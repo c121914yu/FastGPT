@@ -10,7 +10,7 @@ import { EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
 
 const FieldEditModal = dynamic(() => import('../../FieldEditModal'));
 
-const AddOutputParam = ({ outputs = [], item, moduleId }: RenderOutputProps) => {
+const AddOutputParam = ({ outputs = [], item, nodeId }: RenderOutputProps) => {
   const { t } = useTranslation();
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
@@ -33,7 +33,7 @@ const AddOutputParam = ({ outputs = [], item, moduleId }: RenderOutputProps) => 
           onClose={() => setEditField(undefined)}
           onSubmit={({ data }) => {
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'addOutput',
               key: data.key,
               value: {

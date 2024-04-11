@@ -2,11 +2,14 @@ import { FlowNodeTypeEnum } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type.d';
 import { FlowNodeTemplateTypeEnum } from '../../constants';
 import { Input_Template_Switch } from '../input';
+import { getHandleConfig } from '../utils';
 
 export const StopToolNode: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.stopTool,
   templateType: FlowNodeTemplateTypeEnum.functionCall,
-  flowType: FlowNodeTypeEnum.stopTool,
+  flowNodeType: FlowNodeTypeEnum.stopTool,
+  sourceHandle: getHandleConfig(false, true, false, false),
+  targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/toolStop.svg',
   name: '工具调用终止',
   intro:

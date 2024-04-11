@@ -30,7 +30,9 @@ export const dispatchRunPlugin = async (props: RunPluginProps): Promise<RunPlugi
   const plugin = await getPluginRuntimeById(pluginId);
 
   // concat dynamic inputs
-  const inputModule = plugin.modules.find((item) => item.flowType === FlowNodeTypeEnum.pluginInput);
+  const inputModule = plugin.modules.find(
+    (item) => item.flowNodeType === FlowNodeTypeEnum.pluginInput
+  );
   if (!inputModule) return Promise.reject('Plugin error, It has no set input.');
   const hasDynamicInput = inputModule.inputs.find((input) => input.key === DYNAMIC_INPUT_KEY);
 

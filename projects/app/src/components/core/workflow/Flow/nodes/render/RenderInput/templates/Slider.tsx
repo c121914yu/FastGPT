@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { Box } from '@chakra-ui/react';
 import MySlider from '@/components/Slider';
 
-const SliderRender = ({ item, moduleId }: RenderInputProps) => {
+const SliderRender = ({ item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   return (
     <Box px={2}>
@@ -18,7 +18,7 @@ const SliderRender = ({ item, moduleId }: RenderInputProps) => {
         value={item.value}
         onChange={(e) => {
           onChangeNode({
-            moduleId,
+            nodeId,
             type: 'updateInput',
             key: item.key,
             value: {

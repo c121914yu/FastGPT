@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import Divider from '../components/Divider';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
@@ -16,11 +16,11 @@ const NodeSimple = ({
   selected,
   minW = '350px',
   maxW
-}: NodeProps<FlowModuleItemType> & { minW?: string | number; maxW?: string | number }) => {
+}: NodeProps<FlowNodeItemType> & { minW?: string | number; maxW?: string | number }) => {
   const { t } = useTranslation();
   const { splitToolInputs } = useFlowProviderStore();
-  const { moduleId, inputs, outputs } = data;
-  const { toolInputs, commonInputs } = splitToolInputs(inputs, moduleId);
+  const { nodeId, inputs, outputs } = data;
+  const { toolInputs, commonInputs } = splitToolInputs(inputs, nodeId);
 
   const filterHiddenInputs = useMemo(
     () => commonInputs.filter((item) => item.type !== 'hidden'),
@@ -33,7 +33,7 @@ const NodeSimple = ({
         <>
           <Divider text={t('core.module.tool.Tool input')} />
           <Container>
-            <RenderToolInput moduleId={moduleId} inputs={toolInputs} />
+            <RenderToolInput nodeId={nodeId} inputs={toolInputs} />
           </Container>
         </>
       )}
@@ -41,7 +41,7 @@ const NodeSimple = ({
         <>
           <Divider text={t('common.Input')} />
           <Container>
-            <RenderInput moduleId={moduleId} flowInputList={commonInputs} />
+            <RenderInput nodeId={nodeId} flowInputList={commonInputs} />
           </Container>
         </>
       )}
@@ -49,7 +49,7 @@ const NodeSimple = ({
         <>
           <Divider text={t('common.Output')} />
           <Container>
-            <RenderOutput moduleId={moduleId} flowOutputList={outputs} />
+            <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
           </Container>
         </>
       )}

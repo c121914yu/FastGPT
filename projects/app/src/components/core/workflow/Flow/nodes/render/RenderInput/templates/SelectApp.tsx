@@ -7,7 +7,7 @@ import Avatar from '@/components/Avatar';
 import SelectAppModal from '../../../../SelectAppModal';
 import { useTranslation } from 'next-i18next';
 
-const SelectAppRender = ({ item, moduleId }: RenderInputProps) => {
+const SelectAppRender = ({ item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { filterAppIds } = useFlowProviderStore();
@@ -53,7 +53,7 @@ const SelectAppRender = ({ item, moduleId }: RenderInputProps) => {
             onClose={onCloseSelectApp}
             onSuccess={(e) => {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'updateInput',
                 key: 'app',
                 value: {
@@ -70,7 +70,7 @@ const SelectAppRender = ({ item, moduleId }: RenderInputProps) => {
     filterAppString,
     isOpenSelectApp,
     item,
-    moduleId,
+    nodeId,
     onCloseSelectApp,
     onOpenSelectApp,
     t,

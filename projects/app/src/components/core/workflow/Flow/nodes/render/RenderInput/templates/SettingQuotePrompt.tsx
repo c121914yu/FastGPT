@@ -22,7 +22,7 @@ import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import PromptTemplate from '@/components/PromptTemplate';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
-const SettingQuotePrompt = ({ inputs = [], moduleId }: RenderInputProps) => {
+const SettingQuotePrompt = ({ inputs = [], nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { nodes } = useFlowProviderStore();
@@ -119,7 +119,7 @@ const SettingQuotePrompt = ({ inputs = [], moduleId }: RenderInputProps) => {
     );
     if (quoteTemplateInput) {
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: quoteTemplateInput.key,
         value: {
@@ -130,7 +130,7 @@ const SettingQuotePrompt = ({ inputs = [], moduleId }: RenderInputProps) => {
     }
     if (quotePromptInput) {
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: quotePromptInput.key,
         value: {

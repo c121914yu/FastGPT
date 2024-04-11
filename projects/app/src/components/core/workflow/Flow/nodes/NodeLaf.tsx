@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import Container from '../components/Container';
 import { Box, Button, Center, Flex, useDisclosure } from '@chakra-ui/react';
 import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
@@ -30,12 +30,12 @@ import { useRequest } from '@fastgpt/web/hooks/useRequest';
 
 const LafAccountModal = dynamic(() => import('@/components/support/laf/LafAccountModal'));
 
-const NodeLaf = (props: NodeProps<FlowModuleItemType>) => {
+const NodeLaf = (props: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { feConfigs } = useSystemStore();
   const { data, selected } = props;
-  const { moduleId, inputs, outputs } = data;
+  const { nodeId, inputs, outputs } = data;
 
   const requestUrl = inputs.find((item) => item.key === ModuleInputKeyEnum.httpReqUrl);
 
@@ -127,7 +127,7 @@ const NodeLaf = (props: NodeProps<FlowModuleItemType>) => {
       // update intro
       if (lafFunction.description) {
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'attr',
           key: 'intro',
           value: lafFunction.description
@@ -153,7 +153,7 @@ const NodeLaf = (props: NodeProps<FlowModuleItemType>) => {
       // add params
       allParams.forEach((param) => {
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'addInput',
           key: param.name,
           value: {
@@ -194,7 +194,7 @@ const NodeLaf = (props: NodeProps<FlowModuleItemType>) => {
       ].filter((item) => !outputs.find((output) => output.key === item.name));
       allResponseParams.forEach((param) => {
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'addOutput',
           key: param.name,
           value: {
@@ -229,7 +229,7 @@ const NodeLaf = (props: NodeProps<FlowModuleItemType>) => {
           placeholder={t('core.module.laf.Select laf function')}
           onchange={(e) => {
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'updateInput',
               key: ModuleInputKeyEnum.httpReqUrl,
               value: {
@@ -295,11 +295,11 @@ const ConfigLaf = () => {
   );
 };
 
-const RenderIO = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const RenderIO = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
-  const { moduleId, inputs, outputs } = data;
+  const { nodeId, inputs, outputs } = data;
   const { splitToolInputs, hasToolNode } = useFlowProviderStore();
-  const { commonInputs, toolInputs } = splitToolInputs(inputs, moduleId);
+  const { commonInputs, toolInputs } = splitToolInputs(inputs, nodeId);
 
   return (
     <>
@@ -307,7 +307,7 @@ const RenderIO = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
         <>
           <Divider text={t('core.module.tool.Tool input')} />
           <Container>
-            <RenderToolInput moduleId={moduleId} inputs={toolInputs} canEdit />
+            <RenderToolInput nodeId={nodeId} inputs={toolInputs} canEdit />
           </Container>
         </>
       )}
@@ -315,13 +315,13 @@ const RenderIO = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
         <Divider text={t('common.Input')} />
         <Container>
           <Box mb={3}>自定义Body参数</Box>
-          <RenderInput moduleId={moduleId} flowInputList={commonInputs} />
+          <RenderInput nodeId={nodeId} flowInputList={commonInputs} />
         </Container>
       </>
       <>
         <Divider text={t('common.Output')} />
         <Container>
-          <RenderOutput moduleId={moduleId} flowOutputList={outputs} />
+          <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
         </Container>
       </>
     </>

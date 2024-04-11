@@ -6,18 +6,17 @@ import {
   variableMap
 } from './constants';
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from './node/type';
-import { ModuleItemType } from './type';
+import { StoreNodeItemType } from './type';
 import type { VariableItemType, AppTTSConfigType, AppWhisperConfigType } from '../app/type';
 import { Input_Template_Switch } from './template/input';
 import { EditorVariablePickerType } from '../../../web/components/common/Textarea/PromptEditor/type';
-import { Output_Template_Finish } from './template/output';
 import { defaultWhisperConfig } from '../app/constants';
 
 /* module  */
-export const getGuideModule = (modules: ModuleItemType[]) =>
-  modules.find((item) => item.flowType === FlowNodeTypeEnum.userGuide);
+export const getGuideModule = (modules: StoreNodeItemType[]) =>
+  modules.find((item) => item.flowNodeType === FlowNodeTypeEnum.userGuide);
 
-export const splitGuideModule = (guideModules?: ModuleItemType) => {
+export const splitGuideModule = (guideModules?: StoreNodeItemType) => {
   const welcomeText: string =
     guideModules?.inputs?.find((item) => item.key === ModuleInputKeyEnum.welcomeText)?.value || '';
 
@@ -68,13 +67,17 @@ export const getModuleInputUiField = (input: FlowNodeInputItemType) => {
 
 export const plugin2ModuleIO = (
   pluginId: string,
-  modules: ModuleItemType[]
+  modules: StoreNodeItemType[]
 ): {
   inputs: FlowNodeInputItemType[];
   outputs: FlowNodeOutputItemType[];
 } => {
-  const pluginInput = modules.find((module) => module.flowType === FlowNodeTypeEnum.pluginInput);
-  const pluginOutput = modules.find((module) => module.flowType === FlowNodeTypeEnum.pluginOutput);
+  const pluginInput = modules.find(
+    (module) => module.flowNodeType === FlowNodeTypeEnum.pluginInput
+  );
+  const pluginOutput = modules.find(
+    (module) => module.flowNodeType === FlowNodeTypeEnum.pluginOutput
+  );
 
   return {
     inputs: pluginInput
@@ -106,10 +109,9 @@ export const plugin2ModuleIO = (
           ...pluginOutput.outputs.map((item) => ({
             ...item,
             edit: false
-          })),
-          Output_Template_Finish
+          }))
         ]
-      : [Output_Template_Finish]
+      : []
   };
 };
 

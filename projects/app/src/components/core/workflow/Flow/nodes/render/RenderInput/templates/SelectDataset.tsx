@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { RenderInputProps } from '../type';
-import { getFlowStore, onChangeNode, useFlowProviderStoreType } from '../../../../FlowProvider';
+import { onChangeNode, useFlowProviderStore } from '../../../../FlowProvider';
 import { Box, Button, Flex, Grid, useDisclosure, useTheme } from '@chakra-ui/react';
 import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import { SelectedDatasetType } from '@fastgpt/global/core/workflow/api';
@@ -17,11 +17,11 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/app/DatasetSelectModal'));
 
-const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) => {
+const SelectDatasetRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { llmModelList } = useSystemStore();
-  const [nodes, setNodes] = useState<useFlowProviderStoreType['nodes']>([]);
+  const { nodes } = useFlowProviderStore();
   const [data, setData] = useState({
     searchMode: DatasetSearchModeEnum.embedding,
     limit: 5,
@@ -56,7 +56,7 @@ const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) 
     });
 
     return maxTokens;
-  }, [nodes]);
+  }, [llmModelList, nodes]);
 
   const {
     isOpen: isOpenDatasetPrams,
@@ -77,13 +77,6 @@ const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) 
       }
     });
   }, [inputs]);
-
-  useEffect(() => {
-    async () => {
-      const { nodes } = await getFlowStore();
-      setNodes(nodes);
-    };
-  }, []);
 
   return (
     <>
@@ -132,7 +125,7 @@ const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) 
           defaultSelectedDatasets={item.value}
           onChange={(e) => {
             onChangeNode({
-              moduleId,
+              nodeId,
               key: item.key,
               type: 'updateInput',
               value: {
@@ -154,7 +147,7 @@ const SelectDatasetRender = ({ inputs = [], item, moduleId }: RenderInputProps) 
               const item = inputs.find((input) => input.key === key);
               if (!item) continue;
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'updateInput',
                 key,
                 value: {

@@ -11,8 +11,8 @@ import {
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_Dataset_Quote, Input_Template_Switch } from '../input';
-import { Output_Template_Finish } from '../output';
 import { getNanoid } from '../../../../common/string/tools';
+import { getHandleConfig } from '../utils';
 
 export const getOneQuoteInputTemplate = (key = getNanoid()) => ({
   ...Input_Template_Dataset_Quote,
@@ -22,8 +22,10 @@ export const getOneQuoteInputTemplate = (key = getNanoid()) => ({
 
 export const DatasetConcatModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.datasetConcatNode,
-  flowType: FlowNodeTypeEnum.datasetConcatNode,
+  flowNodeType: FlowNodeTypeEnum.datasetConcatNode,
   templateType: FlowNodeTemplateTypeEnum.other,
+  sourceHandle: getHandleConfig(false, true, false, false),
+  targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/concat.svg',
   name: '知识库搜索引用合并',
   intro: '可以将多个知识库搜索结果进行合并输出。使用 RRF 的合并方式进行最终排序输出。',
@@ -35,9 +37,7 @@ export const DatasetConcatModule: FlowNodeTemplateType = {
       type: FlowNodeInputTypeEnum.custom,
       label: '最大 Tokens',
       value: 1500,
-      valueType: ModuleIOValueTypeEnum.number,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      valueType: ModuleIOValueTypeEnum.number
     },
     getOneQuoteInputTemplate('defaultQuote')
   ],
@@ -46,8 +46,7 @@ export const DatasetConcatModule: FlowNodeTemplateType = {
       key: ModuleOutputKeyEnum.datasetQuoteQA,
       label: 'core.module.Dataset quote.label',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.datasetQuote,
-      targets: []
+      valueType: ModuleIOValueTypeEnum.datasetQuote
     }
   ]
 };

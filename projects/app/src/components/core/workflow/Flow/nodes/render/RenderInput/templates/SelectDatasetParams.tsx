@@ -11,7 +11,7 @@ import DatasetParamsModal, { DatasetParamsProps } from '@/components/core/app/Da
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import SearchParamsTip from '@/components/core/dataset/SearchParamsTip';
 
-const SelectDatasetParam = ({ inputs = [], moduleId }: RenderInputProps) => {
+const SelectDatasetParam = ({ inputs = [], nodeId }: RenderInputProps) => {
   const { nodes } = useFlowProviderStore();
   const { t } = useTranslation();
   const { llmModelList } = useSystemStore();
@@ -99,7 +99,7 @@ const SelectDatasetParam = ({ inputs = [], moduleId }: RenderInputProps) => {
               const item = inputs.find((input) => input.key === key);
               if (!item) continue;
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'updateInput',
                 key,
                 value: {

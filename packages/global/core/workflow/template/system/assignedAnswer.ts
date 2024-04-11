@@ -6,12 +6,14 @@ import {
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_Switch } from '../input';
-import { Output_Template_Finish } from '../output';
+import { getHandleConfig } from '../utils';
 
 export const AssignedAnswerModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.answerNode,
   templateType: FlowNodeTemplateTypeEnum.textAnswer,
-  flowType: FlowNodeTypeEnum.answerNode,
+  flowNodeType: FlowNodeTypeEnum.answerNode,
+  sourceHandle: getHandleConfig(false, true, false, false),
+  targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/reply.png',
   name: '指定回复',
   intro:
@@ -24,10 +26,8 @@ export const AssignedAnswerModule: FlowNodeTemplateType = {
       valueType: ModuleIOValueTypeEnum.any,
       label: 'core.module.input.label.Response content',
       description: 'core.module.input.description.Response content',
-      placeholder: 'core.module.input.description.Response content',
-      showTargetInApp: true,
-      showTargetInPlugin: true
+      placeholder: 'core.module.input.description.Response content'
     }
   ],
-  outputs: [Output_Template_Finish]
+  outputs: []
 };

@@ -9,9 +9,7 @@ export const Input_Template_Switch: FlowNodeInputItemType = {
   type: FlowNodeInputTypeEnum.hidden,
   label: '',
   description: 'core.module.input.description.Trigger',
-  valueType: ModuleIOValueTypeEnum.any,
-  showTargetInApp: true,
-  showTargetInPlugin: true
+  valueType: ModuleIOValueTypeEnum.any
 };
 
 export const Input_Template_History: FlowNodeInputItemType = {
@@ -22,9 +20,7 @@ export const Input_Template_History: FlowNodeInputItemType = {
   min: 0,
   max: 30,
   valueType: ModuleIOValueTypeEnum.chatHistory,
-  value: 6,
-  showTargetInApp: true,
-  showTargetInPlugin: true
+  value: 6
 };
 
 export const Input_Template_UserChatInput: FlowNodeInputItemType = {
@@ -32,9 +28,7 @@ export const Input_Template_UserChatInput: FlowNodeInputItemType = {
   type: FlowNodeInputTypeEnum.custom,
   label: '',
   required: true,
-  valueType: ModuleIOValueTypeEnum.string,
-  showTargetInApp: true,
-  showTargetInPlugin: true
+  valueType: ModuleIOValueTypeEnum.string
 };
 
 export const Input_Template_AddInputParam: FlowNodeInputItemType = {
@@ -42,9 +36,7 @@ export const Input_Template_AddInputParam: FlowNodeInputItemType = {
   type: FlowNodeInputTypeEnum.addInputParam,
   valueType: ModuleIOValueTypeEnum.any,
   label: '',
-  required: false,
-  showTargetInApp: false,
-  showTargetInPlugin: false
+  required: false
 };
 
 export const Input_Template_DynamicInput: FlowNodeInputItemType = {
@@ -53,10 +45,7 @@ export const Input_Template_DynamicInput: FlowNodeInputItemType = {
   valueType: ModuleIOValueTypeEnum.any,
   label: 'core.module.inputType.dynamicTargetInput',
   description: 'core.module.input.description.dynamic input',
-  required: false,
-  showTargetInApp: false,
-  showTargetInPlugin: true,
-  hideInApp: true
+  required: false
 };
 
 export const Input_Template_SelectAIModel: FlowNodeInputItemType = {
@@ -64,18 +53,14 @@ export const Input_Template_SelectAIModel: FlowNodeInputItemType = {
   type: FlowNodeInputTypeEnum.selectLLMModel,
   label: 'core.module.input.label.aiModel',
   required: true,
-  valueType: ModuleIOValueTypeEnum.string,
-  showTargetInApp: false,
-  showTargetInPlugin: false
+  valueType: ModuleIOValueTypeEnum.string
 };
 export const Input_Template_SettingAiModel: FlowNodeInputItemType = {
   key: ModuleInputKeyEnum.aiModel,
   type: FlowNodeInputTypeEnum.settingLLMModel,
   label: 'core.module.input.label.aiModel',
   required: true,
-  valueType: ModuleIOValueTypeEnum.string,
-  showTargetInApp: false,
-  showTargetInPlugin: false
+  valueType: ModuleIOValueTypeEnum.string
 };
 
 export const Input_Template_System_Prompt: FlowNodeInputItemType = {
@@ -85,9 +70,7 @@ export const Input_Template_System_Prompt: FlowNodeInputItemType = {
   valueType: ModuleIOValueTypeEnum.string,
   label: 'core.ai.Prompt',
   description: chatNodeSystemPromptTip,
-  placeholder: chatNodeSystemPromptTip,
-  showTargetInApp: true,
-  showTargetInPlugin: true
+  placeholder: chatNodeSystemPromptTip
 };
 
 export const Input_Template_Dataset_Quote: FlowNodeInputItemType = {
@@ -95,7 +78,5 @@ export const Input_Template_Dataset_Quote: FlowNodeInputItemType = {
   type: FlowNodeInputTypeEnum.settingDatasetQuotePrompt,
   label: '知识库引用',
   description: 'core.module.Dataset quote.Input description',
-  valueType: ModuleIOValueTypeEnum.datasetQuote,
-  showTargetInApp: true,
-  showTargetInPlugin: true
+  valueType: ModuleIOValueTypeEnum.datasetQuote
 };

@@ -1,5 +1,6 @@
 import { UserGuideModule } from './system/userGuide';
-import { UserInputModule } from './system/userInput';
+import { EmptyNode } from './system/emptyNode';
+import { WorkflowStart } from './system/workflowStart';
 import { AiChatModule } from './system/aiChat';
 import { DatasetSearchModule } from './system/datasetSearch';
 import { DatasetConcatModule } from './system/datasetConcat';
@@ -7,7 +8,6 @@ import { AssignedAnswerModule } from './system/assignedAnswer';
 import { ClassifyQuestionModule } from './system/classifyQuestion';
 import { ContextExtractModule } from './system/contextExtract';
 import { HttpModule468 } from './system/http468';
-import { HttpModule } from './system/abandon/http';
 
 import { ToolModule } from './system/tools';
 import { StopToolNode } from './system/stopTool';
@@ -25,7 +25,7 @@ import { lafModule } from './system/laf';
 /* app flow module templates */
 export const appSystemModuleTemplates: FlowNodeTemplateType[] = [
   UserGuideModule,
-  UserInputModule,
+  WorkflowStart,
   AiChatModule,
   AssignedAnswerModule,
   DatasetSearchModule,
@@ -59,8 +59,9 @@ export const pluginSystemModuleTemplates: FlowNodeTemplateType[] = [
 
 /* all module */
 export const moduleTemplatesFlat: FlowNodeTemplateType[] = [
+  EmptyNode,
   UserGuideModule,
-  UserInputModule,
+  WorkflowStart,
   AiChatModule,
   DatasetSearchModule,
   DatasetConcatModule,
@@ -68,7 +69,6 @@ export const moduleTemplatesFlat: FlowNodeTemplateType[] = [
   ClassifyQuestionModule,
   ContextExtractModule,
   HttpModule468,
-  HttpModule,
   ToolModule,
   StopToolNode,
   AiChatModule,
@@ -82,8 +82,8 @@ export const moduleTemplatesFlat: FlowNodeTemplateType[] = [
 
 export const moduleTemplatesList: moduleTemplateListType = [
   {
-    type: FlowNodeTemplateTypeEnum.userGuide,
-    label: '',
+    type: FlowNodeTemplateTypeEnum.systemInput,
+    label: 'core.module.template.System input module',
     list: []
   },
   {
@@ -114,11 +114,6 @@ export const moduleTemplatesList: moduleTemplateListType = [
   {
     type: FlowNodeTemplateTypeEnum.other,
     label: '其他',
-    list: []
-  },
-  {
-    type: FlowNodeTemplateTypeEnum.systemInput,
-    label: 'core.module.template.System input module',
     list: []
   }
 ];

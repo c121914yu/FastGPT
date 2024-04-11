@@ -23,11 +23,11 @@ import { onChangeNode } from '../../../FlowProvider';
 const EditFieldModal = dynamic(() => import('./EditFieldModal'));
 
 const RenderToolInput = ({
-  moduleId,
+  nodeId,
   inputs,
   canEdit = false
 }: {
-  moduleId: string;
+  nodeId: string;
   inputs: FlowNodeInputItemType[];
   canEdit?: boolean;
 }) => {
@@ -90,7 +90,7 @@ const RenderToolInput = ({
                         cursor={'pointer'}
                         onClick={() => {
                           onChangeNode({
-                            moduleId,
+                            nodeId,
                             type: 'delInput',
                             key: item.key,
                             value: ''
@@ -109,7 +109,7 @@ const RenderToolInput = ({
       {!!editField && (
         <EditFieldModal
           defaultValue={editField}
-          moduleId={moduleId}
+          nodeId={nodeId}
           onClose={() => setEditField(undefined)}
         />
       )}

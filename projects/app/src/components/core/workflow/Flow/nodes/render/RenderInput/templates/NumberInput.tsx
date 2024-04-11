@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { onChangeNode } from '../../../../FlowProvider';
 
-const NumberInputRender = ({ item, moduleId }: RenderInputProps) => {
+const NumberInputRender = ({ item, nodeId }: RenderInputProps) => {
   return (
     <NumberInput
       defaultValue={item.value}
@@ -17,7 +17,7 @@ const NumberInputRender = ({ item, moduleId }: RenderInputProps) => {
       max={item.max}
       onChange={(e) => {
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'updateInput',
           key: item.key,
           value: {

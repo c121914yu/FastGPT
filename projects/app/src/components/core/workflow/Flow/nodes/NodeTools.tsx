@@ -1,7 +1,7 @@
 import React from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import Divider from '../components/Divider';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
@@ -10,22 +10,22 @@ import { useTranslation } from 'next-i18next';
 import { ToolSourceHandle } from './render/ToolHandle';
 import { Box } from '@chakra-ui/react';
 
-const NodeTools = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const NodeTools = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
-  const { moduleId, inputs, outputs } = data;
+  const { nodeId, inputs, outputs } = data;
 
   return (
     <NodeCard minW={'350px'} selected={selected} {...data}>
       <Divider text={t('common.Input')} />
       <Container>
-        <RenderInput moduleId={moduleId} flowInputList={inputs} />
+        <RenderInput nodeId={nodeId} flowInputList={inputs} />
       </Container>
 
       <Box position={'relative'}>
         <Box borderBottomLeftRadius={'md'} borderBottomRadius={'md'} overflow={'hidden'}>
           <Divider showBorderBottom={false} text={t('core.module.template.Tool module')} />
         </Box>
-        <ToolSourceHandle moduleId={moduleId} />
+        <ToolSourceHandle nodeId={nodeId} />
       </Box>
     </NodeCard>
   );

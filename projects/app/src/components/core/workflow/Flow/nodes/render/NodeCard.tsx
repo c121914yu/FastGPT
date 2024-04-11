@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import Avatar from '@/components/Avatar';
-import type { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import type { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import { useTranslation } from 'next-i18next';
 import { useEditTitle } from '@/web/common/hooks/useEditTitle';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { onChangeNode, onCopyNode, onResetNode, useFlowProviderStore } from '../../FlowProvider';
+import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -16,9 +16,9 @@ import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { LOGO_ICON } from '@fastgpt/global/common/system/constants';
 import { ToolTargetHandle } from './ToolHandle';
 import { useEditTextarea } from '@fastgpt/web/hooks/useEditTextarea';
-import TriggerAndFinish from './RenderInput/templates/TriggerAndFinish';
+import { ConnectionSourceHandle, ConnectionTargetHandle } from './ConnectionHandle';
 
-type Props = FlowModuleItemType & {
+type Props = FlowNodeItemType & {
   children?: React.ReactNode | React.ReactNode[] | string;
   minW?: string | number;
   maxW?: string | number;
@@ -35,8 +35,8 @@ const NodeCard = (props: Props) => {
     intro,
     minW = '300px',
     maxW = '600px',
-    moduleId,
-    flowType,
+    nodeId,
+    flowNodeType,
     inputs,
     selected,
     forbidMenu,
@@ -45,7 +45,9 @@ const NodeCard = (props: Props) => {
 
   const { toast } = useToast();
   const { setLoading } = useSystemStore();
-  const { nodes, splitToolInputs, onDelNode } = useFlowProviderStore();
+  const { nodes, splitToolInputs, onDelNode, onCopyNode, onResetNode } = useFlowProviderStore();
+  const [isHover, setIsHover] = useState(false);
+
   // edit intro
   const { onOpenModal: onOpenIntroModal, EditModal: EditIntroModal } = useEditTextarea({
     title: t('core.module.Edit intro'),
@@ -66,17 +68,18 @@ const NodeCard = (props: Props) => {
   });
 
   const showToolHandle = useMemo(
-    () => isTool && !!nodes.find((item) => item.data?.flowType === FlowNodeTypeEnum.tools),
+    () => isTool && !!nodes.find((item) => item.data?.flowNodeType === FlowNodeTypeEnum.tools),
     [isTool, nodes]
   );
   const moduleIsTool = useMemo(() => {
-    const { isTool } = splitToolInputs([], moduleId);
+    const { isTool } = splitToolInputs([], nodeId);
     return isTool;
-  }, [moduleId, splitToolInputs]);
+  }, [nodeId, splitToolInputs]);
 
+  /* Node header */
   const Header = useMemo(() => {
     const menuList = [
-      ...(flowType === FlowNodeTypeEnum.pluginModule
+      ...(flowNodeType === FlowNodeTypeEnum.pluginModule
         ? [
             {
               icon: 'common/refreshLight',
@@ -92,7 +95,7 @@ const NodeCard = (props: Props) => {
                     setLoading(true);
                     const pluginModule = await getPreviewPluginModule(pluginId);
                     onResetNode({
-                      id: moduleId,
+                      id: nodeId,
                       module: pluginModule
                     });
                   } catch (e) {
@@ -122,7 +125,7 @@ const NodeCard = (props: Props) => {
                       });
                     }
                     onChangeNode({
-                      moduleId,
+                      nodeId,
                       type: 'attr',
                       key: 'name',
                       value: e
@@ -135,19 +138,19 @@ const NodeCard = (props: Props) => {
         icon: 'copy',
         label: t('common.Copy'),
         variant: 'whiteBase',
-        onClick: () => onCopyNode(moduleId)
+        onClick: () => onCopyNode(nodeId)
       },
       {
         icon: 'delete',
         label: t('common.Delete'),
         variant: 'whiteDanger',
-        onClick: onOpenConfirmDeleteNode(() => onDelNode(moduleId))
+        onClick: onOpenConfirmDeleteNode(() => onDelNode(nodeId))
       }
     ];
 
     return (
       <Box className="custom-drag-handle" px={4} py={3} position={'relative'}>
-        {showToolHandle && <ToolTargetHandle moduleId={moduleId} />}
+        {showToolHandle && <ToolTargetHandle nodeId={nodeId} />}
         <Flex alignItems={'center'}>
           <Avatar src={avatar} borderRadius={'0'} objectFit={'contain'} w={'30px'} h={'30px'} />
           <Box ml={3} fontSize={'lg'}>
@@ -196,7 +199,7 @@ const NodeCard = (props: Props) => {
                   defaultVal: intro,
                   onSuccess(e) {
                     onChangeNode({
-                      moduleId,
+                      nodeId,
                       type: 'attr',
                       key: 'intro',
                       value: e
@@ -209,16 +212,14 @@ const NodeCard = (props: Props) => {
             </Button>
           )}
         </Flex>
-        {/* switch */}
-        <TriggerAndFinish moduleId={moduleId} isTool={moduleIsTool} />
       </Box>
     );
   }, [
-    flowType,
+    flowNodeType,
     t,
     onOpenConfirmDeleteNode,
     showToolHandle,
-    moduleId,
+    nodeId,
     avatar,
     name,
     forbidMenu,
@@ -227,12 +228,14 @@ const NodeCard = (props: Props) => {
     inputs,
     onOpenConfirmSync,
     setLoading,
+    onResetNode,
     toast,
     onOpenModal,
+    onCopyNode,
     onDelNode,
     onOpenIntroModal
   ]);
-
+  /* config modal */
   const RenderModal = useMemo(() => {
     return (
       <>
@@ -259,10 +262,14 @@ const NodeCard = (props: Props) => {
           display: 'flex'
         }
       }}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
     >
       {Header}
-      <Box className="nowheel">{children}</Box>
+      {children}
       {RenderModal}
+      <ConnectionSourceHandle nodeId={nodeId} isHover={isHover} />
+      <ConnectionTargetHandle nodeId={nodeId} />
     </Box>
   );
 };
