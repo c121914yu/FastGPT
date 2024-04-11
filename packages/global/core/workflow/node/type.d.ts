@@ -5,7 +5,7 @@ import { EditInputFieldMap, EditOutputFieldMap } from './type';
 import { LLMModelTypeEnum } from '../../ai/constants';
 
 export type FlowNodeChangeProps = {
-  moduleId: string;
+  nodeId: string;
   type:
     | 'attr' // key: attr, value: new value
     | 'updateInput' // key: update input key, value: new input value
@@ -31,18 +31,10 @@ export type FlowNodeInputItemType = {
   required?: boolean;
   toolDescription?: string; // If this field is not empty, it is entered as a tool
 
-  edit?: boolean; // Whether to allow editing
-  editField?: EditInputFieldMap;
-  defaultEditField?: EditNodeFieldType;
+  // hideInApp?: boolean;
+  // hideInPlugin?: boolean;
 
-  connected?: boolean; // There are incoming data
-
-  showTargetInApp?: boolean;
-  showTargetInPlugin?: boolean;
-
-  hideInApp?: boolean;
-  hideInPlugin?: boolean;
-
+  // render components params
   placeholder?: string; // input,textarea
 
   list?: { label: string; value: any }[]; // select
@@ -55,25 +47,15 @@ export type FlowNodeInputItemType = {
   llmModelType?: `${LLMModelTypeEnum}`;
 };
 
-export type FlowNodeOutputTargetItemType = {
-  moduleId: string;
-  key: string;
-};
 export type FlowNodeOutputItemType = {
   type?: `${FlowNodeOutputTypeEnum}`;
   key: `${ModuleOutputKeyEnum}` | string;
+  value?: any;
   valueType?: `${ModuleIOValueTypeEnum}`;
 
   label?: string;
   description?: string;
-  required?: boolean;
   defaultValue?: any;
-
-  edit?: boolean;
-  editField?: EditOutputFieldMap;
-  defaultEditField?: EditNodeFieldType;
-
-  targets: FlowNodeOutputTargetItemType[];
 };
 
 /* --------------- edit field ------------------- */

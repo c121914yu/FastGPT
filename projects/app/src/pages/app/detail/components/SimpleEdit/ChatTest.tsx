@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ChatBox from '@/components/ChatBox';
 import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d';
-import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { streamFetch } from '@/web/common/api/fetch';
 import MyTooltip from '@/components/MyTooltip';
@@ -19,7 +19,7 @@ const ChatTest = ({ appId }: { appId: string }) => {
   const { userInfo } = useUserStore();
   const { appDetail } = useAppStore();
   const ChatBoxRef = useRef<ComponentRef>(null);
-  const [modules, setModules] = useState<ModuleItemType[]>([]);
+  const [modules, setModules] = useState<StoreNodeItemType[]>([]);
 
   const startChat = useCallback(
     async ({ chatList, controller, generatingMessage, variables }: StartChatFnProps) => {

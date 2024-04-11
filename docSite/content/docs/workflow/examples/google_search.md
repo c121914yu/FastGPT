@@ -83,11 +83,11 @@ export default async function (ctx: FunctionContext) {
 ```json
 [
   {
-    "moduleId": "userGuide",
+    "nodeId": "userGuide",
     "name": "core.module.template.App system setting",
     "intro": "core.app.tip.userGuideTip",
     "avatar": "/imgs/workflow/userGuide.png",
-    "flowType": "userGuide",
+    "flowNodeType": "userGuide",
     "position": {
       "x": -92.26884681344463,
       "y": 710.9354029649536
@@ -139,11 +139,11 @@ export default async function (ctx: FunctionContext) {
     "outputs": []
   },
   {
-    "moduleId": "userChatInput",
+    "nodeId": "userChatInput",
     "name": "core.module.template.Chat entrance",
     "intro": "当用户发送一个内容后，流程将会从这个模块开始执行。",
     "avatar": "/imgs/workflow/userChatInput.svg",
-    "flowType": "questionInput",
+    "flowNodeType": "questionInput",
     "position": {
       "x": 241.60980819261408,
       "y": 1330.9528898009685
@@ -167,7 +167,7 @@ export default async function (ctx: FunctionContext) {
         "valueType": "string",
         "targets": [
           {
-            "moduleId": "n84rvg",
+            "nodeId": "n84rvg",
             "key": "userChatInput"
           }
         ]
@@ -175,11 +175,11 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "n84rvg",
+    "nodeId": "n84rvg",
     "name": "工具调用（实验）",
     "intro": "通过AI模型自动选择一个或多个功能块进行调用，也可以对插件进行调用。",
     "avatar": "/imgs/workflow/tool.svg",
-    "flowType": "tools",
+    "flowNodeType": "tools",
     "showStatus": true,
     "position": {
       "x": 809.4264785615641,
@@ -284,7 +284,7 @@ export default async function (ctx: FunctionContext) {
         "type": "hidden",
         "targets": [
           {
-            "moduleId": "3mbu91",
+            "nodeId": "3mbu91",
             "key": "selectedTools"
           }
         ]
@@ -300,11 +300,11 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "3mbu91",
+    "nodeId": "3mbu91",
     "name": "HTTP 请求",
     "intro": "调用谷歌搜索，查询相关内容。",
     "avatar": "/imgs/workflow/http.png",
-    "flowType": "httpRequest468",
+    "flowNodeType": "httpRequest468",
     "showStatus": true,
     "position": {
       "x": 848.9794517815185,
@@ -485,9 +485,9 @@ export default async function (ctx: FunctionContext) {
 ```json
 [
   {
-    "moduleId": "userChatInput",
+    "nodeId": "userChatInput",
     "name": "用户问题(对话入口)",
-    "flowType": "questionInput",
+    "flowNodeType": "questionInput",
     "position": {
       "x": 200.0300839741032,
       "y": 1641.7311245570252
@@ -511,7 +511,7 @@ export default async function (ctx: FunctionContext) {
         "valueType": "string",
         "targets": [
           {
-            "moduleId": "6g2075",
+            "nodeId": "6g2075",
             "key": "content"
           }
         ]
@@ -519,9 +519,9 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "6g2075",
+    "nodeId": "6g2075",
     "name": "文本内容提取",
-    "flowType": "contentExtract",
+    "flowNodeType": "contentExtract",
     "showStatus": true,
     "position": {
       "x": 787.652411398441,
@@ -619,7 +619,7 @@ export default async function (ctx: FunctionContext) {
         "type": "source",
         "targets": [
           {
-            "moduleId": "5jtdwx",
+            "nodeId": "5jtdwx",
             "key": "switch"
           }
         ]
@@ -640,7 +640,7 @@ export default async function (ctx: FunctionContext) {
         "type": "source",
         "targets": [
           {
-            "moduleId": "zakgqt",
+            "nodeId": "zakgqt",
             "key": "prompt"
           }
         ]
@@ -648,9 +648,9 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "r8ckxe",
+    "nodeId": "r8ckxe",
     "name": "AI 对话",
-    "flowType": "chatNode",
+    "flowNodeType": "chatNode",
     "showStatus": true,
     "position": {
       "x": 2886.1033536393606,
@@ -822,9 +822,9 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "bwhh0x",
+    "nodeId": "bwhh0x",
     "name": "core.module.template.textEditor",
-    "flowType": "pluginModule",
+    "flowNodeType": "pluginModule",
     "showStatus": false,
     "position": {
       "x": 2323.6602408408294,
@@ -943,7 +943,7 @@ export default async function (ctx: FunctionContext) {
         "edit": false,
         "targets": [
           {
-            "moduleId": "r8ckxe",
+            "nodeId": "r8ckxe",
             "key": "userChatInput"
           }
         ]
@@ -951,9 +951,9 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "lxubmw",
+    "nodeId": "lxubmw",
     "name": "用户问题(入口)",
-    "flowType": "questionInput",
+    "flowNodeType": "questionInput",
     "position": {
       "x": 1744.5949622106039,
       "y": 2767.1993979535087
@@ -977,7 +977,7 @@ export default async function (ctx: FunctionContext) {
         "valueType": "string",
         "targets": [
           {
-            "moduleId": "bwhh0x",
+            "nodeId": "bwhh0x",
             "key": "q"
           }
         ]
@@ -985,9 +985,9 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "se8tz2",
+    "nodeId": "se8tz2",
     "name": "用户问题(对话入口)",
-    "flowType": "questionInput",
+    "flowNodeType": "questionInput",
     "position": {
       "x": 1258.737695219056,
       "y": 1282.7814513663104
@@ -1011,7 +1011,7 @@ export default async function (ctx: FunctionContext) {
         "valueType": "string",
         "targets": [
           {
-            "moduleId": "5jtdwx",
+            "nodeId": "5jtdwx",
             "key": "userChatInput"
           }
         ]
@@ -1019,9 +1019,9 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "5jtdwx",
+    "nodeId": "5jtdwx",
     "name": "AI 对话",
-    "flowType": "chatNode",
+    "flowNodeType": "chatNode",
     "showStatus": true,
     "position": {
       "x": 1709.9128961202969,
@@ -1193,9 +1193,9 @@ export default async function (ctx: FunctionContext) {
     ]
   },
   {
-    "moduleId": "zakgqt",
+    "nodeId": "zakgqt",
     "name": "core.module.template.Http request",
-    "flowType": "httpRequest468",
+    "flowNodeType": "httpRequest468",
     "showStatus": true,
     "position": {
       "x": 1596.0994578513428,
@@ -1370,7 +1370,7 @@ export default async function (ctx: FunctionContext) {
         },
         "targets": [
           {
-            "moduleId": "bwhh0x",
+            "nodeId": "bwhh0x",
             "key": "response"
           }
         ]

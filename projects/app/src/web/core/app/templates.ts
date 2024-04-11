@@ -19,7 +19,7 @@ export const appTemplates: (AppItemType & {
         moduleId: 'userGuide',
         name: 'core.module.template.App system setting',
         avatar: '/imgs/workflow/userGuide.png',
-        flowType: 'userGuide',
+        flowNodeType: 'userGuide',
         position: {
           x: 454.98510354678695,
           y: 721.4016845336229
@@ -69,7 +69,7 @@ export const appTemplates: (AppItemType & {
         moduleId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
         avatar: '/imgs/workflow/userChatInput.png',
-        flowType: 'questionInput',
+        flowNodeType: 'questionInput',
         position: {
           x: 464.32198615344566,
           y: 1602.2698463081606
@@ -104,7 +104,7 @@ export const appTemplates: (AppItemType & {
         moduleId: 'chatModule',
         name: 'AI 对话',
         avatar: '/imgs/workflow/AI.png',
-        flowType: 'chatNode',
+        flowNodeType: 'chatNode',
         showStatus: true,
         position: {
           x: 1150.8317145593148,
@@ -302,7 +302,7 @@ export const appTemplates: (AppItemType & {
         moduleId: 'userGuide',
         name: 'core.module.template.App system setting',
         avatar: '/imgs/workflow/userGuide.png',
-        flowType: 'userGuide',
+        flowNodeType: 'userGuide',
         position: {
           x: 447.98520778293346,
           y: 721.4016845336229
@@ -384,7 +384,7 @@ export const appTemplates: (AppItemType & {
         moduleId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
         avatar: '/imgs/workflow/userChatInput.png',
-        flowType: 'questionInput',
+        flowNodeType: 'questionInput',
         position: {
           x: 464.32198615344566,
           y: 1602.2698463081606
@@ -419,7 +419,7 @@ export const appTemplates: (AppItemType & {
         moduleId: 'chatModule',
         name: 'AI 对话',
         avatar: '/imgs/workflow/AI.png',
-        flowType: 'chatNode',
+        flowNodeType: 'chatNode',
         showStatus: true,
         position: {
           x: 981.9682828103937,
@@ -619,7 +619,7 @@ export const appTemplates: (AppItemType & {
         name: 'core.module.template.App system setting',
         intro: 'core.app.tip.userGuideTip',
         avatar: '/imgs/workflow/userGuide.png',
-        flowType: 'userGuide',
+        flowNodeType: 'userGuide',
         position: {
           x: 447.98520778293346,
           y: 721.4016845336229
@@ -675,7 +675,7 @@ export const appTemplates: (AppItemType & {
         name: 'core.module.template.Chat entrance',
         intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
         avatar: '/imgs/workflow/userChatInput.svg',
-        flowType: 'questionInput',
+        flowNodeType: 'questionInput',
         position: {
           x: 324.81436595478294,
           y: 1527.0012457753612
@@ -711,7 +711,7 @@ export const appTemplates: (AppItemType & {
         name: 'AI 对话',
         intro: 'AI 大模型对话',
         avatar: '/imgs/workflow/AI.png',
-        flowType: 'chatNode',
+        flowNodeType: 'chatNode',
         showStatus: true,
         position: {
           x: 1962.4010270586014,
@@ -879,7 +879,7 @@ export const appTemplates: (AppItemType & {
         name: '知识库搜索',
         intro: Dataset_SEARCH_DESC,
         avatar: '/imgs/workflow/db.png',
-        flowType: 'datasetSearchNode',
+        flowNodeType: 'datasetSearchNode',
         showStatus: true,
         position: {
           x: 1098.245668870126,
@@ -1050,7 +1050,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: '7z5g5h',
         name: 'core.module.template.Chat entrance',
-        flowType: 'questionInput',
+        flowNodeType: 'questionInput',
         position: {
           x: -269.50851681351924,
           y: 1657.6123698022448
@@ -1084,7 +1084,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'remuj3',
         name: '问题分类',
-        flowType: 'classifyQuestion',
+        flowNodeType: 'classifyQuestion',
         showStatus: true,
         position: {
           x: 446.8376904635288,
@@ -1228,7 +1228,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'a99p6z',
         name: '指定回复',
-        flowType: 'answerNode',
+        flowNodeType: 'answerNode',
         position: {
           x: 1259.0649974848573,
           y: 1681.4596399262844
@@ -1271,7 +1271,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'iejcou',
         name: '指定回复',
-        flowType: 'answerNode',
+        flowNodeType: 'answerNode',
         position: {
           x: 1294.6389464245608,
           y: 2192.8473001117936
@@ -1314,7 +1314,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'nlfwkc',
         name: 'AI 对话',
-        flowType: 'chatNode',
+        flowNodeType: 'chatNode',
         showStatus: true,
         position: {
           x: 2043.3729922717066,
@@ -1480,7 +1480,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'fljhzy',
         name: 'core.module.template.Dataset search',
-        flowType: 'datasetSearchNode',
+        flowNodeType: 'datasetSearchNode',
         showStatus: true,
         position: {
           x: 1307.1997559129973,
@@ -1652,7 +1652,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'q9equb',
         name: 'core.module.template.App system setting',
-        flowType: 'userGuide',
+        flowNodeType: 'userGuide',
         position: {
           x: -272.66416216517086,
           y: 842.9928682053646
@@ -1703,7 +1703,7 @@ export const appTemplates: (AppItemType & {
       {
         moduleId: 'tc90wz',
         name: '指定回复',
-        flowType: 'answerNode',
+        flowNodeType: 'answerNode',
         position: {
           x: 1964.026271678838,
           y: 663.4812247423405

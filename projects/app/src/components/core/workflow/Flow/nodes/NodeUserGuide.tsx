@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useTransition } from 'react';
 import { NodeProps } from 'reactflow';
 import { Box, Flex, Textarea, useTheme } from '@chakra-ui/react';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
-import { FlowModuleItemType, ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { welcomeTextTip } from '@fastgpt/global/core/workflow/template/tip';
 import { onChangeNode } from '../FlowProvider';
@@ -20,7 +20,7 @@ import { splitGuideModule } from '@fastgpt/global/core/workflow/utils';
 import { useTranslation } from 'next-i18next';
 import { TTSTypeEnum } from '@/constants/app';
 
-const NodeUserGuide = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const NodeUserGuide = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const theme = useTheme();
   return (
     <>
@@ -47,9 +47,9 @@ const NodeUserGuide = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
 
 export default React.memo(NodeUserGuide);
 
-function WelcomeText({ data }: { data: FlowModuleItemType }) {
+function WelcomeText({ data }: { data: FlowNodeItemType }) {
   const { t } = useTranslation();
-  const { inputs, moduleId } = data;
+  const { inputs, nodeId } = data;
   const [, startTst] = useTransition();
 
   const welcomeText = inputs.find((item) => item.key === ModuleInputKeyEnum.welcomeText);
@@ -74,7 +74,7 @@ function WelcomeText({ data }: { data: FlowModuleItemType }) {
           onChange={(e) => {
             startTst(() => {
               onChangeNode({
-                moduleId,
+                nodeId,
                 key: ModuleInputKeyEnum.welcomeText,
                 type: 'updateInput',
                 value: {
@@ -90,8 +90,8 @@ function WelcomeText({ data }: { data: FlowModuleItemType }) {
   );
 }
 
-function ChatStartVariable({ data }: { data: FlowModuleItemType }) {
-  const { inputs, moduleId } = data;
+function ChatStartVariable({ data }: { data: FlowNodeItemType }) {
+  const { inputs, nodeId } = data;
 
   const variables = useMemo(
     () =>
@@ -103,7 +103,7 @@ function ChatStartVariable({ data }: { data: FlowModuleItemType }) {
   const updateVariables = useCallback(
     (value: VariableItemType[]) => {
       onChangeNode({
-        moduleId,
+        nodeId,
         key: ModuleInputKeyEnum.variables,
         type: 'updateInput',
         value: {
@@ -112,14 +112,14 @@ function ChatStartVariable({ data }: { data: FlowModuleItemType }) {
         }
       });
     },
-    [inputs, moduleId]
+    [inputs, nodeId]
   );
 
   return <VariableEdit variables={variables} onChange={(e) => updateVariables(e)} />;
 }
 
-function QuestionGuide({ data }: { data: FlowModuleItemType }) {
-  const { inputs, moduleId } = data;
+function QuestionGuide({ data }: { data: FlowNodeItemType }) {
+  const { inputs, nodeId } = data;
 
   const questionGuide = useMemo(
     () =>
@@ -135,7 +135,7 @@ function QuestionGuide({ data }: { data: FlowModuleItemType }) {
       onChange={(e) => {
         const value = e.target.checked;
         onChangeNode({
-          moduleId,
+          nodeId,
           key: ModuleInputKeyEnum.questionGuide,
           type: 'updateInput',
           value: {
@@ -148,16 +148,16 @@ function QuestionGuide({ data }: { data: FlowModuleItemType }) {
   );
 }
 
-function TTSGuide({ data }: { data: FlowModuleItemType }) {
-  const { inputs, moduleId } = data;
-  const { ttsConfig } = splitGuideModule({ inputs } as ModuleItemType);
+function TTSGuide({ data }: { data: FlowNodeItemType }) {
+  const { inputs, nodeId } = data;
+  const { ttsConfig } = splitGuideModule({ inputs } as StoreNodeItemType);
 
   return (
     <TTSSelect
       value={ttsConfig}
       onChange={(e) => {
         onChangeNode({
-          moduleId,
+          nodeId,
           key: ModuleInputKeyEnum.tts,
           type: 'updateInput',
           value: {
@@ -170,9 +170,9 @@ function TTSGuide({ data }: { data: FlowModuleItemType }) {
   );
 }
 
-function WhisperGuide({ data }: { data: FlowModuleItemType }) {
-  const { inputs, moduleId } = data;
-  const { ttsConfig, whisperConfig } = splitGuideModule({ inputs } as ModuleItemType);
+function WhisperGuide({ data }: { data: FlowNodeItemType }) {
+  const { inputs, nodeId } = data;
+  const { ttsConfig, whisperConfig } = splitGuideModule({ inputs } as StoreNodeItemType);
 
   return (
     <WhisperConfig
@@ -180,7 +180,7 @@ function WhisperGuide({ data }: { data: FlowModuleItemType }) {
       value={whisperConfig}
       onChange={(e) => {
         onChangeNode({
-          moduleId,
+          nodeId,
           key: ModuleInputKeyEnum.whisper,
           type: 'updateInput',
           value: {

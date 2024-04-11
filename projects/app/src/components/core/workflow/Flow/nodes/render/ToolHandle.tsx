@@ -12,9 +12,9 @@ import { useFlowProviderStore } from '../../FlowProvider';
 import { useCallback } from 'react';
 
 type ToolHandleProps = BoxProps & {
-  moduleId: string;
+  nodeId: string;
 };
-export const ToolTargetHandle = ({ moduleId }: ToolHandleProps) => {
+export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
   const { t } = useTranslation();
 
   const valueTypeMap = FlowValueTypeMap[ModuleIOValueTypeEnum.tools];
@@ -48,7 +48,7 @@ export const ToolTargetHandle = ({ moduleId }: ToolHandleProps) => {
   );
 };
 
-export const ToolSourceHandle = ({ moduleId }: ToolHandleProps) => {
+export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
   const { t } = useTranslation();
   const { setEdges, nodes } = useFlowProviderStore();
 

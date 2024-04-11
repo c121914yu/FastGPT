@@ -21,7 +21,7 @@ import { getErrText } from '@fastgpt/global/common/error/utils';
 import { Box, Flex, Checkbox } from '@chakra-ui/react';
 import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
-import { ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import { VariableInputEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { useForm } from 'react-hook-form';
@@ -79,7 +79,7 @@ type Props = OutLinkChatAuthProps & {
   showEmptyIntro?: boolean;
   appAvatar?: string;
   userAvatar?: string;
-  userGuideModule?: ModuleItemType;
+  userGuideModule?: StoreNodeItemType;
   showFileSelector?: boolean;
   active?: boolean; // can use
   appId: string;

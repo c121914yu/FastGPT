@@ -13,7 +13,7 @@
       "name": "定义插件输入",
       "intro": "自定义配置外部输入，使用插件时，仅暴露自定义配置的输入",
       "avatar": "/imgs/workflow/input.png",
-      "flowType": "pluginInput",
+      "flowNodeType": "pluginInput",
       "showStatus": false,
       "position": {
         "x": 187.94161749205568,
@@ -51,7 +51,7 @@
       "name": "定义插件输出",
       "intro": "自定义配置外部输出，使用插件时，仅暴露自定义配置的输出",
       "avatar": "/imgs/workflow/output.png",
-      "flowType": "pluginOutput",
+      "flowNodeType": "pluginOutput",
       "showStatus": false,
       "position": {
         "x": 1176.9471084832217,
@@ -93,7 +93,7 @@
       "name": "文本加工",
       "intro": "可对固定或传入的文本进行加工后输出，非字符串类型数据最终会转成字符串类型。",
       "avatar": "/imgs/workflow/textEditor.svg",
-      "flowType": "pluginModule",
+      "flowNodeType": "pluginModule",
       "showStatus": false,
       "position": {
         "x": 600.7190079155914,

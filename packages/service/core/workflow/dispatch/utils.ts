@@ -4,9 +4,9 @@ import {
   ModuleOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 
-export const setEntryEntries = (modules: ModuleItemType[]) => {
+export const setEntryEntries = (modules: StoreNodeItemType[]) => {
   const initRunningModuleType: Record<string, boolean> = {
     [FlowNodeTypeEnum.historyNode]: true,
     [FlowNodeTypeEnum.questionInput]: true,
@@ -14,7 +14,7 @@ export const setEntryEntries = (modules: ModuleItemType[]) => {
   };
 
   modules.forEach((item) => {
-    if (initRunningModuleType[item.flowType]) {
+    if (initRunningModuleType[item.flowNodeType]) {
       item.isEntry = true;
     }
   });
@@ -22,11 +22,11 @@ export const setEntryEntries = (modules: ModuleItemType[]) => {
 };
 
 export const checkTheModuleConnectedByTool = (
-  modules: ModuleItemType[],
-  module: ModuleItemType
+  modules: StoreNodeItemType[],
+  module: StoreNodeItemType
 ) => {
   let sign = false;
-  const toolModules = modules.filter((item) => item.flowType === FlowNodeTypeEnum.tools);
+  const toolModules = modules.filter((item) => item.flowNodeType === FlowNodeTypeEnum.tools);
 
   toolModules.forEach((item) => {
     const toolOutput = item.outputs.find(

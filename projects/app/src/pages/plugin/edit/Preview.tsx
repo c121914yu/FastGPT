@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactFlow, { Background, ReactFlowProvider, useNodesState } from 'reactflow';
-import { FlowModuleItemType, ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import dynamic from 'next/dynamic';
 import { plugin2ModuleIO } from '@fastgpt/global/core/workflow/utils';
@@ -8,7 +8,7 @@ import MyModal from '@fastgpt/web/components/common/MyModal';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import { PluginItemSchema } from '@fastgpt/global/core/plugin/type';
-import { appModule2FlowNode } from '@/utils/adapt';
+import { appModule2FlowNode } from '@/web/core/workflow/adapt';
 
 const nodeTypes = {
   [FlowNodeTypeEnum.pluginModule]: dynamic(
@@ -22,18 +22,18 @@ const PreviewPlugin = ({
   onClose
 }: {
   plugin: PluginItemSchema;
-  modules: ModuleItemType[];
+  modules: StoreNodeItemType[];
   onClose: () => void;
 }) => {
   const { t } = useTranslation();
-  const [nodes = [], setNodes, onNodesChange] = useNodesState<FlowModuleItemType>([]);
+  const [nodes = [], setNodes, onNodesChange] = useNodesState<FlowNodeItemType>([]);
 
   useEffect(() => {
     setNodes([
       appModule2FlowNode({
         item: {
-          moduleId: 'plugin',
-          flowType: FlowNodeTypeEnum.pluginModule,
+          nodeId: 'plugin',
+          flowNodeType: FlowNodeTypeEnum.pluginModule,
           avatar: plugin.avatar,
           name: plugin.name,
           intro: plugin.intro,

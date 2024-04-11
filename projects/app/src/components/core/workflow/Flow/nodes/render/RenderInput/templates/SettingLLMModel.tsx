@@ -5,14 +5,14 @@ import { SettingAIDataType } from '@fastgpt/global/core/workflow/node/type';
 import SettingLLMModel from '@/components/core/ai/SettingLLMModel';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
-const SelectAiModelRender = ({ item, inputs = [], moduleId }: RenderInputProps) => {
+const SelectAiModelRender = ({ item, inputs = [], nodeId }: RenderInputProps) => {
   const onChangeModel = useCallback(
     (e: SettingAIDataType) => {
       for (const key in e) {
         const input = inputs.find((input) => input.key === key);
         input &&
           onChangeNode({
-            moduleId,
+            nodeId,
             type: 'updateInput',
             key,
             value: {
@@ -23,7 +23,7 @@ const SelectAiModelRender = ({ item, inputs = [], moduleId }: RenderInputProps) 
           });
       }
     },
-    [inputs, moduleId]
+    [inputs, nodeId]
   );
 
   const llmModelData: SettingAIDataType = {

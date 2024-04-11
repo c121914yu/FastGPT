@@ -12,7 +12,7 @@ import {
   Flex
 } from '@chakra-ui/react';
 import { NodeProps } from 'reactflow';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import { useTranslation } from 'next-i18next';
 import NodeCard from '../render/NodeCard';
 import Container from '../../components/Container';
@@ -30,7 +30,7 @@ import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
 import RenderToolInput from '../render/RenderToolInput';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
 
-const NodeExtract = ({ data }: NodeProps<FlowModuleItemType>) => {
+const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
   const { inputs, outputs, moduleId } = data;
   const { splitToolInputs } = useFlowProviderStore();
   const { toolInputs, commonInputs } = splitToolInputs(inputs, moduleId);

@@ -7,14 +7,12 @@ import { useCopyData } from '@/web/common/hooks/useCopyData';
 import dynamic from 'next/dynamic';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
-import { getFlowStore } from '@/components/core/workflow/Flow/FlowProvider';
-import { filterExportModules, flowNode2Modules } from '@/components/core/workflow/utils';
+import { filterExportModules, flowNode2StoreNodes } from '@/components/core/workflow/utils';
 import { putUpdatePlugin } from '@/web/core/plugin/api';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import MyMenu from '@/components/MyMenu';
+import { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
 
 const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 const PreviewPlugin = dynamic(() => import('./Preview'));
@@ -26,89 +24,18 @@ const Header = ({ plugin, onClose }: Props) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { copyData } = useCopyData();
+  const { nodes, edges } = useFlowProviderStore();
   const { isOpen: isOpenImport, onOpen: onOpenImport, onClose: onCloseImport } = useDisclosure();
-  const [previewModules, setPreviewModules] = React.useState<ModuleItemType[]>();
+  const [previewModules, setPreviewModules] = React.useState<StoreNodeItemType[]>();
 
   const flow2ModulesAndCheck = useCallback(async () => {
-    const { nodes, edges } = await getFlowStore();
+    const storeNodes = flowNode2StoreNodes({ nodes, edges });
 
-    const modules = flowNode2Modules({ nodes, edges });
-
-    // check required connect
-    for (let i = 0; i < modules.length; i++) {
-      const item = modules[i];
-
-      // update custom input connected
-      if (item.flowType === FlowNodeTypeEnum.pluginInput) {
-        item.inputs.forEach((item) => {
-          item.connected = true;
-        });
-        if (
-          item.outputs.find(
-            (output) =>
-              output.key !== ModuleOutputKeyEnum.pluginStart && output.targets.length === 0
-          )
-        ) {
-          toast({
-            status: 'warning',
-            title: t('module.Plugin input must connect')
-          });
-          return false;
-        }
-      }
-      if (
-        item.flowType === FlowNodeTypeEnum.pluginOutput &&
-        item.inputs.find((input) => !input.connected)
-      ) {
-        toast({
-          status: 'warning',
-          title: t('core.module.Plugin output must connect')
-        });
-        return false;
-      }
-
-      if (
-        item.inputs.find((input) => {
-          if (!input.required || input.connected) return false;
-          if (input.value === undefined || input.value === '' || input.value?.length === 0) {
-            return true;
-          }
-          return false;
-        })
-      ) {
-        toast({
-          status: 'warning',
-          title: `【${item.name}】存在未填或未连接参数`
-        });
-        return false;
-      }
-    }
-
-    // plugin must have input
-    const pluginInputModule = modules.find(
-      (item) => item.flowType === FlowNodeTypeEnum.pluginInput
-    );
-
-    if (!pluginInputModule) {
-      toast({
-        status: 'warning',
-        title: t('module.Plugin input is required')
-      });
-      return false;
-    }
-    if (pluginInputModule.inputs.length < 1) {
-      toast({
-        status: 'warning',
-        title: t('module.Plugin input is not value')
-      });
-      return false;
-    }
-
-    return modules;
-  }, [t, toast]);
+    return storeNodes;
+  }, [edges, nodes]);
 
   const { mutate: onclickSave, isLoading } = useRequest({
-    mutationFn: (modules: ModuleItemType[]) => {
+    mutationFn: (modules: StoreNodeItemType[]) => {
       return putUpdatePlugin({
         id: plugin._id,
         modules

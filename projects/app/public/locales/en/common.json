@@ -1051,6 +1051,9 @@
     "shareChat": {
       "Init Error": "Init Chat Error",
       "Init History Error": "Init History Error"
+    },
+    "workflow": {
+      "Can not delete node": "Can not delete the node"
     }
   },
   "dataset": {

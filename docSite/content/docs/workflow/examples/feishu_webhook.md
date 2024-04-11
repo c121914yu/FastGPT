@@ -26,11 +26,11 @@ weight: 404
 ```json
 [
   {
-    "moduleId": "userGuide",
+    "nodeId": "userGuide",
     "name": "core.module.template.App system setting",
     "intro": "core.app.tip.userGuideTip",
     "avatar": "/imgs/workflow/userGuide.png",
-    "flowType": "userGuide",
+    "flowNodeType": "userGuide",
     "position": {
       "x": -92.26884681344463,
       "y": 710.9354029649536
@@ -82,11 +82,11 @@ weight: 404
     "outputs": []
   },
   {
-    "moduleId": "userChatInput",
+    "nodeId": "userChatInput",
     "name": "core.module.template.Chat entrance",
     "intro": "当用户发送一个内容后，流程将会从这个模块开始执行。",
     "avatar": "/imgs/workflow/userChatInput.svg",
-    "flowType": "questionInput",
+    "flowNodeType": "questionInput",
     "position": {
       "x": 241.60980819261408,
       "y": 1330.9528898009685
@@ -110,7 +110,7 @@ weight: 404
         "valueType": "string",
         "targets": [
           {
-            "moduleId": "n84rvg",
+            "nodeId": "n84rvg",
             "key": "userChatInput"
           }
         ]
@@ -118,11 +118,11 @@ weight: 404
     ]
   },
   {
-    "moduleId": "n84rvg",
+    "nodeId": "n84rvg",
     "name": "工具调用（实验）",
     "intro": "通过AI模型自动选择一个或多个功能块进行调用，也可以对插件进行调用。",
     "avatar": "/imgs/workflow/tool.svg",
-    "flowType": "tools",
+    "flowNodeType": "tools",
     "showStatus": true,
     "position": {
       "x": 809.4264785615641,
@@ -227,7 +227,7 @@ weight: 404
         "type": "hidden",
         "targets": [
           {
-            "moduleId": "3mbu91",
+            "nodeId": "3mbu91",
             "key": "selectedTools"
           }
         ]
@@ -243,11 +243,11 @@ weight: 404
     ]
   },
   {
-    "moduleId": "3mbu91",
+    "nodeId": "3mbu91",
     "name": "HTTP 请求",
     "intro": "调用飞书webhook，发送一个通知",
     "avatar": "/imgs/workflow/http.png",
-    "flowType": "httpRequest468",
+    "flowNodeType": "httpRequest468",
     "showStatus": true,
     "position": {
       "x": 1483.6437630977423,
@@ -376,11 +376,11 @@ weight: 404
         "type": "source",
         "targets": [
           {
-            "moduleId": "rzx4mj",
+            "nodeId": "rzx4mj",
             "key": "switch"
           },
           {
-            "moduleId": "psdhs1",
+            "nodeId": "psdhs1",
             "key": "switch"
           }
         ]
@@ -424,11 +424,11 @@ weight: 404
     ]
   },
   {
-    "moduleId": "rzx4mj",
+    "nodeId": "rzx4mj",
     "name": "工具调用终止",
     "intro": "该模块需配置工具调用使用。当该模块被执行时，本次工具调用将会强制结束，并且不再调用AI针对工具调用结果回答问题。",
     "avatar": "/imgs/workflow/toolStop.svg",
-    "flowType": "stopTool",
+    "flowNodeType": "stopTool",
     "position": {
       "x": 2145.5070710160267,
       "y": 1306.3581817783079
@@ -448,11 +448,11 @@ weight: 404
     "outputs": []
   },
   {
-    "moduleId": "psdhs1",
+    "nodeId": "psdhs1",
     "name": "指定回复",
     "intro": "该模块可以直接回复一段指定的内容。常用于引导、提示。非字符串内容传入时，会转成字符串进行输出。",
     "avatar": "/imgs/workflow/reply.png",
-    "flowType": "answerNode",
+    "flowNodeType": "answerNode",
     "position": {
       "x": 2117.0429459850598,
       "y": 1658.4125434513746

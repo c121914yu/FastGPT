@@ -87,9 +87,9 @@ Response:
 ```json
 [
   {
-    "moduleId": "userGuide",
+    "nodeId": "userGuide",
     "name": "core.module.template.App system setting",
-    "flowType": "userGuide",
+    "flowNodeType": "userGuide",
     "position": {
       "x": 454.98510354678695,
       "y": 721.4016845336229
@@ -136,9 +136,9 @@ Response:
     "outputs": []
   },
   {
-    "moduleId": "userChatInput",
+    "nodeId": "userChatInput",
     "name": "core.module.template.Chat entrance",
-    "flowType": "questionInput",
+    "flowNodeType": "questionInput",
     "position": {
       "x": 597.8136543694757,
       "y": 1709.9244174501202
@@ -162,7 +162,7 @@ Response:
         "valueType": "string",
         "targets": [
           {
-            "moduleId": "mqgfub",
+            "nodeId": "mqgfub",
             "key": "prompt"
           }
         ]
@@ -170,9 +170,9 @@ Response:
     ]
   },
   {
-    "moduleId": "mqgfub",
+    "nodeId": "mqgfub",
     "name": "Dalle3绘图",
-    "flowType": "httpRequest468",
+    "flowNodeType": "httpRequest468",
     "showStatus": true,
     "position": {
       "x": 1071.8956245626034,
@@ -353,7 +353,7 @@ Response:
         },
         "targets": [
           {
-            "moduleId": "nl6mr9",
+            "nodeId": "nl6mr9",
             "key": "url"
           }
         ]
@@ -361,9 +361,9 @@ Response:
     ]
   },
   {
-    "moduleId": "xy76o2",
+    "nodeId": "xy76o2",
     "name": "core.module.template.Assigned reply",
-    "flowType": "answerNode",
+    "flowNodeType": "answerNode",
     "position": {
       "x": 2204.027057268489,
       "y": 1256.786345213533
@@ -403,9 +403,9 @@ Response:
     ]
   },
   {
-    "moduleId": "nl6mr9",
+    "nodeId": "nl6mr9",
     "name": "core.module.template.textEditor",
-    "flowType": "pluginModule",
+    "flowNodeType": "pluginModule",
     "showStatus": false,
     "position": {
       "x": 1690.1826860670342,
@@ -506,7 +506,7 @@ Response:
         "edit": false,
         "targets": [
           {
-            "moduleId": "xy76o2",
+            "nodeId": "xy76o2",
             "key": "text"
           }
         ]

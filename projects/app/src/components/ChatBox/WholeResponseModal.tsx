@@ -105,7 +105,7 @@ const ResponseBox = React.memo(function ResponseBox({
               mr={2}
               src={
                 item.moduleLogo ||
-                moduleTemplatesFlat.find((template) => item.moduleType === template.flowType)
+                moduleTemplatesFlat.find((template) => item.moduleType === template.flowNodeType)
                   ?.avatar
               }
               alt={''}

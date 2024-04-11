@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
 import { Box, Button, Flex } from '@chakra-ui/react';
@@ -22,11 +22,11 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MySlider from '@/components/Slider';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
 
-const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { llmModelList } = useSystemStore();
   const { nodes } = useFlowProviderStore();
-  const { moduleId, inputs, outputs } = data;
+  const { nodeId, inputs, outputs } = data;
 
   const quotes = useMemo(
     () => inputs.filter((item) => item.valueType === ModuleIOValueTypeEnum.datasetQuote),
@@ -69,7 +69,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowModuleItemType>) =>
                 _hover={{ color: 'red.600' }}
                 onClick={() => {
                   onChangeNode({
-                    moduleId,
+                    nodeId,
                     type: 'delInput',
                     key: quote.key
                   });
@@ -83,7 +83,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowModuleItemType>) =>
           variant={'whiteBase'}
           onClick={() => {
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'addInput',
               value: getOneQuoteInputTemplate()
             });
@@ -93,7 +93,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowModuleItemType>) =>
         </Button>
       </Box>
     );
-  }, [moduleId, quotes, t]);
+  }, [nodeId, quotes, t]);
 
   const CustomComponent = useMemo(() => {
     console.log(111);
@@ -112,7 +112,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowModuleItemType>) =>
             value={item.value}
             onChange={(e) => {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'updateInput',
                 key: item.key,
                 value: {
@@ -125,12 +125,12 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowModuleItemType>) =>
         </Box>
       )
     };
-  }, [moduleId, tokenLimit]);
+  }, [nodeId, tokenLimit]);
 
   return (
     <NodeCard minW={'400px'} selected={selected} {...data}>
       <Container borderTop={'2px solid'} borderTopColor={'myGray.200'} position={'relative'}>
-        <RenderInput moduleId={moduleId} flowInputList={inputs} CustomComponent={CustomComponent} />
+        <RenderInput nodeId={nodeId} flowInputList={inputs} CustomComponent={CustomComponent} />
         {/* render dataset select */}
         {RenderQuoteList}
         <Flex position={'absolute'} right={4} top={'60%'}>
@@ -141,7 +141,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowModuleItemType>) =>
             // transform={'translate(-14px, -50%)'}
           />
         </Flex>
-        {/* <RenderOutput moduleId={moduleId} flowOutputList={outputs} /> */}
+        {/* <RenderOutput nodeId={nodeId} flowOutputList={outputs} /> */}
       </Container>
     </NodeCard>
   );

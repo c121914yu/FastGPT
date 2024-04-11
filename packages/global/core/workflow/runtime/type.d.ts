@@ -1,17 +1,17 @@
 import { ChatNodeUsageType } from '../../../support/wallet/bill/type';
 import { ChatItemValueItemType, ToolRunResponseItemType } from '../../chat/type';
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from '../node/type';
-import { ModuleItemType } from '../type';
+import { StoreNodeItemType } from '../type';
 import { DispatchNodeResponseKeyEnum } from './constants';
 
 export type RunningModuleItemType = {
-  name: ModuleItemType['name'];
-  avatar: ModuleItemType['avatar'];
-  intro?: ModuleItemType['intro'];
-  moduleId: ModuleItemType['moduleId'];
-  flowType: ModuleItemType['flowType'];
-  showStatus?: ModuleItemType['showStatus'];
-  isEntry?: ModuleItemType['isEntry'];
+  name: StoreNodeItemType['name'];
+  avatar: StoreNodeItemType['avatar'];
+  intro?: StoreNodeItemType['intro'];
+  nodeId: StoreNodeItemType['nodeId'];
+  flowNodeType: StoreNodeItemType['flowNodeType'];
+  showStatus?: StoreNodeItemType['showStatus'];
+  isEntry?: StoreNodeItemType['isEntry'];
 
   inputs: {
     key: string;
@@ -28,10 +28,6 @@ export type RunningModuleItemType = {
     response?: boolean;
     value?: any;
     valueType?: FlowNodeOutputItemType['valueType'];
-    targets: {
-      moduleId: string;
-      key: string;
-    }[];
   }[];
 };
 

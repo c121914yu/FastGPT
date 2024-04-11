@@ -19,12 +19,14 @@ import {
   Input_Template_UserChatInput
 } from '../input';
 import { chatNodeSystemPromptTip } from '../tip';
-import { Output_Template_Finish, Output_Template_UserChatInput } from '../output';
+import { getHandleConfig } from '../utils';
 
 export const AiChatModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.chatNode,
   templateType: FlowNodeTemplateTypeEnum.textAnswer,
-  flowType: FlowNodeTypeEnum.chatNode,
+  flowNodeType: FlowNodeTypeEnum.chatNode,
+  sourceHandle: getHandleConfig(false, true, false, false),
+  targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/AI.png',
   name: 'AI 对话',
   intro: 'AI 大模型对话',
@@ -42,9 +44,7 @@ export const AiChatModule: FlowNodeTemplateType = {
       valueType: ModuleIOValueTypeEnum.number,
       min: 0,
       max: 10,
-      step: 1,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      step: 1
     },
     {
       key: ModuleInputKeyEnum.aiChatMaxToken,
@@ -54,34 +54,26 @@ export const AiChatModule: FlowNodeTemplateType = {
       valueType: ModuleIOValueTypeEnum.number,
       min: 100,
       max: 4000,
-      step: 50,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      step: 50
     },
     {
       key: ModuleInputKeyEnum.aiChatIsResponseText,
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
       value: true,
-      valueType: ModuleIOValueTypeEnum.boolean,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      valueType: ModuleIOValueTypeEnum.boolean
     },
     {
       key: ModuleInputKeyEnum.aiChatQuoteTemplate,
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
-      valueType: ModuleIOValueTypeEnum.string,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      valueType: ModuleIOValueTypeEnum.string
     },
     {
       key: ModuleInputKeyEnum.aiChatQuotePrompt,
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
-      valueType: ModuleIOValueTypeEnum.string,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      valueType: ModuleIOValueTypeEnum.string
     },
     // settings modal ---
     {
@@ -95,23 +87,19 @@ export const AiChatModule: FlowNodeTemplateType = {
     Input_Template_Dataset_Quote
   ],
   outputs: [
-    Output_Template_UserChatInput,
     {
       key: ModuleOutputKeyEnum.history,
       label: 'core.module.output.label.New context',
       description: 'core.module.output.description.New context',
       valueType: ModuleIOValueTypeEnum.chatHistory,
-      type: FlowNodeOutputTypeEnum.source,
-      targets: []
+      type: FlowNodeOutputTypeEnum.source
     },
     {
       key: ModuleOutputKeyEnum.answerText,
       label: 'core.module.output.label.Ai response content',
       description: 'core.module.output.description.Ai response content',
       valueType: ModuleIOValueTypeEnum.string,
-      type: FlowNodeOutputTypeEnum.source,
-      targets: []
-    },
-    Output_Template_Finish
+      type: FlowNodeOutputTypeEnum.source
+    }
   ]
 };

@@ -18,10 +18,10 @@ const RenderList: {
 ];
 
 const RenderToolOutput = ({
-  moduleId,
+  nodeId,
   flowOutputList
 }: {
-  moduleId: string;
+  nodeId: string;
   flowOutputList: FlowNodeOutputItemType[];
 }) => {
   const sortOutputs = useMemo(
@@ -50,7 +50,7 @@ const RenderToolOutput = ({
           )?.Component;
 
           if (!Component) return null;
-          return <Component outputs={sortOutputs} item={output} moduleId={moduleId} />;
+          return <Component outputs={sortOutputs} item={output} nodeId={nodeId} />;
         })();
 
         return (
@@ -58,7 +58,7 @@ const RenderToolOutput = ({
             <Box key={output.key} _notLast={{ mb: 7 }} position={'relative'}>
               {output.label && (
                 <OutputLabel
-                  moduleId={moduleId}
+                  nodeId={nodeId}
                   outputKey={output.key}
                   outputs={sortOutputs}
                   {...output}

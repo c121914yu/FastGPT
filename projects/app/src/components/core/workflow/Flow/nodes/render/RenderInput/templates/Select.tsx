@@ -3,7 +3,7 @@ import type { RenderInputProps } from '../type';
 import { onChangeNode } from '../../../../FlowProvider';
 import MySelect from '@fastgpt/web/components/common/MySelect';
 
-const SelectRender = ({ item, moduleId }: RenderInputProps) => {
+const SelectRender = ({ item, nodeId }: RenderInputProps) => {
   return (
     <MySelect
       width={'100%'}
@@ -11,7 +11,7 @@ const SelectRender = ({ item, moduleId }: RenderInputProps) => {
       list={item.list || []}
       onchange={(e) => {
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'updateInput',
           key: item.key,
           value: {

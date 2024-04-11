@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Box, Flex, IconButton, useTheme, useDisclosure, Button } from '@chakra-ui/react';
-import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { AppSchema } from '@fastgpt/global/core/app/type.d';
 import { useTranslation } from 'next-i18next';
@@ -12,7 +12,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
 import ChatTest, { type ChatTestComponentRef } from '@/components/core/workflow/Flow/ChatTest';
 import { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
-import { flowNode2Modules, filterExportModules } from '@/components/core/workflow/utils';
+import { flowNode2StoreNodes, filterExportModules } from '@/components/core/workflow/utils';
 import { useAppStore } from '@/web/core/app/store/useAppStore';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
@@ -31,8 +31,8 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
   onClose
 }: Props & {
   ChatTestRef: React.RefObject<ChatTestComponentRef>;
-  testModules?: ModuleItemType[];
-  setTestModules: React.Dispatch<ModuleItemType[] | undefined>;
+  testModules?: StoreNodeItemType[];
+  setTestModules: React.Dispatch<StoreNodeItemType[] | undefined>;
 }) {
   const theme = useTheme();
   const { toast } = useToast();
@@ -47,38 +47,13 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
   const [isSaving, setIsSaving] = useState(false);
 
   const flow2ModulesAndCheck = useCallback(async () => {
-    const modules = flowNode2Modules({ nodes, edges });
-    // check required connect
-    for (let i = 0; i < modules.length; i++) {
-      const item = modules[i];
+    const storeNodes = flowNode2StoreNodes({ nodes, edges });
 
-      const { isTool } = splitToolInputs(item.inputs, item.moduleId);
-
-      const unconnected = item.inputs.find((input) => {
-        if (!input.required || input.connected || (isTool && input.toolDescription)) {
-          return false;
-        }
-        if (input.value === undefined || input.value === '' || input.value?.length === 0) {
-          return true;
-        }
-        return false;
-      });
-
-      if (unconnected) {
-        const msg = t('core.module.Unlink tip', { name: t(item.name) });
-
-        toast({
-          status: 'warning',
-          title: msg
-        });
-        return false;
-      }
-    }
-    return modules;
-  }, [edges, nodes, splitToolInputs, t, toast]);
+    return storeNodes;
+  }, [edges, nodes]);
 
   const onclickSave = useCallback(
-    async (modules: ModuleItemType[]) => {
+    async (modules: StoreNodeItemType[]) => {
       setIsSaving(true);
       try {
         await updateAppDetail(app._id, {
@@ -212,7 +187,7 @@ const Header = (props: Props) => {
   const { app } = props;
   const ChatTestRef = useRef<ChatTestComponentRef>(null);
 
-  const [testModules, setTestModules] = useState<ModuleItemType[]>();
+  const [testModules, setTestModules] = useState<StoreNodeItemType[]>();
 
   return (
     <>

@@ -7,9 +7,9 @@ import type {
 import { useViewport, XYPosition } from 'reactflow';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import Avatar from '@/components/Avatar';
-import { onSetNodes, useFlowProviderStore } from './FlowProvider';
+import { useFlowProviderStore } from './FlowProvider';
 import { customAlphabet } from 'nanoid';
-import { appModule2FlowNode } from '@/utils/adapt';
+import { appModule2FlowNode } from '@/web/core/workflow/adapt';
 import { useTranslation } from 'next-i18next';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 import EmptyTip from '@/components/EmptyTip';
@@ -66,7 +66,7 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   const templates = useMemo(() => {
     const map = {
       [TemplateTypeEnum.basic]: basicNodeTemplates.filter((item) => {
-        if (item.flowType === FlowNodeTypeEnum.lafModule && !feConfigs.lafEnv) {
+        if (item.flowNodeType === FlowNodeTypeEnum.lafModule && !feConfigs.lafEnv) {
           return false;
         }
         return true;
@@ -77,7 +77,14 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
       )
     };
     return JSON.stringify(map[templateType]);
-  }, [basicNodeTemplates, searchKey, systemNodeTemplates, teamPluginNodeTemplates, templateType]);
+  }, [
+    basicNodeTemplates,
+    feConfigs.lafEnv,
+    searchKey,
+    systemNodeTemplates,
+    teamPluginNodeTemplates,
+    templateType
+  ]);
 
   const { mutate: onChangeTab } = useRequest({
     mutationFn: async (e: any) => {
@@ -236,7 +243,7 @@ const RenderList = React.memo(function RenderList({
   const { x, y, zoom } = useViewport();
   const { setLoading } = useSystemStore();
   const { toast } = useToast();
-  const { reactFlowWrapper, nodes } = useFlowProviderStore();
+  const { reactFlowWrapper, nodes, setNodes } = useFlowProviderStore();
 
   const formatTemplates = useMemo<moduleTemplateListType>(() => {
     const copy: moduleTemplateListType = JSON.parse(JSON.stringify(moduleTemplatesList));
@@ -256,7 +263,7 @@ const RenderList = React.memo(function RenderList({
       const templateModule = await (async () => {
         try {
           // get plugin preview module
-          if (template.flowType === FlowNodeTypeEnum.pluginModule) {
+          if (template.flowNodeType === FlowNodeTypeEnum.pluginModule) {
             setLoading(true);
             const res = await getPreviewPluginModule(template.id);
 
@@ -278,19 +285,27 @@ const RenderList = React.memo(function RenderList({
       const mouseX = (position.x - reactFlowBounds.left - x) / zoom - 100;
       const mouseY = (position.y - reactFlowBounds.top - y) / zoom;
 
-      onSetNodes(
+      setNodes(
         nodes.concat(
           appModule2FlowNode({
             item: {
-              ...templateModule,
-              moduleId: nanoid(),
-              position: { x: mouseX, y: mouseY - 20 }
+              nodeId: nanoid(),
+              name: templateModule.name,
+              avatar: templateModule.avatar,
+              intro: templateModule.intro,
+              position: { x: mouseX, y: mouseY - 20 },
+              flowNodeType: templateModule.flowNodeType,
+              showStatus: templateModule.showStatus,
+              sourceNodes: [],
+              targetNodes: [],
+              inputs: templateModule.inputs,
+              outputs: templateModule.outputs
             }
           })
         )
       );
     },
-    [nodes, reactFlowWrapper, setLoading, t, toast, x, y, zoom]
+    [nodes, reactFlowWrapper, setLoading, setNodes, t, toast, x, y, zoom]
   );
 
   return templates.length === 0 ? (
