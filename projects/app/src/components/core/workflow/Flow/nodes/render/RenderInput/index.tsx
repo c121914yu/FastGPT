@@ -70,14 +70,13 @@ const RenderList: {
     Component: dynamic(() => import('./templates/SettingQuotePrompt'))
   }
 ];
-const UserChatInput = dynamic(() => import('./templates/UserChatInput'));
 
 type Props = {
   flowInputList: FlowNodeInputItemType[];
-  moduleId: string;
+  nodeId: string;
   CustomComponent?: Record<string, (e: FlowNodeInputItemType) => React.ReactNode>;
 };
-const RenderInput = ({ flowInputList, moduleId, CustomComponent }: Props) => {
+const RenderInput = ({ flowInputList, nodeId, CustomComponent }: Props) => {
   const { mode } = useFlowProviderStore();
 
   const sortInputs = useMemo(
@@ -121,16 +120,13 @@ const RenderInput = ({ flowInputList, moduleId, CustomComponent }: Props) => {
         const Component = RenderList.find((item) => item.types.includes(input.type))?.Component;
 
         if (!Component) return null;
-        return <Component inputs={filterInputs} item={input} moduleId={moduleId} />;
+        return <Component inputs={filterInputs} item={input} nodeId={nodeId} />;
       })();
 
       return input.type !== FlowNodeInputTypeEnum.hidden ? (
         <Box key={input.key} _notLast={{ mb: 7 }} position={'relative'}>
-          {input.key === ModuleInputKeyEnum.userChatInput && (
-            <UserChatInput inputs={filterInputs} item={input} moduleId={moduleId} />
-          )}
           {!!input.label && (
-            <InputLabel moduleId={moduleId} inputKey={input.key} mode={mode} {...input} />
+            <InputLabel nodeId={nodeId} inputKey={input.key} mode={mode} {...input} />
           )}
           {!!RenderComponent && (
             <Box mt={2} className={'nodrag'}>
@@ -140,7 +136,7 @@ const RenderInput = ({ flowInputList, moduleId, CustomComponent }: Props) => {
         </Box>
       ) : null;
     });
-  }, [filterInputs, memoCustomComponent, mode, moduleId]);
+  }, [filterInputs, memoCustomComponent, mode, nodeId]);
 
   return <>{Render}</>;
 };

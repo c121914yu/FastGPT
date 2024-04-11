@@ -14,12 +14,12 @@ import dynamic from 'next/dynamic';
 const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 
 type Props = FlowNodeInputItemType & {
-  moduleId: string;
+  nodeId: string;
   inputKey: string;
   mode: useFlowProviderStoreType['mode'];
 };
 
-const InputLabel = ({ moduleId, inputKey, mode, ...item }: Props) => {
+const InputLabel = ({ nodeId, inputKey, mode, ...item }: Props) => {
   const { t } = useTranslation();
   const {
     required = false,
@@ -93,7 +93,7 @@ const InputLabel = ({ moduleId, inputKey, mode, ...item }: Props) => {
             _hover={{ color: 'red.500' }}
             onClick={() => {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'delInput',
                 key: inputKey,
                 value: ''
@@ -123,14 +123,14 @@ const InputLabel = ({ moduleId, inputKey, mode, ...item }: Props) => {
 
             if (changeKey) {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'replaceInput',
                 key: editField.key,
                 value: newInput
               });
             } else {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'updateInput',
                 key: newInput.key,
                 value: newInput

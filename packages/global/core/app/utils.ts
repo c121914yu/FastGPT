@@ -7,7 +7,7 @@ import {
 } from '../workflow/constants';
 import type { FlowNodeInputItemType } from '../workflow/node/type.d';
 import { getGuideModule, splitGuideModule } from '../workflow/utils';
-import { ModuleItemType } from '../workflow/type.d';
+import { StoreNodeItemType } from '../workflow/type.d';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 import { defaultWhisperConfig } from './constants';
 
@@ -44,7 +44,7 @@ export const getDefaultAppForm = (): AppSimpleEditFormType => {
 };
 
 /* format app modules to edit form */
-export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
+export const appModules2Form = ({ modules }: { modules: StoreNodeItemType[] }) => {
   const defaultAppForm = getDefaultAppForm();
 
   const findInputValueByKey = (inputs: FlowNodeInputItemType[], key: string) => {
@@ -53,8 +53,8 @@ export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
 
   modules.forEach((module) => {
     if (
-      module.flowType === FlowNodeTypeEnum.chatNode ||
-      module.flowType === FlowNodeTypeEnum.tools
+      module.flowNodeType === FlowNodeTypeEnum.chatNode ||
+      module.flowNodeType === FlowNodeTypeEnum.tools
     ) {
       defaultAppForm.aiSettings.model = findInputValueByKey(
         module.inputs,
@@ -76,7 +76,7 @@ export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
         module.inputs,
         ModuleInputKeyEnum.history
       );
-    } else if (module.flowType === FlowNodeTypeEnum.datasetSearchNode) {
+    } else if (module.flowNodeType === FlowNodeTypeEnum.datasetSearchNode) {
       defaultAppForm.dataset.datasets = findInputValueByKey(
         module.inputs,
         ModuleInputKeyEnum.datasetSelectList
@@ -108,7 +108,7 @@ export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
         module.inputs,
         ModuleInputKeyEnum.datasetSearchExtensionBg
       );
-    } else if (module.flowType === FlowNodeTypeEnum.userGuide) {
+    } else if (module.flowNodeType === FlowNodeTypeEnum.userGuide) {
       const { welcomeText, variableModules, questionGuide, ttsConfig, whisperConfig } =
         splitGuideModule(getGuideModule(modules));
 
@@ -119,13 +119,13 @@ export const appModules2Form = ({ modules }: { modules: ModuleItemType[] }) => {
         tts: ttsConfig,
         whisper: whisperConfig
       };
-    } else if (module.flowType === FlowNodeTypeEnum.pluginModule) {
+    } else if (module.flowNodeType === FlowNodeTypeEnum.pluginModule) {
       defaultAppForm.selectedTools.push({
         id: module.inputs.find((input) => input.key === ModuleInputKeyEnum.pluginId)?.value || '',
         name: module.name,
         avatar: module.avatar,
         intro: module.intro || '',
-        flowType: module.flowType,
+        flowNodeType: module.flowNodeType,
         showStatus: module.showStatus,
         inputs: module.inputs,
         outputs: module.outputs,

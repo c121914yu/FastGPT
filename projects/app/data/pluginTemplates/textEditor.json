@@ -11,7 +11,7 @@
     {
       "moduleId": "w90mfp",
       "name": "定义插件输入",
-      "flowType": "pluginInput",
+      "flowNodeType": "pluginInput",
       "showStatus": false,
       "position": {
         "x": 616.4226348688949,
@@ -95,7 +95,7 @@
     {
       "moduleId": "tze1ju",
       "name": "定义插件输出",
-      "flowType": "pluginOutput",
+      "flowNodeType": "pluginOutput",
       "showStatus": false,
       "position": {
         "x": 1607.7142331269126,
@@ -135,7 +135,7 @@
     {
       "moduleId": "49de3g",
       "name": "HTTP模块",
-      "flowType": "httpRequest468",
+      "flowNodeType": "httpRequest468",
       "showStatus": true,
       "position": {
         "x": 1086.8929621216014,

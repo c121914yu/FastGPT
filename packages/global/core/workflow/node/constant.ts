@@ -42,8 +42,9 @@ export enum FlowNodeOutputTypeEnum {
 }
 
 export enum FlowNodeTypeEnum {
+  emptyNode = 'emptyNode',
   userGuide = 'userGuide',
-  questionInput = 'questionInput',
+  workflowStart = 'workflowStart',
   historyNode = 'historyNode',
   chatNode = 'chatNode',
 
@@ -53,7 +54,6 @@ export enum FlowNodeTypeEnum {
   answerNode = 'answerNode',
   classifyQuestion = 'classifyQuestion',
   contentExtract = 'contentExtract',
-  httpRequest = 'httpRequest',
   httpRequest468 = 'httpRequest468',
   runApp = 'app',
   pluginModule = 'pluginModule',
@@ -62,9 +62,10 @@ export enum FlowNodeTypeEnum {
   queryExtension = 'cfr',
   tools = 'tools',
   stopTool = 'stopTool',
-  lafModule = 'lafModule'
+  lafModule = 'lafModule',
 
   // abandon
+  httpRequest = 'httpRequest'
 }
 
 export const EDGE_TYPE = 'default';

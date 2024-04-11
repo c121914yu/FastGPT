@@ -1,67 +1,51 @@
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { FlowNodeOutputTargetItemType } from '@fastgpt/global/core/workflow/node/type';
-import { FlowModuleItemType, ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { type Node, type Edge } from 'reactflow';
 
-export const flowNode2Modules = ({
+export const flowNode2StoreNodes = ({
   nodes,
   edges
 }: {
-  nodes: Node<FlowModuleItemType, string | undefined>[];
+  nodes: Node<FlowNodeItemType, string | undefined>[];
   edges: Edge<any>[];
 }) => {
-  const modules: ModuleItemType[] = nodes.map((item) => ({
-    moduleId: item.data.moduleId,
+  const formatNodes: StoreNodeItemType[] = nodes.map((item) => ({
+    nodeId: item.data.nodeId,
     name: item.data.name,
     intro: item.data.intro,
     avatar: item.data.avatar,
-    flowType: item.data.flowType,
+    flowNodeType: item.data.flowNodeType,
     showStatus: item.data.showStatus,
     position: item.position,
-    inputs: item.data.inputs.map((input) => ({
-      ...input,
-      connected: false
-    })),
-    outputs: item.data.outputs.map((item) => ({
-      ...item,
-      targets: [] as FlowNodeOutputTargetItemType[]
-    }))
+    sourceNodes: [],
+    targetNodes: [],
+    inputs: item.data.inputs,
+    outputs: item.data.outputs
   }));
 
-  // update inputs and outputs
-  modules.forEach((module) => {
-    module.inputs.forEach((input) => {
-      input.connected = !!edges.find(
-        (edge) => edge.target === module.moduleId && edge.targetHandle === input.key
-      );
-    });
+  // compute sourceNodes and targetNodes by edges
+  formatNodes.forEach((node) => {
+    const sourceEdges = edges.filter((edge) => edge.target === node.nodeId);
+    const targetEdges = edges.filter((edge) => edge.source === node.nodeId);
 
-    module.outputs.forEach((output) => {
-      output.targets = edges
-        .filter((edge) => {
-          if (
-            edge.source === module.moduleId &&
-            edge.sourceHandle === output.key &&
-            edge.targetHandle
-          ) {
-            return true;
-          }
-        })
-        .map((edge) => ({
-          moduleId: edge.target,
-          key: edge.targetHandle || ''
-        }));
-    });
+    node.sourceNodes = sourceEdges.map((item) => ({
+      nodeId: item.source
+    }));
+    node.targetNodes = targetEdges.map((item) => ({
+      nodeId: item.target,
+      sourceHandle: item.sourceHandle || '',
+      targetHandle: item.targetHandle || ''
+    }));
   });
 
-  return modules;
+  return formatNodes;
 };
 
-export const filterExportModules = (modules: ModuleItemType[]) => {
+export const filterExportModules = (modules: StoreNodeItemType[]) => {
   modules.forEach((module) => {
     // dataset - remove select dataset value
-    if (module.flowType === FlowNodeTypeEnum.datasetSearchNode) {
+    if (module.flowNodeType === FlowNodeTypeEnum.datasetSearchNode) {
       module.inputs.forEach((item) => {
         if (item.key === ModuleInputKeyEnum.datasetSelectList) {
           item.value = [];

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from '../render/NodeCard';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import Divider from '../../components/Divider';
 import Container from '../../components/Container';
 import RenderInput from '../render/RenderInput';
@@ -594,7 +594,7 @@ const RenderPropsItem = ({ text, num }: { text: string; num: number }) => {
   );
 };
 
-const NodeHttp = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { moduleId, inputs, outputs } = data;
   const { splitToolInputs, hasToolNode } = useFlowProviderStore();

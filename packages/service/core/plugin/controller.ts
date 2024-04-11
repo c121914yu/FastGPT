@@ -66,7 +66,7 @@ export async function getPluginPreviewModule({
   return {
     id: plugin.id,
     templateType: plugin.templateType,
-    flowType: FlowNodeTypeEnum.pluginModule,
+    flowNodeType: FlowNodeTypeEnum.pluginModule,
     avatar: plugin.avatar,
     name: plugin.name,
     intro: plugin.intro,

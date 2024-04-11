@@ -1,5 +1,5 @@
 export type EditFieldModalProps = {
   defaultValue?: EditFieldFormProps;
-  moduleId: string;
+  nodeId: string;
   onClose: () => void;
 };

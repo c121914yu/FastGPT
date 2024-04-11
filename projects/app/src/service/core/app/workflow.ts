@@ -1,8 +1,8 @@
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import type { ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import type { StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 
-export const getChatModelNameListByModules = (modules: ModuleItemType[]): string[] => {
-  const chatModules = modules.filter((item) => item.flowType === FlowNodeTypeEnum.chatNode);
+export const getChatModelNameListByModules = (modules: StoreNodeItemType[]): string[] => {
+  const chatModules = modules.filter((item) => item.flowNodeType === FlowNodeTypeEnum.chatNode);
   return chatModules
     .map((item) => {
       const model = item.inputs.find((input) => input.key === 'model')?.value;

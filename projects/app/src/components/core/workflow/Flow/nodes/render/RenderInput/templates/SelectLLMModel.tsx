@@ -5,7 +5,7 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { llmModelTypeFilterMap } from '@fastgpt/global/core/ai/constants';
 import AIModelSelector from '@/components/Select/AIModelSelector';
 
-const SelectAiModelRender = ({ item, moduleId }: RenderInputProps) => {
+const SelectAiModelRender = ({ item, nodeId }: RenderInputProps) => {
   const { llmModelList } = useSystemStore();
 
   const modelList = llmModelList.filter((model) => {
@@ -19,7 +19,7 @@ const SelectAiModelRender = ({ item, moduleId }: RenderInputProps) => {
   const onChangeModel = useCallback(
     (e: string) => {
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: item.key,
         value: {
@@ -28,7 +28,7 @@ const SelectAiModelRender = ({ item, moduleId }: RenderInputProps) => {
         }
       });
     },
-    [item, moduleId]
+    [item, nodeId]
   );
 
   useEffect(() => {

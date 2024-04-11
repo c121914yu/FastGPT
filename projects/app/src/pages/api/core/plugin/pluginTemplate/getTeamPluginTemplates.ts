@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       parentId: String(plugin.parentId),
       pluginType: plugin.type,
       templateType: FlowNodeTemplateTypeEnum.personalPlugin,
-      flowType: FlowNodeTypeEnum.pluginModule,
+      flowNodeType: FlowNodeTypeEnum.pluginModule,
       avatar: plugin.avatar,
       name: plugin.name,
       intro: plugin.intro,

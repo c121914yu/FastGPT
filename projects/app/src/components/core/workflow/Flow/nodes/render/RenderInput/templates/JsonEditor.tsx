@@ -9,7 +9,7 @@ import {
   splitGuideModule
 } from '@fastgpt/global/core/workflow/utils';
 
-const JsonEditor = ({ inputs = [], item, moduleId }: RenderInputProps) => {
+const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const { nodes } = useFlowProviderStore();
 
@@ -33,7 +33,7 @@ const JsonEditor = ({ inputs = [], item, moduleId }: RenderInputProps) => {
   const update = useCallback(
     (value: string) => {
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: item.key,
         value: {
@@ -42,7 +42,7 @@ const JsonEditor = ({ inputs = [], item, moduleId }: RenderInputProps) => {
         }
       });
     },
-    [item, moduleId]
+    [item, nodeId]
   );
 
   const value = useMemo(() => {

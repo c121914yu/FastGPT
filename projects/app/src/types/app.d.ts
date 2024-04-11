@@ -8,7 +8,7 @@ import type {
   FlowNodeOutputItemType,
   FlowNodeOutputTargetItemType
 } from '@fastgpt/global/core/workflow/node/type.d';
-import type { FlowNodeTemplateType, ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import type { FlowNodeTemplateType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import type { ChatSchema } from '@fastgpt/global/core/chat/type';
 import type { AppSchema } from '@fastgpt/global/core/app/type';
 import { ChatModelType } from '@/constants/model';
@@ -27,7 +27,7 @@ export interface ShareAppItem {
 export type AppItemType = {
   id: string;
   name: string;
-  modules: ModuleItemType[];
+  modules: StoreNodeItemType[];
 };
 
 export type AppLogsListItemType = {

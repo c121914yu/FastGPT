@@ -14,7 +14,7 @@ import {
   FlowNodeInputTypeEnum,
   FlowNodeTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
 import { responseWriteNodeStatus } from '../../../common/response';
 import { getSystemTime } from '@fastgpt/global/common/time/timezone';
@@ -79,7 +79,7 @@ export async function dispatchWorkFlow({
   detail = false,
   ...props
 }: ChatDispatchProps & {
-  modules?: ModuleItemType[]; // app modules
+  modules?: StoreNodeItemType[]; // app modules
   runtimeModules?: RunningModuleItemType[];
   startParams?: Record<string, any>; // entry module params
 }): Promise<DispatchFlowResponse> {
@@ -254,8 +254,8 @@ export async function dispatchWorkFlow({
 
     // run module
     const dispatchRes: Record<string, any> = await (async () => {
-      if (callbackMap[module.flowType]) {
-        return callbackMap[module.flowType](dispatchData);
+      if (callbackMap[module.flowNodeType]) {
+        return callbackMap[module.flowNodeType](dispatchData);
       }
       return {};
     })();
@@ -265,7 +265,7 @@ export async function dispatchWorkFlow({
       if (!dispatchRes[DispatchNodeResponseKeyEnum.nodeResponse]) return undefined;
       return {
         moduleName: module.name,
-        moduleType: module.flowType,
+        moduleType: module.flowNodeType,
         ...dispatchRes[DispatchNodeResponseKeyEnum.nodeResponse]
       };
     })();
@@ -310,7 +310,7 @@ export async function dispatchWorkFlow({
 
   // focus try to run pluginOutput
   const pluginOutputModule = runningModules.find(
-    (item) => item.flowType === FlowNodeTypeEnum.pluginOutput
+    (item) => item.flowNodeType === FlowNodeTypeEnum.pluginOutput
   );
   if (pluginOutputModule) {
     await moduleRun(pluginOutputModule);
@@ -327,7 +327,7 @@ export async function dispatchWorkFlow({
 
 /* init store modules to running modules */
 function loadModules(
-  modules: ModuleItemType[],
+  modules: StoreNodeItemType[],
   variables: Record<string, any>
 ): RunningModuleItemType[] {
   return modules
@@ -340,7 +340,7 @@ function loadModules(
         name: module.name,
         avatar: module.avatar,
         intro: module.intro,
-        flowType: module.flowType,
+        flowNodeType: module.flowNodeType,
         showStatus: module.showStatus,
         isEntry: module.isEntry,
         inputs: module.inputs

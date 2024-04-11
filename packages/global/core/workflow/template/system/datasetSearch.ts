@@ -11,8 +11,8 @@ import {
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_Switch, Input_Template_UserChatInput } from '../input';
-import { Output_Template_Finish, Output_Template_UserChatInput } from '../output';
 import { DatasetSearchModeEnum } from '../../../dataset/constants';
+import { getHandleConfig } from '../utils';
 
 export const Dataset_SEARCH_DESC =
   '调用“语义检索”和“全文检索”能力，从“知识库”中查找可能与问题相关的参考内容';
@@ -20,7 +20,9 @@ export const Dataset_SEARCH_DESC =
 export const DatasetSearchModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.datasetSearchNode,
   templateType: FlowNodeTemplateTypeEnum.functionCall,
-  flowType: FlowNodeTypeEnum.datasetSearchNode,
+  flowNodeType: FlowNodeTypeEnum.datasetSearchNode,
+  sourceHandle: getHandleConfig(false, true, false, false),
+  targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/db.png',
   name: '知识库搜索',
   intro: Dataset_SEARCH_DESC,
@@ -35,35 +37,27 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
       value: [],
       valueType: ModuleIOValueTypeEnum.selectDataset,
       list: [],
-      required: true,
-      showTargetInApp: false,
-      showTargetInPlugin: true
+      required: true
     },
     {
       key: ModuleInputKeyEnum.datasetSimilarity,
       type: FlowNodeInputTypeEnum.selectDatasetParamsModal,
       label: '',
       value: 0.4,
-      valueType: ModuleIOValueTypeEnum.number,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      valueType: ModuleIOValueTypeEnum.number
     },
     {
       key: ModuleInputKeyEnum.datasetMaxTokens,
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
       value: 1500,
-      valueType: ModuleIOValueTypeEnum.number,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      valueType: ModuleIOValueTypeEnum.number
     },
     {
       key: ModuleInputKeyEnum.datasetSearchMode,
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
       valueType: ModuleIOValueTypeEnum.string,
-      showTargetInApp: false,
-      showTargetInPlugin: false,
       value: DatasetSearchModeEnum.embedding
     },
     {
@@ -71,8 +65,6 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
       valueType: ModuleIOValueTypeEnum.boolean,
-      showTargetInApp: false,
-      showTargetInPlugin: false,
       value: false
     },
     {
@@ -80,25 +72,19 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
       valueType: ModuleIOValueTypeEnum.boolean,
-      showTargetInApp: false,
-      showTargetInPlugin: false,
       value: true
     },
     {
       key: ModuleInputKeyEnum.datasetSearchExtensionModel,
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
-      valueType: ModuleIOValueTypeEnum.string,
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      valueType: ModuleIOValueTypeEnum.string
     },
     {
       key: ModuleInputKeyEnum.datasetSearchExtensionBg,
       type: FlowNodeInputTypeEnum.hidden,
       label: '',
       valueType: ModuleIOValueTypeEnum.string,
-      showTargetInApp: false,
-      showTargetInPlugin: false,
       value: ''
     },
     {
@@ -107,27 +93,23 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
     }
   ],
   outputs: [
-    Output_Template_UserChatInput,
     {
       key: ModuleOutputKeyEnum.datasetIsEmpty,
       label: 'core.module.output.label.Search result empty',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.boolean,
-      targets: []
+      valueType: ModuleIOValueTypeEnum.boolean
     },
     {
       key: ModuleOutputKeyEnum.datasetUnEmpty,
       label: 'core.module.output.label.Search result not empty',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.boolean,
-      targets: []
+      valueType: ModuleIOValueTypeEnum.boolean
     },
     {
       key: ModuleOutputKeyEnum.datasetQuoteQA,
       label: 'core.module.Dataset quote.label',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.datasetQuote,
-      targets: []
+      valueType: ModuleIOValueTypeEnum.datasetQuote
     }
   ]
 };

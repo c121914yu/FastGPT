@@ -1,4 +1,4 @@
-import type { ModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import type { StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import { AppSchema } from '@fastgpt/global/core/app/type.d';
 import React, {
   useMemo,
@@ -32,7 +32,7 @@ const ChatTest = (
     onClose
   }: {
     app: AppSchema;
-    modules?: ModuleItemType[];
+    modules?: StoreNodeItemType[];
     onClose: () => void;
   },
   ref: ForwardedRef<ChatTestComponentRef>

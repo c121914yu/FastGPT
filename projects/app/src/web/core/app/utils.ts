@@ -1,11 +1,11 @@
 import { AppSimpleEditFormType } from '@fastgpt/global/core/app/type';
-import { ModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import {
   FlowNodeInputTypeEnum,
   FlowNodeTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
 import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { UserInputModule } from '@fastgpt/global/core/workflow/template/system/userInput';
+import { EmptyNode } from '@fastgpt/global/core/workflow/template/system/emptyNode';
 import { ToolModule } from '@fastgpt/global/core/workflow/template/system/tools';
 import {
   DatasetSearchModule,
@@ -14,11 +14,13 @@ import {
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 export async function postForm2Modules(data: AppSimpleEditFormType) {
-  function userGuideTemplate(formData: AppSimpleEditFormType): ModuleItemType[] {
+  function userGuideTemplate(formData: AppSimpleEditFormType): StoreNodeItemType[] {
     return [
       {
         name: '系统配置',
-        flowType: FlowNodeTypeEnum.userGuide,
+        flowNodeType: FlowNodeTypeEnum.userGuide,
+        targetNodes: [],
+        sourceNodes: [],
         inputs: [
           {
             key: ModuleInputKeyEnum.welcomeText,
@@ -56,17 +58,17 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
           x: 447.98520778293346,
           y: 721.4016845336229
         },
-        moduleId: 'userGuide'
+        nodeId: 'userGuide'
       }
     ];
   }
-  function simpleChatTemplate(formData: AppSimpleEditFormType): ModuleItemType[] {
+  function simpleChatTemplate(formData: AppSimpleEditFormType): StoreNodeItemType[] {
     return [
       {
-        moduleId: 'userChatInput',
+        nodeId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
         avatar: '/imgs/workflow/userChatInput.png',
-        flowType: 'questionInput',
+        flowNodeType: 'workflowStart',
         position: {
           x: 464.32198615344566,
           y: 1602.2698463081606
@@ -76,10 +78,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             key: 'userChatInput',
             type: 'systemInput',
             valueType: 'string',
-            label: 'core.module.input.label.user question',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            label: 'core.module.input.label.user question'
           }
         ],
         outputs: [
@@ -87,21 +86,15 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             key: 'userChatInput',
             label: 'core.module.input.label.user question',
             type: 'source',
-            valueType: 'string',
-            targets: [
-              {
-                moduleId: 'chatModule',
-                key: 'userChatInput'
-              }
-            ]
+            valueType: 'string'
           }
         ]
       },
       {
-        moduleId: 'chatModule',
+        nodeId: 'chatModule',
         name: 'AI 对话',
         avatar: '/imgs/workflow/AI.png',
-        flowType: 'chatNode',
+        flowNodeType: 'chatNode',
         showStatus: true,
         position: {
           x: 981.9682828103937,
@@ -291,14 +284,14 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
       }
     ];
   }
-  function datasetTemplate(formData: AppSimpleEditFormType): ModuleItemType[] {
+  function datasetTemplate(formData: AppSimpleEditFormType): StoreNodeItemType[] {
     return [
       {
-        moduleId: 'userChatInput',
+        nodeId: 'userChatInput',
         name: 'core.module.template.Chat entrance',
         intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
         avatar: '/imgs/workflow/userChatInput.svg',
-        flowType: 'questionInput',
+        flowNodeType: 'workflowStart',
         position: {
           x: 324.81436595478294,
           y: 1527.0012457753612
@@ -322,7 +315,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             valueType: 'string',
             targets: [
               {
-                moduleId: '0voh5n',
+                nodeId: '0voh5n',
                 key: 'userChatInput'
               }
             ]
@@ -330,11 +323,11 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
         ]
       },
       {
-        moduleId: '63toub',
+        nodeId: '63toub',
         name: 'AI 对话',
         intro: 'AI 大模型对话',
         avatar: '/imgs/workflow/AI.png',
-        flowType: 'chatNode',
+        flowNodeType: 'chatNode',
         showStatus: true,
         position: {
           x: 1962.4010270586014,
@@ -499,11 +492,11 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
         ]
       },
       {
-        moduleId: '0voh5n',
+        nodeId: '0voh5n',
         name: '知识库搜索',
         intro: Dataset_SEARCH_DESC,
         avatar: '/imgs/workflow/db.png',
-        flowType: 'datasetSearchNode',
+        flowNodeType: 'datasetSearchNode',
         showStatus: true,
         position: {
           x: 1098.245668870126,
@@ -622,7 +615,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             valueType: 'string',
             targets: [
               {
-                moduleId: '63toub',
+                nodeId: '63toub',
                 key: 'userChatInput'
               }
             ]
@@ -648,7 +641,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             valueType: 'datasetQuote',
             targets: [
               {
-                moduleId: '63toub',
+                nodeId: '63toub',
                 key: 'quoteQA'
               }
             ]
@@ -657,16 +650,16 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
       }
     ];
   }
-  function toolTemplates(formData: AppSimpleEditFormType): ModuleItemType[] {
-    let tools: ModuleItemType[] =
+  function toolTemplates(formData: AppSimpleEditFormType): StoreNodeItemType[] {
+    let tools: StoreNodeItemType[] =
       formData.dataset.datasets.length > 0
         ? [
             {
-              moduleId: getNanoid(6),
+              nodeId: getNanoid(6),
               name: DatasetSearchModule.name,
               intro: DatasetSearchModule.intro,
               avatar: DatasetSearchModule.avatar,
-              flowType: DatasetSearchModule.flowType,
+              flowNodeType: DatasetSearchModule.flowNodeType,
               showStatus: DatasetSearchModule.showStatus,
               position: {
                 x: 1000,
@@ -812,11 +805,11 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
 
     tools = tools.concat(
       formData.selectedTools.map((tool, i) => ({
-        moduleId: getNanoid(6),
+        nodeId: getNanoid(6),
         name: tool.name,
         intro: tool.intro,
         avatar: tool.avatar,
-        flowType: tool.flowType,
+        flowNodeType: tool.flowNodeType,
         showStatus: tool.showStatus,
         position: {
           x: 1000 + (300 * i + 1),
@@ -826,13 +819,13 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
         outputs: tool.outputs
       }))
     );
-    const modules: ModuleItemType[] = [
+    const modules: StoreNodeItemType[] = [
       {
-        moduleId: 'userChatInput',
+        nodeId: 'userChatInput',
         name: UserInputModule.name,
         intro: UserInputModule.intro,
         avatar: UserInputModule.avatar,
-        flowType: UserInputModule.flowType,
+        flowNodeType: UserInputModule.flowNodeType,
         position: {
           x: 324.81436595478294,
           y: 1527.0012457753612
@@ -843,7 +836,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             ...UserInputModule.outputs[0],
             targets: [
               {
-                moduleId: 'yt7o6j',
+                nodeId: 'yt7o6j',
                 key: 'userChatInput'
               }
             ]
@@ -851,11 +844,11 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
         ]
       },
       {
-        moduleId: 'yt7o6j',
+        nodeId: 'yt7o6j',
         name: ToolModule.name,
         intro: ToolModule.intro,
         avatar: ToolModule.avatar,
-        flowType: ToolModule.flowType,
+        flowNodeType: ToolModule.flowNodeType,
         showStatus: ToolModule.showStatus,
         position: {
           x: 890.8756545707358,
@@ -958,7 +951,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             valueType: 'tools',
             type: 'hidden',
             targets: tools.map((tool) => ({
-              moduleId: tool.moduleId,
+              nodeId: tool.nodeId,
               key: 'selectedTools'
             }))
           },

@@ -9,7 +9,7 @@ import {
   splitGuideModule
 } from '@fastgpt/global/core/workflow/utils';
 
-const TextareaRender = ({ inputs = [], item, moduleId }: RenderInputProps) => {
+const TextareaRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const { nodes } = useFlowProviderStore();
 
@@ -39,7 +39,7 @@ const TextareaRender = ({ inputs = [], item, moduleId }: RenderInputProps) => {
   const onChange = useCallback(
     (e: string) => {
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: item.key,
         value: {
@@ -48,7 +48,7 @@ const TextareaRender = ({ inputs = [], item, moduleId }: RenderInputProps) => {
         }
       });
     },
-    [item, moduleId]
+    [item, nodeId]
   );
 
   return (

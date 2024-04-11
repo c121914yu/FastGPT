@@ -1,5 +1,4 @@
 export enum FlowNodeTemplateTypeEnum {
-  userGuide = 'userGuide',
   systemInput = 'systemInput',
   tools = 'tools',
   textAnswer = 'textAnswer',

@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 
 const FieldEditModal = dynamic(() => import('../../FieldEditModal'));
 
-const AddInputParam = ({ inputs = [], item, moduleId }: RenderInputProps) => {
+const AddInputParam = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
@@ -32,7 +32,7 @@ const AddInputParam = ({ inputs = [], item, moduleId }: RenderInputProps) => {
           onClose={() => setEditField(undefined)}
           onSubmit={({ data }) => {
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'addInput',
               key: data.key,
               value: {

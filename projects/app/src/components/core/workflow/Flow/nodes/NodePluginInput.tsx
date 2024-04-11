@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
 import { onChangeNode } from '../FlowProvider';
 import dynamic from 'next/dynamic';
 import { Box, Button, Flex } from '@chakra-ui/react';
@@ -43,9 +43,9 @@ const createEditField: EditInputFieldMap = {
   isToolInput: true
 };
 
-const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
+const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
-  const { moduleId, inputs, outputs } = data;
+  const { nodeId, inputs, outputs } = data;
   const [createField, setCreateField] = useState<EditNodeFieldType>();
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
@@ -91,12 +91,12 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                   _hover={{ color: 'red.500' }}
                   onClick={() => {
                     onChangeNode({
-                      moduleId,
+                      nodeId,
                       type: 'delInput',
                       key: item.key
                     });
                     onChangeNode({
-                      moduleId,
+                      nodeId,
                       type: 'delOutput',
                       key: item.key
                     });
@@ -146,7 +146,7 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
           onClose={() => setCreateField(undefined)}
           onSubmit={({ data }) => {
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'addInput',
               value: {
                 key: data.key,
@@ -161,7 +161,7 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
               }
             });
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'addOutput',
               value: {
                 key: data.key,
@@ -230,26 +230,26 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
             console.log(data);
             if (changeKey) {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'replaceInput',
                 key: editField.key,
                 value: newInput
               });
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'replaceOutput',
                 key: editField.key,
                 value: newOutput
               });
             } else {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'updateInput',
                 key: newInput.key,
                 value: newInput
               });
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'updateOutput',
                 key: newOutput.key,
                 value: newOutput

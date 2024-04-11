@@ -1,4 +1,4 @@
-import type { FlowNodeTemplateType, ModuleItemType } from '../workflow/type.d';
+import type { FlowNodeTemplateType, StoreNodeItemType } from '../workflow/type.d';
 
 import { AppTypeEnum } from './constants';
 import { PermissionTypeEnum } from '../../support/permission/constant';
@@ -18,7 +18,7 @@ export interface AppSchema {
   avatar: string;
   intro: string;
   updateTime: number;
-  modules: ModuleItemType[];
+  modules: StoreNodeItemType[];
   permission: `${PermissionTypeEnum}`;
   inited?: boolean;
   teamTags: string[];

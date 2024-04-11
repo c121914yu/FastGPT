@@ -1053,6 +1053,9 @@
     "shareChat": {
       "Init Error": "初始化对话框失败",
       "Init History Error": "初始化聊天记录失败"
+    },
+    "workflow": {
+      "Can not delete node": "该节点不允许删除"
     }
   },
   "dataset": {

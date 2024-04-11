@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import ReactFlow, {
   Background,
   Connection,
@@ -7,7 +7,8 @@ import ReactFlow, {
   MiniMap,
   NodeProps,
   ReactFlowProvider,
-  useReactFlow
+  useReactFlow,
+  OnInit
 } from 'reactflow';
 import { Box, Flex, IconButton, useDisclosure } from '@chakra-ui/react';
 import { SmallCloseIcon } from '@chakra-ui/icons';
@@ -22,14 +23,14 @@ import { useFlowProviderStore } from './FlowProvider';
 import 'reactflow/dist/style.css';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useTranslation } from 'next-i18next';
-import { FlowModuleItemType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
 
 const NodeSimple = dynamic(() => import('./nodes/NodeSimple'));
 const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
   [FlowNodeTypeEnum.userGuide]: dynamic(() => import('./nodes/NodeUserGuide')),
-  [FlowNodeTypeEnum.questionInput]: dynamic(() => import('./nodes/NodeQuestionInput')),
+  [FlowNodeTypeEnum.workflowStart]: dynamic(() => import('./nodes/NodeWorkflowStart')),
   [FlowNodeTypeEnum.historyNode]: NodeSimple,
   [FlowNodeTypeEnum.chatNode]: NodeSimple,
   [FlowNodeTypeEnum.datasetSearchNode]: NodeSimple,
@@ -45,7 +46,7 @@ const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
   [FlowNodeTypeEnum.pluginModule]: NodeSimple,
   [FlowNodeTypeEnum.queryExtension]: NodeSimple,
   [FlowNodeTypeEnum.tools]: dynamic(() => import('./nodes/NodeTools')),
-  [FlowNodeTypeEnum.stopTool]: (data: NodeProps<FlowModuleItemType>) => (
+  [FlowNodeTypeEnum.stopTool]: (data: NodeProps<FlowNodeItemType>) => (
     <NodeSimple {...data} minW={'100px'} maxW={'300px'} />
   ),
   [FlowNodeTypeEnum.lafModule]: dynamic(() => import('./nodes/NodeLaf'))
@@ -58,8 +59,16 @@ const Container = React.memo(function Container() {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const { reactFlowWrapper, nodes, onNodesChange, edges, onEdgesChange, onConnect } =
-    useFlowProviderStore();
+  const {
+    reactFlowWrapper,
+    nodes,
+    onNodesChange,
+    edges,
+    onEdgesChange,
+    onConnectStart,
+    onConnectEnd,
+    onConnect
+  } = useFlowProviderStore();
 
   const customOnConnect = useCallback(
     (connect: Connection) => {
@@ -98,6 +107,8 @@ const Container = React.memo(function Container() {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={customOnConnect}
+      onConnectStart={onConnectStart}
+      onConnectEnd={onConnectEnd}
     >
       <FlowController />
     </ReactFlow>
