@@ -42,7 +42,7 @@ const SelectAiModelRender = ({ item, moduleId }: RenderInputProps) => {
       minW={'350px'}
       width={'100%'}
       value={item.value}
-      list={modelList.map((item) => ({
+      list={(item.selectedModelList ? item.selectedModelList : modelList).map((item) => ({
         value: item.model,
         label: item.name
       }))}

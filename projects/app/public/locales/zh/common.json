@@ -610,7 +610,8 @@
             "success": "开始同步"
           }
         },
-        "training": {}
+        "training": {
+        }
       },
       "data": {
         "Auxiliary Data": "辅助数据",
@@ -842,6 +843,9 @@
       "Http request settings": "请求配置",
       "Input Type": "输入类型",
       "Laf sync params": "同步参数",
+      "Max Length": "最大长度",
+      "Max Length placeholder": "输入文本的最大长度",
+      "Model List": "模型列表",
       "Plugin output must connect": "自定义输出必须全部连接",
       "QueryExtension": {
         "placeholder": "例如:\n关于 python 的介绍和使用等问题。\n当前对话与游戏《GTA5》有关。",
@@ -849,6 +853,7 @@
       },
       "Quote prompt setting": "引用提示词配置",
       "Qupte prompt setting": "",
+      "Select Data List": "数据列表",
       "Select app": "选择应用",
       "Setting quote prompt": "配置引用提示词",
       "Unlink tip": "【{{name}}】存在未填或未连接参数",
@@ -924,16 +929,21 @@
           "Classify background": "例如: \n1. AIGC（人工智能生成内容）是指使用人工智能技术自动或半自动地生成数字内容，如文本、图像、音乐、视频等。\n2. AIGC技术包括但不限于自然语言处理、计算机视觉、机器学习和深度学习。这些技术可以创建新内容或修改现有内容，以满足特定的创意、教育、娱乐或信息需求。"
         }
       },
+      "inputDataType": {
+        "input": "单行输入框",
+        "jsonInput": "JSON 输入框",
+        "radio": "单选框",
+        "selectDataset": "知识库选择",
+        "selectLLMModel": "对话模型选择",
+        "switch": "开关",
+        "textarea": "段落输入"
+      },
       "inputType": {
         "chat history": "历史记录",
         "dynamicTargetInput": "动态外部数据",
         "input": "输入框",
         "selectApp": "应用选择",
-        "selectDataset": "知识库选择",
-        "selectLLMModel": "对话模型选择",
-        "switch": "开关",
-        "target": "外部数据",
-        "textarea": "段落输入"
+        "target": "外部数据传入"
       },
       "laf": {
         "Select laf function": "选择laf函数"
@@ -966,6 +976,7 @@
         "AI support tool tip": "支持函数调用的模型，可以更好的使用工具调用。",
         "Ai chat": "AI 对话",
         "Ai chat intro": "AI 大模型对话",
+        "App system setting": "系统配置",
         "Assigned reply": "指定回复",
         "Assigned reply intro": "该模块可以直接回复一段指定的内容。常用于引导、提示。非字符串内容传入时，会转成字符串进行输出。",
         "Basic Node": "基础功能",
@@ -997,7 +1008,6 @@
         "Tool module": "工具",
         "UnKnow Module": "未知模块",
         "User guide": "用户引导",
-        "App system setting": "系统配置",
         "http body placeholder": "与APIFox相同的语法",
         "textEditor": "文本加工",
         "textEditor intro": "可对固定或传入的文本进行加工后输出，非字符串类型数据最终会转成字符串类型。"

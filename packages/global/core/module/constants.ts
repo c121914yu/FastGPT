@@ -27,6 +27,17 @@ export enum ModuleIOValueTypeEnum {
   tools = 'tools'
 }
 
+export enum PluginInputTypeEnum {
+  selectApp = 'selectApp',
+  selectDataset = 'selectDataset',
+  input = 'input',
+  textarea = 'textarea',
+  JSONEditor = 'JSONEditor',
+  select = 'select',
+  selectLLMModel = 'selectLLMModel',
+  switch = 'switch'
+}
+
 /* reg: modulename key */
 export enum ModuleInputKeyEnum {
   // old

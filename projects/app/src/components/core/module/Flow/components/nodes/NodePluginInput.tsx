@@ -20,7 +20,7 @@ import type {
   FlowNodeInputItemType,
   FlowNodeOutputItemType
 } from '@fastgpt/global/core/module/node/type.d';
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/module/constants';
+import { ModuleIOValueTypeEnum, PluginInputTypeEnum } from '@fastgpt/global/core/module/constants';
 import { useTranslation } from 'next-i18next';
 
 const FieldEditModal = dynamic(() => import('../render/FieldEditModal'));
@@ -31,6 +31,7 @@ const defaultCreateField: EditNodeFieldType = {
   description: '',
   inputType: FlowNodeInputTypeEnum.target,
   valueType: ModuleIOValueTypeEnum.string,
+  inputDataType: PluginInputTypeEnum.input,
   required: true
 };
 const createEditField: EditInputFieldMap = {
@@ -74,6 +75,10 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
                     setEditField({
                       inputType: item.type,
                       valueType: item.valueType,
+                      inputDataType: item.inputDataType,
+                      maxLen: item.maxLen,
+                      selectedModelList: item.selectedModelList,
+                      list: item.list,
                       key: item.key,
                       label: item.label,
                       description: item.description,
@@ -151,6 +156,10 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
               value: {
                 key: data.key,
                 valueType: data.valueType,
+                inputDataType: data.inputDataType,
+                maxLen: data.maxLen,
+                selectedModelList: data.selectedModelList,
+                list: data.list,
                 label: data.label,
                 type: data.inputType,
                 required: data.required,
@@ -195,6 +204,10 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowModuleItemType>) => {
               ...memInput,
               type: data.inputType,
               valueType: data.valueType,
+              inputDataType: data.inputDataType,
+              maxLen: data.maxLen,
+              selectedModelList: data.selectedModelList,
+              list: data.list,
               key: data.key,
               required: data.required,
               label: data.label,

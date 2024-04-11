@@ -841,6 +841,9 @@
       "Http request settings": "Request settings",
       "Input Type": "Input Type",
       "Laf sync params": "Sync params",
+      "Max Length": "Max Length",
+      "Max Length placeholder": "The max length of input text",
+      "Model List": "Model list",
       "Plugin output must connect": "Custom outputs must all be connected",
       "QueryExtension": {
         "placeholder": "Questions about python introduction and usage, etc. The current conversation is related to the game GTA5.",
@@ -848,6 +851,7 @@
       },
       "Quote prompt setting": "Quote prompt setting",
       "Qupte prompt setting": "",
+      "Select Data List": "Data list",
       "Select app": "Select app",
       "Setting quote prompt": "Setting quote prompt",
       "Unlink tip": "[{{name}}] An unfilled or unconnected parameter exists",
@@ -923,16 +927,21 @@
           "Classify background": "For example:\n1.AIGC (Artificial Intelligence Generates content) refers to the automatic or semi-automatic generation of digital content, such as text, images, music, videos, and so on, using artificial intelligence technologies. AIGC technologies include, but are not limited to, natural language processing, computer vision, machine learning, and deep learning. These technologies can create new content or modify existing content to meet specific creative, educational, entertainment or information needs."
         }
       },
+      "inputDataType": {
+        "input": "One line input",
+        "jsonInput": "JSON input",
+        "radio": "Radio",
+        "selectDataset": "Dataset Selector",
+        "selectLLMModel": "Select Chat Model",
+        "switch": "Switch",
+        "textarea": "Textarea"
+      },
       "inputType": {
         "chat history": "History",
         "dynamicTargetInput": "dynamic Target Input",
         "input": "Input",
         "selectApp": "App Selector",
-        "selectDataset": "Dataset Selector",
-        "selectLLMModel": "Select Chat Model",
-        "switch": "Switch",
-        "target": "Target Data",
-        "textarea": "Textarea"
+        "target": "Target Data"
       },
       "laf": {
         "Select laf function": ""
@@ -965,6 +974,7 @@
         "AI support tool tip": "A model that supports function calls allows better use of tool calls.",
         "Ai chat": "LLM Chat",
         "Ai chat intro": "Request LLM chat",
+        "App system setting": "",
         "Assigned reply": "Assigned reply",
         "Assigned reply intro": "The module can respond directly to a specified piece of content. Often used to guide and prompt. When non-string content is passed in, it is converted to a string for output.",
         "Basic Node": "Basic Node",

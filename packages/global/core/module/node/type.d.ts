@@ -53,6 +53,11 @@ export type FlowNodeInputItemType = {
   min?: number; // slider, number input
 
   llmModelType?: `${LLMModelTypeEnum}`;
+
+  inputDataType?: `${PluginInputTypeEnum}`;
+  maxLen?: number;
+  list?: { label: string; value: any }[];
+  selectedModelList?: LLMModelItemType[];
 };
 
 export type FlowNodeOutputTargetItemType = {
@@ -99,6 +104,10 @@ export type EditNodeFieldType = {
   valueType?: `${ModuleIOValueTypeEnum}`;
   isToolInput?: boolean;
   defaultValue?: string;
+  inputDataType?: `${PluginInputTypeEnum}`;
+  maxLen?: number;
+  list?: { label: string; value: any }[];
+  selectedModelList?: LLMModelItemType[];
 };
 
 /* ------------- item type --------------- */

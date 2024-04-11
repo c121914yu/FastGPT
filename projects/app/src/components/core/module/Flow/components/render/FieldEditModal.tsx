@@ -7,11 +7,24 @@ import {
   Flex,
   Switch,
   Input,
-  Textarea
+  Textarea,
+  TableContainer,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Image,
+  Stack
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import MyModal from '@fastgpt/web/components/common/MyModal';
-import { DYNAMIC_INPUT_KEY, ModuleIOValueTypeEnum } from '@fastgpt/global/core/module/constants';
+import {
+  DYNAMIC_INPUT_KEY,
+  ModuleIOValueTypeEnum,
+  PluginInputTypeEnum
+} from '@fastgpt/global/core/module/constants';
 import { useTranslation } from 'next-i18next';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 import {
@@ -21,6 +34,8 @@ import {
 import { EditInputFieldMap, EditNodeFieldType } from '@fastgpt/global/core/module/node/type.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MySelect from '@fastgpt/web/components/common/MySelect';
+import MyIcon from '@fastgpt/web/components/common/Icon';
+import { useSystemStore } from '@/web/common/system/useSystemStore';
 
 const FieldEditModal = ({
   editField = {
@@ -45,6 +60,10 @@ const FieldEditModal = ({
   const isCreate = useMemo(() => !defaultField.key, [defaultField.key]);
   const showDynamicInputSelect =
     !keys.includes(DYNAMIC_INPUT_KEY) || defaultField.key === DYNAMIC_INPUT_KEY;
+  const { llmModelList } = useSystemStore();
+  const [selectedModelList, setSelectedModelList] = useState<any[]>(
+    defaultField.selectedModelList || []
+  );
 
   const inputTypeList = [
     {
@@ -56,21 +75,6 @@ const FieldEditModal = ({
       label: t('core.module.inputType.input'),
       value: FlowNodeInputTypeEnum.input,
       valueType: ModuleIOValueTypeEnum.string
-    },
-    {
-      label: t('core.module.inputType.textarea'),
-      value: FlowNodeInputTypeEnum.textarea,
-      valueType: ModuleIOValueTypeEnum.string
-    },
-    {
-      label: t('core.module.inputType.switch'),
-      value: FlowNodeInputTypeEnum.switch,
-      valueType: ModuleIOValueTypeEnum.boolean
-    },
-    {
-      label: t('core.module.inputType.selectDataset'),
-      value: FlowNodeInputTypeEnum.selectDataset,
-      valueType: ModuleIOValueTypeEnum.selectDataset
     },
     ...(showDynamicInputSelect
       ? [
@@ -90,13 +94,56 @@ const FieldEditModal = ({
       value: item.value
     }));
 
+  const inputDataTypeList = [
+    {
+      label: t('core.module.inputDataType.input'),
+      value: PluginInputTypeEnum.input,
+      valueType: ModuleIOValueTypeEnum.string
+    },
+    {
+      label: t('core.module.inputDataType.textarea'),
+      value: PluginInputTypeEnum.textarea,
+      valueType: ModuleIOValueTypeEnum.string
+    },
+    {
+      label: t('core.module.inputDataType.jsonInput'),
+      value: PluginInputTypeEnum.JSONEditor,
+      valueType: ModuleIOValueTypeEnum.string
+    },
+    {
+      label: t('core.module.inputDataType.radio'),
+      value: PluginInputTypeEnum.select,
+      valueType: ModuleIOValueTypeEnum.string
+    },
+    {
+      label: t('core.module.inputDataType.selectDataset'),
+      value: PluginInputTypeEnum.selectDataset,
+      valueType: ModuleIOValueTypeEnum.selectDataset
+    },
+    {
+      label: t('core.module.inputDataType.selectLLMModel'),
+      value: PluginInputTypeEnum.selectLLMModel,
+      valueType: ModuleIOValueTypeEnum.string
+    },
+    {
+      label: t('core.module.inputDataType.switch'),
+      value: PluginInputTypeEnum.switch,
+      valueType: ModuleIOValueTypeEnum.boolean
+    }
+  ];
+
   const { register, getValues, setValue, handleSubmit, watch } = useForm<EditNodeFieldType>({
     defaultValues: defaultField
   });
   const inputType = watch('inputType');
   const outputType = watch('outputType');
+  const inputDataType = watch('inputDataType');
   const required = watch('required');
   const [refresh, setRefresh] = useState(false);
+
+  const showToolInput = useMemo(() => {
+    return editField.isToolInput && inputType === FlowNodeInputTypeEnum.target;
+  }, [editField.isToolInput, inputType]);
 
   const showDataTypeSelect = useMemo(() => {
     if (!editField.dataType) return false;
@@ -106,6 +153,32 @@ const FieldEditModal = ({
 
     return false;
   }, [editField.dataType, inputType, outputType]);
+
+  const showInputDataTypeSelect = useMemo(() => {
+    if (inputType === FlowNodeInputTypeEnum.input) return true;
+
+    return false;
+  }, [inputType]);
+
+  const showMaxLenInput = useMemo(() => {
+    if (inputType !== FlowNodeInputTypeEnum.input) return false;
+    if (inputDataType === PluginInputTypeEnum.input) return true;
+    if (inputDataType === PluginInputTypeEnum.textarea) return true;
+
+    return false;
+  }, [inputDataType, inputType]);
+
+  const showSelectDataList = useMemo(() => {
+    if (inputDataType === PluginInputTypeEnum.select) return true;
+
+    return false;
+  }, [inputDataType]);
+
+  const showModelList = useMemo(() => {
+    if (inputDataType === PluginInputTypeEnum.selectLLMModel) return true;
+
+    return false;
+  }, [inputDataType]);
 
   const showRequired = useMemo(() => {
     if (inputType === FlowNodeInputTypeEnum.addInputParam) return false;
@@ -126,6 +199,24 @@ const FieldEditModal = ({
   const showDescriptionInput = useMemo(() => {
     return editField.description;
   }, [editField.description]);
+
+  const [list, setList] = useState<Array<{ label: string; value: string }>>(
+    defaultField.list || []
+  );
+  const [emptyInput, setEmptyInput] = useState({ label: '', value: '' });
+  const addNewListItem = (label: string, value: string = '') => {
+    if (!label) return;
+    setEmptyInput({ label: '', value: '' });
+    const checkExist = list.find((item) => item.label === label);
+    if (checkExist) {
+      return toast({
+        status: 'warning',
+        title: t('core.module.edit.Field Already Exist')
+      });
+    }
+    setList([...list, { label, value }]);
+    setValue('list', [...list, { label, value }]);
+  };
 
   const onSubmitSuccess = useCallback(
     (data: EditNodeFieldType) => {
@@ -217,7 +308,7 @@ const FieldEditModal = ({
             />
           </Flex>
         )}
-        {editField.isToolInput && (
+        {showToolInput && (
           <Flex alignItems={'center'} mb={5}>
             <Box flex={'0 0 70px'}>工具参数</Box>
             <Switch {...register('isToolInput')} />
@@ -245,6 +336,167 @@ const FieldEditModal = ({
                 setRefresh(!refresh);
               }}
             />
+          </Flex>
+        )}
+        {showInputDataTypeSelect && (
+          <Flex mb={5} alignItems={'center'}>
+            <Box flex={'0 0 70px'}>{t('core.module.Data Type')}</Box>
+            <MySelect
+              w={'288px'}
+              list={inputDataTypeList}
+              value={getValues('inputDataType')}
+              onchange={(e: string) => {
+                const type = e as `${PluginInputTypeEnum}`;
+                const selectedItem = inputDataTypeList.find((item) => item.value === type);
+
+                setValue('inputDataType', type);
+                setValue('valueType', selectedItem?.valueType);
+                setRefresh(!refresh);
+              }}
+            />
+          </Flex>
+        )}
+        {showMaxLenInput && (
+          <Flex mb={5} alignItems={'center'}>
+            <Box flex={'0 0 70px'}>{t('core.module.Max Length')}</Box>
+            <Input
+              bg={'myGray.50'}
+              placeholder={t('core.module.Max Length placeholder')}
+              {...register('maxLen')}
+            />
+          </Flex>
+        )}
+        {showSelectDataList && (
+          <Flex mb={5} alignItems={'center'}>
+            <Box flex={'0 0 70px'}>{t('core.module.Select Data List')}</Box>
+            <TableContainer w={'full'}>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th p={2}>label</Th>
+                    <Th p={2}>value</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {list.map((item, index) => (
+                    <Tr key={item.label}>
+                      <Td p={0} pl={2}>
+                        <Input
+                          variant={'unstyled'}
+                          defaultValue={item.label}
+                          onBlur={(e) => {
+                            const value = e.target.value;
+                            setList((prevList) => {
+                              const newList = [...prevList];
+                              newList[index] = { ...newList[index], label: value };
+                              return newList;
+                            });
+                            setValue(
+                              'list',
+                              list?.map((item, i) =>
+                                i === index ? { ...item, label: value } : item
+                              )
+                            );
+                          }}
+                        />
+                      </Td>
+                      <Td p={0} pl={2}>
+                        <Box display={'flex'} alignItems={'center'}>
+                          <Input
+                            variant={'unstyled'}
+                            defaultValue={item.value}
+                            onBlur={(e) => {
+                              const value = e.target.value;
+                              setList;
+                              setValue(
+                                'list',
+                                list?.map((item, i) =>
+                                  i === index ? { ...item, value: value } : item
+                                )
+                              );
+                            }}
+                          />
+                          <MyIcon
+                            name={'delete'}
+                            cursor={'pointer'}
+                            _hover={{ color: 'red.600' }}
+                            w={'14px'}
+                            onClick={() => {
+                              setList((prevList) => prevList.filter((_, i) => i !== index));
+                              setValue(
+                                'list',
+                                list.filter((_, i) => i !== index)
+                              );
+                            }}
+                          />
+                        </Box>
+                      </Td>
+                    </Tr>
+                  ))}
+                  <Tr>
+                    <Td p={0} pl={2}>
+                      <Input
+                        variant={'unstyled'}
+                        value={emptyInput.label}
+                        onChange={(e) => setEmptyInput({ ...emptyInput, label: e.target.value })}
+                        onBlur={(e) => addNewListItem(e.target.value)}
+                      />
+                    </Td>
+                    <Td p={0} pl={2}>
+                      <Input
+                        variant={'unstyled'}
+                        value={emptyInput.value}
+                        onChange={(e) => setEmptyInput({ ...emptyInput, value: e.target.value })}
+                        onBlur={(e) => addNewListItem(emptyInput.label, e.target.value)}
+                      />
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </Flex>
+        )}
+        {showModelList && (
+          <Flex mb={5} alignItems={'center'}>
+            <Box flex={'0 0 70px'}>{t('core.module.Model List')}</Box>
+            <Stack maxH={'200px'} overflow={'auto'} w={'full'}>
+              {llmModelList.map((item, index) => (
+                <Flex
+                  key={index}
+                  border={
+                    selectedModelList.find((i) => i.model === item.model)
+                      ? '1px solid #9bb4f9'
+                      : '1px solid #e2e8f0'
+                  }
+                  bg={selectedModelList.find((i) => i.model === item.model) && 'primary.100'}
+                  color={selectedModelList.find((i) => i.model === item.model) && '#436ff6'}
+                  borderRadius={'md'}
+                  _hover={{ bg: 'primary.100', border: '1px solid #9bb4f9', color: '#436ff6' }}
+                  p={2}
+                  cursor={'pointer'}
+                  onClick={() => {
+                    setSelectedModelList((prev) => {
+                      const checkExist = prev.find((i) => i.model === item.model);
+                      if (checkExist) {
+                        return prev.filter((i) => i.model !== item.model);
+                      }
+                      return [...prev, item];
+                    });
+                    setValue(
+                      'selectedModelList',
+                      selectedModelList.find((i) => i.model === item.model)
+                        ? selectedModelList.filter((i) => i.model !== item.model)
+                        : [...selectedModelList, item]
+                    );
+                  }}
+                >
+                  <Box mr={2}>
+                    <Image w={6} alt={item.name} src={item.avatar} />
+                  </Box>
+                  <Box>{item.name}</Box>
+                </Flex>
+              ))}
+            </Stack>
           </Flex>
         )}
         {showNameInput && (

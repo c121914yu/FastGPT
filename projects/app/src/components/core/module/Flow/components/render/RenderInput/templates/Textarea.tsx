@@ -55,6 +55,7 @@ const TextareaRender = ({ inputs = [], item, moduleId }: RenderInputProps) => {
     <PromptEditor
       variables={variables}
       title={t(item.label)}
+      maxLength={item.maxLen}
       h={150}
       placeholder={t(item.placeholder || '')}
       value={item.value}
