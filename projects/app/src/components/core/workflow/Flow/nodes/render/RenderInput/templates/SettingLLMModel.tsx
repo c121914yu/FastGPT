@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
 import type { RenderInputProps } from '../type';
-import { onChangeNode } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import { SettingAIDataType } from '@fastgpt/global/core/workflow/node/type';
 import SettingLLMModel from '@/components/core/ai/SettingLLMModel';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 const SelectAiModelRender = ({ item, inputs = [], nodeId }: RenderInputProps) => {
+  const { onChangeNode } = useFlowProviderStore();
+
   const onChangeModel = useCallback(
     (e: SettingAIDataType) => {
       for (const key in e) {
@@ -23,7 +25,7 @@ const SelectAiModelRender = ({ item, inputs = [], nodeId }: RenderInputProps) =>
           });
       }
     },
-    [inputs, nodeId]
+    [inputs, nodeId, onChangeNode]
   );
 
   const llmModelData: SettingAIDataType = {

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useTransition } from 'react';
 import type { RenderInputProps } from '../type';
-import { useFlowProviderStore, onChangeNode } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import {
@@ -11,7 +11,7 @@ import {
 
 const TextareaRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
-  const { nodes } = useFlowProviderStore();
+  const { nodes, onChangeNode } = useFlowProviderStore();
 
   // get variable
   const variables = useMemo(() => {

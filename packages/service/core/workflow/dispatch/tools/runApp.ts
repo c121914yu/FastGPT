@@ -1,6 +1,6 @@
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
-import { SelectAppItemType } from '@fastgpt/global/core/workflow/type';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
+import { SelectAppItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { dispatchWorkFlow } from '../index';
 import { MongoApp } from '../../../../core/app/schema';
 import { responseWrite } from '../../../../common/response';

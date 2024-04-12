@@ -8,11 +8,11 @@ import {
   MenuButton,
   MenuItemProps
 } from '@chakra-ui/react';
-import MyIcon from '@fastgpt/web/components/common/Icon';
+import MyIcon from '../Icon';
 
 type MenuItemType = 'primary' | 'danger';
 
-interface Props {
+export type Props = {
   width?: number | string;
   offset?: [number, number];
   Button: React.ReactNode;
@@ -24,7 +24,7 @@ interface Props {
     type?: MenuItemType;
     onClick: () => any;
   }[];
-}
+};
 
 const MyMenu = ({
   width = 'auto',
@@ -132,4 +132,4 @@ const MyMenu = ({
   );
 };
 
-export default MyMenu;
+export default React.memo(MyMenu);

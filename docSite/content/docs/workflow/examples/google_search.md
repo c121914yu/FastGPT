@@ -312,16 +312,6 @@ export default async function (ctx: FunctionContext) {
     },
     "inputs": [
       {
-        "key": "switch",
-        "type": "triggerAndFinish",
-        "label": "",
-        "description": "core.module.input.description.Trigger",
-        "valueType": "any",
-        "showTargetInApp": true,
-        "showTargetInPlugin": true,
-        "connected": false
-      },
-      {
         "key": "system_httpMethod",
         "type": "custom",
         "valueType": "string",

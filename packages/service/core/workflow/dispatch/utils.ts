@@ -4,7 +4,7 @@ import {
   ModuleOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 
 export const setEntryEntries = (modules: StoreNodeItemType[]) => {
   const initRunningModuleType: Record<string, boolean> = {

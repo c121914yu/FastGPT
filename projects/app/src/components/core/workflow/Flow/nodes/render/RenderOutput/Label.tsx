@@ -1,14 +1,12 @@
-import { EditNodeFieldType, FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/node/type';
+import { EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
+import { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import React, { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Box, Flex } from '@chakra-ui/react';
-import MyIcon from '@fastgpt/web/components/common/Icon';
-import { onChangeNode } from '../../../FlowProvider';
 import MyTooltip from '@/components/MyTooltip';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
-import SourceHandle from '../SourceHandle';
-import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import dynamic from 'next/dynamic';
+import { useFlowProviderStore } from '../../../FlowProvider';
 
 const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 
@@ -23,7 +21,8 @@ const OutputLabel = ({
   outputs: FlowNodeOutputItemType[];
 }) => {
   const { t } = useTranslation();
-  const { label = '', description, edit } = item;
+  const { onChangeNode } = useFlowProviderStore();
+  const { label = '', description } = item;
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
   return (
@@ -34,107 +33,12 @@ const OutputLabel = ({
       alignItems={'center'}
       position={'relative'}
     >
-      {edit && (
-        <>
-          <MyIcon
-            name={'common/settingLight'}
-            w={'14px'}
-            cursor={'pointer'}
-            mr={3}
-            _hover={{ color: 'primary.500' }}
-            onClick={() =>
-              setEditField({
-                key: outputKey,
-                label: item.label,
-                description: item.description,
-                valueType: item.valueType,
-                outputType: item.type,
-                required: item.required,
-                defaultValue: item.defaultValue
-              })
-            }
-          />
-          <MyIcon
-            className="delete"
-            name={'delete'}
-            w={'14px'}
-            cursor={'pointer'}
-            mr={3}
-            _hover={{ color: 'red.500' }}
-            onClick={() => {
-              onChangeNode({
-                nodeId,
-                type: 'delOutput',
-                key: outputKey
-              });
-            }}
-          />
-        </>
-      )}
       {description && (
         <MyTooltip label={t(description)} forceShow>
           <QuestionOutlineIcon display={['none', 'inline']} mr={1} />
         </MyTooltip>
       )}
-      <Box position={'relative'}>
-        {item.required && (
-          <Box
-            position={'absolute'}
-            top={'-2px'}
-            left={'-5px'}
-            color={'red.500'}
-            fontWeight={'bold'}
-          >
-            *
-          </Box>
-        )}
-        {t(label)}
-      </Box>
-
-      {/* {item.type === FlowNodeOutputTypeEnum.source && (
-        <SourceHandle handleKey={outputKey} valueType={item.valueType} />
-      )} */}
-
-      {!!editField && (
-        <FieldEditModal
-          editField={item.editField}
-          defaultField={editField}
-          keys={[outputKey]}
-          onClose={() => setEditField(undefined)}
-          onSubmit={({ data, changeKey }) => {
-            if (!data.outputType || !data.key) return;
-
-            const newOutput: FlowNodeOutputItemType = {
-              ...item,
-              type: data.outputType,
-              valueType: data.valueType,
-              key: data.key,
-              label: data.label,
-              description: data.description,
-              required: data.required,
-              defaultValue: data.defaultValue
-            };
-
-            if (changeKey) {
-              onChangeNode({
-                nodeId,
-                type: 'replaceOutput',
-                key: editField.key,
-                value: newOutput
-              });
-            } else {
-              onChangeNode({
-                nodeId,
-                type: 'updateOutput',
-                key: newOutput.key,
-                value: newOutput
-              });
-            }
-
-            setEditField(undefined);
-          }}
-        />
-      )}
+      <Box position={'relative'}>{t(label)}</Box>
     </Flex>
   );
 };

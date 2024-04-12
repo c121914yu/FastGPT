@@ -1,5 +1,5 @@
 import type { AppTTSConfigType } from '@fastgpt/global/core/app/type.d';
-import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { AdminFbkType, ChatItemType } from '@fastgpt/global/core/chat/type';
 import type { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat.d';
 

@@ -3,14 +3,14 @@ import {
   FlowNodeOutputTypeEnum,
   FlowNodeTypeEnum
 } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type.d';
+import { FlowNodeTemplateType } from '../../type';
 import {
   ModuleIOValueTypeEnum,
   ModuleInputKeyEnum,
   ModuleOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
-import { Input_Template_Switch, Input_Template_UserChatInput } from '../input';
+import { Input_Template_UserChatInput } from '../input';
 import { DatasetSearchModeEnum } from '../../../dataset/constants';
 import { getHandleConfig } from '../utils';
 
@@ -29,10 +29,9 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
   showStatus: true,
   isTool: true,
   inputs: [
-    Input_Template_Switch,
     {
       key: ModuleInputKeyEnum.datasetSelectList,
-      type: FlowNodeInputTypeEnum.selectDataset,
+      renderTypeList: [FlowNodeInputTypeEnum.selectDataset, FlowNodeInputTypeEnum.reference],
       label: 'core.module.input.label.Select dataset',
       value: [],
       valueType: ModuleIOValueTypeEnum.selectDataset,
@@ -41,48 +40,49 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
     },
     {
       key: ModuleInputKeyEnum.datasetSimilarity,
-      type: FlowNodeInputTypeEnum.selectDatasetParamsModal,
+      renderTypeList: [FlowNodeInputTypeEnum.selectDatasetParamsModal],
       label: '',
       value: 0.4,
       valueType: ModuleIOValueTypeEnum.number
     },
+    // setting from modal
     {
       key: ModuleInputKeyEnum.datasetMaxTokens,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       value: 1500,
       valueType: ModuleIOValueTypeEnum.number
     },
     {
       key: ModuleInputKeyEnum.datasetSearchMode,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       valueType: ModuleIOValueTypeEnum.string,
       value: DatasetSearchModeEnum.embedding
     },
     {
       key: ModuleInputKeyEnum.datasetSearchUsingReRank,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       valueType: ModuleIOValueTypeEnum.boolean,
       value: false
     },
     {
       key: ModuleInputKeyEnum.datasetSearchUsingExtensionQuery,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       valueType: ModuleIOValueTypeEnum.boolean,
       value: true
     },
     {
       key: ModuleInputKeyEnum.datasetSearchExtensionModel,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       valueType: ModuleIOValueTypeEnum.string
     },
     {
       key: ModuleInputKeyEnum.datasetSearchExtensionBg,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       valueType: ModuleIOValueTypeEnum.string,
       value: ''
@@ -94,18 +94,21 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
+      id: ModuleOutputKeyEnum.datasetIsEmpty,
       key: ModuleOutputKeyEnum.datasetIsEmpty,
       label: 'core.module.output.label.Search result empty',
       type: FlowNodeOutputTypeEnum.source,
       valueType: ModuleIOValueTypeEnum.boolean
     },
     {
+      id: ModuleOutputKeyEnum.datasetUnEmpty,
       key: ModuleOutputKeyEnum.datasetUnEmpty,
       label: 'core.module.output.label.Search result not empty',
       type: FlowNodeOutputTypeEnum.source,
       valueType: ModuleIOValueTypeEnum.boolean
     },
     {
+      id: ModuleOutputKeyEnum.datasetQuoteQA,
       key: ModuleOutputKeyEnum.datasetQuoteQA,
       label: 'core.module.Dataset quote.label',
       type: FlowNodeOutputTypeEnum.source,

@@ -4,7 +4,7 @@ import { connectToDatabase } from '@/service/mongo';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
 import { MongoPlugin } from '@fastgpt/service/core/plugin/schema';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type/index.d';
 import { FlowNodeTemplateTypeEnum } from '@fastgpt/global/core/workflow/constants';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {

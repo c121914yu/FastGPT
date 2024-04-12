@@ -2,14 +2,14 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Box, Flex, IconButton, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import type {
   FlowNodeTemplateType,
-  moduleTemplateListType
-} from '@fastgpt/global/core/workflow/type.d';
+  nodeTemplateListType
+} from '@fastgpt/global/core/workflow/type/index.d';
 import { useViewport, XYPosition } from 'reactflow';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import Avatar from '@/components/Avatar';
 import { useFlowProviderStore } from './FlowProvider';
 import { customAlphabet } from 'nanoid';
-import { appModule2FlowNode } from '@/web/core/workflow/adapt';
+import { storeNode2FlowNode, nodeTemplate2FlowNode } from '@/web/core/workflow/adapt';
 import { useTranslation } from 'next-i18next';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 import EmptyTip from '@/components/EmptyTip';
@@ -47,15 +47,15 @@ enum TemplateTypeEnum {
 
 const sliderWidth = 380;
 
-const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
+const NodeTemplatesModal = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [currentParent, setCurrentParent] = useState<RenderListProps['currentParent']>();
   const [searchKey, setSearchKey] = useState('');
   const { feConfigs } = useSystemStore();
+  const { nodes, basicNodeTemplates } = useFlowProviderStore();
 
   const {
-    basicNodeTemplates,
     systemNodeTemplates,
     loadSystemNodeTemplates,
     teamPluginNodeTemplates,
@@ -63,9 +63,17 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   } = useWorkflowStore();
   const [templateType, setTemplateType] = useState(TemplateTypeEnum.basic);
 
-  const templates = useMemo(() => {
+  const templatesString = useMemo(() => {
     const map = {
       [TemplateTypeEnum.basic]: basicNodeTemplates.filter((item) => {
+        // unique node filter
+        if (item.unique) {
+          const nodeExist = nodes.some((node) => node.data.flowNodeType === item.flowNodeType);
+          if (nodeExist) {
+            return false;
+          }
+        }
+        // special node filter
         if (item.flowNodeType === FlowNodeTypeEnum.lafModule && !feConfigs.lafEnv) {
           return false;
         }
@@ -80,6 +88,7 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   }, [
     basicNodeTemplates,
     feConfigs.lafEnv,
+    nodes,
     searchKey,
     systemNodeTemplates,
     teamPluginNodeTemplates,
@@ -110,7 +119,7 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   );
 
   const Render = useMemo(() => {
-    const parseTemplates = JSON.parse(templates) as FlowNodeTemplateType[];
+    const parseTemplates = JSON.parse(templatesString) as FlowNodeTemplateType[];
     return (
       <>
         <Box
@@ -225,12 +234,22 @@ const ModuleTemplateList = ({ isOpen, onClose }: ModuleTemplateListProps) => {
         </Flex>
       </>
     );
-  }, [currentParent, isOpen, onChangeTab, onClose, router, searchKey, t, templateType, templates]);
+  }, [
+    currentParent,
+    isOpen,
+    onChangeTab,
+    onClose,
+    router,
+    searchKey,
+    t,
+    templateType,
+    templatesString
+  ]);
 
   return Render;
 };
 
-export default React.memo(ModuleTemplateList);
+export default React.memo(NodeTemplatesModal);
 
 const RenderList = React.memo(function RenderList({
   templates,
@@ -245,8 +264,8 @@ const RenderList = React.memo(function RenderList({
   const { toast } = useToast();
   const { reactFlowWrapper, nodes, setNodes } = useFlowProviderStore();
 
-  const formatTemplates = useMemo<moduleTemplateListType>(() => {
-    const copy: moduleTemplateListType = JSON.parse(JSON.stringify(moduleTemplatesList));
+  const formatTemplates = useMemo<nodeTemplateListType>(() => {
+    const copy: nodeTemplateListType = JSON.parse(JSON.stringify(moduleTemplatesList));
     templates.forEach((item) => {
       const index = copy.findIndex((template) => template.type === item.templateType);
       if (index === -1) return;
@@ -287,20 +306,9 @@ const RenderList = React.memo(function RenderList({
 
       setNodes(
         nodes.concat(
-          appModule2FlowNode({
-            item: {
-              nodeId: nanoid(),
-              name: templateModule.name,
-              avatar: templateModule.avatar,
-              intro: templateModule.intro,
-              position: { x: mouseX, y: mouseY - 20 },
-              flowNodeType: templateModule.flowNodeType,
-              showStatus: templateModule.showStatus,
-              sourceNodes: [],
-              targetNodes: [],
-              inputs: templateModule.inputs,
-              outputs: templateModule.outputs
-            }
+          nodeTemplate2FlowNode({
+            template: templateModule,
+            position: { x: mouseX, y: mouseY - 20 }
           })
         )
       );

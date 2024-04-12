@@ -1,32 +1,38 @@
-import { FlowNodeTypeEnum } from './node/constant';
+import { FlowNodeTypeEnum } from '../node/constant';
 import {
   ModuleIOValueTypeEnum,
   ModuleOutputKeyEnum,
   FlowNodeTemplateTypeEnum,
   VariableInputEnum
-} from './constants';
-import { DispatchNodeResponseKeyEnum } from './runtime/constants';
-import { FlowNodeInputItemType, FlowNodeOutputItemType } from './node/type';
-import { UserModelSchema } from '../../support/user/type';
+} from '../constants';
+import { DispatchNodeResponseKeyEnum } from '../runtime/constants';
+import { FlowNodeInputItemType, FlowNodeOutputItemType } from './io.d';
+import { UserModelSchema } from '../../../support/user/type';
 import {
   ChatItemType,
   ChatItemValueItemType,
   ToolRunResponseItemType,
   UserChatItemValueItemType
-} from '../chat/type';
-import { ChatNodeUsageType } from '../../support/wallet/bill/type';
-import { RunningModuleItemType } from './runtime/type';
-import { PluginTypeEnum } from '../plugin/constants';
+} from '../../chat/type';
+import { ChatNodeUsageType } from '../../../support/wallet/bill/type';
+import { RunningModuleItemType } from '../runtime/type';
+import { PluginTypeEnum } from '../../plugin/constants';
 
-export type moduleTemplateListType = {
-  type: `${FlowNodeTemplateTypeEnum}`;
-  label: string;
-  list: FlowNodeTemplateType[];
-}[];
-export type FlowNodeTemplateType = {
+export type FlowNodeCommonType = {
+  flowNodeType: `${FlowNodeTypeEnum}`; // render node card
+
+  name: string;
+  intro: string; // template list intro
+  showStatus?: boolean; // chatting response step status
+
+  // data
+  inputs: FlowNodeInputItemType[];
+  outputs: FlowNodeOutputItemType[];
+};
+
+export type FlowNodeTemplateType = FlowNodeCommonType & {
   id: string; // module id, unique
   templateType: `${FlowNodeTemplateTypeEnum}`;
-  flowNodeType: `${FlowNodeTypeEnum}`; // render node card
 
   // show handle
   sourceHandle: {
@@ -44,17 +50,11 @@ export type FlowNodeTemplateType = {
 
   // info
   avatar?: string;
-  name: string;
-  intro: string; // template list intro
   isTool?: boolean; // can be connected by tool
 
   // action
-  showStatus?: boolean; // chatting response step status
   forbidDelete?: boolean; // forbid delete
-
-  // data
-  inputs: FlowNodeInputItemType[];
-  outputs: FlowNodeOutputItemType[];
+  unique?: boolean;
 
   // plugin data
   pluginType?: `${PluginTypeEnum}`;
@@ -62,6 +62,28 @@ export type FlowNodeTemplateType = {
 };
 export type FlowNodeItemType = FlowNodeTemplateType & {
   nodeId: string;
+};
+export type nodeTemplateListType = {
+  type: `${FlowNodeTemplateTypeEnum}`;
+  label: string;
+  list: FlowNodeTemplateType[];
+}[];
+
+// store node type
+export type StoreNodeItemType = FlowNodeCommonType & {
+  nodeId: string;
+  position?: {
+    x: number;
+    y: number;
+  };
+
+  targetNodes: NodeTargetNodeItemType[]; // 输出到的节点数据
+  sourceNodes: NodeSourceNodeItemType[]; // 来源的节点数据
+  inputs: FlowNodeInputItemType[];
+  outputs: FlowNodeOutputItemType[];
+
+  // runTime field
+  // isEntry?: boolean;
 };
 
 /* connection type */
@@ -72,28 +94,6 @@ export type NodeTargetNodeItemType = {
 };
 export type NodeSourceNodeItemType = {
   nodeId: string;
-};
-
-// store module type
-export type StoreNodeItemType = {
-  name: string;
-  avatar?: string;
-  intro?: string;
-  nodeId: string;
-  position?: {
-    x: number;
-    y: number;
-  };
-  flowNodeType: `${FlowNodeTypeEnum}`;
-  showStatus?: boolean;
-
-  targetNodes: NodeTargetNodeItemType[]; // 输出到的节点数据
-  sourceNodes: NodeSourceNodeItemType[]; // 来源的节点数据
-  inputs: FlowNodeInputItemType[];
-  outputs: FlowNodeOutputItemType[];
-
-  // runTime field
-  // isEntry?: boolean;
 };
 
 /* --------------- function type -------------------- */

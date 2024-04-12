@@ -1,4 +1,4 @@
-import type { StoreNodeItemType } from '../workflow/type.d';
+import type { StoreNodeItemType } from '../workflow/type';
 import { PluginTypeEnum } from './constants';
 import { HttpAuthMethodType } from './httpPlugin/type';
 

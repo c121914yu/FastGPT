@@ -3,18 +3,14 @@ import {
   FlowNodeOutputTypeEnum,
   FlowNodeTypeEnum
 } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type';
+import { FlowNodeTemplateType } from '../../type/index.d';
 import {
   ModuleIOValueTypeEnum,
   ModuleInputKeyEnum,
   ModuleOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
-import {
-  Input_Template_DynamicInput,
-  Input_Template_Switch,
-  Input_Template_AddInputParam
-} from '../input';
+import { Input_Template_DynamicInput, Input_Template_AddInputParam } from '../input';
 import { Output_Template_AddOutput } from '../output';
 import { getHandleConfig } from '../utils';
 
@@ -30,10 +26,9 @@ export const lafModule: FlowNodeTemplateType = {
   showStatus: true,
   isTool: true,
   inputs: [
-    Input_Template_Switch,
     {
       key: ModuleInputKeyEnum.httpReqUrl,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: ModuleIOValueTypeEnum.string,
       label: '',
       description: 'core.module.input.description.Http Request Url',
@@ -45,6 +40,7 @@ export const lafModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
+      id: ModuleOutputKeyEnum.httpRawResponse,
       key: ModuleOutputKeyEnum.httpRawResponse,
       label: '原始响应',
       description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',

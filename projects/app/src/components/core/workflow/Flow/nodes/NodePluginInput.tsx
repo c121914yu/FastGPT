@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
-import { onChangeNode } from '../FlowProvider';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import dynamic from 'next/dynamic';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
@@ -16,12 +15,15 @@ import MyTooltip from '@/components/MyTooltip';
 import SourceHandle from './render/SourceHandle';
 import type {
   EditInputFieldMap,
-  EditNodeFieldType,
+  EditNodeFieldType
+} from '@fastgpt/global/core/workflow/node/type.d';
+import {
   FlowNodeInputItemType,
   FlowNodeOutputItemType
-} from '@fastgpt/global/core/workflow/node/type.d';
+} from '@fastgpt/global/core/workflow/type/io.d';
 import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
+import { useFlowProviderStore } from '../FlowProvider';
 
 const FieldEditModal = dynamic(() => import('./render/FieldEditModal'));
 
@@ -46,6 +48,8 @@ const createEditField: EditInputFieldMap = {
 const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { nodeId, inputs, outputs } = data;
+  const { onChangeNode } = useFlowProviderStore();
+
   const [createField, setCreateField] = useState<EditNodeFieldType>();
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
@@ -62,48 +66,6 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
             position={'relative'}
             mb={7}
           >
-            {item.edit && (
-              <>
-                <MyIcon
-                  name={'common/settingLight'}
-                  w={'14px'}
-                  cursor={'pointer'}
-                  mr={3}
-                  _hover={{ color: 'primary.500' }}
-                  onClick={() =>
-                    setEditField({
-                      inputType: item.type,
-                      valueType: item.valueType,
-                      key: item.key,
-                      label: item.label,
-                      description: item.description,
-                      required: item.required,
-                      isToolInput: !!item.toolDescription
-                    })
-                  }
-                />
-                <MyIcon
-                  className="delete"
-                  name={'delete'}
-                  w={'14px'}
-                  cursor={'pointer'}
-                  mr={3}
-                  _hover={{ color: 'red.500' }}
-                  onClick={() => {
-                    onChangeNode({
-                      nodeId,
-                      type: 'delInput',
-                      key: item.key
-                    });
-                    onChangeNode({
-                      nodeId,
-                      type: 'delOutput',
-                      key: item.key
-                    });
-                  }}
-                />
-              </>
-            )}
             {item.description && (
               <MyTooltip label={t(item.description)} forceShow>
                 <QuestionOutlineIcon display={['none', 'inline']} mr={1} />

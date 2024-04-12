@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { RenderInputProps } from '../type';
-import { onChangeNode, useFlowProviderStore } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import { Box, Button, Flex, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import { DatasetSearchModeEnum } from '@fastgpt/global/core/dataset/constants';
@@ -12,7 +12,7 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import SearchParamsTip from '@/components/core/dataset/SearchParamsTip';
 
 const SelectDatasetParam = ({ inputs = [], nodeId }: RenderInputProps) => {
-  const { nodes } = useFlowProviderStore();
+  const { nodes, onChangeNode } = useFlowProviderStore();
   const { t } = useTranslation();
   const { llmModelList } = useSystemStore();
 

@@ -1,9 +1,11 @@
 import React from 'react';
 import type { RenderInputProps } from '../type';
 import { Input } from '@chakra-ui/react';
-import { onChangeNode } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 
 const TextInput = ({ item, nodeId }: RenderInputProps) => {
+  const { onChangeNode } = useFlowProviderStore();
+
   return (
     <Input
       placeholder={item.placeholder}

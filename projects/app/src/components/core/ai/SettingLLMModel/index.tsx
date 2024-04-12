@@ -41,7 +41,7 @@ const SettingLLMModel = ({ llmModelType = LLMModelTypeEnum.all, defaultData, onC
         model: modelList[0].model
       });
     }
-  }, [defaultData, model, modelList, onChange]);
+  }, []);
 
   return (
     <Box position={'relative'}>

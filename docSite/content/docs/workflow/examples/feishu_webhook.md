@@ -130,16 +130,6 @@ weight: 404
     },
     "inputs": [
       {
-        "key": "switch",
-        "type": "triggerAndFinish",
-        "label": "",
-        "description": "core.module.input.description.Trigger",
-        "valueType": "any",
-        "showTargetInApp": true,
-        "showTargetInPlugin": true,
-        "connected": false
-      },
-      {
         "key": "model",
         "type": "settingLLMModel",
         "label": "core.module.input.label.aiModel",
@@ -254,16 +244,7 @@ weight: 404
       "y": 798.9716928475544
     },
     "inputs": [
-      {
-        "key": "switch",
-        "type": "triggerAndFinish",
-        "label": "",
-        "description": "core.module.input.description.Trigger",
-        "valueType": "any",
-        "showTargetInApp": true,
-        "showTargetInPlugin": true,
-        "connected": false
-      },
+     
       {
         "key": "system_httpMethod",
         "type": "custom",

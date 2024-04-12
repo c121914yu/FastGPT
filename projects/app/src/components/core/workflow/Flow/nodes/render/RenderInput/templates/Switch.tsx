@@ -1,9 +1,10 @@
 import React from 'react';
 import type { RenderInputProps } from '../type';
 import { Switch } from '@chakra-ui/react';
-import { onChangeNode } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 
 const SwitchRender = ({ item, nodeId }: RenderInputProps) => {
+  const { onChangeNode } = useFlowProviderStore();
   return (
     <Switch
       size={'lg'}

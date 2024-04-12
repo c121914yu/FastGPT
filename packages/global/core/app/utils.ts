@@ -5,9 +5,9 @@ import {
   ModuleInputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../workflow/constants';
-import type { FlowNodeInputItemType } from '../workflow/node/type.d';
+import type { FlowNodeInputItemType } from '../workflow/type/io.d';
 import { getGuideModule, splitGuideModule } from '../workflow/utils';
-import { StoreNodeItemType } from '../workflow/type.d';
+import { StoreNodeItemType } from '../workflow/type';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 import { defaultWhisperConfig } from './constants';
 

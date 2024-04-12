@@ -7,10 +7,10 @@ import {
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import { ChatItemValueTypeEnum, ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAIApi } from '../../../ai/config';
-import type { ClassifyQuestionAgentItemType } from '@fastgpt/global/core/workflow/type.d';
+import type { ClassifyQuestionAgentItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
 import { Prompt_CQJson } from '@fastgpt/global/core/ai/prompt/agent';
 import { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';

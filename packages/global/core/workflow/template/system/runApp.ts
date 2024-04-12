@@ -3,18 +3,14 @@ import {
   FlowNodeOutputTypeEnum,
   FlowNodeTypeEnum
 } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type.d';
+import { FlowNodeTemplateType } from '../../type/index.d';
 import {
   ModuleIOValueTypeEnum,
   ModuleInputKeyEnum,
   ModuleOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
-import {
-  Input_Template_History,
-  Input_Template_Switch,
-  Input_Template_UserChatInput
-} from '../input';
+import { Input_Template_History, Input_Template_UserChatInput } from '../input';
 import { getHandleConfig } from '../utils';
 
 export const RunAppModule: FlowNodeTemplateType = {
@@ -28,10 +24,9 @@ export const RunAppModule: FlowNodeTemplateType = {
   intro: '可以选择一个其他应用进行调用',
   showStatus: true,
   inputs: [
-    Input_Template_Switch,
     {
       key: ModuleInputKeyEnum.runAppSelectApp,
-      type: FlowNodeInputTypeEnum.selectApp,
+      renderTypeList: [FlowNodeInputTypeEnum.selectApp, FlowNodeInputTypeEnum.reference],
       valueType: ModuleIOValueTypeEnum.selectApp,
       label: '选择一个应用',
       description: '选择一个其他应用进行调用',
@@ -42,6 +37,7 @@ export const RunAppModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
+      id: ModuleOutputKeyEnum.history,
       key: ModuleOutputKeyEnum.history,
       label: '新的上下文',
       description: '将该应用回复内容拼接到历史记录中，作为新的上下文返回',
@@ -49,6 +45,7 @@ export const RunAppModule: FlowNodeTemplateType = {
       type: FlowNodeOutputTypeEnum.source
     },
     {
+      id: ModuleOutputKeyEnum.answerText,
       key: ModuleOutputKeyEnum.answerText,
       label: '回复的文本',
       description: '将在应用完全结束后触发',

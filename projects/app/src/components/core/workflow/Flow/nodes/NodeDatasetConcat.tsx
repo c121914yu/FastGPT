@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
 import { Box, Button, Flex } from '@chakra-ui/react';
@@ -13,19 +13,19 @@ import {
   ModuleOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { getOneQuoteInputTemplate } from '@fastgpt/global/core/workflow/template/system/datasetConcat';
-import { onChangeNode, useFlowProviderStore } from '../FlowProvider';
+import { useFlowProviderStore } from '../FlowProvider';
 import TargetHandle from './render/TargetHandle';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import SourceHandle from './render/SourceHandle';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MySlider from '@/components/Slider';
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
+import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 
 const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { llmModelList } = useSystemStore();
-  const { nodes } = useFlowProviderStore();
+  const { nodes, onChangeNode } = useFlowProviderStore();
   const { nodeId, inputs, outputs } = data;
 
   const quotes = useMemo(

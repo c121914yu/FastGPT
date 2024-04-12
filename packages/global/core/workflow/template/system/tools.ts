@@ -3,7 +3,7 @@ import {
   FlowNodeOutputTypeEnum,
   FlowNodeTypeEnum
 } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type.d';
+import { FlowNodeTemplateType } from '../../type/index.d';
 import {
   ModuleIOValueTypeEnum,
   ModuleOutputKeyEnum,
@@ -13,7 +13,6 @@ import {
 import {
   Input_Template_SettingAiModel,
   Input_Template_History,
-  Input_Template_Switch,
   Input_Template_System_Prompt,
   Input_Template_UserChatInput
 } from '../input';
@@ -32,14 +31,13 @@ export const ToolModule: FlowNodeTemplateType = {
   intro: '通过AI模型自动选择一个或多个功能块进行调用，也可以对插件进行调用。',
   showStatus: true,
   inputs: [
-    Input_Template_Switch,
     {
       ...Input_Template_SettingAiModel,
       llmModelType: LLMModelTypeEnum.all
     },
     {
       key: ModuleInputKeyEnum.aiChatTemperature,
-      type: FlowNodeInputTypeEnum.hidden, // Set in the pop-up window
+      renderTypeList: [FlowNodeInputTypeEnum.hidden], // Set in the pop-up window
       label: '',
       value: 0,
       valueType: ModuleIOValueTypeEnum.number,
@@ -49,7 +47,7 @@ export const ToolModule: FlowNodeTemplateType = {
     },
     {
       key: ModuleInputKeyEnum.aiChatMaxToken,
-      type: FlowNodeInputTypeEnum.hidden, // Set in the pop-up window
+      renderTypeList: [FlowNodeInputTypeEnum.hidden], // Set in the pop-up window
       label: '',
       value: 2000,
       valueType: ModuleIOValueTypeEnum.number,
@@ -68,6 +66,7 @@ export const ToolModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
+      id: ModuleOutputKeyEnum.selectedTools,
       key: ModuleOutputKeyEnum.selectedTools,
       valueType: ModuleIOValueTypeEnum.tools,
       type: FlowNodeOutputTypeEnum.hidden

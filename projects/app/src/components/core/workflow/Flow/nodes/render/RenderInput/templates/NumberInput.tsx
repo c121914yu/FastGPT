@@ -7,9 +7,11 @@ import {
   NumberInputField,
   NumberInputStepper
 } from '@chakra-ui/react';
-import { onChangeNode } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 
 const NumberInputRender = ({ item, nodeId }: RenderInputProps) => {
+  const { onChangeNode } = useFlowProviderStore();
+
   return (
     <NumberInput
       defaultValue={item.value}

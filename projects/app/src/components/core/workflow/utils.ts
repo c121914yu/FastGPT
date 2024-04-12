@@ -1,6 +1,6 @@
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { type Node, type Edge } from 'reactflow';
 
 export const flowNode2StoreNodes = ({

@@ -4,59 +4,51 @@ import { SelectedDatasetType } from '../api';
 import { EditInputFieldMap, EditOutputFieldMap } from './type';
 import { LLMModelTypeEnum } from '../../ai/constants';
 
-export type FlowNodeChangeProps = {
-  nodeId: string;
-  type:
-    | 'attr' // key: attr, value: new value
-    | 'updateInput' // key: update input key, value: new input value
-    | 'replaceInput' // key: old input key, value: new input value
-    | 'addInput' // key: null, value: new input value
-    | 'delInput' // key: delete input key, value: null
-    | 'updateOutput' // key: update output key, value: new output value
-    | 'replaceOutput' // key: old output key, value: new output value
-    | 'addOutput' // key: null, value: new output value
-    | 'delOutput'; // key: delete output key, value: null
-  key?: string;
-  value?: any;
-  index?: number;
-};
-
-export type FlowNodeInputItemType = {
-  valueType?: `${ModuleIOValueTypeEnum}`; // data type
-  type: `${FlowNodeInputTypeEnum}`; // Node Type. Decide on a render style
-  key: `${ModuleInputKeyEnum}` | string;
-  value?: any;
-  label: string;
-  description?: string;
-  required?: boolean;
-  toolDescription?: string; // If this field is not empty, it is entered as a tool
-
-  // hideInApp?: boolean;
-  // hideInPlugin?: boolean;
-
-  // render components params
-  placeholder?: string; // input,textarea
-
-  list?: { label: string; value: any }[]; // select
-
-  markList?: { label: string; value: any }[]; // slider
-  step?: number; // slider
-  max?: number; // slider, number input
-  min?: number; // slider, number input
-
-  llmModelType?: `${LLMModelTypeEnum}`;
-};
-
-export type FlowNodeOutputItemType = {
-  type?: `${FlowNodeOutputTypeEnum}`;
-  key: `${ModuleOutputKeyEnum}` | string;
-  value?: any;
-  valueType?: `${ModuleIOValueTypeEnum}`;
-
-  label?: string;
-  description?: string;
-  defaultValue?: any;
-};
+export type FlowNodeChangeProps = { nodeId: string } & (
+  | {
+      type: 'attr'; // key: attr, value: new value
+      key: string;
+      value: any;
+    }
+  | {
+      type: 'updateInput'; // key: update input key, value: new input value
+      key: string;
+      value: any;
+    }
+  | {
+      type: 'replaceInput'; // key: old input key, value: new input value
+      key: string;
+      value: any;
+    }
+  | {
+      type: 'addInput'; // key: null, value: new input value
+      value: any;
+      index?: number;
+    }
+  | {
+      type: 'delInput'; // key: delete input key, value: null
+      key: string;
+    }
+  | {
+      type: 'updateOutput'; // key: update output key, value: new output value
+      key: string;
+      value: any;
+    }
+  | {
+      type: 'replaceOutput'; // key: old output key, value: new output value
+      key: string;
+      value: any;
+    }
+  | {
+      type: 'addOutput'; // key: null, value: new output value
+      value: any;
+      index?: number;
+    }
+  | {
+      type: 'delOutput'; // key: delete output key, value: null
+      key: string;
+    }
+);
 
 /* --------------- edit field ------------------- */
 export type EditInputFieldMap = EditOutputFieldMap & {

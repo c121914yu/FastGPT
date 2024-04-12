@@ -111,16 +111,6 @@
           "showTargetInPlugin": false
         },
         {
-          "key": "switch",
-          "type": "triggerAndFinish",
-          "label": "",
-          "description": "core.module.input.description.Trigger",
-          "valueType": "any",
-          "showTargetInApp": true,
-          "showTargetInPlugin": true,
-          "connected": true
-        },
-        {
           "key": "textarea",
           "valueType": "string",
           "label": "文本内容",

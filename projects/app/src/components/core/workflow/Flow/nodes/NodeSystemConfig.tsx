@@ -2,10 +2,9 @@ import React, { useCallback, useMemo, useTransition } from 'react';
 import { NodeProps } from 'reactflow';
 import { Box, Flex, Textarea, useTheme } from '@chakra-ui/react';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
-import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { welcomeTextTip } from '@fastgpt/global/core/workflow/template/tip';
-import { onChangeNode } from '../FlowProvider';
 
 import VariableEdit from '../../../app/VariableEdit';
 import MyIcon from '@fastgpt/web/components/common/Icon';
@@ -19,9 +18,12 @@ import WhisperConfig from '@/components/core/app/WhisperConfig';
 import { splitGuideModule } from '@fastgpt/global/core/workflow/utils';
 import { useTranslation } from 'next-i18next';
 import { TTSTypeEnum } from '@/constants/app';
+import { useFlowProviderStore } from '../FlowProvider';
 
 const NodeUserGuide = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const theme = useTheme();
+  const { onChangeNode } = useFlowProviderStore();
+
   return (
     <>
       <NodeCard minW={'300px'} selected={selected} forbidMenu {...data}>
