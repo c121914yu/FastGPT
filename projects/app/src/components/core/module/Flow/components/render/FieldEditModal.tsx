@@ -407,7 +407,11 @@ const FieldEditModal = ({
                             defaultValue={item.value}
                             onBlur={(e) => {
                               const value = e.target.value;
-                              setList;
+                              setList((prevList) => {
+                                const newList = [...prevList];
+                                newList[index] = { ...newList[index], value: value };
+                                return newList;
+                              });
                               setValue(
                                 'list',
                                 list?.map((item, i) =>
@@ -517,6 +521,10 @@ const FieldEditModal = ({
               placeholder="appointment/sql"
               {...register('key', {
                 required: true,
+                validate: (value) =>
+                  inputDataType === PluginInputTypeEnum.switch && value === 'switch'
+                    ? "Key cannot be named 'switch'"
+                    : true,
                 onChange: (e) => {
                   const value = e.target.value;
                   // auto fill label
