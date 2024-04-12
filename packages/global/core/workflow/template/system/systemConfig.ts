@@ -1,5 +1,5 @@
 import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type.d';
+import { FlowNodeTemplateType } from '../../type/index.d';
 import {
   ModuleIOValueTypeEnum,
   ModuleInputKeyEnum,
@@ -7,26 +7,27 @@ import {
 } from '../../constants';
 import { getHandleConfig } from '../utils';
 
-export const UserGuideModule: FlowNodeTemplateType = {
-  id: FlowNodeTypeEnum.userGuide,
+export const SystemConfigNode: FlowNodeTemplateType = {
+  id: FlowNodeTypeEnum.systemConfig,
   templateType: FlowNodeTemplateTypeEnum.systemInput,
-  flowNodeType: FlowNodeTypeEnum.userGuide,
+  flowNodeType: FlowNodeTypeEnum.systemConfig,
   sourceHandle: getHandleConfig(false, false, false, false),
   targetHandle: getHandleConfig(false, false, false, false),
   avatar: '/imgs/workflow/userGuide.png',
   name: '系统配置',
   intro: '可以配置应用的系统参数。',
+  unique: true,
   forbidDelete: true,
   inputs: [
     {
       key: ModuleInputKeyEnum.welcomeText,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: ModuleIOValueTypeEnum.string,
       label: 'core.app.Welcome Text'
     },
     {
       key: ModuleInputKeyEnum.variables,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: ModuleIOValueTypeEnum.any,
       label: 'core.module.Variable',
       value: []
@@ -34,12 +35,18 @@ export const UserGuideModule: FlowNodeTemplateType = {
     {
       key: ModuleInputKeyEnum.questionGuide,
       valueType: ModuleIOValueTypeEnum.boolean,
-      type: FlowNodeInputTypeEnum.switch,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: ''
     },
     {
       key: ModuleInputKeyEnum.tts,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
+      valueType: ModuleIOValueTypeEnum.any,
+      label: ''
+    },
+    {
+      key: ModuleInputKeyEnum.whisper,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: ModuleIOValueTypeEnum.any,
       label: '',
       showTargetInApp: false,

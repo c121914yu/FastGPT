@@ -14,9 +14,11 @@ export enum ModuleIOValueTypeEnum {
   string = 'string',
   number = 'number',
   boolean = 'boolean',
+  any = 'any',
+
   chatHistory = 'chatHistory',
   datasetQuote = 'datasetQuote',
-  any = 'any',
+  dynamic = 'dynamic',
 
   // plugin special type
   selectApp = 'selectApp',

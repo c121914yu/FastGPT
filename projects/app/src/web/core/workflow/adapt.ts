@@ -1,12 +1,36 @@
-import type { StoreNodeItemType, FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
-import type { Edge, Node } from 'reactflow';
+import type {
+  StoreNodeItemType,
+  FlowNodeItemType,
+  FlowNodeTemplateType
+} from '@fastgpt/global/core/workflow/type/index.d';
+import type { Edge, Node, XYPosition } from 'reactflow';
 import { customAlphabet } from 'nanoid';
 import { moduleTemplatesFlat } from '@fastgpt/global/core/workflow/template/constants';
 import { EDGE_TYPE } from '@fastgpt/global/core/workflow/node/constant';
 import { EmptyNode } from '@fastgpt/global/core/workflow/template/system/emptyNode';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
-export const appModule2FlowNode = ({
+export const nodeTemplate2FlowNode = ({
+  template,
+  position
+}: {
+  template: FlowNodeTemplateType;
+  position: XYPosition;
+}): Node<FlowNodeItemType> => {
+  // replace item data
+  const moduleItem: FlowNodeItemType = {
+    ...template,
+    nodeId: nanoid()
+  };
+
+  return {
+    id: moduleItem.nodeId,
+    type: moduleItem.flowNodeType,
+    data: moduleItem,
+    position: position
+  };
+};
+export const storeNode2FlowNode = ({
   item: storeNode
 }: {
   item: StoreNodeItemType;
@@ -16,13 +40,11 @@ export const appModule2FlowNode = ({
     moduleTemplatesFlat.find((template) => template.flowNodeType === storeNode.flowNodeType) ||
     EmptyNode;
 
-  console.log(JSON.parse(JSON.stringify(moduleTemplatesFlat)));
-
   // replace item data
   const moduleItem: FlowNodeItemType = {
     ...template,
     ...storeNode,
-    avatar: template?.avatar || storeNode.avatar,
+    avatar: template?.avatar,
     inputs: template.inputs.map((input) => {
       // use latest inputs
       const storeNodeInput = storeNode.inputs.find((item) => item.key === input.key) || input;
@@ -51,7 +73,7 @@ export const appModule2FlowNode = ({
 export const appModule2FlowEdge = ({ nodes }: { nodes: StoreNodeItemType[] }) => {
   const edges: Edge[] = [];
   nodes.forEach((node) =>
-    node.targetNodes.forEach((targetNode) => {
+    node.targetNodes?.forEach((targetNode) => {
       edges.push({
         source: node.nodeId,
         sourceHandle: targetNode.sourceHandle,

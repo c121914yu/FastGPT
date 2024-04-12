@@ -13,7 +13,7 @@ import EditModal, { defaultForm } from './component/EditModal';
 import { getPluginPaths, getUserPlugins } from '@/web/core/plugin/api';
 import EmptyTip from '@/components/EmptyTip';
 import { useUserStore } from '@/web/support/user/useUserStore';
-import MyMenu from '@/components/MyMenu';
+import MyMenu from '@fastgpt/web/components/common/MyMenu';
 import HttpPluginEditModal, { defaultHttpPlugin } from './component/HttpPluginEditModal';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import ParentPaths from '@/components/common/ParentPaths';

@@ -3,18 +3,14 @@ import {
   FlowNodeOutputTypeEnum,
   FlowNodeTypeEnum
 } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type';
+import { FlowNodeTemplateType } from '../../type/index.d';
 import {
   ModuleIOValueTypeEnum,
   ModuleInputKeyEnum,
   ModuleOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
-import {
-  Input_Template_AddInputParam,
-  Input_Template_DynamicInput,
-  Input_Template_Switch
-} from '../input';
+import { Input_Template_AddInputParam, Input_Template_DynamicInput } from '../input';
 import { Output_Template_AddOutput } from '../output';
 import { getHandleConfig } from '../utils';
 
@@ -30,10 +26,9 @@ export const HttpModule468: FlowNodeTemplateType = {
   showStatus: true,
   isTool: true,
   inputs: [
-    Input_Template_Switch,
     {
       key: ModuleInputKeyEnum.httpMethod,
-      type: FlowNodeInputTypeEnum.custom,
+      renderTypeList: [FlowNodeInputTypeEnum.custom],
       valueType: ModuleIOValueTypeEnum.string,
       label: '',
       value: 'POST',
@@ -41,7 +36,7 @@ export const HttpModule468: FlowNodeTemplateType = {
     },
     {
       key: ModuleInputKeyEnum.httpReqUrl,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: ModuleIOValueTypeEnum.string,
       label: '',
       description: 'core.module.input.description.Http Request Url',
@@ -50,7 +45,7 @@ export const HttpModule468: FlowNodeTemplateType = {
     },
     {
       key: ModuleInputKeyEnum.httpHeaders,
-      type: FlowNodeInputTypeEnum.custom,
+      renderTypeList: [FlowNodeInputTypeEnum.custom],
       valueType: ModuleIOValueTypeEnum.any,
       value: [],
       label: '',
@@ -60,7 +55,7 @@ export const HttpModule468: FlowNodeTemplateType = {
     },
     {
       key: ModuleInputKeyEnum.httpParams,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: ModuleIOValueTypeEnum.any,
       value: [],
       label: '',
@@ -68,7 +63,7 @@ export const HttpModule468: FlowNodeTemplateType = {
     },
     {
       key: ModuleInputKeyEnum.httpJsonBody,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: ModuleIOValueTypeEnum.any,
       value: '',
       label: '',
@@ -81,6 +76,7 @@ export const HttpModule468: FlowNodeTemplateType = {
   ],
   outputs: [
     {
+      id: ModuleOutputKeyEnum.httpRawResponse,
       key: ModuleOutputKeyEnum.httpRawResponse,
       label: '原始响应',
       description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',

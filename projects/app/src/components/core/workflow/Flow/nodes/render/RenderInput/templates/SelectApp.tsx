@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import type { RenderInputProps } from '../type';
-import { onChangeNode, useFlowProviderStore } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import { Box, Button, Flex, useDisclosure, useTheme } from '@chakra-ui/react';
-import { SelectAppItemType } from '@fastgpt/global/core/workflow/type';
+import { SelectAppItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import Avatar from '@/components/Avatar';
 import SelectAppModal from '../../../../SelectAppModal';
 import { useTranslation } from 'next-i18next';
@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next';
 const SelectAppRender = ({ item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { filterAppIds } = useFlowProviderStore();
+  const { filterAppIds, onChangeNode } = useFlowProviderStore();
 
   const {
     isOpen: isOpenSelectApp,

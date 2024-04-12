@@ -1,6 +1,6 @@
 import { ChatNodeUsageType } from '../../../support/wallet/bill/type';
 import { ChatItemValueItemType, ToolRunResponseItemType } from '../../chat/type';
-import { FlowNodeInputItemType, FlowNodeOutputItemType } from '../node/type';
+import { FlowNodeInputItemType, FlowNodeOutputItemType } from '../type/io.d';
 import { StoreNodeItemType } from '../type';
 import { DispatchNodeResponseKeyEnum } from './constants';
 

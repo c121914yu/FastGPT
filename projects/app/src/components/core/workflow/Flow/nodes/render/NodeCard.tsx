@@ -2,11 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import Avatar from '@/components/Avatar';
-import type { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
+import type { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { useTranslation } from 'next-i18next';
 import { useEditTitle } from '@/web/common/hooks/useEditTitle';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
+import { useFlowProviderStore } from '../../FlowProvider';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -45,7 +45,8 @@ const NodeCard = (props: Props) => {
 
   const { toast } = useToast();
   const { setLoading } = useSystemStore();
-  const { nodes, splitToolInputs, onDelNode, onCopyNode, onResetNode } = useFlowProviderStore();
+  const { nodes, splitToolInputs, onDelNode, onCopyNode, onResetNode, onChangeNode } =
+    useFlowProviderStore();
   const [isHover, setIsHover] = useState(false);
 
   // edit intro

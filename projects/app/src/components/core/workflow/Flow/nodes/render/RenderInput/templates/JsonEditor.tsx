@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import type { RenderInputProps } from '../type';
-import { onChangeNode, useFlowProviderStore } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import JSONEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
 import {
@@ -11,7 +11,7 @@ import {
 
 const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
-  const { nodes } = useFlowProviderStore();
+  const { nodes, onChangeNode } = useFlowProviderStore();
 
   // get variable
   const variables = useMemo(() => {

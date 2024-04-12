@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from '../render/NodeCard';
-import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import Divider from '../../components/Divider';
 import Container from '../../components/Container';
 import RenderInput from '../render/RenderInput';
@@ -21,11 +21,11 @@ import {
   useDisclosure
 } from '@chakra-ui/react';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { onChangeNode, useFlowProviderStore } from '../../FlowProvider';
+import { useFlowProviderStore } from '../../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import Tabs from '@/components/Tabs';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
+import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
@@ -95,15 +95,16 @@ export type PropsArrType = {
 };
 
 const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
-  moduleId,
+  nodeId,
   inputs
 }: {
-  moduleId: string;
+  nodeId: string;
   inputs: FlowNodeInputItemType[];
 }) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [_, startSts] = useTransition();
+  const { onChangeNode } = useFlowProviderStore();
 
   const { isOpen: isOpenCurl, onOpen: onOpenCurl, onClose: onCloseCurl } = useDisclosure();
 
@@ -113,7 +114,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
   const onChangeUrl = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: ModuleInputKeyEnum.httpReqUrl,
         value: {
@@ -122,7 +123,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         }
       });
     },
-    [moduleId, requestUrl]
+    [nodeId, requestUrl]
   );
   const onBlurUrl = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,7 +152,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         });
 
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'updateInput',
           key: ModuleInputKeyEnum.httpParams,
           value: {
@@ -161,7 +162,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         });
 
         onChangeNode({
-          moduleId,
+          nodeId,
           type: 'updateInput',
           key: ModuleInputKeyEnum.httpReqUrl,
           value: {
@@ -176,7 +177,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         });
       }
     },
-    [inputs, moduleId, requestUrl, t, toast]
+    [inputs, nodeId, requestUrl, t, toast]
   );
 
   return (
@@ -218,7 +219,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
           ]}
           onchange={(e) => {
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'updateInput',
               key: ModuleInputKeyEnum.httpMethod,
               value: {
@@ -240,16 +241,16 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         />
       </Flex>
 
-      {isOpenCurl && <CurlImportModal moduleId={moduleId} inputs={inputs} onClose={onCloseCurl} />}
+      {isOpenCurl && <CurlImportModal nodeId={nodeId} inputs={inputs} onClose={onCloseCurl} />}
     </Box>
   );
 });
 
 export function RenderHttpProps({
-  moduleId,
+  nodeId,
   inputs
 }: {
-  moduleId: string;
+  nodeId: string;
   inputs: FlowNodeInputItemType[];
 }) {
   const { t } = useTranslation();
@@ -348,16 +349,16 @@ export function RenderHttpProps({
         {
           [TabEnum.params]: (
             <RenderForm
-              moduleId={moduleId}
+              nodeId={nodeId}
               input={params}
               variables={variables}
               tabType={TabEnum.params}
             />
           ),
-          [TabEnum.body]: <RenderJson moduleId={moduleId} variables={variables} input={jsonBody} />,
+          [TabEnum.body]: <RenderJson nodeId={nodeId} variables={variables} input={jsonBody} />,
           [TabEnum.headers]: (
             <RenderForm
-              moduleId={moduleId}
+              nodeId={nodeId}
               input={headers}
               variables={variables}
               tabType={TabEnum.headers}
@@ -368,12 +369,12 @@ export function RenderHttpProps({
   );
 }
 const RenderForm = ({
-  moduleId,
+  nodeId,
   input,
   variables,
   tabType
 }: {
-  moduleId: string;
+  nodeId: string;
   input: FlowNodeInputItemType;
   variables: EditorVariablePickerType[];
   tabType?: TabEnum;
@@ -399,7 +400,7 @@ const RenderForm = ({
   useEffect(() => {
     if (shouldUpdateNode) {
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: input.key,
         value: {
@@ -544,11 +545,11 @@ const RenderForm = ({
   );
 };
 const RenderJson = ({
-  moduleId,
+  nodeId,
   input,
   variables
 }: {
-  moduleId: string;
+  nodeId: string;
   input: FlowNodeInputItemType;
   variables: EditorVariablePickerType[];
 }) => {
@@ -566,7 +567,7 @@ const RenderJson = ({
         onChange={(e) => {
           startSts(() => {
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'updateInput',
               key: input.key,
               value: {
@@ -596,25 +597,25 @@ const RenderPropsItem = ({ text, num }: { text: string; num: number }) => {
 
 const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
-  const { moduleId, inputs, outputs } = data;
+  const { nodeId, inputs, outputs } = data;
   const { splitToolInputs, hasToolNode } = useFlowProviderStore();
-  const { toolInputs, commonInputs } = splitToolInputs(inputs, moduleId);
+  const { toolInputs, commonInputs } = splitToolInputs(inputs, nodeId);
 
   const CustomComponents = useMemo(
     () => ({
       [ModuleInputKeyEnum.httpMethod]: () => (
-        <RenderHttpMethodAndUrl moduleId={moduleId} inputs={inputs} />
+        <RenderHttpMethodAndUrl nodeId={nodeId} inputs={inputs} />
       ),
       [ModuleInputKeyEnum.httpHeaders]: () => (
         <>
-          <RenderHttpProps moduleId={moduleId} inputs={inputs} />
+          <RenderHttpProps nodeId={nodeId} inputs={inputs} />
           <Box mt={2} transform={'translateY(10px)'}>
             {t('core.module.Variable import')}
           </Box>
         </>
       )
     }),
-    [inputs, moduleId, t]
+    [inputs, nodeId, t]
   );
 
   return (
@@ -623,7 +624,7 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         <>
           <Divider text={t('core.module.tool.Tool input')} />
           <Container>
-            <RenderToolInput moduleId={moduleId} inputs={toolInputs} canEdit />
+            <RenderToolInput nodeId={nodeId} inputs={toolInputs} canEdit />
           </Container>
         </>
       )}
@@ -631,7 +632,7 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         <Divider text={t('common.Input')} />
         <Container>
           <RenderInput
-            moduleId={moduleId}
+            nodeId={nodeId}
             flowInputList={commonInputs}
             CustomComponent={CustomComponents}
           />
@@ -640,7 +641,7 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
       <>
         <Divider text={t('common.Output')} />
         <Container>
-          <RenderOutput moduleId={moduleId} flowOutputList={outputs} />
+          <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
         </Container>
       </>
     </NodeCard>

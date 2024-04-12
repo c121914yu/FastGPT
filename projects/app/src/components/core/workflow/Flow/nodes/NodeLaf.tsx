@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import Container from '../components/Container';
 import { Box, Button, Center, Flex, useDisclosure } from '@chakra-ui/react';
 import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { onChangeNode, useFlowProviderStore } from '../FlowProvider';
+import { useFlowProviderStore } from '../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import { getLafAppDetail } from '@/web/support/laf/api';
 import MySelect from '@fastgpt/web/components/common/MySelect';
@@ -36,6 +36,8 @@ const NodeLaf = (props: NodeProps<FlowNodeItemType>) => {
   const { feConfigs } = useSystemStore();
   const { data, selected } = props;
   const { nodeId, inputs, outputs } = data;
+
+  const { onChangeNode } = useFlowProviderStore();
 
   const requestUrl = inputs.find((item) => item.key === ModuleInputKeyEnum.httpReqUrl);
 

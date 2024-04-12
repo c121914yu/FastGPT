@@ -1,5 +1,5 @@
 import { FlowNodeOutputTypeEnum, FlowNodeTypeEnum } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type';
+import { FlowNodeTemplateType } from '../../type/index.d';
 import {
   ModuleIOValueTypeEnum,
   ModuleOutputKeyEnum,
@@ -17,9 +17,11 @@ export const WorkflowStart: FlowNodeTemplateType = {
   name: '流程开始',
   intro: '',
   forbidDelete: true,
+  unique: true,
   inputs: [],
   outputs: [
     {
+      id: ModuleOutputKeyEnum.userChatInput,
       key: ModuleOutputKeyEnum.userChatInput,
       label: 'core.module.input.label.user question',
       type: FlowNodeOutputTypeEnum.source,

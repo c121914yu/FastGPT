@@ -3,7 +3,7 @@ import { connectToDatabase } from '@/service/mongo';
 import { sseErrRes } from '@fastgpt/service/common/response';
 import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { responseWrite } from '@fastgpt/service/common/response';
-import type { StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
+import type { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { pushChatUsage } from '@/service/support/wallet/usage/push';
 import { UsageSourceEnum } from '@fastgpt/global/support/wallet/usage/constants';
 import type { ChatItemType, ChatItemValueItemType } from '@fastgpt/global/core/chat/type';

@@ -5,7 +5,7 @@ import {
 import { formatModelChars2Points } from '../../../../support/wallet/usage/utils';
 import type { SelectedDatasetType } from '@fastgpt/global/core/workflow/api.d';
 import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { ModelTypeEnum, getLLMModel, getVectorModel } from '../../../ai/model';
 import { searchDatasetData } from '../../../dataset/search/controller';
 import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';

@@ -1,4 +1,4 @@
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type.d';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import {
   DYNAMIC_INPUT_KEY,
   ModuleInputKeyEnum,

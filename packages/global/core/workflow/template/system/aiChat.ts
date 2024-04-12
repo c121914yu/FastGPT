@@ -3,7 +3,7 @@ import {
   FlowNodeOutputTypeEnum,
   FlowNodeTypeEnum
 } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type.d';
+import { FlowNodeTemplateType } from '../../type';
 import {
   ModuleIOValueTypeEnum,
   ModuleInputKeyEnum,
@@ -14,7 +14,6 @@ import {
   Input_Template_SettingAiModel,
   Input_Template_Dataset_Quote,
   Input_Template_History,
-  Input_Template_Switch,
   Input_Template_System_Prompt,
   Input_Template_UserChatInput
 } from '../input';
@@ -33,12 +32,11 @@ export const AiChatModule: FlowNodeTemplateType = {
   showStatus: true,
   isTool: true,
   inputs: [
-    Input_Template_Switch,
     Input_Template_SettingAiModel,
     // --- settings modal
     {
       key: ModuleInputKeyEnum.aiChatTemperature,
-      type: FlowNodeInputTypeEnum.hidden, // Set in the pop-up window
+      renderTypeList: [FlowNodeInputTypeEnum.hidden], // Set in the pop-up window
       label: '',
       value: 0,
       valueType: ModuleIOValueTypeEnum.number,
@@ -48,7 +46,7 @@ export const AiChatModule: FlowNodeTemplateType = {
     },
     {
       key: ModuleInputKeyEnum.aiChatMaxToken,
-      type: FlowNodeInputTypeEnum.hidden, // Set in the pop-up window
+      renderTypeList: [FlowNodeInputTypeEnum.hidden], // Set in the pop-up window
       label: '',
       value: 2000,
       valueType: ModuleIOValueTypeEnum.number,
@@ -58,20 +56,20 @@ export const AiChatModule: FlowNodeTemplateType = {
     },
     {
       key: ModuleInputKeyEnum.aiChatIsResponseText,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       value: true,
       valueType: ModuleIOValueTypeEnum.boolean
     },
     {
       key: ModuleInputKeyEnum.aiChatQuoteTemplate,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       valueType: ModuleIOValueTypeEnum.string
     },
     {
       key: ModuleInputKeyEnum.aiChatQuotePrompt,
-      type: FlowNodeInputTypeEnum.hidden,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       valueType: ModuleIOValueTypeEnum.string
     },
@@ -88,6 +86,7 @@ export const AiChatModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
+      id: ModuleOutputKeyEnum.history,
       key: ModuleOutputKeyEnum.history,
       label: 'core.module.output.label.New context',
       description: 'core.module.output.description.New context',
@@ -95,6 +94,7 @@ export const AiChatModule: FlowNodeTemplateType = {
       type: FlowNodeOutputTypeEnum.source
     },
     {
+      id: ModuleOutputKeyEnum.answerText,
       key: ModuleOutputKeyEnum.answerText,
       label: 'core.module.output.label.Ai response content',
       description: 'core.module.output.description.Ai response content',

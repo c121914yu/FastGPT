@@ -1,4 +1,4 @@
-import { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/node/type';
+import { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 
 export type RenderOutputProps = {
   outputs?: FlowNodeOutputItemType[];

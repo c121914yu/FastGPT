@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { RenderInputProps } from '../type';
-import { onChangeNode, useFlowProviderStore } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import { Box, Button, Flex, Grid, useDisclosure, useTheme } from '@chakra-ui/react';
 import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import { SelectedDatasetType } from '@fastgpt/global/core/workflow/api';
@@ -21,7 +21,7 @@ const SelectDatasetRender = ({ inputs = [], item, nodeId }: RenderInputProps) =>
   const { t } = useTranslation();
   const theme = useTheme();
   const { llmModelList } = useSystemStore();
-  const { nodes } = useFlowProviderStore();
+  const { nodes, onChangeNode } = useFlowProviderStore();
   const [data, setData] = useState({
     searchMode: DatasetSearchModeEnum.embedding,
     limit: 5,

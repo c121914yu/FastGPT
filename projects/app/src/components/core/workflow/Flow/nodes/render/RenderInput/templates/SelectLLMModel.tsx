@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import type { RenderInputProps } from '../type';
-import { onChangeNode } from '../../../../FlowProvider';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { llmModelTypeFilterMap } from '@fastgpt/global/core/ai/constants';
 import AIModelSelector from '@/components/Select/AIModelSelector';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 
 const SelectAiModelRender = ({ item, nodeId }: RenderInputProps) => {
   const { llmModelList } = useSystemStore();
+  const { onChangeNode } = useFlowProviderStore();
 
   const modelList = llmModelList.filter((model) => {
     if (!item.llmModelType) return true;

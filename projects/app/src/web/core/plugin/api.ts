@@ -1,5 +1,5 @@
 import { GET, POST, DELETE, PUT } from '@/web/common/api/request';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type/index.d';
 import { ParentTreePathItemType } from '@fastgpt/global/common/parentFolder/type';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import {
