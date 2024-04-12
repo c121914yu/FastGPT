@@ -1,12 +1,14 @@
 import React from 'react';
 import type { RenderInputProps } from '../type';
-import { onChangeNode } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import { Box } from '@chakra-ui/react';
 import MySlider from '@/components/Slider';
 
 const SliderRender = ({ item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
+  const { onChangeNode } = useFlowProviderStore();
+
   return (
     <Box px={2}>
       <MySlider

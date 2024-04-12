@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import type { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
+import type { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { Box } from '@chakra-ui/react';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import dynamic from 'next/dynamic';
@@ -7,12 +7,15 @@ import dynamic from 'next/dynamic';
 import InputLabel from './Label';
 import type { RenderInputProps } from './type';
 import { useFlowProviderStore } from '../../../FlowProvider';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 const RenderList: {
   types: `${FlowNodeInputTypeEnum}`[];
   Component: React.ComponentType<RenderInputProps>;
 }[] = [
+  {
+    types: [FlowNodeInputTypeEnum.reference],
+    Component: dynamic(() => import('./templates/Reference'))
+  },
   {
     types: [FlowNodeInputTypeEnum.input],
     Component: dynamic(() => import('./templates/TextInput'))
@@ -79,51 +82,30 @@ type Props = {
 const RenderInput = ({ flowInputList, nodeId, CustomComponent }: Props) => {
   const { mode } = useFlowProviderStore();
 
-  const sortInputs = useMemo(
-    () =>
-      JSON.stringify(
-        [...flowInputList].sort((a, b) => {
-          if (a.type === FlowNodeInputTypeEnum.addInputParam) {
-            return 1;
-          }
-          if (b.type === FlowNodeInputTypeEnum.addInputParam) {
-            return -1;
-          }
-
-          if (a.type === FlowNodeInputTypeEnum.switch) {
-            return -1;
-          }
-
-          return 0;
-        })
-      ),
-    [flowInputList]
-  );
+  const copyInputs = useMemo(() => JSON.stringify(flowInputList), [flowInputList]);
   const filterInputs = useMemo(() => {
-    const parseSortInputs = JSON.parse(sortInputs) as FlowNodeInputItemType[];
+    const parseSortInputs = JSON.parse(copyInputs) as FlowNodeInputItemType[];
     return parseSortInputs.filter((input) => {
-      if (mode === 'app' && input.hideInApp) return false;
-      if (mode === 'plugin' && input.hideInPlugin) return false;
-
       return true;
     });
-  }, [mode, sortInputs]);
+  }, [copyInputs]);
 
   const memoCustomComponent = useMemo(() => CustomComponent || {}, [CustomComponent]);
 
   const Render = useMemo(() => {
     return filterInputs.map((input) => {
+      const renderType = input.renderTypeList[input.selectedTypeIndex || 0];
       const RenderComponent = (() => {
-        if (input.type === FlowNodeInputTypeEnum.custom && memoCustomComponent[input.key]) {
+        if (renderType === FlowNodeInputTypeEnum.custom && memoCustomComponent[input.key]) {
           return <>{memoCustomComponent[input.key]({ ...input })}</>;
         }
-        const Component = RenderList.find((item) => item.types.includes(input.type))?.Component;
+        const Component = RenderList.find((item) => item.types.includes(renderType))?.Component;
 
         if (!Component) return null;
         return <Component inputs={filterInputs} item={input} nodeId={nodeId} />;
       })();
 
-      return input.type !== FlowNodeInputTypeEnum.hidden ? (
+      return renderType !== FlowNodeInputTypeEnum.hidden ? (
         <Box key={input.key} _notLast={{ mb: 7 }} position={'relative'}>
           {!!input.label && (
             <InputLabel nodeId={nodeId} inputKey={input.key} mode={mode} {...input} />

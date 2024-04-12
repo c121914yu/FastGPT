@@ -1,5 +1,5 @@
 import { MongoPlugin } from './schema';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type/index.d';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { plugin2ModuleIO } from '@fastgpt/global/core/workflow/utils';
 import { PluginSourceEnum } from '@fastgpt/global/core/plugin/constants';

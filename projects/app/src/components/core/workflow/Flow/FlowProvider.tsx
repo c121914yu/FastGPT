@@ -9,11 +9,12 @@ import {
   addEdge,
   OnConnectStartParams
 } from 'reactflow';
-import type { FlowNodeItemType, FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type.d';
 import type {
-  FlowNodeChangeProps,
-  FlowNodeInputItemType
-} from '@fastgpt/global/core/workflow/node/type';
+  FlowNodeItemType,
+  FlowNodeTemplateType
+} from '@fastgpt/global/core/workflow/type/index.d';
+import type { FlowNodeChangeProps } from '@fastgpt/global/core/workflow/node/type';
+import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import React, {
   type SetStateAction,
   type Dispatch,
@@ -25,12 +26,12 @@ import React, {
   useMemo
 } from 'react';
 import { customAlphabet } from 'nanoid';
-import { appModule2FlowEdge, appModule2FlowNode } from '@/web/core/workflow/adapt';
+import { appModule2FlowEdge, storeNode2FlowNode } from '@/web/core/workflow/adapt';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
-import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type.d';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
@@ -49,6 +50,8 @@ export type useFlowProviderStoreType = {
   connectingEdge: OnConnectStartParams | undefined;
   onConnectStart: (event: any, params: OnConnectStartParams) => void;
   onConnectEnd: (event: any) => void;
+  // nodes
+  basicNodeTemplates: FlowNodeTemplateType[];
   reactFlowWrapper: null | React.RefObject<HTMLDivElement>;
   mode: 'app' | 'plugin';
   filterAppIds: string[];
@@ -150,16 +153,19 @@ const StateContext = createContext<useFlowProviderStoreType>({
   onConnectEnd: function (event: any): void {
     throw new Error('Function not implemented.');
   },
-  connectingEdge: undefined
+  connectingEdge: undefined,
+  basicNodeTemplates: []
 });
 export const useFlowProviderStore = () => useContext(StateContext);
 
 export const FlowProvider = ({
   mode,
+  basicNodeTemplates = [],
   filterAppIds = [],
   children
 }: {
   mode: useFlowProviderStoreType['mode'];
+  basicNodeTemplates: FlowNodeTemplateType[];
   filterAppIds?: string[];
   children: React.ReactNode;
 }) => {
@@ -263,7 +269,8 @@ export const FlowProvider = ({
 
   /* change */
   const onChangeNode = useCallback(
-    ({ nodeId, type, key, value, index }: FlowNodeChangeProps) => {
+    (props: FlowNodeChangeProps) => {
+      const { nodeId, type } = props;
       setNodes((nodes) =>
         nodes.map((node) => {
           if (node.id !== nodeId) return node;
@@ -271,25 +278,27 @@ export const FlowProvider = ({
           const updateObj: Record<string, any> = {};
 
           if (type === 'attr') {
-            if (key) {
-              updateObj[key] = value;
+            if (props.key) {
+              updateObj[props.key] = props.value;
             }
           } else if (type === 'updateInput') {
-            updateObj.inputs = node.data.inputs.map((item) => (item.key === key ? value : item));
+            updateObj.inputs = node.data.inputs.map((item) =>
+              item.key === props.key ? props.value : item
+            );
           } else if (type === 'replaceInput') {
-            onDelEdge({ nodeId, targetHandle: key });
-            const oldInputIndex = node.data.inputs.findIndex((item) => item.key === key);
-            updateObj.inputs = node.data.inputs.filter((item) => item.key !== key);
+            onDelEdge({ nodeId, targetHandle: props.key });
+            const oldInputIndex = node.data.inputs.findIndex((item) => item.key === props.key);
+            updateObj.inputs = node.data.inputs.filter((item) => item.key !== props.key);
             setTimeout(() => {
               onChangeNode({
                 nodeId,
                 type: 'addInput',
                 index: oldInputIndex,
-                value
+                value: props.value
               });
             });
           } else if (type === 'addInput') {
-            const input = node.data.inputs.find((input) => input.key === value.key);
+            const input = node.data.inputs.find((input) => input.key === props.value.key);
             if (input) {
               toast({
                 status: 'warning',
@@ -297,33 +306,35 @@ export const FlowProvider = ({
               });
               updateObj.inputs = node.data.inputs;
             } else {
-              if (index !== undefined) {
+              if (props.index !== undefined) {
                 const inputs = [...node.data.inputs];
-                inputs.splice(index, 0, value);
+                inputs.splice(props.index, 0, props.value);
                 updateObj.inputs = inputs;
               } else {
-                updateObj.inputs = node.data.inputs.concat(value);
+                updateObj.inputs = node.data.inputs.concat(props.value);
               }
             }
           } else if (type === 'delInput') {
-            onDelEdge({ nodeId, targetHandle: key });
-            updateObj.inputs = node.data.inputs.filter((item) => item.key !== key);
+            onDelEdge({ nodeId, targetHandle: props.key });
+            updateObj.inputs = node.data.inputs.filter((item) => item.key !== props.key);
           } else if (type === 'updateOutput') {
-            updateObj.outputs = node.data.outputs.map((item) => (item.key === key ? value : item));
+            updateObj.outputs = node.data.outputs.map((item) =>
+              item.key === props.key ? props.value : item
+            );
           } else if (type === 'replaceOutput') {
-            onDelEdge({ nodeId, sourceHandle: key });
-            const oldOutputIndex = node.data.outputs.findIndex((item) => item.key === key);
-            updateObj.outputs = node.data.outputs.filter((item) => item.key !== key);
+            onDelEdge({ nodeId, sourceHandle: props.key });
+            const oldOutputIndex = node.data.outputs.findIndex((item) => item.key === props.key);
+            updateObj.outputs = node.data.outputs.filter((item) => item.key !== props.key);
             setTimeout(() => {
               onChangeNode({
                 nodeId,
                 type: 'addOutput',
                 index: oldOutputIndex,
-                value
+                value: props.value
               });
             });
           } else if (type === 'addOutput') {
-            const output = node.data.outputs.find((output) => output.key === value.key);
+            const output = node.data.outputs.find((output) => output.key === props.value.key);
             if (output) {
               toast({
                 status: 'warning',
@@ -331,17 +342,17 @@ export const FlowProvider = ({
               });
               updateObj.outputs = node.data.outputs;
             } else {
-              if (index !== undefined) {
+              if (props.index !== undefined) {
                 const outputs = [...node.data.outputs];
-                outputs.splice(index, 0, value);
+                outputs.splice(props.index, 0, props.value);
                 updateObj.outputs = outputs;
               } else {
-                updateObj.outputs = node.data.outputs.concat(value);
+                updateObj.outputs = node.data.outputs.concat(props.value);
               }
             }
           } else if (type === 'delOutput') {
-            onDelEdge({ nodeId, sourceHandle: key });
-            updateObj.outputs = node.data.outputs.filter((item) => item.key !== key);
+            onDelEdge({ nodeId, sourceHandle: props.key });
+            updateObj.outputs = node.data.outputs.filter((item) => item.key !== props.key);
           }
 
           return {
@@ -372,10 +383,9 @@ export const FlowProvider = ({
           showStatus: node.data.showStatus
         };
         return nodes.concat(
-          appModule2FlowNode({
+          storeNode2FlowNode({
             item: {
               name: template.name,
-              avatar: template.avatar,
               intro: template.intro,
               nodeId: nanoid(),
               position: { x: node.position.x + 200, y: node.position.y + 50 },
@@ -447,7 +457,7 @@ export const FlowProvider = ({
       });
       setEdges(edges);
 
-      setNodes(nodes.map((item) => appModule2FlowNode({ item })));
+      setNodes(nodes.map((item) => storeNode2FlowNode({ item })));
 
       setTimeout(() => {
         onFixView();
@@ -456,57 +466,10 @@ export const FlowProvider = ({
     [setEdges, setNodes, onFixView]
   );
 
-  // use eventbus to avoid refresh ReactComponents
-  useEffect(() => {
-    eventBus.on(
-      EventNameEnum.requestFlowEvent,
-      ({ type, data }: { type: requestEventType; data: any }) => {
-        switch (type) {
-          case 'onChangeNode':
-            onChangeNode(data);
-            return;
-          case 'onCopyNode':
-            onCopyNode(data);
-            return;
-          case 'onResetNode':
-            onResetNode(data);
-            return;
-          case 'onDelNode':
-            onDelNode(data);
-            return;
-          case 'onDelConnect':
-            onDelConnect(data);
-            return;
-          case 'setNodes':
-            setNodes(data);
-            return;
-        }
-      }
-    );
-    return () => {
-      eventBus.off(EventNameEnum.requestFlowEvent);
-    };
-  }, []);
-  useEffect(() => {
-    eventBus.on(EventNameEnum.requestFlowStore, () => {
-      eventBus.emit('receiveFlowStore', {
-        nodes,
-        edges,
-        mode,
-        filterAppIds,
-        reactFlowWrapper
-      });
-    });
-    return () => {
-      eventBus.off(EventNameEnum.requestFlowStore);
-    };
-  }, [edges, filterAppIds, mode, nodes]);
-
   const value = {
     reactFlowWrapper,
     mode,
     filterAppIds,
-
     edges,
     setEdges,
     onEdgesChange,
@@ -514,6 +477,7 @@ export const FlowProvider = ({
     nodes,
     setNodes,
     onNodesChange: handleNodesChange,
+    basicNodeTemplates,
     // connect
     connectingEdge,
     onConnectStart,
@@ -535,10 +499,3 @@ export const FlowProvider = ({
 };
 
 export default React.memo(FlowProvider);
-
-export const onChangeNode = (e: FlowNodeChangeProps) => {
-  eventBus.emit(EventNameEnum.requestFlowEvent, {
-    type: 'onChangeNode',
-    data: e
-  });
-};

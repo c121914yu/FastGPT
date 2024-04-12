@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ModalBody, Flex, Box, useTheme, ModalFooter, Button } from '@chakra-ui/react';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useQuery } from '@tanstack/react-query';
-import type { SelectAppItemType } from '@fastgpt/global/core/workflow/type';
+import type { SelectAppItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import Avatar from '@/components/Avatar';
 import { useTranslation } from 'next-i18next';
 import { useLoading } from '@fastgpt/web/hooks/useLoading';

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type.d';
-import { onChangeNode } from '../FlowProvider';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import dynamic from 'next/dynamic';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
@@ -15,13 +14,14 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
 import TargetHandle from './render/TargetHandle';
 import { useToast } from '@fastgpt/web/hooks/useToast';
+import { EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
 import {
-  EditNodeFieldType,
   FlowNodeInputItemType,
   FlowNodeOutputItemType
-} from '@fastgpt/global/core/workflow/node/type';
+} from '@fastgpt/global/core/workflow/type/io';
 import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
+import { useFlowProviderStore } from '../FlowProvider';
 
 const FieldEditModal = dynamic(() => import('./render/FieldEditModal'));
 
@@ -45,6 +45,8 @@ const createEditField = {
 const NodePluginOutput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { nodeId, inputs, outputs } = data;
+  const { onChangeNode } = useFlowProviderStore();
+
   const [createField, setCreateField] = useState<EditNodeFieldType>();
   const [editField, setEditField] = useState<EditNodeFieldType>();
 

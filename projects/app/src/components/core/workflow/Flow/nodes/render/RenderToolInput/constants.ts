@@ -1,4 +1,4 @@
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
+import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 

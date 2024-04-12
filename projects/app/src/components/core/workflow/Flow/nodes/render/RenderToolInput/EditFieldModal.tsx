@@ -17,8 +17,8 @@ import { defaultEditFormData } from './constants';
 import MySelect from '@fastgpt/web/components/common/MySelect';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { onChangeNode } from '../../../FlowProvider';
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
+import { useFlowProviderStore } from '../../../FlowProvider';
+import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 
 const EditFieldModal = ({
   defaultValue = defaultEditFormData,
@@ -27,6 +27,7 @@ const EditFieldModal = ({
 }: EditFieldModalProps) => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const { onChangeNode } = useFlowProviderStore();
 
   const { register, getValues, setValue, handleSubmit, watch } = useForm<FlowNodeInputItemType>({
     defaultValues: defaultValue

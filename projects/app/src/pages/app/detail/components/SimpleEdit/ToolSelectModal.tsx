@@ -16,7 +16,7 @@ import { useWorkflowStore } from '@/web/core/workflow/store/workflow';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { useQuery } from '@tanstack/react-query';
 import EmptyTip from '@/components/EmptyTip';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type/index.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import Avatar from '@/components/Avatar';
 import MyIcon from '@fastgpt/web/components/common/Icon';

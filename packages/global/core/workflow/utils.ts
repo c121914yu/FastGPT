@@ -5,7 +5,7 @@ import {
   VariableInputEnum,
   variableMap
 } from './constants';
-import { FlowNodeInputItemType, FlowNodeOutputItemType } from './node/type';
+import { FlowNodeInputItemType, FlowNodeOutputItemType } from './type/io.d';
 import { StoreNodeItemType } from './type';
 import type { VariableItemType, AppTTSConfigType, AppWhisperConfigType } from '../app/type';
 import { Input_Template_Switch } from './template/input';

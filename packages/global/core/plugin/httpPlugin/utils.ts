@@ -3,7 +3,7 @@ import { OpenApiJsonSchema } from './type';
 import yaml from 'js-yaml';
 import { OpenAPIV3 } from 'openapi-types';
 import { PluginTypeEnum } from '../constants';
-import { FlowNodeInputItemType, FlowNodeOutputItemType } from '../../workflow/node/type';
+import { FlowNodeInputItemType, FlowNodeOutputItemType } from '../../workflow/type/io.d';
 import { FlowNodeInputTypeEnum, FlowNodeOutputTypeEnum } from '../../workflow/node/constant';
 import { ModuleIOValueTypeEnum } from '../../workflow/constants';
 import { PluginInputModule } from '../../workflow/template/system/pluginInput';

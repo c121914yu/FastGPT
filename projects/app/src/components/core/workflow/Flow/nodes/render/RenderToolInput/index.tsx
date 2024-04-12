@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import type {
   FlowNodeInputItemType,
   FlowNodeOutputItemType
-} from '@fastgpt/global/core/workflow/node/type';
+} from '@fastgpt/global/core/workflow/type/io.d';
 import {
   Box,
   Button,
@@ -19,7 +19,7 @@ import { useTranslation } from 'next-i18next';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import dynamic from 'next/dynamic';
 import { defaultEditFormData } from './constants';
-import { onChangeNode } from '../../../FlowProvider';
+import { useFlowProviderStore } from '../../../FlowProvider';
 const EditFieldModal = dynamic(() => import('./EditFieldModal'));
 
 const RenderToolInput = ({
@@ -32,6 +32,7 @@ const RenderToolInput = ({
   canEdit?: boolean;
 }) => {
   const { t } = useTranslation();
+  const { onChangeNode } = useFlowProviderStore();
   const [editField, setEditField] = React.useState<FlowNodeInputItemType>();
 
   return (

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Header from './Header';
 import Flow from '@/components/core/workflow/Flow';
 import FlowProvider, { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
-import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type.d';
+import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type/index.d';
 import { pluginSystemModuleTemplates } from '@fastgpt/global/core/workflow/template/constants';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { serviceSideProps } from '@/web/common/utils/i18n';

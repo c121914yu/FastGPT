@@ -1,4 +1,4 @@
-import { UserGuideModule } from './system/userGuide';
+import { SystemConfigNode } from './system/systemConfig';
 import { EmptyNode } from './system/emptyNode';
 import { WorkflowStart } from './system/workflowStart';
 import { AiChatModule } from './system/aiChat';
@@ -18,13 +18,13 @@ import { PluginOutputModule } from './system/pluginOutput';
 import { RunPluginModule } from './system/runPlugin';
 import { AiQueryExtension } from './system/queryExtension';
 
-import type { FlowNodeTemplateType, moduleTemplateListType } from '../../workflow/type.d';
+import type { FlowNodeTemplateType, nodeTemplateListType } from '../type';
 import { FlowNodeTemplateTypeEnum } from '../../workflow/constants';
 import { lafModule } from './system/laf';
 
 /* app flow module templates */
 export const appSystemModuleTemplates: FlowNodeTemplateType[] = [
-  UserGuideModule,
+  SystemConfigNode,
   WorkflowStart,
   AiChatModule,
   AssignedAnswerModule,
@@ -60,7 +60,7 @@ export const pluginSystemModuleTemplates: FlowNodeTemplateType[] = [
 /* all module */
 export const moduleTemplatesFlat: FlowNodeTemplateType[] = [
   EmptyNode,
-  UserGuideModule,
+  SystemConfigNode,
   WorkflowStart,
   AiChatModule,
   DatasetSearchModule,
@@ -80,7 +80,7 @@ export const moduleTemplatesFlat: FlowNodeTemplateType[] = [
   lafModule
 ];
 
-export const moduleTemplatesList: moduleTemplateListType = [
+export const moduleTemplatesList: nodeTemplateListType = [
   {
     type: FlowNodeTemplateTypeEnum.systemInput,
     label: 'core.module.template.System input module',

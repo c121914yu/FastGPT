@@ -2,12 +2,12 @@ import React from 'react';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { ModalBody, Button, ModalFooter, useDisclosure, Textarea, Box } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
-import { onChangeNode } from '../../FlowProvider';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/node/type';
+import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useForm } from 'react-hook-form';
 import parse from '@bany/curl-to-json';
+import { useFlowProviderStore } from '../../FlowProvider';
 
 type RequestMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 const methodMap: { [K in RequestMethod]: string } = {
@@ -28,6 +28,7 @@ const CurlImportModal = ({
   onClose: () => void;
 }) => {
   const { t } = useTranslation();
+  const { onChangeNode } = useFlowProviderStore();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       curlContent: ''

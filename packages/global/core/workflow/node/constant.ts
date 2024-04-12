@@ -1,13 +1,10 @@
-export enum FlowNodeInputTypeEnum {
-  triggerAndFinish = 'triggerAndFinish',
-  systemInput = 'systemInput', // history, userChatInput, variableInput
-
+export enum FlowNodeInputTypeEnum { // render ui
+  reference = 'reference', // reference to other node output
   input = 'input', // one line input
   numberInput = 'numberInput',
   select = 'select',
   slider = 'slider',
-  target = 'target', // data input
-  switch = 'switch',
+  switch = 'switch', // true/false
 
   // editor
   textarea = 'textarea',
@@ -15,10 +12,8 @@ export enum FlowNodeInputTypeEnum {
 
   addInputParam = 'addInputParam', // params input
 
+  // special input
   selectApp = 'selectApp',
-
-  // chat special input
-  aiSettings = 'aiSettings',
 
   // ai model select
   selectLLMModel = 'selectLLMModel',
@@ -43,7 +38,7 @@ export enum FlowNodeOutputTypeEnum {
 
 export enum FlowNodeTypeEnum {
   emptyNode = 'emptyNode',
-  userGuide = 'userGuide',
+  systemConfig = 'userGuide',
   workflowStart = 'workflowStart',
   historyNode = 'historyNode',
   chatNode = 'chatNode',

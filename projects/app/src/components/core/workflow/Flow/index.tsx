@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ReactFlow, {
   Background,
   Connection,
@@ -17,19 +17,20 @@ import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/
 import dynamic from 'next/dynamic';
 
 import ButtonEdge from './components/ButtonEdge';
-import ModuleTemplateList from './ModuleTemplateList';
+import NodeTemplatesModal from './NodeTemplatesModal';
 import { useFlowProviderStore } from './FlowProvider';
 
 import 'reactflow/dist/style.css';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useTranslation } from 'next-i18next';
-import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
 
 const NodeSimple = dynamic(() => import('./nodes/NodeSimple'));
 const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
-  [FlowNodeTypeEnum.userGuide]: dynamic(() => import('./nodes/NodeUserGuide')),
+  [FlowNodeTypeEnum.emptyNode]: NodeSimple,
+  [FlowNodeTypeEnum.systemConfig]: dynamic(() => import('./nodes/NodeSystemConfig')),
   [FlowNodeTypeEnum.workflowStart]: dynamic(() => import('./nodes/NodeWorkflowStart')),
   [FlowNodeTypeEnum.historyNode]: NodeSimple,
   [FlowNodeTypeEnum.chatNode]: NodeSimple,
@@ -155,7 +156,7 @@ const Flow = ({ Header, ...data }: { Header: React.ReactNode }) => {
 
         <Container {...data} />
 
-        <ModuleTemplateList isOpen={isOpenTemplate} onClose={onCloseTemplate} />
+        <NodeTemplatesModal isOpen={isOpenTemplate} onClose={onCloseTemplate} />
       </Box>
     );
   }, [data, isOpenTemplate, onCloseTemplate, onOpenTemplate]);

@@ -23,7 +23,7 @@ const sourceHoverStyle = {
   justifyContent: 'center',
   width: '18px',
   height: '18px',
-  transform: 'translate(4px,-50%)'
+  transform: 'translate(5px,-50%)'
 };
 
 export const ConnectionSourceHandle = ({
@@ -95,7 +95,7 @@ export const ConnectionSourceHandle = ({
       </Handle>
     );
   }, [connectingEdge?.handleId, edges, isHover, node, nodeId]);
-  console.log(showSourceHandle, node);
+
   return showSourceHandle ? <>{RightHandle}</> : null;
 };
 

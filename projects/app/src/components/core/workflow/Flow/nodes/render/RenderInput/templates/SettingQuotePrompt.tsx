@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import type { RenderInputProps } from '../type';
 import { Box, BoxProps, Button, Flex, ModalFooter, useDisclosure } from '@chakra-ui/react';
-import { onChangeNode, useFlowProviderStore } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useForm } from 'react-hook-form';
 import { PromptTemplateItem } from '@fastgpt/global/core/ai/type';
@@ -25,7 +25,7 @@ import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 const SettingQuotePrompt = ({ inputs = [], nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { nodes } = useFlowProviderStore();
+  const { nodes, onChangeNode } = useFlowProviderStore();
   const { watch, setValue, handleSubmit } = useForm({
     defaultValues: {
       quoteTemplate: inputs.find((input) => input.key === 'quoteTemplate')?.value || '',

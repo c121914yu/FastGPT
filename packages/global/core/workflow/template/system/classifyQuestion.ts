@@ -3,7 +3,7 @@ import {
   FlowNodeOutputTypeEnum,
   FlowNodeTypeEnum
 } from '../../node/constant';
-import { FlowNodeTemplateType } from '../../type.d';
+import { FlowNodeTemplateType } from '../../type';
 import {
   ModuleIOValueTypeEnum,
   ModuleInputKeyEnum,
@@ -12,7 +12,6 @@ import {
 import {
   Input_Template_SelectAIModel,
   Input_Template_History,
-  Input_Template_Switch,
   Input_Template_UserChatInput
 } from '../input';
 import { Input_Template_System_Prompt } from '../input';
@@ -30,7 +29,6 @@ export const ClassifyQuestionModule: FlowNodeTemplateType = {
   intro: `根据用户的历史记录和当前问题判断该次提问的类型。可以添加多组问题类型，下面是一个模板例子：\n类型1: 打招呼\n类型2: 关于商品“使用”问题\n类型3: 关于商品“购买”问题\n类型4: 其他问题`,
   showStatus: true,
   inputs: [
-    Input_Template_Switch,
     {
       ...Input_Template_SelectAIModel,
       llmModelType: LLMModelTypeEnum.classify
@@ -45,7 +43,7 @@ export const ClassifyQuestionModule: FlowNodeTemplateType = {
     Input_Template_UserChatInput,
     {
       key: ModuleInputKeyEnum.agents,
-      type: FlowNodeInputTypeEnum.custom,
+      renderTypeList: [FlowNodeInputTypeEnum.custom],
       valueType: ModuleIOValueTypeEnum.any,
       label: '',
       value: [
@@ -64,22 +62,5 @@ export const ClassifyQuestionModule: FlowNodeTemplateType = {
       ]
     }
   ],
-  outputs: [
-    // custom output
-    {
-      key: 'wqre',
-      label: '',
-      type: FlowNodeOutputTypeEnum.hidden
-    },
-    {
-      key: 'sdfa',
-      label: '',
-      type: FlowNodeOutputTypeEnum.hidden
-    },
-    {
-      key: 'agex',
-      label: '',
-      type: FlowNodeOutputTypeEnum.hidden
-    }
-  ]
+  outputs: []
 };

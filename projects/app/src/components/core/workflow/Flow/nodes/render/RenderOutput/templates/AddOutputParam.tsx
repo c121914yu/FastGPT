@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { RenderOutputProps } from '../type';
-import { onChangeNode } from '../../../../FlowProvider';
+import { useFlowProviderStore } from '../../../../FlowProvider';
 import { Box, Button } from '@chakra-ui/react';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import { useTranslation } from 'next-i18next';
@@ -12,6 +12,7 @@ const FieldEditModal = dynamic(() => import('../../FieldEditModal'));
 
 const AddOutputParam = ({ outputs = [], item, nodeId }: RenderOutputProps) => {
   const { t } = useTranslation();
+  const { onChangeNode } = useFlowProviderStore();
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
   return (
