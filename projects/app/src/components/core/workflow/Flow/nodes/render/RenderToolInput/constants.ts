@@ -1,6 +1,6 @@
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 
 export const defaultEditFormData: FlowNodeInputItemType = {
   valueType: 'string',
@@ -20,6 +20,6 @@ export const defaultEditFormData: FlowNodeInputItemType = {
     key: '',
     description: '',
     inputType: FlowNodeInputTypeEnum.target,
-    valueType: ModuleIOValueTypeEnum.string
+    valueType: WorkflowIOValueTypeEnum.string
   }
 };

@@ -2,13 +2,13 @@ import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/cons
 import { responseWrite } from '../../../../common/response';
 import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 export type AnswerProps = ModuleDispatchProps<{
   text: string;
 }>;
 export type AnswerResponse = DispatchNodeResultType<{
-  [ModuleOutputKeyEnum.answerText]: string;
+  [NodeOutputKeyEnum.answerText]: string;
 }>;
 
 export const dispatchAnswer = (props: Record<string, any>): AnswerResponse => {
@@ -32,6 +32,6 @@ export const dispatchAnswer = (props: Record<string, any>): AnswerResponse => {
   }
 
   return {
-    [ModuleOutputKeyEnum.answerText]: formatText
+    [NodeOutputKeyEnum.answerText]: formatText
   };
 };

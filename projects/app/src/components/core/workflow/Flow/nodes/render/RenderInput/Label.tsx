@@ -6,7 +6,6 @@ import { Box, Flex } from '@chakra-ui/react';
 import MyTooltip from '@/components/MyTooltip';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 
-import dynamic from 'next/dynamic';
 import NodeInputSelect from '@fastgpt/web/components/core/workflow/NodeInputSelect';
 
 type Props = FlowNodeInputItemType & {
@@ -18,7 +17,7 @@ type Props = FlowNodeInputItemType & {
 const InputLabel = ({ nodeId, inputKey, mode, ...item }: Props) => {
   const { t } = useTranslation();
   const { onChangeNode } = useFlowProviderStore();
-  const { required = false, description, label, selectedTypeIndex, renderTypeList } = item;
+  const { description, label, selectedTypeIndex, renderTypeList } = item;
 
   const onChangeRenderType = useCallback(
     (e: string) => {
@@ -30,7 +29,8 @@ const InputLabel = ({ nodeId, inputKey, mode, ...item }: Props) => {
         key: inputKey,
         value: {
           ...item,
-          selectedTypeIndex: index
+          selectedTypeIndex: index,
+          value: undefined
         }
       });
     },
@@ -40,17 +40,6 @@ const InputLabel = ({ nodeId, inputKey, mode, ...item }: Props) => {
   return (
     <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
       <Box position={'relative'}>
-        {required && (
-          <Box
-            position={'absolute'}
-            top={'-2px'}
-            left={'-8px'}
-            color={'red.500'}
-            fontWeight={'bold'}
-          >
-            *
-          </Box>
-        )}
         {t(label)}
         {description && (
           <MyTooltip label={t(description)} forceShow>

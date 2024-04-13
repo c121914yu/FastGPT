@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import type { RenderInputProps } from '../type';
 import { useFlowProviderStore } from '../../../../FlowProvider';
-import { SettingAIDataType } from '@fastgpt/global/core/workflow/node/type';
+import type { SettingAIDataType } from '@fastgpt/global/core/app/type.d';
 import SettingLLMModel from '@/components/core/ai/SettingLLMModel';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 const SelectAiModelRender = ({ item, inputs = [], nodeId }: RenderInputProps) => {
   const { onChangeNode } = useFlowProviderStore();
@@ -29,13 +29,12 @@ const SelectAiModelRender = ({ item, inputs = [], nodeId }: RenderInputProps) =>
   );
 
   const llmModelData: SettingAIDataType = {
-    model: inputs.find((input) => input.key === ModuleInputKeyEnum.aiModel)?.value ?? '',
-    maxToken:
-      inputs.find((input) => input.key === ModuleInputKeyEnum.aiChatMaxToken)?.value ?? 2048,
+    model: inputs.find((input) => input.key === NodeInputKeyEnum.aiModel)?.value ?? '',
+    maxToken: inputs.find((input) => input.key === NodeInputKeyEnum.aiChatMaxToken)?.value ?? 2048,
     temperature:
-      inputs.find((input) => input.key === ModuleInputKeyEnum.aiChatTemperature)?.value ?? 1,
+      inputs.find((input) => input.key === NodeInputKeyEnum.aiChatTemperature)?.value ?? 1,
     isResponseAnswerText: inputs.find(
-      (input) => input.key === ModuleInputKeyEnum.aiChatIsResponseText
+      (input) => input.key === NodeInputKeyEnum.aiChatIsResponseText
     )?.value
   };
 

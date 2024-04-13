@@ -4,7 +4,7 @@ import { connectToDatabase } from '@/service/mongo';
 import { authApp } from '@fastgpt/service/support/permission/auth/app';
 import { getGuideModule } from '@fastgpt/global/core/workflow/utils';
 import { getChatModelNameListByModules } from '@/service/core/app/workflow';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import type { InitChatProps, InitChatResponse } from '@/global/core/chat/api.d';
 import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
 import { getChatItems } from '@fastgpt/service/core/chat/controller';

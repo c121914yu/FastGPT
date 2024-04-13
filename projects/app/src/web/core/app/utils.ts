@@ -4,7 +4,7 @@ import {
   FlowNodeInputTypeEnum,
   FlowNodeTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum, NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { EmptyNode } from '@fastgpt/global/core/workflow/template/system/emptyNode';
 import { ToolModule } from '@fastgpt/global/core/workflow/template/system/tools';
 import {
@@ -19,35 +19,33 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
       {
         name: '系统配置',
         flowNodeType: FlowNodeTypeEnum.userGuide,
-        targetNodes: [],
-        sourceNodes: [],
         inputs: [
           {
-            key: ModuleInputKeyEnum.welcomeText,
+            key: NodeInputKeyEnum.welcomeText,
             type: FlowNodeInputTypeEnum.hidden,
             label: 'core.app.Welcome Text',
             value: formData.userGuide.welcomeText
           },
           {
-            key: ModuleInputKeyEnum.variables,
+            key: NodeInputKeyEnum.variables,
             type: FlowNodeInputTypeEnum.hidden,
             label: 'core.app.Chat Variable',
             value: formData.userGuide.variables
           },
           {
-            key: ModuleInputKeyEnum.questionGuide,
+            key: NodeInputKeyEnum.questionGuide,
             type: FlowNodeInputTypeEnum.hidden,
             label: 'core.app.Question Guide',
             value: formData.userGuide.questionGuide
           },
           {
-            key: ModuleInputKeyEnum.tts,
+            key: NodeInputKeyEnum.tts,
             type: FlowNodeInputTypeEnum.hidden,
             label: '',
             value: formData.userGuide.tts
           },
           {
-            key: ModuleInputKeyEnum.whisper,
+            key: NodeInputKeyEnum.whisper,
             type: FlowNodeInputTypeEnum.hidden,
             label: '',
             value: formData.userGuide.whisper
@@ -878,11 +876,11 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             connected: false
           },
           {
-            key: ModuleInputKeyEnum.aiChatTemperature,
+            key: NodeInputKeyEnum.aiChatTemperature,
             type: FlowNodeInputTypeEnum.hidden, // Set in the pop-up window
             label: '',
             value: formData.aiSettings.temperature,
-            valueType: ModuleIOValueTypeEnum.number,
+            valueType: WorkflowIOValueTypeEnum.number,
             min: 0,
             max: 10,
             step: 1,
@@ -890,11 +888,11 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
             showTargetInPlugin: false
           },
           {
-            key: ModuleInputKeyEnum.aiChatMaxToken,
+            key: NodeInputKeyEnum.aiChatMaxToken,
             type: FlowNodeInputTypeEnum.hidden, // Set in the pop-up window
             label: '',
             value: formData.aiSettings.maxToken,
-            valueType: ModuleIOValueTypeEnum.number,
+            valueType: WorkflowIOValueTypeEnum.number,
             min: 100,
             max: 4000,
             step: 50,

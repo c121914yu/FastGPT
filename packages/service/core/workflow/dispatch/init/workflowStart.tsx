@@ -1,12 +1,12 @@
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 export type UserChatInputProps = ModuleDispatchProps<{
-  [ModuleInputKeyEnum.userChatInput]: string;
+  [NodeInputKeyEnum.userChatInput]: string;
 }>;
 
-export const dispatchChatInput = (props: Record<string, any>) => {
+export const dispatchWorkflowStart = (props: Record<string, any>) => {
   const {
-    params: { userChatInput }
+    variables: { userChatInput }
   } = props as UserChatInputProps;
   return {
     userChatInput

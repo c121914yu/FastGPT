@@ -4,54 +4,29 @@ import { Handle, Position } from 'reactflow';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 import MyTooltip from '@/components/MyTooltip';
 import { useTranslation } from 'next-i18next';
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { SmallAddIcon } from '@chakra-ui/icons';
+import { sourceCommonStyle, sourceConnectedStyle } from '@/web/core/workflow/constants/handleStyle';
 
-interface Props extends BoxProps {
-  handleKey: string;
-  valueType?: `${ModuleIOValueTypeEnum}`;
-}
+type Props = {
+  handleId: string;
+  transform?: string;
+};
 
-const SourceHandle = ({ handleKey, valueType, ...props }: Props) => {
+const SourceHandle = ({ handleId, transform }: Props) => {
   const { t } = useTranslation();
 
-  const valType = valueType ?? ModuleIOValueTypeEnum.any;
-
-  const valueStyle = useMemo(
-    () =>
-      valueType && FlowValueTypeMap[valueType]
-        ? FlowValueTypeMap[valueType]?.handlerStyle
-        : FlowValueTypeMap[ModuleIOValueTypeEnum.any]?.handlerStyle,
-    [valueType]
-  );
-
   return (
-    <Box
-      position={'absolute'}
-      top={'50%'}
-      right={'-18px'}
-      transform={'translate(0,-50%)'}
-      {...props}
-    >
-      <MyTooltip
-        label={t('app.module.type', {
-          type: t(FlowValueTypeMap[valType]?.label),
-          description: FlowValueTypeMap[valType]?.description
-        })}
-      >
-        <Handle
-          style={{
-            width: '14px',
-            height: '14px',
-            borderWidth: '3.5px',
-            backgroundColor: 'white',
-            ...valueStyle
-          }}
-          type="source"
-          id={handleKey}
-          position={Position.Right}
-        />
-      </MyTooltip>
-    </Box>
+    <Handle
+      style={{
+        ...sourceCommonStyle,
+        ...sourceConnectedStyle,
+        transform
+      }}
+      type="source"
+      id={handleId}
+      position={Position.Right}
+    ></Handle>
   );
 };
 

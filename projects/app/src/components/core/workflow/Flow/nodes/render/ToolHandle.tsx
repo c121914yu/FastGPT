@@ -2,9 +2,9 @@ import MyTooltip from '@/components/MyTooltip';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 import { Box, BoxProps } from '@chakra-ui/react';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { Connection, Handle, Position } from 'reactflow';
@@ -17,7 +17,7 @@ type ToolHandleProps = BoxProps & {
 export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
   const { t } = useTranslation();
 
-  const valueTypeMap = FlowValueTypeMap[ModuleIOValueTypeEnum.tools];
+  const valueTypeMap = FlowValueTypeMap[WorkflowIOValueTypeEnum.tools];
 
   return (
     <MyTooltip
@@ -33,7 +33,7 @@ export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
           backgroundColor: 'transparent'
         }}
         type="target"
-        id={ModuleOutputKeyEnum.selectedTools}
+        id={NodeOutputKeyEnum.selectedTools}
         position={Position.Top}
       >
         <Box
@@ -52,7 +52,7 @@ export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
   const { t } = useTranslation();
   const { setEdges, nodes } = useFlowProviderStore();
 
-  const valueTypeMap = FlowValueTypeMap[ModuleIOValueTypeEnum.tools];
+  const valueTypeMap = FlowValueTypeMap[WorkflowIOValueTypeEnum.tools];
 
   /* onConnect edge, delete tool input and switch */
   const onConnect = useCallback(
@@ -65,7 +65,7 @@ export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
           const input = inputs.find((input) => input.key === edge.targetHandle);
           if (
             edge.target === node.id &&
-            (!!input?.toolDescription || input?.key === ModuleInputKeyEnum.switch)
+            (!!input?.toolDescription || input?.key === NodeInputKeyEnum.switch)
           ) {
             return false;
           }
@@ -90,7 +90,7 @@ export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
           backgroundColor: 'transparent'
         }}
         type="source"
-        id={ModuleOutputKeyEnum.selectedTools}
+        id={NodeOutputKeyEnum.selectedTools}
         position={Position.Bottom}
         onConnect={onConnect}
       >

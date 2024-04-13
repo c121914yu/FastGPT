@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { LLMModelTypeEnum, llmModelTypeFilterMap } from '@fastgpt/global/core/ai/constants';
 import { Box, Button, useDisclosure } from '@chakra-ui/react';
-import { SettingAIDataType } from '@fastgpt/global/core/workflow/node/type';
+import type { SettingAIDataType } from '@fastgpt/global/core/app/type.d';
 import AISettingModal from '@/components/core/ai/AISettingModal';
 import Avatar from '@/components/Avatar';
 import { HUGGING_FACE_ICON } from '@fastgpt/global/common/system/constants';

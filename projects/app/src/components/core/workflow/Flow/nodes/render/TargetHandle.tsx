@@ -4,22 +4,22 @@ import { Handle, OnConnect, Position } from 'reactflow';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 import MyTooltip from '@/components/MyTooltip';
 import { useTranslation } from 'next-i18next';
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 
 interface Props extends BoxProps {
   handleKey: string;
-  valueType?: `${ModuleIOValueTypeEnum}`;
+  valueType?: `${WorkflowIOValueTypeEnum}`;
 }
 
 const TargetHandle = ({ handleKey, valueType, ...props }: Props) => {
   const { t } = useTranslation();
 
-  const valType = valueType ?? ModuleIOValueTypeEnum.any;
+  const valType = valueType ?? WorkflowIOValueTypeEnum.any;
   const valueStyle = useMemo(
     () =>
       valueType && FlowValueTypeMap[valueType]
         ? FlowValueTypeMap[valueType]?.handlerStyle
-        : FlowValueTypeMap[ModuleIOValueTypeEnum.any]?.handlerStyle,
+        : FlowValueTypeMap[WorkflowIOValueTypeEnum.any]?.handlerStyle,
     [valueType]
   );
 

@@ -8,7 +8,7 @@ import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import { ChatItemValueTypeEnum, ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAIApi } from '../../../ai/config';
 import type { ClassifyQuestionAgentItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
@@ -27,11 +27,11 @@ import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/ty
 import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 
 type Props = ModuleDispatchProps<{
-  [ModuleInputKeyEnum.aiModel]: string;
-  [ModuleInputKeyEnum.aiSystemPrompt]?: string;
-  [ModuleInputKeyEnum.history]?: ChatItemType[] | number;
-  [ModuleInputKeyEnum.userChatInput]: string;
-  [ModuleInputKeyEnum.agents]: ClassifyQuestionAgentItemType[];
+  [NodeInputKeyEnum.aiModel]: string;
+  [NodeInputKeyEnum.aiSystemPrompt]?: string;
+  [NodeInputKeyEnum.history]?: ChatItemType[] | number;
+  [NodeInputKeyEnum.userChatInput]: string;
+  [NodeInputKeyEnum.agents]: ClassifyQuestionAgentItemType[];
 }>;
 type CQResponse = DispatchNodeResultType<{
   [key: string]: any;
@@ -44,7 +44,7 @@ const agentFunName = 'classify_question';
 export const dispatchClassifyQuestion = async (props: Props): Promise<CQResponse> => {
   const {
     user,
-    module: { name },
+    node: { name },
     histories,
     params: { model, history = 6, agents, userChatInput }
   } = props as Props;

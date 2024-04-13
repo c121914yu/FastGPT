@@ -3,7 +3,7 @@ import { BezierEdge, getBezierPath, EdgeLabelRenderer, EdgeProps } from 'reactfl
 import { useFlowProviderStore } from '../FlowProvider';
 import { Flex } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 const ButtonEdge = (props: EdgeProps) => {
   const { nodes, onDelConnect } = useFlowProviderStore();
@@ -37,7 +37,7 @@ const ButtonEdge = (props: EdgeProps) => {
     targetPosition
   });
 
-  const isToolEdge = sourceHandleId === ModuleOutputKeyEnum.selectedTools;
+  const isToolEdge = sourceHandleId === NodeOutputKeyEnum.selectedTools;
 
   const memoEdgeLabel = useMemo(() => {
     return (

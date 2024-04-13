@@ -8,7 +8,7 @@ import {
   ChatStatusEnum
 } from './constants';
 import { FlowNodeTypeEnum } from '../workflow/node/constant';
-import { ModuleOutputKeyEnum } from '../workflow/constants';
+import { NodeOutputKeyEnum } from '../workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '../workflow/runtime/constants';
 import { AppSchema } from '../app/type';
 import type { AppSchema as AppType } from '@fastgpt/global/core/app/type.d';

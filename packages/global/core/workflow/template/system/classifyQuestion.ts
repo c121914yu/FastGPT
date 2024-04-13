@@ -5,8 +5,8 @@ import {
 } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import {
@@ -22,7 +22,7 @@ export const ClassifyQuestionModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.classifyQuestion,
   templateType: FlowNodeTemplateTypeEnum.functionCall,
   flowNodeType: FlowNodeTypeEnum.classifyQuestion,
-  sourceHandle: getHandleConfig(false, true, false, false),
+  sourceHandle: getHandleConfig(false, false, false, false),
   targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/cq.png',
   name: '问题分类',
@@ -42,9 +42,9 @@ export const ClassifyQuestionModule: FlowNodeTemplateType = {
     Input_Template_History,
     Input_Template_UserChatInput,
     {
-      key: ModuleInputKeyEnum.agents,
+      key: NodeInputKeyEnum.agents,
       renderTypeList: [FlowNodeInputTypeEnum.custom],
-      valueType: ModuleIOValueTypeEnum.any,
+      valueType: WorkflowIOValueTypeEnum.any,
       label: '',
       value: [
         {

@@ -1053,7 +1053,11 @@
       "Init History Error": "Init History Error"
     },
     "workflow": {
-      "Can not delete node": "Can not delete the node"
+      "Can not delete node": "Can not delete the node",
+      "Change input type tip": "Changing the input type will empty the entered values, please confirm!",
+      "chat": {
+        "Quote prompt": "Quote prompt"
+      }
     }
   },
   "dataset": {

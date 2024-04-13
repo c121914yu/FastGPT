@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ChatBox from '@/components/ChatBox';
 import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { streamFetch } from '@/web/common/api/fetch';
 import MyTooltip from '@/components/MyTooltip';
 import MyIcon from '@fastgpt/web/components/common/Icon';
@@ -28,8 +28,8 @@ const ChatTest = ({ appId }: { appId: string }) => {
       modules.forEach((module) => {
         module.inputs.forEach((input) => {
           if (
-            (input.key === ModuleInputKeyEnum.history ||
-              input.key === ModuleInputKeyEnum.historyMaxAmount) &&
+            (input.key === NodeInputKeyEnum.history ||
+              input.key === NodeInputKeyEnum.historyMaxAmount) &&
             typeof input.value === 'number'
           ) {
             historyMaxLen = Math.max(historyMaxLen, input.value);

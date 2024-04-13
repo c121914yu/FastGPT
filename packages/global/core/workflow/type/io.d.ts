@@ -1,12 +1,12 @@
 import { LLMModelTypeEnum } from '../../ai/constants';
-import { ModuleIOValueTypeEnum, ModuleInputKeyEnum, ModuleOutputKeyEnum } from '../constants';
+import { WorkflowIOValueTypeEnum, NodeInputKeyEnum, NodeOutputKeyEnum } from '../constants';
 import { FlowNodeInputTypeEnum, FlowNodeOutputTypeEnum } from '../node/constant';
 
 export type FlowNodeInputItemType = {
   selectedTypeIndex?: number;
   renderTypeList: `${FlowNodeInputTypeEnum}`[]; // Node Type. Decide on a render style
-  key: `${ModuleInputKeyEnum}` | string;
-  valueType?: `${ModuleIOValueTypeEnum}`; // data type
+  key: `${NodeInputKeyEnum}` | string;
+  valueType?: `${WorkflowIOValueTypeEnum}`; // data type
   value?: any;
   label: string;
   description?: string; // field desc
@@ -32,9 +32,10 @@ export type FlowNodeInputItemType = {
 export type FlowNodeOutputItemType = {
   id: string; // output unique id(Does not follow the key change)
   type?: `${FlowNodeOutputTypeEnum}`;
-  key: `${ModuleOutputKeyEnum}` | string;
+  key: `${NodeOutputKeyEnum}` | string;
   value?: any;
-  valueType?: `${ModuleIOValueTypeEnum}`;
+  valueType?: `${WorkflowIOValueTypeEnum}`;
+  required?: boolean;
 
   label?: string;
   description?: string;
