@@ -1,8 +1,8 @@
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import type {
   DispatchNodeResultType,
-  RunningModuleItemType
+  RuntimeNodeItemType
 } from '@fastgpt/global/core/workflow/runtime/type';
 import { ModelTypeEnum, getLLMModel } from '../../../../ai/model';
 import { getHistories } from '../../utils';
@@ -27,8 +27,8 @@ type Response = DispatchNodeResultType<{}>;
 
 export const dispatchRunTools = async (props: DispatchToolModuleProps): Promise<Response> => {
   const {
-    module: { name, outputs },
-    runtimeModules,
+    node: { name, outputs },
+    runtimeNodes,
     histories,
     params: { model, systemPrompt, userChatInput, history = 6 }
   } = props;
@@ -39,7 +39,7 @@ export const dispatchRunTools = async (props: DispatchToolModuleProps): Promise<
   /* get tool params */
 
   // get tool output targets
-  const toolOutput = outputs.find((output) => output.key === ModuleOutputKeyEnum.selectedTools);
+  const toolOutput = outputs.find((output) => output.key === NodeOutputKeyEnum.selectedTools);
 
   if (!toolOutput) {
     return Promise.reject('No tool output found');
@@ -57,7 +57,7 @@ export const dispatchRunTools = async (props: DispatchToolModuleProps): Promise<
     .map<ToolModuleItemType>((tool) => {
       const toolParams = tool?.inputs.filter((input) => !!input.toolDescription) || [];
       return {
-        ...(tool as RunningModuleItemType),
+        ...(tool as RuntimeNodeItemType),
         toolParams
       };
     });

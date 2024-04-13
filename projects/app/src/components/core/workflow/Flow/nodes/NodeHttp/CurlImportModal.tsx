@@ -2,7 +2,7 @@ import React from 'react';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { ModalBody, Button, ModalFooter, useDisclosure, Textarea, Box } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useForm } from 'react-hook-form';
@@ -39,11 +39,11 @@ const CurlImportModal = ({
 
   const handleFileProcessing = async (content: string) => {
     try {
-      const requestUrl = inputs.find((item) => item.key === ModuleInputKeyEnum.httpReqUrl);
-      const requestMethod = inputs.find((item) => item.key === ModuleInputKeyEnum.httpMethod);
-      const params = inputs.find((item) => item.key === ModuleInputKeyEnum.httpParams);
-      const headers = inputs.find((item) => item.key === ModuleInputKeyEnum.httpHeaders);
-      const jsonBody = inputs.find((item) => item.key === ModuleInputKeyEnum.httpJsonBody);
+      const requestUrl = inputs.find((item) => item.key === NodeInputKeyEnum.httpReqUrl);
+      const requestMethod = inputs.find((item) => item.key === NodeInputKeyEnum.httpMethod);
+      const params = inputs.find((item) => item.key === NodeInputKeyEnum.httpParams);
+      const headers = inputs.find((item) => item.key === NodeInputKeyEnum.httpHeaders);
+      const jsonBody = inputs.find((item) => item.key === NodeInputKeyEnum.httpJsonBody);
 
       const parsed = parse(content);
       if (!parsed.url) {
@@ -65,7 +65,7 @@ const CurlImportModal = ({
       onChangeNode({
         moduleId,
         type: 'updateInput',
-        key: ModuleInputKeyEnum.httpReqUrl,
+        key: NodeInputKeyEnum.httpReqUrl,
         value: {
           ...requestUrl,
           value: parsed.url
@@ -75,7 +75,7 @@ const CurlImportModal = ({
       onChangeNode({
         moduleId,
         type: 'updateInput',
-        key: ModuleInputKeyEnum.httpMethod,
+        key: NodeInputKeyEnum.httpMethod,
         value: {
           ...requestMethod,
           value: methodMap[parsed.method?.toLowerCase() as RequestMethod] || 'GET'
@@ -85,7 +85,7 @@ const CurlImportModal = ({
       onChangeNode({
         moduleId,
         type: 'updateInput',
-        key: ModuleInputKeyEnum.httpParams,
+        key: NodeInputKeyEnum.httpParams,
         value: {
           ...params,
           value: newParams
@@ -95,7 +95,7 @@ const CurlImportModal = ({
       onChangeNode({
         moduleId,
         type: 'updateInput',
-        key: ModuleInputKeyEnum.httpHeaders,
+        key: NodeInputKeyEnum.httpHeaders,
         value: {
           ...headers,
           value: newHeaders
@@ -105,7 +105,7 @@ const CurlImportModal = ({
       onChangeNode({
         moduleId,
         type: 'updateInput',
-        key: ModuleInputKeyEnum.httpJsonBody,
+        key: NodeInputKeyEnum.httpJsonBody,
         value: {
           ...jsonBody,
           value: newBody

@@ -8,7 +8,7 @@ import MyModal from '@fastgpt/web/components/common/MyModal';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import { PluginItemSchema } from '@fastgpt/global/core/plugin/type';
-import { storeNode2FlowNode } from '@/web/core/workflow/adapt';
+import { storeNode2FlowNode } from '@/web/core/workflow/utils';
 
 const nodeTypes = {
   [FlowNodeTypeEnum.pluginModule]: dynamic(
@@ -36,8 +36,6 @@ const PreviewPlugin = ({
           flowNodeType: FlowNodeTypeEnum.pluginModule,
           name: plugin.name,
           intro: plugin.intro,
-          targetNodes: [],
-          sourceNodes: [],
           ...plugin2ModuleIO(plugin._id, modules)
         }
       })

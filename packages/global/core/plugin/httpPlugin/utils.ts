@@ -5,7 +5,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import { PluginTypeEnum } from '../constants';
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from '../../workflow/type/io.d';
 import { FlowNodeInputTypeEnum, FlowNodeOutputTypeEnum } from '../../workflow/node/constant';
-import { ModuleIOValueTypeEnum } from '../../workflow/constants';
+import { WorkflowIOValueTypeEnum } from '../../workflow/constants';
 import { PluginInputModule } from '../../workflow/template/system/pluginInput';
 import { PluginOutputModule } from '../../workflow/template/system/pluginOutput';
 import { HttpModule468 } from '../../workflow/template/system/http468';
@@ -83,7 +83,7 @@ export const httpApiSchema2Plugins = async ({
       ...(item.params?.map((param: any) => {
         return {
           key: param.name,
-          valueType: ModuleIOValueTypeEnum.string,
+          valueType: WorkflowIOValueTypeEnum.string,
           label: param.name,
           type: FlowNodeInputTypeEnum.target,
           required: param.required,
@@ -106,7 +106,7 @@ export const httpApiSchema2Plugins = async ({
         const prop = properties[key];
         return {
           key,
-          valueType: ModuleIOValueTypeEnum.string,
+          valueType: WorkflowIOValueTypeEnum.string,
           label: key,
           type: FlowNodeInputTypeEnum.target,
           required: false,
@@ -131,7 +131,7 @@ export const httpApiSchema2Plugins = async ({
       ...(item.params?.map((param: any) => {
         return {
           key: param.name,
-          valueType: ModuleIOValueTypeEnum.string,
+          valueType: WorkflowIOValueTypeEnum.string,
           label: param.name,
           type: FlowNodeOutputTypeEnum.source,
           edit: true,
@@ -146,7 +146,7 @@ export const httpApiSchema2Plugins = async ({
       ...(propsKeys?.map((key) => {
         return {
           key,
-          valueType: ModuleIOValueTypeEnum.string,
+          valueType: WorkflowIOValueTypeEnum.string,
           label: key,
           type: FlowNodeOutputTypeEnum.source,
           edit: true,
@@ -164,7 +164,7 @@ export const httpApiSchema2Plugins = async ({
       ...(item.params?.map((param: any) => {
         return {
           key: param.name,
-          valueType: ModuleIOValueTypeEnum.string,
+          valueType: WorkflowIOValueTypeEnum.string,
           label: param.name,
           type: FlowNodeInputTypeEnum.target,
           description: param.description,
@@ -181,7 +181,7 @@ export const httpApiSchema2Plugins = async ({
         const prop = properties[key];
         return {
           key,
-          valueType: ModuleIOValueTypeEnum.string,
+          valueType: WorkflowIOValueTypeEnum.string,
           label: key,
           type: FlowNodeInputTypeEnum.target,
           description: prop.description,
@@ -207,7 +207,7 @@ export const httpApiSchema2Plugins = async ({
         if (param.in === 'header') {
           httpNodeHeaders.push({
             key: param.name,
-            type: param.schema?.type || ModuleIOValueTypeEnum.string,
+            type: param.schema?.type || WorkflowIOValueTypeEnum.string,
             value: `{{${param.name}}}`
           });
         } else if (param.in === 'body') {
@@ -219,7 +219,7 @@ export const httpApiSchema2Plugins = async ({
         } else if (param.in === 'query') {
           httpNodeParams.push({
             key: param.name,
-            type: param.schema?.type || ModuleIOValueTypeEnum.string,
+            type: param.schema?.type || WorkflowIOValueTypeEnum.string,
             value: `{{${param.name}}}`
           });
         }

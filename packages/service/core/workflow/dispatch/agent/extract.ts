@@ -8,7 +8,7 @@ import {
 import { ChatItemValueTypeEnum, ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAIApi } from '../../../ai/config';
 import type { ContextExtractAgentItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { Prompt_ExtractJson } from '@fastgpt/global/core/ai/prompt/agent';
@@ -28,16 +28,16 @@ import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/ty
 import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 
 type Props = ModuleDispatchProps<{
-  [ModuleInputKeyEnum.history]?: ChatItemType[];
-  [ModuleInputKeyEnum.contextExtractInput]: string;
-  [ModuleInputKeyEnum.extractKeys]: ContextExtractAgentItemType[];
-  [ModuleInputKeyEnum.description]: string;
-  [ModuleInputKeyEnum.aiModel]: string;
+  [NodeInputKeyEnum.history]?: ChatItemType[];
+  [NodeInputKeyEnum.contextExtractInput]: string;
+  [NodeInputKeyEnum.extractKeys]: ContextExtractAgentItemType[];
+  [NodeInputKeyEnum.description]: string;
+  [NodeInputKeyEnum.aiModel]: string;
 }>;
 type Response = DispatchNodeResultType<{
-  [ModuleOutputKeyEnum.success]?: boolean;
-  [ModuleOutputKeyEnum.failed]?: boolean;
-  [ModuleOutputKeyEnum.contextExtractFields]: string;
+  [NodeOutputKeyEnum.success]?: boolean;
+  [NodeOutputKeyEnum.failed]?: boolean;
+  [NodeOutputKeyEnum.contextExtractFields]: string;
 }>;
 
 type ActionProps = Props & { extractModel: LLMModelItemType };
@@ -47,7 +47,7 @@ const agentFunName = 'request_function';
 export async function dispatchContentExtract(props: Props): Promise<Response> {
   const {
     user,
-    module: { name },
+    node: { name },
     histories,
     params: { content, history = 6, model, description, extractKeys }
   } = props;
@@ -119,9 +119,9 @@ export async function dispatchContentExtract(props: Props): Promise<Response> {
   });
 
   return {
-    [ModuleOutputKeyEnum.success]: success ? true : undefined,
-    [ModuleOutputKeyEnum.failed]: success ? undefined : true,
-    [ModuleOutputKeyEnum.contextExtractFields]: JSON.stringify(arg),
+    [NodeOutputKeyEnum.success]: success ? true : undefined,
+    [NodeOutputKeyEnum.failed]: success ? undefined : true,
+    [NodeOutputKeyEnum.contextExtractFields]: JSON.stringify(arg),
     ...arg,
     [DispatchNodeResponseKeyEnum.nodeResponse]: {
       totalPoints: user.openaiAccount?.key ? 0 : totalPoints,

@@ -5,9 +5,9 @@ import {
 } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_Dataset_Quote } from '../input';
@@ -33,21 +33,21 @@ export const DatasetConcatModule: FlowNodeTemplateType = {
   showStatus: false,
   inputs: [
     {
-      key: ModuleInputKeyEnum.datasetMaxTokens,
+      key: NodeInputKeyEnum.datasetMaxTokens,
       renderTypeList: [FlowNodeInputTypeEnum.custom],
       label: '最大 Tokens',
       value: 1500,
-      valueType: ModuleIOValueTypeEnum.number
+      valueType: WorkflowIOValueTypeEnum.number
     },
     getOneQuoteInputTemplate('defaultQuote')
   ],
   outputs: [
     {
-      id: ModuleOutputKeyEnum.datasetQuoteQA,
-      key: ModuleOutputKeyEnum.datasetQuoteQA,
+      id: NodeOutputKeyEnum.datasetQuoteQA,
+      key: NodeOutputKeyEnum.datasetQuoteQA,
       label: 'core.module.Dataset quote.label',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.datasetQuote
+      valueType: WorkflowIOValueTypeEnum.datasetQuote
     }
   ]
 };

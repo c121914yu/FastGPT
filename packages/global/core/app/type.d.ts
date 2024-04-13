@@ -2,11 +2,11 @@ import type { FlowNodeTemplateType, StoreNodeItemType } from '../workflow/type';
 
 import { AppTypeEnum } from './constants';
 import { PermissionTypeEnum } from '../../support/permission/constant';
-import type { DatasetModuleProps } from '../workflow/node/type.d';
 import { VariableInputEnum } from '../workflow/constants';
 import { SelectedDatasetType } from '../workflow/api';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 import { TeamTagSchema as TeamTagsSchemaType } from '@fastgpt/global/support/user/team/type.d';
+import { StoreEdgeItemType } from 'core/workflow/type/edge';
 export interface AppSchema {
   _id: string;
   userId: string;
@@ -19,6 +19,7 @@ export interface AppSchema {
   intro: string;
   updateTime: number;
   modules: StoreNodeItemType[];
+  edges: StoreEdgeItemType[];
   permission: `${PermissionTypeEnum}`;
   inited?: boolean;
   teamTags: string[];
@@ -84,6 +85,14 @@ export type AppSimpleEditFormType = {
 };
 
 /* app function config */
+export type SettingAIDataType = {
+  model: string;
+  temperature: number;
+  maxToken: number;
+  isResponseAnswerText?: boolean;
+  maxHistories?: number;
+};
+
 // variable
 export type VariableItemType = {
   id: string;

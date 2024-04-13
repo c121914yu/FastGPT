@@ -1,8 +1,8 @@
 import { FlowNodeOutputTypeEnum, FlowNodeTypeEnum } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type/index.d';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { getHandleConfig } from '../utils';
@@ -21,11 +21,11 @@ export const WorkflowStart: FlowNodeTemplateType = {
   inputs: [],
   outputs: [
     {
-      id: ModuleOutputKeyEnum.userChatInput,
-      key: ModuleOutputKeyEnum.userChatInput,
+      id: NodeOutputKeyEnum.userChatInput,
+      key: NodeOutputKeyEnum.userChatInput,
       label: 'core.module.input.label.user question',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.string
+      valueType: WorkflowIOValueTypeEnum.string
     }
   ]
 };

@@ -40,7 +40,6 @@ export enum FlowNodeTypeEnum {
   emptyNode = 'emptyNode',
   systemConfig = 'userGuide',
   workflowStart = 'workflowStart',
-  historyNode = 'historyNode',
   chatNode = 'chatNode',
 
   datasetSearchNode = 'datasetSearchNode',
@@ -57,10 +56,7 @@ export enum FlowNodeTypeEnum {
   queryExtension = 'cfr',
   tools = 'tools',
   stopTool = 'stopTool',
-  lafModule = 'lafModule',
-
-  // abandon
-  httpRequest = 'httpRequest'
+  lafModule = 'lafModule'
 }
 
 export const EDGE_TYPE = 'default';

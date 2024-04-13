@@ -1,24 +1,46 @@
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleOutputKeyEnum
+  WorkflowIOValueTypeEnum,
+  NodeOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import {
+  RuntimeEdgeItemType,
+  RuntimeNodeItemType
+} from '@fastgpt/global/core/workflow/runtime/type';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 
-export const setEntryEntries = (modules: StoreNodeItemType[]) => {
-  const initRunningModuleType: Record<string, boolean> = {
-    [FlowNodeTypeEnum.historyNode]: true,
-    [FlowNodeTypeEnum.questionInput]: true,
-    [FlowNodeTypeEnum.pluginInput]: true
-  };
+/* 
+  区分普通连线和递归连线
+  递归连线：可以通过往上查询 nodes，最终追溯到自身
+*/
+export const splitEdges = ({
+  edges,
+  allEdges,
+  currentNode
+}: {
+  edges: RuntimeEdgeItemType[];
+  allEdges: RuntimeEdgeItemType[];
+  currentNode: RuntimeNodeItemType;
+}) => {
+  const commonEdges: RuntimeEdgeItemType[] = [];
+  const recursiveEdges: RuntimeEdgeItemType[] = [];
 
-  modules.forEach((item) => {
-    if (initRunningModuleType[item.flowNodeType]) {
-      item.isEntry = true;
+  edges.forEach((edge) => {
+    const checkIsCurrentNode = (edge: RuntimeEdgeItemType): boolean => {
+      const sourceEdge = allEdges.find((item) => item.target === edge.source);
+      if (!sourceEdge) return false;
+      if (sourceEdge.source === currentNode.nodeId) return true;
+      return checkIsCurrentNode(sourceEdge);
+    };
+    if (checkIsCurrentNode(edge)) {
+      recursiveEdges.push(edge);
+    } else {
+      commonEdges.push(edge);
     }
   });
-  return modules;
+
+  return { commonEdges, recursiveEdges };
 };
 
 export const checkTheModuleConnectedByTool = (
@@ -30,7 +52,7 @@ export const checkTheModuleConnectedByTool = (
 
   toolModules.forEach((item) => {
     const toolOutput = item.outputs.find(
-      (output) => output.key === ModuleOutputKeyEnum.selectedTools
+      (output) => output.key === NodeOutputKeyEnum.selectedTools
     );
     toolOutput?.targets.forEach((target) => {
       if (target.moduleId === module.moduleId) {
@@ -51,7 +73,7 @@ export const getHistories = (history?: ChatItemType[] | number, histories: ChatI
 };
 
 /* value type format */
-export const valueTypeFormat = (value: any, type?: `${ModuleIOValueTypeEnum}`) => {
+export const valueTypeFormat = (value: any, type?: `${WorkflowIOValueTypeEnum}`) => {
   if (value === undefined) return;
 
   if (type === 'string') {

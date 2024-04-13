@@ -18,7 +18,6 @@ import { formatModelChars2Points } from '../../../../support/wallet/usage/utils'
 import type { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { postTextCensor } from '../../../../common/api/requestPlusApi';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
-import type { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import type { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 import {
   countGptMessagesTokens,
@@ -34,28 +33,28 @@ import {
   Prompt_QuotePromptList,
   Prompt_QuoteTemplateList
 } from '@fastgpt/global/core/ai/prompt/AIChat';
-import type { AIChatModuleProps } from '@fastgpt/global/core/workflow/node/type.d';
+import type { AIChatNodeProps } from '@fastgpt/global/core/workflow/runtime/type.d';
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { responseWrite, responseWriteController } from '../../../../common/response';
 import { getLLMModel, ModelTypeEnum } from '../../../ai/model';
 import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
-import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getHistories } from '../utils';
 import { filterSearchResultsByMaxChars } from '@fastgpt/global/core/dataset/search/utils';
 import { getHistoryPreview } from '@fastgpt/global/core/chat/utils';
 
 export type ChatProps = ModuleDispatchProps<
-  AIChatModuleProps & {
-    [ModuleInputKeyEnum.userChatInput]: string;
-    [ModuleInputKeyEnum.history]?: ChatItemType[] | number;
-    [ModuleInputKeyEnum.aiChatDatasetQuote]?: SearchDataResponseItemType[];
+  AIChatNodeProps & {
+    [NodeInputKeyEnum.userChatInput]: string;
+    [NodeInputKeyEnum.history]?: ChatItemType[] | number;
+    [NodeInputKeyEnum.aiChatDatasetQuote]?: SearchDataResponseItemType[];
   }
 >;
 export type ChatResponse = DispatchNodeResultType<{
-  [ModuleOutputKeyEnum.answerText]: string;
-  [ModuleOutputKeyEnum.history]: ChatItemType[];
+  [NodeOutputKeyEnum.answerText]: string;
+  [NodeOutputKeyEnum.history]: ChatItemType[];
 }>;
 
 /* request openai chat */
@@ -66,7 +65,7 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
     detail = false,
     user,
     histories,
-    module: { name, outputs },
+    node: { name, outputs },
     inputFiles = [],
     params: {
       model,
@@ -189,8 +188,6 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
         detail,
         stream: response
       });
-
-      targetResponse({ res, detail, outputs });
 
       return {
         answerText: answer
@@ -344,28 +341,6 @@ function getMaxTokens({
   return {
     max_tokens: maxToken
   };
-}
-
-function targetResponse({
-  res,
-  outputs,
-  detail
-}: {
-  res: NextApiResponse;
-  outputs: StoreNodeItemType['outputs'];
-  detail: boolean;
-}) {
-  const targets =
-    outputs.find((output) => output.key === ModuleOutputKeyEnum.answerText)?.targets || [];
-
-  if (targets.length === 0) return;
-  responseWrite({
-    res,
-    event: detail ? SseResponseEventEnum.answer : undefined,
-    data: textAdaptGptResponse({
-      text: '\n'
-    })
-  });
 }
 
 async function streamResponse({

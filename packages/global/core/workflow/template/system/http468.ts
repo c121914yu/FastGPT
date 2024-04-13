@@ -5,9 +5,9 @@ import {
 } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type/index.d';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_AddInputParam, Input_Template_DynamicInput } from '../input';
@@ -27,26 +27,26 @@ export const HttpModule468: FlowNodeTemplateType = {
   isTool: true,
   inputs: [
     {
-      key: ModuleInputKeyEnum.httpMethod,
+      key: NodeInputKeyEnum.httpMethod,
       renderTypeList: [FlowNodeInputTypeEnum.custom],
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       label: '',
       value: 'POST',
       required: true
     },
     {
-      key: ModuleInputKeyEnum.httpReqUrl,
+      key: NodeInputKeyEnum.httpReqUrl,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       label: '',
       description: 'core.module.input.description.Http Request Url',
       placeholder: 'https://api.ai.com/getInventory',
       required: false
     },
     {
-      key: ModuleInputKeyEnum.httpHeaders,
+      key: NodeInputKeyEnum.httpHeaders,
       renderTypeList: [FlowNodeInputTypeEnum.custom],
-      valueType: ModuleIOValueTypeEnum.any,
+      valueType: WorkflowIOValueTypeEnum.any,
       value: [],
       label: '',
       description: 'core.module.input.description.Http Request Header',
@@ -54,17 +54,17 @@ export const HttpModule468: FlowNodeTemplateType = {
       required: false
     },
     {
-      key: ModuleInputKeyEnum.httpParams,
+      key: NodeInputKeyEnum.httpParams,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
-      valueType: ModuleIOValueTypeEnum.any,
+      valueType: WorkflowIOValueTypeEnum.any,
       value: [],
       label: '',
       required: false
     },
     {
-      key: ModuleInputKeyEnum.httpJsonBody,
+      key: NodeInputKeyEnum.httpJsonBody,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
-      valueType: ModuleIOValueTypeEnum.any,
+      valueType: WorkflowIOValueTypeEnum.any,
       value: '',
       label: '',
       required: false
@@ -76,11 +76,11 @@ export const HttpModule468: FlowNodeTemplateType = {
   ],
   outputs: [
     {
-      id: ModuleOutputKeyEnum.httpRawResponse,
-      key: ModuleOutputKeyEnum.httpRawResponse,
+      id: NodeOutputKeyEnum.httpRawResponse,
+      key: NodeOutputKeyEnum.httpRawResponse,
       label: '原始响应',
       description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',
-      valueType: ModuleIOValueTypeEnum.any,
+      valueType: WorkflowIOValueTypeEnum.any,
       type: FlowNodeOutputTypeEnum.source
     },
     {

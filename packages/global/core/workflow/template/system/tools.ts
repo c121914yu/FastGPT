@@ -5,10 +5,10 @@ import {
 } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type/index.d';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum,
-  ModuleInputKeyEnum
+  NodeInputKeyEnum
 } from '../../constants';
 import {
   Input_Template_SettingAiModel,
@@ -36,21 +36,21 @@ export const ToolModule: FlowNodeTemplateType = {
       llmModelType: LLMModelTypeEnum.all
     },
     {
-      key: ModuleInputKeyEnum.aiChatTemperature,
+      key: NodeInputKeyEnum.aiChatTemperature,
       renderTypeList: [FlowNodeInputTypeEnum.hidden], // Set in the pop-up window
       label: '',
       value: 0,
-      valueType: ModuleIOValueTypeEnum.number,
+      valueType: WorkflowIOValueTypeEnum.number,
       min: 0,
       max: 10,
       step: 1
     },
     {
-      key: ModuleInputKeyEnum.aiChatMaxToken,
+      key: NodeInputKeyEnum.aiChatMaxToken,
       renderTypeList: [FlowNodeInputTypeEnum.hidden], // Set in the pop-up window
       label: '',
       value: 2000,
-      valueType: ModuleIOValueTypeEnum.number,
+      valueType: WorkflowIOValueTypeEnum.number,
       min: 100,
       max: 4000,
       step: 50
@@ -66,9 +66,9 @@ export const ToolModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
-      id: ModuleOutputKeyEnum.selectedTools,
-      key: ModuleOutputKeyEnum.selectedTools,
-      valueType: ModuleIOValueTypeEnum.tools,
+      id: NodeOutputKeyEnum.selectedTools,
+      key: NodeOutputKeyEnum.selectedTools,
+      valueType: WorkflowIOValueTypeEnum.tools,
       type: FlowNodeOutputTypeEnum.hidden
     }
   ]

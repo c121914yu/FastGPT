@@ -6,21 +6,26 @@ import { MongoApp } from '../../../../core/app/schema';
 import { responseWrite } from '../../../../common/response';
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
-import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
-import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import {
+  getDefaultEntryNodeIds,
+  initWorkflowEdgeStatus,
+  storeNodes2RuntimeNodes,
+  textAdaptGptResponse
+} from '@fastgpt/global/core/workflow/runtime/utils';
+import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
-import { getHistories, setEntryEntries } from '../utils';
+import { getHistories } from '../utils';
 import { chatValue2RuntimePrompt, runtimePrompt2ChatsValue } from '@fastgpt/global/core/chat/adapt';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 
 type Props = ModuleDispatchProps<{
-  [ModuleInputKeyEnum.userChatInput]: string;
-  [ModuleInputKeyEnum.history]?: ChatItemType[] | number;
+  [NodeInputKeyEnum.userChatInput]: string;
+  [NodeInputKeyEnum.history]?: ChatItemType[] | number;
   app: SelectAppItemType;
 }>;
 type Response = DispatchNodeResultType<{
-  [ModuleOutputKeyEnum.answerText]: string;
-  [ModuleOutputKeyEnum.history]: ChatItemType[];
+  [NodeOutputKeyEnum.answerText]: string;
+  [NodeOutputKeyEnum.history]: ChatItemType[];
 }>;
 
 export const dispatchAppRequest = async (props: Props): Promise<Response> => {
@@ -63,8 +68,8 @@ export const dispatchAppRequest = async (props: Props): Promise<Response> => {
   const { flowResponses, flowUsages, assistantResponses } = await dispatchWorkFlow({
     ...props,
     appId: app.id,
-    modules: setEntryEntries(appData.modules),
-    runtimeModules: undefined, // must reset
+    runtimeNodes: storeNodes2RuntimeNodes(appData.modules, getDefaultEntryNodeIds(appData.modules)),
+    runtimeEdges: initWorkflowEdgeStatus(appData.edges),
     histories: chatHistories,
     inputFiles,
     startParams: {

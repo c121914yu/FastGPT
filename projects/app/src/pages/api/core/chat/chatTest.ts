@@ -3,7 +3,6 @@ import { connectToDatabase } from '@/service/mongo';
 import { sseErrRes } from '@fastgpt/service/common/response';
 import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { responseWrite } from '@fastgpt/service/common/response';
-import type { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { pushChatUsage } from '@/service/support/wallet/usage/push';
 import { UsageSourceEnum } from '@fastgpt/global/support/wallet/usage/constants';
 import type { ChatItemType, ChatItemValueItemType } from '@fastgpt/global/core/chat/type';
@@ -11,13 +10,20 @@ import { authApp } from '@fastgpt/service/support/permission/auth/app';
 import { dispatchWorkFlow } from '@fastgpt/service/core/workflow/dispatch';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
 import { getUserChatInfoAndAuthTeamPoints } from '@/service/support/permission/auth/team';
-import { setEntryEntries } from '@fastgpt/service/core/workflow/dispatch/utils';
 import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
+import { RuntimeEdgeItemType, StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
+import {
+  getDefaultEntryNodeIds,
+  initWorkflowEdgeStatus,
+  storeNodes2RuntimeNodes
+} from '@fastgpt/global/core/workflow/runtime/utils';
 
 export type Props = {
   history: ChatItemType[];
   prompt: ChatItemValueItemType[];
-  modules: StoreNodeItemType[];
+  nodes: StoreNodeItemType[];
+  edges: StoreEdgeItemType[];
   variables: Record<string, any>;
   appId: string;
   appName: string;
@@ -32,14 +38,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.end();
   });
 
-  let { modules = [], history = [], prompt, variables = {}, appName, appId } = req.body as Props;
+  const {
+    nodes = [],
+    edges = [],
+    history = [],
+    prompt,
+    variables = {},
+    appName,
+    appId
+  } = req.body as Props;
   try {
     await connectToDatabase();
-    if (!history || !modules || !prompt || prompt.length === 0) {
+    if (!history || !nodes || !prompt || prompt.length === 0) {
       throw new Error('Prams Error');
     }
-    if (!Array.isArray(modules)) {
-      throw new Error('history is not array');
+    if (!Array.isArray(nodes)) {
+      throw new Error('Nodes is not array');
+    }
+    if (!Array.isArray(edges)) {
+      throw new Error('Edges is not array');
     }
 
     /* user auth */
@@ -64,13 +81,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       tmbId,
       user,
       appId,
-      modules: setEntryEntries(modules),
-      variables,
-      inputFiles: files,
-      histories: history,
-      startParams: {
+      runtimeNodes: storeNodes2RuntimeNodes(nodes, getDefaultEntryNodeIds(nodes)),
+      runtimeEdges: initWorkflowEdgeStatus(edges),
+      variables: {
+        ...variables,
         userChatInput: text
       },
+      inputFiles: files,
+      histories: history,
       stream: true,
       detail: true,
       maxRunTimes: 200

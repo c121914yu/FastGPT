@@ -5,9 +5,9 @@ import {
 } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type/index.d';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import {
@@ -35,11 +35,11 @@ export const AiQueryExtension: FlowNodeTemplateType = {
       llmModelType: LLMModelTypeEnum.queryExtension
     },
     {
-      key: ModuleInputKeyEnum.aiSystemPrompt,
+      key: NodeInputKeyEnum.aiSystemPrompt,
       renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
       label: 'core.app.edit.Query extension background prompt',
       max: 300,
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       description: 'core.app.edit.Query extension background tip',
       placeholder: 'core.module.QueryExtension.placeholder'
     },
@@ -48,11 +48,11 @@ export const AiQueryExtension: FlowNodeTemplateType = {
   ],
   outputs: [
     {
-      id: ModuleOutputKeyEnum.text,
-      key: ModuleOutputKeyEnum.text,
+      id: NodeOutputKeyEnum.text,
+      key: NodeOutputKeyEnum.text,
       label: 'core.module.output.label.query extension result',
       description: 'core.module.output.description.query extension result',
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       type: FlowNodeOutputTypeEnum.source
     }
   ]

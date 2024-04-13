@@ -1,15 +1,15 @@
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { dispatchWorkFlow } from '../index';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { DYNAMIC_INPUT_KEY, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DYNAMIC_INPUT_KEY, NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getPluginRuntimeById } from '../../../plugin/controller';
 import { authPluginCanUse } from '../../../../support/permission/auth/plugin';
-import { setEntryEntries } from '../utils';
+import { setWorkflowDefaultEntries } from '@fastgpt/global/core/workflow/runtime/utils';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 
 type RunPluginProps = ModuleDispatchProps<{
-  [ModuleInputKeyEnum.pluginId]: string;
+  [NodeInputKeyEnum.pluginId]: string;
   [key: string]: any;
 }>;
 type RunPluginResponse = DispatchNodeResultType<{}>;
@@ -57,7 +57,7 @@ export const dispatchRunPlugin = async (props: RunPluginProps): Promise<RunPlugi
 
   const { flowResponses, flowUsages, assistantResponses } = await dispatchWorkFlow({
     ...props,
-    modules: setEntryEntries(plugin.modules).map((module) => ({
+    modules: setWorkflowDefaultEntries(plugin.modules).map((module) => ({
       ...module,
       showStatus: false
     })),

@@ -1,12 +1,12 @@
 import type { FlowNodeOutputItemType } from '../type/io.d';
-import { ModuleOutputKeyEnum } from '../constants';
+import { NodeOutputKeyEnum } from '../constants';
 import { FlowNodeOutputTypeEnum } from '../node/constant';
-import { ModuleIOValueTypeEnum } from '../constants';
+import { WorkflowIOValueTypeEnum } from '../constants';
 
 export const Output_Template_AddOutput: FlowNodeOutputItemType = {
-  id: ModuleOutputKeyEnum.userChatInput,
-  key: ModuleOutputKeyEnum.addOutputParam,
+  id: NodeOutputKeyEnum.userChatInput,
+  key: NodeOutputKeyEnum.addOutputParam,
   type: FlowNodeOutputTypeEnum.addOutputParam,
-  valueType: ModuleIOValueTypeEnum.any,
+  valueType: WorkflowIOValueTypeEnum.any,
   label: ''
 };

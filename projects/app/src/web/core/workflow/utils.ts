@@ -8,6 +8,7 @@ import { customAlphabet } from 'nanoid';
 import { moduleTemplatesFlat } from '@fastgpt/global/core/workflow/template/constants';
 import { EDGE_TYPE } from '@fastgpt/global/core/workflow/node/constant';
 import { EmptyNode } from '@fastgpt/global/core/workflow/template/system/emptyNode';
+import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
 export const nodeTemplate2FlowNode = ({
@@ -70,20 +71,45 @@ export const storeNode2FlowNode = ({
     position: storeNode.position || { x: 0, y: 0 }
   };
 };
-export const appModule2FlowEdge = ({ nodes }: { nodes: StoreNodeItemType[] }) => {
-  const edges: Edge[] = [];
-  nodes.forEach((node) =>
-    node.targetNodes?.forEach((targetNode) => {
-      edges.push({
-        source: node.nodeId,
-        sourceHandle: targetNode.sourceHandle,
-        target: targetNode.nodeId,
-        targetHandle: targetNode.targetHandle,
-        id: nanoid(),
-        type: EDGE_TYPE
-      });
-    })
-  );
+export const storeEdgesRenderEdge = ({ edge }: { edge: StoreEdgeItemType }) => {
+  return {
+    ...edge,
+    id: nanoid(),
+    type: EDGE_TYPE
+  };
+};
 
-  return edges;
+export const computedNodeInputReference = ({
+  nodeId,
+  nodes,
+  edges
+}: {
+  nodeId: string;
+  nodes: FlowNodeItemType[];
+  edges: Edge[];
+}) => {
+  // get current node
+  const node = nodes.find((item) => item.nodeId === nodeId);
+  if (!node) {
+    return;
+  }
+  let sourceNodes: FlowNodeItemType[] = [];
+  // 根据 edge 获取所有的 source 节点（source节点会继续向前递归获取）
+  const findSourceNode = (nodeId: string) => {
+    const targetEdges = edges.filter((item) => item.target === nodeId);
+    targetEdges.forEach((edge) => {
+      const sourceNode = nodes.find((item) => item.nodeId === edge.source);
+      if (!sourceNode) return;
+
+      // 去重
+      if (sourceNodes.some((item) => item.nodeId === sourceNode.nodeId)) {
+        return;
+      }
+      sourceNodes.push(sourceNode);
+      findSourceNode(sourceNode.nodeId);
+    });
+  };
+  findSourceNode(nodeId);
+
+  return sourceNodes;
 };

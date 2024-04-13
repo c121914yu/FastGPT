@@ -13,7 +13,7 @@ import type {
   FlowNodeItemType,
   FlowNodeTemplateType
 } from '@fastgpt/global/core/workflow/type/index.d';
-import type { FlowNodeChangeProps } from '@fastgpt/global/core/workflow/node/type';
+import type { FlowNodeChangeProps } from '@fastgpt/global/core/workflow/type/fe.d';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import React, {
   type SetStateAction,
@@ -26,13 +26,14 @@ import React, {
   useMemo
 } from 'react';
 import { customAlphabet } from 'nanoid';
-import { appModule2FlowEdge, storeNode2FlowNode } from '@/web/core/workflow/adapt';
+import { storeEdgesRenderEdge, storeNode2FlowNode } from '@/web/core/workflow/utils';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
+import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
@@ -73,7 +74,7 @@ export type useFlowProviderStoreType = {
   }) => void;
   onDelConnect: (id: string) => void;
   onConnect: ({ connect }: { connect: Connection }) => any;
-  initData: (modules: StoreNodeItemType[]) => void;
+  initData: (e: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => void;
   splitToolInputs: (
     inputs: FlowNodeInputItemType[],
     nodeId: string
@@ -130,9 +131,7 @@ const StateContext = createContext<useFlowProviderStoreType>({
   onConnect: function ({ connect }: { connect: Connection }) {
     return;
   },
-  initData: function (modules: StoreNodeItemType[]): void {
-    throw new Error('Function not implemented.');
-  },
+
   onResetNode: function (e): void {
     throw new Error('Function not implemented.');
   },
@@ -154,7 +153,10 @@ const StateContext = createContext<useFlowProviderStoreType>({
     throw new Error('Function not implemented.');
   },
   connectingEdge: undefined,
-  basicNodeTemplates: []
+  basicNodeTemplates: [],
+  initData: function (e: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }): void {
+    throw new Error('Function not implemented.');
+  }
 });
 export const useFlowProviderStore = () => useContext(StateContext);
 
@@ -391,8 +393,6 @@ export const FlowProvider = ({
               position: { x: node.position.x + 200, y: node.position.y + 50 },
               flowNodeType: template.flowNodeType,
               showStatus: template.showStatus,
-              sourceNodes: [],
-              targetNodes: [],
               inputs: template.inputs,
               outputs: template.outputs
             }
@@ -407,7 +407,7 @@ export const FlowProvider = ({
   const splitToolInputs = useCallback(
     (inputs: FlowNodeInputItemType[], nodeId: string) => {
       const isTool = !!edges.find(
-        (edge) => edge.targetHandle === ModuleOutputKeyEnum.selectedTools && edge.target === nodeId
+        (edge) => edge.targetHandle === NodeOutputKeyEnum.selectedTools && edge.target === nodeId
       );
 
       return {
@@ -451,13 +451,10 @@ export const FlowProvider = ({
   );
 
   const initData = useCallback(
-    (nodes: StoreNodeItemType[]) => {
-      const edges = appModule2FlowEdge({
-        nodes
-      });
-      setEdges(edges);
+    (e: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => {
+      setNodes(e.nodes?.map((item) => storeNode2FlowNode({ item })));
 
-      setNodes(nodes.map((item) => storeNode2FlowNode({ item })));
+      setEdges(e.edges?.map((item) => storeEdgesRenderEdge({ edge: item })));
 
       setTimeout(() => {
         onFixView();
