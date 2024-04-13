@@ -10,7 +10,7 @@ export enum FlowNodeTemplateTypeEnum {
   other = 'other'
 }
 
-export enum ModuleIOValueTypeEnum {
+export enum WorkflowIOValueTypeEnum {
   string = 'string',
   number = 'number',
   boolean = 'boolean',
@@ -29,7 +29,7 @@ export enum ModuleIOValueTypeEnum {
 }
 
 /* reg: modulename key */
-export enum ModuleInputKeyEnum {
+export enum NodeInputKeyEnum {
   // old
   welcomeText = 'welcomeText',
   variables = 'variables',
@@ -93,7 +93,7 @@ export enum ModuleInputKeyEnum {
   pluginStart = 'pluginStart'
 }
 
-export enum ModuleOutputKeyEnum {
+export enum NodeOutputKeyEnum {
   // common
   userChatInput = 'userChatInput',
   finish = 'finish',
@@ -156,3 +156,10 @@ export const variableMap = {
 };
 
 export const DYNAMIC_INPUT_KEY = 'DYNAMIC_INPUT_KEY';
+
+/* run time */
+export enum RuntimeEdgeStatusEnum {
+  'waiting' = 'waiting',
+  'running' = 'running',
+  'skipped' = 'skipped'
+}

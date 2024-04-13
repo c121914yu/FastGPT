@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Box, Flex, IconButton, useTheme, useDisclosure, Button } from '@chakra-ui/react';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { AppSchema } from '@fastgpt/global/core/app/type.d';
 import { useTranslation } from 'next-i18next';
 import { useCopyData } from '@/web/common/hooks/useCopyData';
@@ -9,7 +8,6 @@ import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 import dynamic from 'next/dynamic';
 
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import MyTooltip from '@/components/MyTooltip';
 import ChatTest, { type ChatTestComponentRef } from '@/components/core/workflow/Flow/ChatTest';
 import { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
 import { flowNode2StoreNodes, filterExportModules } from '@/components/core/workflow/utils';
@@ -18,6 +16,7 @@ import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import MyMenu from '@fastgpt/web/components/common/MyMenu';
+import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 
 const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 
@@ -26,13 +25,19 @@ type Props = { app: AppSchema; onClose: () => void };
 const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
   app,
   ChatTestRef,
-  testModules,
-  setTestModules,
+  setWorkflowTestData,
   onClose
 }: Props & {
   ChatTestRef: React.RefObject<ChatTestComponentRef>;
-  testModules?: StoreNodeItemType[];
-  setTestModules: React.Dispatch<StoreNodeItemType[] | undefined>;
+  setWorkflowTestData: React.Dispatch<
+    React.SetStateAction<
+      | {
+          nodes: StoreNodeItemType[];
+          edges: StoreEdgeItemType[];
+        }
+      | undefined
+    >
+  >;
 }) {
   const theme = useTheme();
   const { toast } = useToast();
@@ -43,21 +48,22 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
   });
   const { isOpen: isOpenImport, onOpen: onOpenImport, onClose: onCloseImport } = useDisclosure();
   const { updateAppDetail } = useAppStore();
-  const { nodes, edges, splitToolInputs } = useFlowProviderStore();
+  const { nodes, edges } = useFlowProviderStore();
   const [isSaving, setIsSaving] = useState(false);
 
-  const flow2ModulesAndCheck = useCallback(async () => {
-    const storeNodes = flowNode2StoreNodes({ nodes, edges });
+  const flowData2StoreDataAndCheck = useCallback(async () => {
+    const data = flowNode2StoreNodes({ nodes, edges });
 
-    return storeNodes;
+    return data;
   }, [edges, nodes]);
 
   const onclickSave = useCallback(
-    async (modules: StoreNodeItemType[]) => {
+    async ({ nodes, edges }: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => {
       setIsSaving(true);
       try {
         await updateAppDetail(app._id, {
-          modules: modules,
+          modules: nodes,
+          edges,
           type: AppTypeEnum.advanced,
           permission: undefined
         });
@@ -79,9 +85,9 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
 
   const saveAndBack = useCallback(async () => {
     try {
-      const modules = await flow2ModulesAndCheck();
-      if (modules) {
-        await onclickSave(modules);
+      const data = await flowData2StoreDataAndCheck();
+      if (data) {
+        await onclickSave(data);
       }
       onClose();
     } catch (error) {
@@ -90,7 +96,7 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
         title: getErrText(error)
       });
     }
-  }, [flow2ModulesAndCheck, onClose, onclickSave, toast]);
+  }, [flowData2StoreDataAndCheck, onClose, onclickSave, toast]);
 
   return (
     <>
@@ -134,38 +140,36 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
               label: t('app.Export Configs'),
               icon: 'export',
               onClick: async () => {
-                const modules = await flow2ModulesAndCheck();
-                if (modules) {
-                  copyData(filterExportModules(modules), t('app.Export Config Successful'));
+                const data = await flowData2StoreDataAndCheck();
+                if (data) {
+                  copyData(filterExportModules(data.nodes), t('app.Export Config Successful'));
                 }
               }
             }
           ]}
         />
 
-        {!testModules && (
-          <Button
-            mr={[3, 5]}
-            size={'sm'}
-            leftIcon={<MyIcon name={'core/chat/chatLight'} w={['14px', '16px']} />}
-            variant={'whitePrimary'}
-            onClick={async () => {
-              const modules = await flow2ModulesAndCheck();
-              if (modules) {
-                setTestModules(modules);
-              }
-            }}
-          >
-            {t('core.Chat test')}
-          </Button>
-        )}
+        <Button
+          mr={[3, 5]}
+          size={'sm'}
+          leftIcon={<MyIcon name={'core/chat/chatLight'} w={['14px', '16px']} />}
+          variant={'whitePrimary'}
+          onClick={async () => {
+            const data = await flowData2StoreDataAndCheck();
+            if (data) {
+              setWorkflowTestData(data);
+            }
+          }}
+        >
+          {t('core.Chat test')}
+        </Button>
 
         <Button
           size={'sm'}
           isLoading={isSaving}
           leftIcon={<MyIcon name={'common/saveFill'} w={['14px', '16px']} />}
           onClick={async () => {
-            const modules = await flow2ModulesAndCheck();
+            const modules = await flowData2StoreDataAndCheck();
             if (modules) {
               onclickSave(modules);
             }
@@ -187,21 +191,23 @@ const Header = (props: Props) => {
   const { app } = props;
   const ChatTestRef = useRef<ChatTestComponentRef>(null);
 
-  const [testModules, setTestModules] = useState<StoreNodeItemType[]>();
+  const [workflowTestData, setWorkflowTestData] = useState<{
+    nodes: StoreNodeItemType[];
+    edges: StoreEdgeItemType[];
+  }>();
 
   return (
     <>
       <RenderHeaderContainer
         {...props}
         ChatTestRef={ChatTestRef}
-        testModules={testModules}
-        setTestModules={setTestModules}
+        setWorkflowTestData={setWorkflowTestData}
       />
       <ChatTest
         ref={ChatTestRef}
-        modules={testModules}
+        {...workflowTestData}
         app={app}
-        onClose={() => setTestModules(undefined)}
+        onClose={() => setWorkflowTestData(undefined)}
       />
     </>
   );

@@ -1,8 +1,8 @@
 import type { AppSimpleEditFormType } from '../app/type';
 import { FlowNodeTypeEnum } from '../workflow/node/constant';
 import {
-  ModuleOutputKeyEnum,
-  ModuleInputKeyEnum,
+  NodeOutputKeyEnum,
+  NodeInputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../workflow/constants';
 import type { FlowNodeInputItemType } from '../workflow/type/io.d';
@@ -58,55 +58,55 @@ export const appModules2Form = ({ modules }: { modules: StoreNodeItemType[] }) =
     ) {
       defaultAppForm.aiSettings.model = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.aiModel
+        NodeInputKeyEnum.aiModel
       );
       defaultAppForm.aiSettings.systemPrompt = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.aiSystemPrompt
+        NodeInputKeyEnum.aiSystemPrompt
       );
       defaultAppForm.aiSettings.temperature = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.aiChatTemperature
+        NodeInputKeyEnum.aiChatTemperature
       );
       defaultAppForm.aiSettings.maxToken = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.aiChatMaxToken
+        NodeInputKeyEnum.aiChatMaxToken
       );
       defaultAppForm.aiSettings.maxHistories = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.history
+        NodeInputKeyEnum.history
       );
     } else if (module.flowNodeType === FlowNodeTypeEnum.datasetSearchNode) {
       defaultAppForm.dataset.datasets = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.datasetSelectList
+        NodeInputKeyEnum.datasetSelectList
       );
       defaultAppForm.dataset.similarity = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.datasetSimilarity
+        NodeInputKeyEnum.datasetSimilarity
       );
       defaultAppForm.dataset.limit = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.datasetMaxTokens
+        NodeInputKeyEnum.datasetMaxTokens
       );
       defaultAppForm.dataset.searchMode =
-        findInputValueByKey(module.inputs, ModuleInputKeyEnum.datasetSearchMode) ||
+        findInputValueByKey(module.inputs, NodeInputKeyEnum.datasetSearchMode) ||
         DatasetSearchModeEnum.embedding;
       defaultAppForm.dataset.usingReRank = !!findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.datasetSearchUsingReRank
+        NodeInputKeyEnum.datasetSearchUsingReRank
       );
       defaultAppForm.dataset.datasetSearchUsingExtensionQuery = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.datasetSearchUsingExtensionQuery
+        NodeInputKeyEnum.datasetSearchUsingExtensionQuery
       );
       defaultAppForm.dataset.datasetSearchExtensionModel = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.datasetSearchExtensionModel
+        NodeInputKeyEnum.datasetSearchExtensionModel
       );
       defaultAppForm.dataset.datasetSearchExtensionBg = findInputValueByKey(
         module.inputs,
-        ModuleInputKeyEnum.datasetSearchExtensionBg
+        NodeInputKeyEnum.datasetSearchExtensionBg
       );
     } else if (module.flowNodeType === FlowNodeTypeEnum.userGuide) {
       const { welcomeText, variableModules, questionGuide, ttsConfig, whisperConfig } =
@@ -121,7 +121,7 @@ export const appModules2Form = ({ modules }: { modules: StoreNodeItemType[] }) =
       };
     } else if (module.flowNodeType === FlowNodeTypeEnum.pluginModule) {
       defaultAppForm.selectedTools.push({
-        id: module.inputs.find((input) => input.key === ModuleInputKeyEnum.pluginId)?.value || '',
+        id: module.inputs.find((input) => input.key === NodeInputKeyEnum.pluginId)?.value || '',
         name: module.name,
         avatar: module.avatar,
         intro: module.intro || '',

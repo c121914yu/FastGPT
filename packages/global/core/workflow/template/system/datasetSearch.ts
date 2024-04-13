@@ -5,9 +5,9 @@ import {
 } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_UserChatInput } from '../input';
@@ -30,61 +30,61 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
   isTool: true,
   inputs: [
     {
-      key: ModuleInputKeyEnum.datasetSelectList,
+      key: NodeInputKeyEnum.datasetSelectList,
       renderTypeList: [FlowNodeInputTypeEnum.selectDataset, FlowNodeInputTypeEnum.reference],
       label: 'core.module.input.label.Select dataset',
       value: [],
-      valueType: ModuleIOValueTypeEnum.selectDataset,
+      valueType: WorkflowIOValueTypeEnum.selectDataset,
       list: [],
       required: true
     },
     {
-      key: ModuleInputKeyEnum.datasetSimilarity,
+      key: NodeInputKeyEnum.datasetSimilarity,
       renderTypeList: [FlowNodeInputTypeEnum.selectDatasetParamsModal],
       label: '',
       value: 0.4,
-      valueType: ModuleIOValueTypeEnum.number
+      valueType: WorkflowIOValueTypeEnum.number
     },
     // setting from modal
     {
-      key: ModuleInputKeyEnum.datasetMaxTokens,
+      key: NodeInputKeyEnum.datasetMaxTokens,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       value: 1500,
-      valueType: ModuleIOValueTypeEnum.number
+      valueType: WorkflowIOValueTypeEnum.number
     },
     {
-      key: ModuleInputKeyEnum.datasetSearchMode,
+      key: NodeInputKeyEnum.datasetSearchMode,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       value: DatasetSearchModeEnum.embedding
     },
     {
-      key: ModuleInputKeyEnum.datasetSearchUsingReRank,
+      key: NodeInputKeyEnum.datasetSearchUsingReRank,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
-      valueType: ModuleIOValueTypeEnum.boolean,
+      valueType: WorkflowIOValueTypeEnum.boolean,
       value: false
     },
     {
-      key: ModuleInputKeyEnum.datasetSearchUsingExtensionQuery,
+      key: NodeInputKeyEnum.datasetSearchUsingExtensionQuery,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
-      valueType: ModuleIOValueTypeEnum.boolean,
+      valueType: WorkflowIOValueTypeEnum.boolean,
       value: true
     },
     {
-      key: ModuleInputKeyEnum.datasetSearchExtensionModel,
+      key: NodeInputKeyEnum.datasetSearchExtensionModel,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
-      valueType: ModuleIOValueTypeEnum.string
+      valueType: WorkflowIOValueTypeEnum.string
     },
     {
-      key: ModuleInputKeyEnum.datasetSearchExtensionBg,
+      key: NodeInputKeyEnum.datasetSearchExtensionBg,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       value: ''
     },
     {
@@ -94,25 +94,25 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
-      id: ModuleOutputKeyEnum.datasetIsEmpty,
-      key: ModuleOutputKeyEnum.datasetIsEmpty,
+      id: NodeOutputKeyEnum.datasetIsEmpty,
+      key: NodeOutputKeyEnum.datasetIsEmpty,
       label: 'core.module.output.label.Search result empty',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.boolean
+      valueType: WorkflowIOValueTypeEnum.boolean
     },
     {
-      id: ModuleOutputKeyEnum.datasetUnEmpty,
-      key: ModuleOutputKeyEnum.datasetUnEmpty,
+      id: NodeOutputKeyEnum.datasetUnEmpty,
+      key: NodeOutputKeyEnum.datasetUnEmpty,
       label: 'core.module.output.label.Search result not empty',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.boolean
+      valueType: WorkflowIOValueTypeEnum.boolean
     },
     {
-      id: ModuleOutputKeyEnum.datasetQuoteQA,
-      key: ModuleOutputKeyEnum.datasetQuoteQA,
+      id: NodeOutputKeyEnum.datasetQuoteQA,
+      key: NodeOutputKeyEnum.datasetQuoteQA,
       label: 'core.module.Dataset quote.label',
       type: FlowNodeOutputTypeEnum.source,
-      valueType: ModuleIOValueTypeEnum.datasetQuote
+      valueType: WorkflowIOValueTypeEnum.datasetQuote
     }
   ]
 };

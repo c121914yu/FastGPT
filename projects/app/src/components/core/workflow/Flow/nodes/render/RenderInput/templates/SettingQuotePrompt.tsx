@@ -20,9 +20,12 @@ import {
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import PromptTemplate from '@/components/PromptTemplate';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import MyIcon from '@fastgpt/web/components/common/Icon';
+import Reference from './Reference';
 
-const SettingQuotePrompt = ({ inputs = [], nodeId }: RenderInputProps) => {
+const SettingQuotePrompt = (props: RenderInputProps) => {
+  const { inputs = [], nodeId } = props;
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { nodes, onChangeNode } = useFlowProviderStore();
@@ -39,14 +42,7 @@ const SettingQuotePrompt = ({ inputs = [], nodeId }: RenderInputProps) => {
     const globalVariables = formatEditorVariablePickerIcon(
       splitGuideModule(getGuideModule(nodes.map((node) => node.data)))?.variableModules || []
     );
-    const moduleVariables = formatEditorVariablePickerIcon(
-      inputs
-        .filter((input) => input.edit)
-        .map((item) => ({
-          key: item.key,
-          label: item.label
-        }))
-    );
+
     const systemVariables = [
       {
         key: 'cTime',
@@ -54,8 +50,9 @@ const SettingQuotePrompt = ({ inputs = [], nodeId }: RenderInputProps) => {
       }
     ];
 
-    return [...globalVariables, ...moduleVariables, ...systemVariables];
-  }, [inputs, t]);
+    return [...globalVariables, ...systemVariables];
+  }, [nodes, t]);
+
   const [selectTemplateData, setSelectTemplateData] = useState<{
     title: string;
     templates: PromptTemplateItem[];
@@ -112,10 +109,10 @@ const SettingQuotePrompt = ({ inputs = [], nodeId }: RenderInputProps) => {
 
   const onSubmit = (data: { quoteTemplate: string; quotePrompt: string }) => {
     const quoteTemplateInput = inputs.find(
-      (input) => input.key === ModuleInputKeyEnum.aiChatQuoteTemplate
+      (input) => input.key === NodeInputKeyEnum.aiChatQuoteTemplate
     );
     const quotePromptInput = inputs.find(
-      (input) => input.key === ModuleInputKeyEnum.aiChatQuotePrompt
+      (input) => input.key === NodeInputKeyEnum.aiChatQuotePrompt
     );
     if (quoteTemplateInput) {
       onChangeNode({
@@ -144,9 +141,22 @@ const SettingQuotePrompt = ({ inputs = [], nodeId }: RenderInputProps) => {
 
   return (
     <>
-      <Button variant={'whitePrimary'} size={'sm'} onClick={onOpen}>
-        {t('core.module.Setting quote prompt')}
-      </Button>
+      <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
+        <Box position={'relative'}>{t('core.workflow.chat.Quote prompt')}</Box>
+        <MyTooltip label={t('core.module.Setting quote prompt')}>
+          <MyIcon
+            ml={1}
+            name={'common/settingLight'}
+            w={'14px'}
+            cursor={'pointer'}
+            onClick={onOpen}
+          />
+        </MyTooltip>
+      </Flex>
+      <Box mt={1}>
+        <Reference {...props} />
+      </Box>
+
       <MyModal
         isOpen={isOpen}
         iconSrc={'modal/edit'}

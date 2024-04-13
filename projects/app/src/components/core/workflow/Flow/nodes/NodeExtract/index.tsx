@@ -23,9 +23,9 @@ import type { ContextExtractAgentItemType } from '@fastgpt/global/core/workflow/
 import RenderOutput from '../render/RenderOutput';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import ExtractFieldModal, { defaultField } from './ExtractFieldModal';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { useFlowProviderStore } from '../../FlowProvider';
 import RenderToolInput from '../render/RenderToolInput';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
@@ -39,7 +39,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
 
   const CustomComponent = useMemo(
     () => ({
-      [ModuleInputKeyEnum.extractKeys]: ({
+      [NodeInputKeyEnum.extractKeys]: ({
         value: extractKeys = [],
         ...props
       }: Omit<FlowNodeInputItemType, 'value'> & {
@@ -103,7 +103,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
                             onChangeNode({
                               moduleId,
                               type: 'updateInput',
-                              key: ModuleInputKeyEnum.extractKeys,
+                              key: NodeInputKeyEnum.extractKeys,
                               value: {
                                 ...props,
                                 value: extractKeys.filter((extract) => item.key !== extract.key)
@@ -163,7 +163,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
           onClose={() => setEditExtractField(undefined)}
           onSubmit={(data) => {
             const extracts: ContextExtractAgentItemType[] =
-              inputs.find((item) => item.key === ModuleInputKeyEnum.extractKeys)?.value || [];
+              inputs.find((item) => item.key === NodeInputKeyEnum.extractKeys)?.value || [];
 
             const exists = extracts.find((item) => item.key === editExtractFiled.key);
 
@@ -174,9 +174,9 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
             onChangeNode({
               moduleId,
               type: 'updateInput',
-              key: ModuleInputKeyEnum.extractKeys,
+              key: NodeInputKeyEnum.extractKeys,
               value: {
-                ...inputs.find((input) => input.key === ModuleInputKeyEnum.extractKeys),
+                ...inputs.find((input) => input.key === NodeInputKeyEnum.extractKeys),
                 value: newInputs
               }
             });
@@ -184,7 +184,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
             const newOutput = {
               key: data.key,
               label: `提取结果-${data.desc}`,
-              valueType: ModuleIOValueTypeEnum.string,
+              valueType: WorkflowIOValueTypeEnum.string,
               type: FlowNodeOutputTypeEnum.source,
               targets: []
             };

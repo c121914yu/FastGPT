@@ -46,9 +46,9 @@ export const runToolWithFunctionCall = async (
     toolModules,
     messages,
     res,
-    runtimeModules,
+    runtimeNodes,
     detail = false,
-    module,
+    node,
     stream
   } = props;
   const assistantResponses = response?.assistantResponses || [];
@@ -70,7 +70,7 @@ export const runToolWithFunctionCall = async (
     });
 
     return {
-      name: module.moduleId,
+      name: node.nodeId,
       description: module.intro,
       parameters: {
         type: 'object',
@@ -117,7 +117,7 @@ export const runToolWithFunctionCall = async (
     } else {
       const result = aiResponse as ChatCompletion;
       const function_call = result.choices?.[0]?.message?.function_call;
-      const toolModule = toolModules.find((module) => module.moduleId === function_call?.name);
+      const toolModule = toolModules.find((node) => node.nodeId === function_call?.name);
 
       const toolCalls = function_call
         ? [
@@ -143,7 +143,7 @@ export const runToolWithFunctionCall = async (
       functionCalls.map(async (tool) => {
         if (!tool) return;
 
-        const toolModule = toolModules.find((module) => module.moduleId === tool.name);
+        const toolModule = toolModules.find((node) => node.nodeId === tool.name);
 
         if (!toolModule) return;
 
@@ -157,9 +157,9 @@ export const runToolWithFunctionCall = async (
 
         const moduleRunResponse = await dispatchWorkFlow({
           ...props,
-          runtimeModules: runtimeModules.map((module) => ({
-            ...module,
-            isEntry: module.moduleId === toolModule.moduleId
+          runtimeNodes: runtimeNodes.map((node) => ({
+            ...node,
+            isEntry: node.nodeId === toolModule.nodeId
           })),
           startParams
         });
@@ -225,7 +225,7 @@ export const runToolWithFunctionCall = async (
     if (stream && detail) {
       responseWriteNodeStatus({
         res,
-        name: module.name
+        name: node.name
       });
     }
 
@@ -344,7 +344,7 @@ async function streamResponse({
       // 流响应中,每次只会返回一个函数，如果带了name，说明触发某个函数
       if (functionCall?.name) {
         functionId = getNanoid();
-        const toolModule = toolModules.find((module) => module.moduleId === functionCall?.name);
+        const toolModule = toolModules.find((node) => node.nodeId === functionCall?.name);
 
         if (toolModule) {
           if (functionCall?.arguments === undefined) {

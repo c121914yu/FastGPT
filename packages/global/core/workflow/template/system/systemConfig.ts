@@ -1,8 +1,8 @@
 import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type/index.d';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { getHandleConfig } from '../utils';
@@ -20,32 +20,32 @@ export const SystemConfigNode: FlowNodeTemplateType = {
   forbidDelete: true,
   inputs: [
     {
-      key: ModuleInputKeyEnum.welcomeText,
+      key: NodeInputKeyEnum.welcomeText,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       label: 'core.app.Welcome Text'
     },
     {
-      key: ModuleInputKeyEnum.variables,
+      key: NodeInputKeyEnum.variables,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
-      valueType: ModuleIOValueTypeEnum.any,
+      valueType: WorkflowIOValueTypeEnum.any,
       label: 'core.module.Variable',
       value: []
     },
     {
-      key: ModuleInputKeyEnum.questionGuide,
-      valueType: ModuleIOValueTypeEnum.boolean,
+      key: NodeInputKeyEnum.questionGuide,
+      valueType: WorkflowIOValueTypeEnum.boolean,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: ''
     },
     {
-      key: ModuleInputKeyEnum.tts,
+      key: NodeInputKeyEnum.tts,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
-      valueType: ModuleIOValueTypeEnum.any,
+      valueType: WorkflowIOValueTypeEnum.any,
       label: ''
     },
     {
-      key: ModuleInputKeyEnum.whisper,
+      key: NodeInputKeyEnum.whisper,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: ModuleIOValueTypeEnum.any,
       label: '',

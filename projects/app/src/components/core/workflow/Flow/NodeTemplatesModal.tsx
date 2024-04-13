@@ -9,7 +9,7 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import Avatar from '@/components/Avatar';
 import { useFlowProviderStore } from './FlowProvider';
 import { customAlphabet } from 'nanoid';
-import { storeNode2FlowNode, nodeTemplate2FlowNode } from '@/web/core/workflow/adapt';
+import { storeNode2FlowNode, nodeTemplate2FlowNode } from '@/web/core/workflow/utils';
 import { useTranslation } from 'next-i18next';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 import EmptyTip from '@/components/EmptyTip';

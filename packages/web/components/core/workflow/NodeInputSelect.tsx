@@ -4,6 +4,7 @@ import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/consta
 import { Box, Button, Flex } from '@chakra-ui/react';
 import MyIcon from '../../common/Icon';
 import { useTranslation } from 'next-i18next';
+import { useConfirm } from '../../../hooks/useConfirm';
 
 const NodeInputSelect = ({
   renderTypeList,
@@ -15,6 +16,9 @@ const NodeInputSelect = ({
   onChange: (e: string) => void;
 }) => {
   const { t } = useTranslation();
+  const { openConfirm, ConfirmModal } = useConfirm({
+    title: t('core.workflow.Change input type tip')
+  });
   const renderType = renderTypeList[renderTypeIndex];
 
   const inputList = useRef([

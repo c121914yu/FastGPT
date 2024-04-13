@@ -8,7 +8,7 @@ import { useEditTitle } from '@/web/common/hooks/useEditTitle';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useFlowProviderStore } from '../../FlowProvider';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { getPreviewPluginModule } from '@/web/core/plugin/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';
@@ -88,7 +88,7 @@ const NodeCard = (props: Props) => {
               variant: 'whiteBase',
               onClick: () => {
                 const pluginId = inputs.find(
-                  (item) => item.key === ModuleInputKeyEnum.pluginId
+                  (item) => item.key === NodeInputKeyEnum.pluginId
                 )?.value;
                 if (!pluginId) return;
                 onOpenConfirmSync(async () => {

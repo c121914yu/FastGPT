@@ -3,32 +3,24 @@ import { ChatItemValueItemType, ToolRunResponseItemType } from '../../chat/type'
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from '../type/io.d';
 import { StoreNodeItemType } from '../type';
 import { DispatchNodeResponseKeyEnum } from './constants';
+import { StoreEdgeItemType } from '../type/edge';
+import { NodeInputKeyEnum } from '../constants';
 
-export type RunningModuleItemType = {
+export type RuntimeNodeItemType = {
+  nodeId: StoreNodeItemType['nodeId'];
   name: StoreNodeItemType['name'];
   avatar: StoreNodeItemType['avatar'];
   intro?: StoreNodeItemType['intro'];
-  nodeId: StoreNodeItemType['nodeId'];
   flowNodeType: StoreNodeItemType['flowNodeType'];
   showStatus?: StoreNodeItemType['showStatus'];
   isEntry?: StoreNodeItemType['isEntry'];
 
-  inputs: {
-    key: string;
-    value?: any;
-    valueType?: FlowNodeInputItemType['valueType'];
-    required?: boolean;
-    toolDescription?: string;
-  }[];
-  outputs: {
-    key: string;
-    required?: boolean;
-    defaultValue?: any;
-    answer?: boolean;
-    response?: boolean;
-    value?: any;
-    valueType?: FlowNodeOutputItemType['valueType'];
-  }[];
+  inputs: FlowNodeInputItemType[];
+  outputs: FlowNodeOutputItemType[];
+};
+
+export type RuntimeEdgeItemType = StoreEdgeItemType & {
+  status: 'waiting' | 'running' | 'skipped';
 };
 
 export type DispatchNodeResponseType = {
@@ -90,9 +82,21 @@ export type DispatchNodeResponseType = {
 };
 
 export type DispatchNodeResultType<T> = {
+  [DispatchNodeResponseKeyEnum.skipHandleId]?: string[]; // skip some edge handle id
   [DispatchNodeResponseKeyEnum.nodeResponse]?: DispatchNodeResponseType; // The node response detail
   [DispatchNodeResponseKeyEnum.nodeDispatchUsages]?: ChatNodeUsageType[]; //
   [DispatchNodeResponseKeyEnum.childrenResponses]?: DispatchNodeResultType[];
   [DispatchNodeResponseKeyEnum.toolResponses]?: ToolRunResponseItemType;
   [DispatchNodeResponseKeyEnum.assistantResponses]?: ChatItemValueItemType[];
 } & T;
+
+/* Single node props */
+export type AIChatNodeProps = {
+  [NodeInputKeyEnum.aiModel]: string;
+  [NodeInputKeyEnum.aiSystemPrompt]?: string;
+  [NodeInputKeyEnum.aiChatTemperature]: number;
+  [NodeInputKeyEnum.aiChatMaxToken]: number;
+  [NodeInputKeyEnum.aiChatIsResponseText]: boolean;
+  [NodeInputKeyEnum.aiChatQuoteTemplate]?: string;
+  [NodeInputKeyEnum.aiChatQuotePrompt]?: string;
+};

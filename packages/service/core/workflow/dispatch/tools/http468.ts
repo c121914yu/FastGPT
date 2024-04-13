@@ -1,8 +1,8 @@
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import {
   DYNAMIC_INPUT_KEY,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import axios from 'axios';
@@ -18,17 +18,17 @@ type PropsArrType = {
   value: string;
 };
 type HttpRequestProps = ModuleDispatchProps<{
-  [ModuleInputKeyEnum.abandon_httpUrl]: string;
-  [ModuleInputKeyEnum.httpMethod]: string;
-  [ModuleInputKeyEnum.httpReqUrl]: string;
-  [ModuleInputKeyEnum.httpHeaders]: PropsArrType[];
-  [ModuleInputKeyEnum.httpParams]: PropsArrType[];
-  [ModuleInputKeyEnum.httpJsonBody]: string;
+  [NodeInputKeyEnum.abandon_httpUrl]: string;
+  [NodeInputKeyEnum.httpMethod]: string;
+  [NodeInputKeyEnum.httpReqUrl]: string;
+  [NodeInputKeyEnum.httpHeaders]: PropsArrType[];
+  [NodeInputKeyEnum.httpParams]: PropsArrType[];
+  [NodeInputKeyEnum.httpJsonBody]: string;
   [DYNAMIC_INPUT_KEY]: Record<string, any>;
   [key: string]: any;
 }>;
 type HttpResponse = DispatchNodeResultType<{
-  [ModuleOutputKeyEnum.failed]?: boolean;
+  [NodeOutputKeyEnum.failed]?: boolean;
   [key: string]: any;
 }>;
 
@@ -40,7 +40,7 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
     chatId,
     responseChatItemId,
     variables,
-    module: { outputs },
+    node: { outputs },
     histories,
     params: {
       system_httpMethod: httpMethod = 'POST',
@@ -127,13 +127,13 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
         httpResult: rawResponse
       },
       [DispatchNodeResponseKeyEnum.toolResponses]: results,
-      [ModuleOutputKeyEnum.httpRawResponse]: rawResponse,
+      [NodeOutputKeyEnum.httpRawResponse]: rawResponse,
       ...results
     };
   } catch (error) {
     addLog.error('Http request error', error);
     return {
-      [ModuleOutputKeyEnum.failed]: true,
+      [NodeOutputKeyEnum.failed]: true,
       [DispatchNodeResponseKeyEnum.nodeResponse]: {
         totalPoints: 0,
         params: Object.keys(params).length > 0 ? params : undefined,
@@ -141,7 +141,7 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
         headers: Object.keys(headers).length > 0 ? headers : undefined,
         httpResult: { error: formatHttpError(error) }
       },
-      [ModuleOutputKeyEnum.httpRawResponse]: getErrText(error)
+      [NodeOutputKeyEnum.httpRawResponse]: getErrText(error)
     };
   }
 };

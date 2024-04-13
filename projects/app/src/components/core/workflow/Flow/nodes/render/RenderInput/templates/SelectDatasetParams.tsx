@@ -5,7 +5,7 @@ import { Box, Button, Flex, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import { DatasetSearchModeEnum } from '@fastgpt/global/core/dataset/constants';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import DatasetParamsModal, { DatasetParamsProps } from '@/components/core/app/DatasetParamsModal';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -32,7 +32,7 @@ const SelectDatasetParam = ({ inputs = [], nodeId }: RenderInputProps) => {
     nodes.forEach((item) => {
       if (item.type === FlowNodeTypeEnum.chatNode) {
         const model =
-          item.data.inputs.find((item) => item.key === ModuleInputKeyEnum.aiModel)?.value || '';
+          item.data.inputs.find((item) => item.key === NodeInputKeyEnum.aiModel)?.value || '';
         const quoteMaxToken =
           llmModelList.find((item) => item.model === model)?.quoteMaxToken || 3000;
 

@@ -1,8 +1,8 @@
 import {
   FlowNodeTemplateTypeEnum,
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum
 } from '../../constants';
 import {
   FlowNodeInputTypeEnum,

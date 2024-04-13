@@ -8,9 +8,9 @@ import { Box, Button, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import { AddIcon } from '@chakra-ui/icons';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { getOneQuoteInputTemplate } from '@fastgpt/global/core/workflow/template/system/datasetConcat';
 import { useFlowProviderStore } from '../FlowProvider';
@@ -29,7 +29,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { nodeId, inputs, outputs } = data;
 
   const quotes = useMemo(
-    () => inputs.filter((item) => item.valueType === ModuleIOValueTypeEnum.datasetQuote),
+    () => inputs.filter((item) => item.valueType === WorkflowIOValueTypeEnum.datasetQuote),
     [inputs]
   );
 
@@ -39,7 +39,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
     nodes.forEach((item) => {
       if (item.type === FlowNodeTypeEnum.chatNode) {
         const model =
-          item.data.inputs.find((item) => item.key === ModuleInputKeyEnum.aiModel)?.value || '';
+          item.data.inputs.find((item) => item.key === NodeInputKeyEnum.aiModel)?.value || '';
         const quoteMaxToken =
           llmModelList.find((item) => item.model === model)?.quoteMaxToken || 3000;
 
@@ -98,7 +98,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const CustomComponent = useMemo(() => {
     console.log(111);
     return {
-      [ModuleInputKeyEnum.datasetMaxTokens]: (item: FlowNodeInputItemType) => (
+      [NodeInputKeyEnum.datasetMaxTokens]: (item: FlowNodeInputItemType) => (
         <Box px={2}>
           <MySlider
             markList={[
@@ -136,8 +136,8 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         <Flex position={'absolute'} right={4} top={'60%'}>
           <Box>{t('core.module.Dataset quote.Concat result')}</Box>
           <SourceHandle
-            handleKey={ModuleOutputKeyEnum.datasetQuoteQA}
-            valueType={ModuleIOValueTypeEnum.datasetQuote}
+            handleKey={NodeOutputKeyEnum.datasetQuoteQA}
+            valueType={WorkflowIOValueTypeEnum.datasetQuote}
             // transform={'translate(-14px, -50%)'}
           />
         </Flex>

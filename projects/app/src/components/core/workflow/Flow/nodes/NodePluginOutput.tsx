@@ -19,7 +19,7 @@ import {
   FlowNodeInputItemType,
   FlowNodeOutputItemType
 } from '@fastgpt/global/core/workflow/type/io';
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { useFlowProviderStore } from '../FlowProvider';
 
@@ -30,7 +30,7 @@ const defaultCreateField: EditNodeFieldType = {
   key: '',
   description: '',
   inputType: FlowNodeInputTypeEnum.target,
-  valueType: ModuleIOValueTypeEnum.string,
+  valueType: WorkflowIOValueTypeEnum.string,
   required: true
 };
 const createEditField = {

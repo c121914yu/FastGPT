@@ -11,7 +11,10 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import MyModal from '@fastgpt/web/components/common/MyModal';
-import { DYNAMIC_INPUT_KEY, ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import {
+  DYNAMIC_INPUT_KEY,
+  WorkflowIOValueTypeEnum
+} from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 import {
@@ -50,34 +53,34 @@ const FieldEditModal = ({
     {
       label: t('core.module.inputType.target'),
       value: FlowNodeInputTypeEnum.target,
-      valueType: ModuleIOValueTypeEnum.string
+      valueType: WorkflowIOValueTypeEnum.string
     },
     {
       label: t('core.module.inputType.input'),
       value: FlowNodeInputTypeEnum.input,
-      valueType: ModuleIOValueTypeEnum.string
+      valueType: WorkflowIOValueTypeEnum.string
     },
     {
       label: t('core.module.inputType.textarea'),
       value: FlowNodeInputTypeEnum.textarea,
-      valueType: ModuleIOValueTypeEnum.string
+      valueType: WorkflowIOValueTypeEnum.string
     },
     {
       label: t('core.module.inputType.switch'),
       value: FlowNodeInputTypeEnum.switch,
-      valueType: ModuleIOValueTypeEnum.boolean
+      valueType: WorkflowIOValueTypeEnum.boolean
     },
     {
       label: t('core.module.inputType.selectDataset'),
       value: FlowNodeInputTypeEnum.selectDataset,
-      valueType: ModuleIOValueTypeEnum.selectDataset
+      valueType: WorkflowIOValueTypeEnum.selectDataset
     },
     ...(showDynamicInputSelect
       ? [
           {
             label: t('core.module.inputType.dynamicTargetInput'),
             value: FlowNodeInputTypeEnum.addInputParam,
-            valueType: ModuleIOValueTypeEnum.any
+            valueType: WorkflowIOValueTypeEnum.any
           }
         ]
       : [])
@@ -231,12 +234,12 @@ const FieldEditModal = ({
               list={dataTypeSelectList}
               value={getValues('valueType')}
               onchange={(e: string) => {
-                const type = e as `${ModuleIOValueTypeEnum}`;
+                const type = e as `${WorkflowIOValueTypeEnum}`;
                 setValue('valueType', type);
 
                 if (
-                  type === ModuleIOValueTypeEnum.chatHistory ||
-                  type === ModuleIOValueTypeEnum.datasetQuote
+                  type === WorkflowIOValueTypeEnum.chatHistory ||
+                  type === WorkflowIOValueTypeEnum.datasetQuote
                 ) {
                   const label = dataTypeSelectList.find((item) => item.value === type)?.label;
                   setValue('label', label);

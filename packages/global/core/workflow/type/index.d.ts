@@ -1,7 +1,7 @@
 import { FlowNodeTypeEnum } from '../node/constant';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum,
   VariableInputEnum
 } from '../constants';
@@ -15,12 +15,14 @@ import {
   UserChatItemValueItemType
 } from '../../chat/type';
 import { ChatNodeUsageType } from '../../../support/wallet/bill/type';
-import { RunningModuleItemType } from '../runtime/type';
+import { RuntimeNodeItemType } from '../runtime/type';
 import { PluginTypeEnum } from '../../plugin/constants';
+import { RuntimeEdgeItemType, StoreEdgeItemType } from './edge';
 
 export type FlowNodeCommonType = {
   flowNodeType: `${FlowNodeTypeEnum}`; // render node card
 
+  avatar?: string;
   name: string;
   intro: string; // template list intro
   showStatus?: boolean; // chatting response step status
@@ -49,7 +51,6 @@ export type FlowNodeTemplateType = FlowNodeCommonType & {
   };
 
   // info
-  avatar?: string;
   isTool?: boolean; // can be connected by tool
 
   // action
@@ -77,13 +78,10 @@ export type StoreNodeItemType = FlowNodeCommonType & {
     y: number;
   };
 
-  targetNodes: NodeTargetNodeItemType[]; // 输出到的节点数据
-  sourceNodes: NodeSourceNodeItemType[]; // 来源的节点数据
+  // targetNodes: NodeTargetNodeItemType[]; // 输出到的节点数据
+  // sourceNodes: NodeSourceNodeItemType[]; // 来源的节点数据
   inputs: FlowNodeInputItemType[];
   outputs: FlowNodeOutputItemType[];
-
-  // runTime field
-  // isEntry?: boolean;
 };
 
 /* connection type */
@@ -117,6 +115,7 @@ export type ContextExtractAgentItemType = {
 };
 
 /* -------------- running module -------------- */
+
 export type ChatDispatchProps = {
   res: NextApiResponse;
   mode: 'test' | 'chat';
@@ -135,7 +134,8 @@ export type ChatDispatchProps = {
 };
 
 export type ModuleDispatchProps<T> = ChatDispatchProps & {
-  module: RunningModuleItemType;
-  runtimeModules: RunningModuleItemType[];
+  node: RuntimeNodeItemType;
+  runtimeNodes: RuntimeNodeItemType[];
+  runtimeEdges: RuntimeEdgeItemType[];
   params: T;
 };

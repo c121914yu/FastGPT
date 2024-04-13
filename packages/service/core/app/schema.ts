@@ -54,6 +54,10 @@ const AppSchema = new Schema({
     type: Array,
     default: []
   },
+  edges: {
+    type: Array,
+    default: []
+  },
   inited: {
     type: Boolean
   },

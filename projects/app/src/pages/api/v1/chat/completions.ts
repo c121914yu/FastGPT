@@ -32,7 +32,7 @@ import { AuthOutLinkChatProps } from '@fastgpt/global/support/outLink/api';
 import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
 import { ChatErrEnum } from '@fastgpt/global/common/error/code/chat';
 import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
-import { setEntryEntries } from '@fastgpt/service/core/workflow/dispatch/utils';
+import { setWorkflowDefaultEntries } from '@fastgpt/global/core/workflow/runtime/utils';
 import { UserChatItemType } from '@fastgpt/global/core/chat/type';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 
@@ -176,7 +176,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       appId: String(app._id),
       chatId,
       responseChatItemId,
-      modules: setEntryEntries(app.modules),
+      modules: setWorkflowDefaultEntries(app.modules),
       variables,
       inputFiles: files,
       histories: concatHistories,

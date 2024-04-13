@@ -5,9 +5,9 @@ import {
 } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import {
@@ -35,43 +35,43 @@ export const AiChatModule: FlowNodeTemplateType = {
     Input_Template_SettingAiModel,
     // --- settings modal
     {
-      key: ModuleInputKeyEnum.aiChatTemperature,
+      key: NodeInputKeyEnum.aiChatTemperature,
       renderTypeList: [FlowNodeInputTypeEnum.hidden], // Set in the pop-up window
       label: '',
       value: 0,
-      valueType: ModuleIOValueTypeEnum.number,
+      valueType: WorkflowIOValueTypeEnum.number,
       min: 0,
       max: 10,
       step: 1
     },
     {
-      key: ModuleInputKeyEnum.aiChatMaxToken,
+      key: NodeInputKeyEnum.aiChatMaxToken,
       renderTypeList: [FlowNodeInputTypeEnum.hidden], // Set in the pop-up window
       label: '',
       value: 2000,
-      valueType: ModuleIOValueTypeEnum.number,
+      valueType: WorkflowIOValueTypeEnum.number,
       min: 100,
       max: 4000,
       step: 50
     },
     {
-      key: ModuleInputKeyEnum.aiChatIsResponseText,
+      key: NodeInputKeyEnum.aiChatIsResponseText,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
       value: true,
-      valueType: ModuleIOValueTypeEnum.boolean
+      valueType: WorkflowIOValueTypeEnum.boolean
     },
     {
-      key: ModuleInputKeyEnum.aiChatQuoteTemplate,
+      key: NodeInputKeyEnum.aiChatQuoteTemplate,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
-      valueType: ModuleIOValueTypeEnum.string
+      valueType: WorkflowIOValueTypeEnum.string
     },
     {
-      key: ModuleInputKeyEnum.aiChatQuotePrompt,
+      key: NodeInputKeyEnum.aiChatQuotePrompt,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       label: '',
-      valueType: ModuleIOValueTypeEnum.string
+      valueType: WorkflowIOValueTypeEnum.string
     },
     // settings modal ---
     {
@@ -86,19 +86,19 @@ export const AiChatModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
-      id: ModuleOutputKeyEnum.history,
-      key: ModuleOutputKeyEnum.history,
+      id: NodeOutputKeyEnum.history,
+      key: NodeOutputKeyEnum.history,
       label: 'core.module.output.label.New context',
       description: 'core.module.output.description.New context',
-      valueType: ModuleIOValueTypeEnum.chatHistory,
+      valueType: WorkflowIOValueTypeEnum.chatHistory,
       type: FlowNodeOutputTypeEnum.source
     },
     {
-      id: ModuleOutputKeyEnum.answerText,
-      key: ModuleOutputKeyEnum.answerText,
+      id: NodeOutputKeyEnum.answerText,
+      key: NodeOutputKeyEnum.answerText,
       label: 'core.module.output.label.Ai response content',
       description: 'core.module.output.description.Ai response content',
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       type: FlowNodeOutputTypeEnum.source
     }
   ]

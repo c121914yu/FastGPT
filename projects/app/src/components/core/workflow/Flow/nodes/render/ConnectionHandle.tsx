@@ -1,28 +1,21 @@
 import React, { useMemo } from 'react';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position, useStore } from 'reactflow';
 import { useTranslation } from 'next-i18next';
 import { useFlowProviderStore } from '../../FlowProvider';
 import { SmallAddIcon } from '@chakra-ui/icons';
+import {
+  primaryColor,
+  sourceCommonStyle,
+  sourceConnectedStyle,
+  sourceHoverStyle
+} from '@/web/core/workflow/constants/handleStyle';
 
-const primaryColor = '#3370FF';
-
-const sourceCommonStyle = {
-  borderColor: primaryColor,
-  backgroundColor: 'white',
-  borderWidth: '3px',
-  transition: 'all 0.1s'
-};
-const sourceConnectedStyle = {
-  width: '14px',
-  height: '14px',
+const sourceConnectedStyles = {
+  ...sourceConnectedStyle,
   transform: 'translate(3px,-50%)'
 };
-const sourceHoverStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '18px',
-  height: '18px',
+const sourceHoverStyles = {
+  ...sourceHoverStyle,
   transform: 'translate(5px,-50%)'
 };
 
@@ -56,7 +49,7 @@ export const ConnectionSourceHandle = ({
         return {
           styles: {
             ...sourceCommonStyle,
-            ...sourceConnectedStyle
+            ...sourceConnectedStyles
           },
           showAddIcon: false
         };
@@ -65,7 +58,7 @@ export const ConnectionSourceHandle = ({
         return {
           styles: {
             ...sourceCommonStyle,
-            ...sourceHoverStyle
+            ...sourceHoverStyles
           },
           showAddIcon: true
         };
@@ -101,6 +94,7 @@ export const ConnectionSourceHandle = ({
 
 export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
   const { nodes, edges, connectingEdge } = useFlowProviderStore();
+
   const { t } = useTranslation();
 
   const node = useMemo(() => nodes.find((node) => node.data.nodeId === nodeId), [nodes, nodeId]);

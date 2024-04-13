@@ -1,3 +1,5 @@
+import { FlowNodeInputTypeEnum } from '../node/constant';
+
 export enum SseResponseEventEnum {
   error = 'error',
   answer = 'answer', // animation stream
@@ -11,9 +13,15 @@ export enum SseResponseEventEnum {
 }
 
 export enum DispatchNodeResponseKeyEnum {
+  skipHandleId = 'skipHandleId', // skip handle id
   nodeResponse = 'responseData', // run node response
   nodeDispatchUsages = 'nodeDispatchUsages', // the node bill.
   childrenResponses = 'childrenResponses', // Some nodes make recursive calls that need to be returned
   toolResponses = 'toolResponses', // The result is passed back to the tool node for use
   assistantResponses = 'assistantResponses' // assistant response
 }
+
+export const needReplaceReferenceInputTypeList = [
+  FlowNodeInputTypeEnum.reference,
+  FlowNodeInputTypeEnum.settingDatasetQuotePrompt
+] as string[];

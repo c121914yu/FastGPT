@@ -5,9 +5,9 @@ import {
 } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type/index.d';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
-  ModuleOutputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
+  NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { Input_Template_DynamicInput, Input_Template_AddInputParam } from '../input';
@@ -27,9 +27,9 @@ export const lafModule: FlowNodeTemplateType = {
   isTool: true,
   inputs: [
     {
-      key: ModuleInputKeyEnum.httpReqUrl,
+      key: NodeInputKeyEnum.httpReqUrl,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
-      valueType: ModuleIOValueTypeEnum.string,
+      valueType: WorkflowIOValueTypeEnum.string,
       label: '',
       description: 'core.module.input.description.Http Request Url',
       placeholder: 'https://api.ai.com/getInventory',
@@ -40,11 +40,11 @@ export const lafModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
-      id: ModuleOutputKeyEnum.httpRawResponse,
-      key: ModuleOutputKeyEnum.httpRawResponse,
+      id: NodeOutputKeyEnum.httpRawResponse,
+      key: NodeOutputKeyEnum.httpRawResponse,
       label: '原始响应',
       description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',
-      valueType: ModuleIOValueTypeEnum.any,
+      valueType: WorkflowIOValueTypeEnum.any,
       type: FlowNodeOutputTypeEnum.source
     },
     {

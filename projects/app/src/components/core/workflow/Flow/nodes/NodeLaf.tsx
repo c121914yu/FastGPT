@@ -4,7 +4,7 @@ import NodeCard from './render/NodeCard';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import Container from '../components/Container';
 import { Box, Button, Center, Flex, useDisclosure } from '@chakra-ui/react';
-import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum, NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useFlowProviderStore } from '../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import { getLafAppDetail } from '@/web/support/laf/api';
@@ -39,7 +39,7 @@ const NodeLaf = (props: NodeProps<FlowNodeItemType>) => {
 
   const { onChangeNode } = useFlowProviderStore();
 
-  const requestUrl = inputs.find((item) => item.key === ModuleInputKeyEnum.httpReqUrl);
+  const requestUrl = inputs.find((item) => item.key === NodeInputKeyEnum.httpReqUrl);
 
   const { userInfo } = useUserStore();
 
@@ -160,7 +160,7 @@ const NodeLaf = (props: NodeProps<FlowNodeItemType>) => {
           key: param.name,
           value: {
             key: param.name,
-            valueType: ModuleIOValueTypeEnum.string,
+            valueType: WorkflowIOValueTypeEnum.string,
             label: param.name,
             type: FlowNodeInputTypeEnum.target,
             required: param.required,
@@ -233,7 +233,7 @@ const NodeLaf = (props: NodeProps<FlowNodeItemType>) => {
             onChangeNode({
               nodeId,
               type: 'updateInput',
-              key: ModuleInputKeyEnum.httpReqUrl,
+              key: NodeInputKeyEnum.httpReqUrl,
               value: {
                 ...requestUrl,
                 value: e

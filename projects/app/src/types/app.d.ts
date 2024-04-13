@@ -1,5 +1,5 @@
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { XYPosition } from 'reactflow';
 import { AppModuleItemTypeEnum, ModulesInputItemTypeEnum } from '../constants/app';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';

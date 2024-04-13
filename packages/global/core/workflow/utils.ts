@@ -1,7 +1,7 @@
 import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from './node/constant';
 import {
-  ModuleIOValueTypeEnum,
-  ModuleInputKeyEnum,
+  WorkflowIOValueTypeEnum,
+  NodeInputKeyEnum,
   VariableInputEnum,
   variableMap
 } from './constants';
@@ -18,21 +18,21 @@ export const getGuideModule = (modules: StoreNodeItemType[]) =>
 
 export const splitGuideModule = (guideModules?: StoreNodeItemType) => {
   const welcomeText: string =
-    guideModules?.inputs?.find((item) => item.key === ModuleInputKeyEnum.welcomeText)?.value || '';
+    guideModules?.inputs?.find((item) => item.key === NodeInputKeyEnum.welcomeText)?.value || '';
 
   const variableModules: VariableItemType[] =
-    guideModules?.inputs.find((item) => item.key === ModuleInputKeyEnum.variables)?.value || [];
+    guideModules?.inputs.find((item) => item.key === NodeInputKeyEnum.variables)?.value || [];
 
   const questionGuide: boolean =
-    !!guideModules?.inputs?.find((item) => item.key === ModuleInputKeyEnum.questionGuide)?.value ||
+    !!guideModules?.inputs?.find((item) => item.key === NodeInputKeyEnum.questionGuide)?.value ||
     false;
 
   const ttsConfig: AppTTSConfigType = guideModules?.inputs?.find(
-    (item) => item.key === ModuleInputKeyEnum.tts
+    (item) => item.key === NodeInputKeyEnum.tts
   )?.value || { type: 'web' };
 
   const whisperConfig: AppWhisperConfigType =
-    guideModules?.inputs?.find((item) => item.key === ModuleInputKeyEnum.whisper)?.value ||
+    guideModules?.inputs?.find((item) => item.key === NodeInputKeyEnum.whisper)?.value ||
     defaultWhisperConfig;
 
   return {
@@ -48,9 +48,9 @@ export const getOrInitModuleInputValue = (input: FlowNodeInputItemType) => {
   if (input.value !== undefined || !input.valueType) return input.value;
 
   const map: Record<string, any> = {
-    [ModuleIOValueTypeEnum.boolean]: false,
-    [ModuleIOValueTypeEnum.number]: 0,
-    [ModuleIOValueTypeEnum.string]: ''
+    [WorkflowIOValueTypeEnum.boolean]: false,
+    [WorkflowIOValueTypeEnum.number]: 0,
+    [WorkflowIOValueTypeEnum.string]: ''
   };
 
   return map[input.valueType];
@@ -84,11 +84,11 @@ export const plugin2ModuleIO = (
       ? [
           {
             // plugin id
-            key: ModuleInputKeyEnum.pluginId,
+            key: NodeInputKeyEnum.pluginId,
             type: FlowNodeInputTypeEnum.hidden,
             label: '',
             value: pluginId,
-            valueType: ModuleIOValueTypeEnum.string,
+            valueType: WorkflowIOValueTypeEnum.string,
             connected: true,
             showTargetInApp: false,
             showTargetInPlugin: false

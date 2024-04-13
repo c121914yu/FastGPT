@@ -20,7 +20,7 @@ import {
   Button,
   useDisclosure
 } from '@chakra-ui/react';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useFlowProviderStore } from '../../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import Tabs from '@/components/Tabs';
@@ -108,15 +108,15 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
 
   const { isOpen: isOpenCurl, onOpen: onOpenCurl, onClose: onCloseCurl } = useDisclosure();
 
-  const requestMethods = inputs.find((item) => item.key === ModuleInputKeyEnum.httpMethod);
-  const requestUrl = inputs.find((item) => item.key === ModuleInputKeyEnum.httpReqUrl);
+  const requestMethods = inputs.find((item) => item.key === NodeInputKeyEnum.httpMethod);
+  const requestUrl = inputs.find((item) => item.key === NodeInputKeyEnum.httpReqUrl);
 
   const onChangeUrl = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChangeNode({
         nodeId,
         type: 'updateInput',
-        key: ModuleInputKeyEnum.httpReqUrl,
+        key: NodeInputKeyEnum.httpReqUrl,
         value: {
           ...requestUrl,
           value: e.target.value
@@ -140,7 +140,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
             [key]: value
           };
         }, {});
-        const inputParams = inputs.find((item) => item.key === ModuleInputKeyEnum.httpParams);
+        const inputParams = inputs.find((item) => item.key === NodeInputKeyEnum.httpParams);
 
         if (!inputParams || Object.keys(paramsObj).length === 0) return;
 
@@ -154,7 +154,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         onChangeNode({
           nodeId,
           type: 'updateInput',
-          key: ModuleInputKeyEnum.httpParams,
+          key: NodeInputKeyEnum.httpParams,
           value: {
             ...inputParams,
             value: concatParams
@@ -164,7 +164,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         onChangeNode({
           nodeId,
           type: 'updateInput',
-          key: ModuleInputKeyEnum.httpReqUrl,
+          key: NodeInputKeyEnum.httpReqUrl,
           value: {
             ...requestUrl,
             value: url
@@ -221,7 +221,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
             onChangeNode({
               nodeId,
               type: 'updateInput',
-              key: ModuleInputKeyEnum.httpMethod,
+              key: NodeInputKeyEnum.httpMethod,
               value: {
                 ...requestMethods,
                 value: e
@@ -257,10 +257,10 @@ export function RenderHttpProps({
   const [selectedTab, setSelectedTab] = useState(TabEnum.params);
   const { nodes } = useFlowProviderStore();
 
-  const requestMethods = inputs.find((item) => item.key === ModuleInputKeyEnum.httpMethod)?.value;
-  const params = inputs.find((item) => item.key === ModuleInputKeyEnum.httpParams);
-  const headers = inputs.find((item) => item.key === ModuleInputKeyEnum.httpHeaders);
-  const jsonBody = inputs.find((item) => item.key === ModuleInputKeyEnum.httpJsonBody);
+  const requestMethods = inputs.find((item) => item.key === NodeInputKeyEnum.httpMethod)?.value;
+  const params = inputs.find((item) => item.key === NodeInputKeyEnum.httpParams);
+  const headers = inputs.find((item) => item.key === NodeInputKeyEnum.httpHeaders);
+  const jsonBody = inputs.find((item) => item.key === NodeInputKeyEnum.httpJsonBody);
 
   const paramsLength = params?.value?.length || 0;
   const headersLength = headers?.value?.length || 0;
@@ -603,10 +603,10 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   const CustomComponents = useMemo(
     () => ({
-      [ModuleInputKeyEnum.httpMethod]: () => (
+      [NodeInputKeyEnum.httpMethod]: () => (
         <RenderHttpMethodAndUrl nodeId={nodeId} inputs={inputs} />
       ),
-      [ModuleInputKeyEnum.httpHeaders]: () => (
+      [NodeInputKeyEnum.httpHeaders]: () => (
         <>
           <RenderHttpProps nodeId={nodeId} inputs={inputs} />
           <Box mt={2} transform={'translateY(10px)'}>

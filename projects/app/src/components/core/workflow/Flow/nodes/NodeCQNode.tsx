@@ -7,16 +7,14 @@ import Divider from '../components/Divider';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
 import type { ClassifyQuestionAgentItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { customAlphabet } from 'nanoid';
-const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 4);
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
-import SourceHandle from './render/SourceHandle';
 import MyTooltip from '@/components/MyTooltip';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { useFlowProviderStore } from '../FlowProvider';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
+import SourceHandle from './render/SourceHandle';
 
 const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
@@ -25,7 +23,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   const CustomComponent = useMemo(
     () => ({
-      [ModuleInputKeyEnum.agents]: ({
+      [NodeInputKeyEnum.agents]: ({
         key: agentKey,
         value = [],
         ...props
@@ -92,13 +90,16 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                       });
                     }}
                   />
-                  <SourceHandle handleKey={item.key} valueType={ModuleIOValueTypeEnum.boolean} />
+                  <SourceHandle
+                    handleId={`${nodeId}-${item.key}`}
+                    transform="translate(18px,-50%)"
+                  />
                 </Box>
               </Box>
             ))}
             <Button
               onClick={() => {
-                const key = nanoid();
+                const key = getNanoid();
 
                 onChangeNode({
                   nodeId,
@@ -110,17 +111,6 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                     value: agents.concat({ value: '', key })
                   }
                 });
-
-                onChangeNode({
-                  nodeId,
-                  type: 'addOutput',
-                  value: {
-                    key,
-                    label: '',
-                    type: FlowNodeOutputTypeEnum.hidden,
-                    targets: []
-                  }
-                });
               }}
             >
               {t('core.module.Add question type')}
@@ -129,7 +119,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         );
       }
     }),
-    [nodeId, t]
+    [nodeId, onChangeNode, t]
   );
 
   return (

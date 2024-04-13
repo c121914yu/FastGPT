@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import type { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { Box } from '@chakra-ui/react';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import OutputLabel from './Label';
 import { RenderOutputProps } from './type';
 import dynamic from 'next/dynamic';
@@ -34,8 +34,8 @@ const RenderToolOutput = ({
           return -1;
         }
 
-        if (a.key === ModuleOutputKeyEnum.finish) return -1;
-        if (b.key === ModuleOutputKeyEnum.finish) return 1;
+        if (a.key === NodeOutputKeyEnum.finish) return -1;
+        if (b.key === NodeOutputKeyEnum.finish) return 1;
         return 0;
       }),
     [flowOutputList]

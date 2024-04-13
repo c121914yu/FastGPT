@@ -24,7 +24,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { getPreviewPluginModule } from '@/web/core/plugin/api';
 import MyBox from '@/components/common/MyBox';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import ParentPaths from '@/components/common/ParentPaths';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import { debounce } from 'lodash';
@@ -181,9 +181,9 @@ const RenderList = React.memo(function RenderList({
       for (const input of res.inputs) {
         if (
           [
-            ModuleInputKeyEnum.switch,
-            ModuleInputKeyEnum.pluginStart,
-            ModuleInputKeyEnum.pluginId
+            NodeInputKeyEnum.switch,
+            NodeInputKeyEnum.pluginStart,
+            NodeInputKeyEnum.pluginId
           ].includes(input.key as any)
         ) {
           continue;

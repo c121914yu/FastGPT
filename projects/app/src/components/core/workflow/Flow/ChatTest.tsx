@@ -18,8 +18,9 @@ import ChatBox from '@/components/ChatBox';
 import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d';
 import { getGuideModule } from '@fastgpt/global/core/workflow/utils';
 import { checkChatSupportSelectFileByModules } from '@/web/core/chat/utils';
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
+import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 
 export type ChatTestComponentRef = {
   resetChatTest: () => void;
@@ -28,11 +29,13 @@ export type ChatTestComponentRef = {
 const ChatTest = (
   {
     app,
-    modules = [],
+    nodes = [],
+    edges = [],
     onClose
   }: {
     app: AppSchema;
-    modules?: StoreNodeItemType[];
+    nodes?: StoreNodeItemType[];
+    edges?: StoreEdgeItemType[];
     onClose: () => void;
   },
   ref: ForwardedRef<ChatTestComponentRef>
@@ -40,16 +43,16 @@ const ChatTest = (
   const { t } = useTranslation();
   const ChatBoxRef = useRef<ComponentRef>(null);
   const { userInfo } = useUserStore();
-  const isOpen = useMemo(() => modules && modules.length > 0, [modules]);
+  const isOpen = useMemo(() => nodes && nodes.length > 0, [nodes]);
 
   const startChat = useCallback(
     async ({ chatList, controller, generatingMessage, variables }: StartChatFnProps) => {
       let historyMaxLen = 6;
-      modules.forEach((module) => {
-        module.inputs.forEach((input) => {
+      nodes.forEach((nodes) => {
+        nodes.inputs.forEach((input) => {
           if (
-            (input.key === ModuleInputKeyEnum.history ||
-              input.key === ModuleInputKeyEnum.historyMaxAmount) &&
+            (input.key === NodeInputKeyEnum.history ||
+              input.key === NodeInputKeyEnum.historyMaxAmount) &&
             typeof input.value === 'number'
           ) {
             historyMaxLen = Math.max(historyMaxLen, input.value);
@@ -64,7 +67,8 @@ const ChatTest = (
         data: {
           history,
           prompt: chatList[chatList.length - 2].value,
-          modules,
+          nodes,
+          edges,
           variables,
           appId: app._id,
           appName: `调试-${app.name}`
@@ -75,7 +79,7 @@ const ChatTest = (
 
       return { responseText, responseData };
     },
-    [app._id, app.name, modules]
+    [app._id, app.name, nodes]
   );
 
   useImperativeHandle(ref, () => ({
@@ -138,23 +142,13 @@ const ChatTest = (
             appAvatar={app.avatar}
             userAvatar={userInfo?.avatar}
             showMarkIcon
-            userGuideModule={getGuideModule(modules)}
-            showFileSelector={checkChatSupportSelectFileByModules(modules)}
+            userGuideModule={getGuideModule(nodes)}
+            showFileSelector={checkChatSupportSelectFileByModules(nodes)}
             onStartChat={startChat}
             onDelMessage={() => {}}
           />
         </Box>
       </Flex>
-      {/* <Box
-        zIndex={2}
-        display={isOpen ? 'block' : 'none'}
-        position={'fixed'}
-        top={0}
-        left={0}
-        bottom={0}
-        right={0}
-        onClick={onClose}
-      /> */}
     </>
   );
 };

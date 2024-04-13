@@ -20,7 +20,7 @@ import { DatasetSearchModeEnum } from '@fastgpt/global/core/dataset/constants';
 import { useTranslation } from 'next-i18next';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 
-import { ModuleInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DatasetSearchModeMap } from '@fastgpt/global/core/dataset/constants';
 import MyRadio from '@/components/common/MyRadio';
 import MyIcon from '@fastgpt/web/components/common/Icon';
@@ -223,9 +223,9 @@ const DatasetParamsModal = ({
                     min={100}
                     max={maxTokens}
                     step={50}
-                    value={getValues(ModuleInputKeyEnum.datasetMaxTokens) ?? 1000}
+                    value={getValues(NodeInputKeyEnum.datasetMaxTokens) ?? 1000}
                     onChange={(val) => {
-                      setValue(ModuleInputKeyEnum.datasetMaxTokens, val);
+                      setValue(NodeInputKeyEnum.datasetMaxTokens, val);
                       setRefresh(!refresh);
                     }}
                   />
@@ -249,9 +249,9 @@ const DatasetParamsModal = ({
                     min={0}
                     max={1}
                     step={0.01}
-                    value={getValues(ModuleInputKeyEnum.datasetSimilarity) ?? 0.5}
+                    value={getValues(NodeInputKeyEnum.datasetSimilarity) ?? 0.5}
                     onChange={(val) => {
-                      setValue(ModuleInputKeyEnum.datasetSimilarity, val);
+                      setValue(NodeInputKeyEnum.datasetSimilarity, val);
                       setRefresh(!refresh);
                     }}
                   />
