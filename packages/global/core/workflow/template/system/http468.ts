@@ -10,7 +10,7 @@ import {
   NodeOutputKeyEnum,
   FlowNodeTemplateTypeEnum
 } from '../../constants';
-import { Input_Template_AddInputParam, Input_Template_DynamicInput } from '../input';
+import { Input_Template_DynamicInput } from '../input';
 import { Output_Template_AddOutput } from '../output';
 import { getHandleConfig } from '../utils';
 
@@ -26,6 +26,14 @@ export const HttpModule468: FlowNodeTemplateType = {
   showStatus: true,
   isTool: true,
   inputs: [
+    {
+      ...Input_Template_DynamicInput,
+      description: '接收前方节点的输出值作为变量，这些变量可以被HTTP请求参数使用。',
+      editField: {
+        key: true,
+        valueType: true
+      }
+    },
     {
       key: NodeInputKeyEnum.httpMethod,
       renderTypeList: [FlowNodeInputTypeEnum.custom],
@@ -68,10 +76,6 @@ export const HttpModule468: FlowNodeTemplateType = {
       value: '',
       label: '',
       required: false
-    },
-    Input_Template_DynamicInput,
-    {
-      ...Input_Template_AddInputParam
     }
   ],
   outputs: [
@@ -81,7 +85,7 @@ export const HttpModule468: FlowNodeTemplateType = {
       label: '原始响应',
       description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',
       valueType: WorkflowIOValueTypeEnum.any,
-      type: FlowNodeOutputTypeEnum.source
+      type: FlowNodeOutputTypeEnum.static
     },
     {
       ...Output_Template_AddOutput

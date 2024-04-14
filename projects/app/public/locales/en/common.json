@@ -1053,10 +1053,16 @@
       "Init History Error": "Init History Error"
     },
     "workflow": {
+      "Add variable": "Add",
       "Can not delete node": "Can not delete the node",
       "Change input type tip": "Changing the input type will empty the entered values, please confirm!",
+      "Custom variable": "Custom variable",
+      "Dataset quote": "Dataset quote",
       "chat": {
         "Quote prompt": "Quote prompt"
+      },
+      "inputType": {
+        "Reference": "Reference"
       }
     }
   },

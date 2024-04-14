@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useTransition } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import type { RenderInputProps } from '../type';
 import { useFlowProviderStore } from '../../../../FlowProvider';
 import { useTranslation } from 'next-i18next';
@@ -20,7 +20,7 @@ const TextareaRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
     );
     const moduleVariables = formatEditorVariablePickerIcon(
       inputs
-        .filter((input) => input.edit)
+        .filter((input) => input.canEdit)
         .map((item) => ({
           key: item.key,
           label: item.label
@@ -48,7 +48,7 @@ const TextareaRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
         }
       });
     },
-    [item, nodeId]
+    [item, nodeId, onChangeNode]
   );
 
   return (

@@ -92,7 +92,7 @@ const NodeInputSelect = ({
 
   const filterMenuList = useMemo(
     () => renderList.filter((item) => renderTypeList.includes(item.renderType)),
-    [renderTypeList]
+    [renderTypeList, renderList]
   );
   const renderTypeData = useMemo(
     () => inputList.current.find((item) => item.type === renderType) || inputList.current[0],
@@ -101,6 +101,7 @@ const NodeInputSelect = ({
 
   return (
     <MyMenu
+      offset={[0, -1]}
       Button={
         <Button
           size={'xs'}

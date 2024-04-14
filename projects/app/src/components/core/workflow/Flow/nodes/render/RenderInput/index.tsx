@@ -78,8 +78,9 @@ type Props = {
   flowInputList: FlowNodeInputItemType[];
   nodeId: string;
   CustomComponent?: Record<string, (e: FlowNodeInputItemType) => React.ReactNode>;
+  mb?: number;
 };
-const RenderInput = ({ flowInputList, nodeId, CustomComponent }: Props) => {
+const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 6 }: Props) => {
   const { mode } = useFlowProviderStore();
 
   const copyInputs = useMemo(() => JSON.stringify(flowInputList), [flowInputList]);
@@ -94,11 +95,12 @@ const RenderInput = ({ flowInputList, nodeId, CustomComponent }: Props) => {
 
   const Render = useMemo(() => {
     return filterInputs.map((input) => {
-      const renderType = input.renderTypeList[input.selectedTypeIndex || 0];
+      const renderType = input.renderTypeList?.[input.selectedTypeIndex || 0];
       const RenderComponent = (() => {
         if (renderType === FlowNodeInputTypeEnum.custom && memoCustomComponent[input.key]) {
           return <>{memoCustomComponent[input.key]({ ...input })}</>;
         }
+
         const Component = RenderList.find((item) => item.types.includes(renderType))?.Component;
 
         if (!Component) return null;
@@ -106,19 +108,17 @@ const RenderInput = ({ flowInputList, nodeId, CustomComponent }: Props) => {
       })();
 
       return renderType !== FlowNodeInputTypeEnum.hidden ? (
-        <Box key={input.key} _notLast={{ mb: 7 }} position={'relative'}>
-          {!!input.label && (
-            <InputLabel nodeId={nodeId} inputKey={input.key} mode={mode} {...input} />
-          )}
+        <Box key={input.key} _notLast={{ mb }} position={'relative'}>
+          {!!input.label && <InputLabel nodeId={nodeId} mode={mode} input={input} />}
           {!!RenderComponent && (
-            <Box mt={2} className={'nodrag'}>
+            <Box mt={1} className={'nodrag'}>
               {RenderComponent}
             </Box>
           )}
         </Box>
       ) : null;
     });
-  }, [filterInputs, memoCustomComponent, mode, nodeId]);
+  }, [filterInputs, mb, memoCustomComponent, mode, nodeId]);
 
   return <>{Render}</>;
 };

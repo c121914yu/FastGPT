@@ -97,21 +97,21 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
       id: NodeOutputKeyEnum.datasetIsEmpty,
       key: NodeOutputKeyEnum.datasetIsEmpty,
       label: 'core.module.output.label.Search result empty',
-      type: FlowNodeOutputTypeEnum.source,
+      type: FlowNodeOutputTypeEnum.static,
       valueType: WorkflowIOValueTypeEnum.boolean
     },
     {
       id: NodeOutputKeyEnum.datasetUnEmpty,
       key: NodeOutputKeyEnum.datasetUnEmpty,
       label: 'core.module.output.label.Search result not empty',
-      type: FlowNodeOutputTypeEnum.source,
+      type: FlowNodeOutputTypeEnum.static,
       valueType: WorkflowIOValueTypeEnum.boolean
     },
     {
       id: NodeOutputKeyEnum.datasetQuoteQA,
       key: NodeOutputKeyEnum.datasetQuoteQA,
       label: 'core.module.Dataset quote.label',
-      type: FlowNodeOutputTypeEnum.source,
+      type: FlowNodeOutputTypeEnum.static,
       valueType: WorkflowIOValueTypeEnum.datasetQuote
     }
   ]

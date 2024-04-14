@@ -20,7 +20,7 @@ const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
     );
     const moduleVariables = formatEditorVariablePickerIcon(
       inputs
-        .filter((input) => input.edit)
+        .filter((input) => input.canEdit)
         .map((item) => ({
           key: item.key,
           label: item.label
@@ -42,7 +42,7 @@ const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
         }
       });
     },
-    [item, nodeId]
+    [item, nodeId, onChangeNode]
   );
 
   const value = useMemo(() => {

@@ -8,7 +8,7 @@ import {
 } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { Connection, Handle, Position } from 'reactflow';
-import { useFlowProviderStore } from '../../FlowProvider';
+import { useFlowProviderStore } from '../../../FlowProvider';
 import { useCallback } from 'react';
 
 type ToolHandleProps = BoxProps & {

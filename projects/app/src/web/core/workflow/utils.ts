@@ -46,20 +46,21 @@ export const storeNode2FlowNode = ({
     ...template,
     ...storeNode,
     avatar: template?.avatar,
-    inputs: template.inputs.map((input) => {
-      // use latest inputs
-      const storeNodeInput = storeNode.inputs.find((item) => item.key === input.key) || input;
+    inputs: storeNode.inputs.map((storeInput) => {
+      const templateInput =
+        template.inputs.find((item) => item.key === storeInput.key) || storeInput;
       return {
-        ...input,
-        value: storeNodeInput.value
+        ...templateInput,
+        ...storeInput
       };
     }),
-    outputs: template.outputs.map((output) => {
-      // unChange outputs
-      const storeNodeOutput = storeNode.outputs.find((item) => item.key === output.key) || output;
+    outputs: storeNode.outputs.map((storeOutput) => {
+      const templateOutput =
+        template.outputs.find((item) => item.key === storeOutput.key) || storeOutput;
       return {
-        ...output,
-        value: storeNodeOutput.value
+        ...storeOutput,
+        ...templateOutput,
+        value: storeOutput.value
       };
     })
   };

@@ -6,6 +6,7 @@ import { PluginSourceEnum } from '@fastgpt/global/core/plugin/constants';
 import type { PluginRuntimeType, PluginTemplateType } from '@fastgpt/global/core/plugin/type.d';
 import { FlowNodeTemplateTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import type { PluginItemSchema } from '@fastgpt/global/core/plugin/type.d';
+import { getHandleConfig } from '../../../global/core/workflow/template/utils';
 
 /* 
   plugin id rule:
@@ -72,6 +73,8 @@ export async function getPluginPreviewModule({
     intro: plugin.intro,
     showStatus: plugin.showStatus,
     isTool: plugin.isTool,
+    sourceHandle: getHandleConfig(false, true, false, false),
+    targetHandle: getHandleConfig(false, false, false, true),
     ...plugin2ModuleIO(plugin.id, plugin.modules)
   };
 }

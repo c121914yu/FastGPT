@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
@@ -6,21 +6,19 @@ import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
-import { AddIcon } from '@chakra-ui/icons';
-import {
-  WorkflowIOValueTypeEnum,
-  NodeInputKeyEnum,
-  NodeOutputKeyEnum
-} from '@fastgpt/global/core/workflow/constants';
+import { AddIcon, SmallAddIcon } from '@chakra-ui/icons';
+import { WorkflowIOValueTypeEnum, NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { getOneQuoteInputTemplate } from '@fastgpt/global/core/workflow/template/system/datasetConcat';
 import { useFlowProviderStore } from '../FlowProvider';
 import TargetHandle from './render/TargetHandle';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import SourceHandle from './render/SourceHandle';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MySlider from '@/components/Slider';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
+import RenderOutput from './render/RenderOutput';
+import Divider from '../components/Divider';
+import Reference from './render/RenderInput/templates/Reference';
 
 const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
@@ -52,11 +50,10 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   const RenderQuoteList = useMemo(() => {
     return (
-      <Box>
-        <Box>
-          {quotes.map((quote, i) => (
-            <Flex key={quote.key} position={'relative'} mb={4} alignItems={'center'}>
-              <TargetHandle handleKey={quote.key} valueType={quote.valueType} />
+      <Box mt={-2}>
+        {quotes.map((quote, i) => (
+          <Box key={quote.key} _notLast={{ mb: 4 }}>
+            <Flex alignItems={'center'}>
               <Box>
                 {t('core.chat.Quote')}
                 {i + 1}
@@ -76,27 +73,22 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                 }}
               />
             </Flex>
-          ))}
-        </Box>
-        <Button
-          leftIcon={<AddIcon />}
-          variant={'whiteBase'}
-          onClick={() => {
-            onChangeNode({
-              nodeId,
-              type: 'addInput',
-              value: getOneQuoteInputTemplate()
-            });
-          }}
-        >
-          {t('core.module.Dataset quote.Add quote')}
-        </Button>
+            <Reference nodeId={nodeId} item={quote} />
+          </Box>
+        ))}
       </Box>
     );
-  }, [nodeId, quotes, t]);
+  }, [nodeId, onChangeNode, quotes, t]);
+
+  const onAddField = useCallback(() => {
+    onChangeNode({
+      nodeId,
+      type: 'addInput',
+      value: getOneQuoteInputTemplate()
+    });
+  }, [nodeId, onChangeNode]);
 
   const CustomComponent = useMemo(() => {
-    console.log(111);
     return {
       [NodeInputKeyEnum.datasetMaxTokens]: (item: FlowNodeInputItemType) => (
         <Box px={2}>
@@ -123,25 +115,36 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
             }}
           />
         </Box>
+      ),
+      customComponent: (item: FlowNodeInputItemType) => (
+        <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
+          <Box position={'relative'}>{t('core.workflow.Dataset quote')}</Box>
+          <Box flex={'1 0 0'} />
+          <Button
+            variant={'transparentBase'}
+            leftIcon={<SmallAddIcon />}
+            iconSpacing={1}
+            size={'sm'}
+            mr={'-5px'}
+            fontSize={'md'}
+            onClick={onAddField}
+          >
+            {t('common.Add New')}
+          </Button>
+        </Flex>
       )
     };
-  }, [nodeId, tokenLimit]);
+  }, [nodeId, onAddField, onChangeNode, t, tokenLimit]);
 
   return (
     <NodeCard minW={'400px'} selected={selected} {...data}>
       <Container borderTop={'2px solid'} borderTopColor={'myGray.200'} position={'relative'}>
         <RenderInput nodeId={nodeId} flowInputList={inputs} CustomComponent={CustomComponent} />
-        {/* render dataset select */}
         {RenderQuoteList}
-        <Flex position={'absolute'} right={4} top={'60%'}>
-          <Box>{t('core.module.Dataset quote.Concat result')}</Box>
-          <SourceHandle
-            handleKey={NodeOutputKeyEnum.datasetQuoteQA}
-            valueType={WorkflowIOValueTypeEnum.datasetQuote}
-            // transform={'translate(-14px, -50%)'}
-          />
-        </Flex>
-        {/* <RenderOutput nodeId={nodeId} flowOutputList={outputs} /> */}
+      </Container>
+      <Divider text={t('common.Output')} />
+      <Container>
+        <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
       </Container>
     </NodeCard>
   );

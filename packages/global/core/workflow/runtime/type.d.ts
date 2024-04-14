@@ -20,7 +20,7 @@ export type RuntimeNodeItemType = {
 };
 
 export type RuntimeEdgeItemType = StoreEdgeItemType & {
-  status: 'waiting' | 'running' | 'skipped';
+  status: 'waiting' | 'active' | 'skipped';
 };
 
 export type DispatchNodeResponseType = {

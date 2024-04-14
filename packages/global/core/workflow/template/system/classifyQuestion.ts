@@ -7,7 +7,8 @@ import { FlowNodeTemplateType } from '../../type';
 import {
   WorkflowIOValueTypeEnum,
   NodeInputKeyEnum,
-  FlowNodeTemplateTypeEnum
+  FlowNodeTemplateTypeEnum,
+  NodeOutputKeyEnum
 } from '../../constants';
 import {
   Input_Template_SelectAIModel,
@@ -62,5 +63,13 @@ export const ClassifyQuestionModule: FlowNodeTemplateType = {
       ]
     }
   ],
-  outputs: []
+  outputs: [
+    {
+      id: NodeOutputKeyEnum.cqResult,
+      key: NodeOutputKeyEnum.cqResult,
+      label: '分类结果',
+      valueType: WorkflowIOValueTypeEnum.string,
+      type: FlowNodeOutputTypeEnum.static
+    }
+  ]
 };

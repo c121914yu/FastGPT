@@ -19,11 +19,11 @@ const methodMap: { [K in RequestMethod]: string } = {
 };
 
 const CurlImportModal = ({
-  moduleId,
+  nodeId,
   inputs,
   onClose
 }: {
-  moduleId: string;
+  nodeId: string;
   inputs: FlowNodeInputItemType[];
   onClose: () => void;
 }) => {
@@ -63,7 +63,7 @@ const CurlImportModal = ({
       const newBody = JSON.stringify(parsed.data, null, 2);
 
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: NodeInputKeyEnum.httpReqUrl,
         value: {
@@ -73,7 +73,7 @@ const CurlImportModal = ({
       });
 
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: NodeInputKeyEnum.httpMethod,
         value: {
@@ -83,7 +83,7 @@ const CurlImportModal = ({
       });
 
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: NodeInputKeyEnum.httpParams,
         value: {
@@ -93,7 +93,7 @@ const CurlImportModal = ({
       });
 
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: NodeInputKeyEnum.httpHeaders,
         value: {
@@ -103,7 +103,7 @@ const CurlImportModal = ({
       });
 
       onChangeNode({
-        moduleId,
+        nodeId,
         type: 'updateInput',
         key: NodeInputKeyEnum.httpJsonBody,
         value: {

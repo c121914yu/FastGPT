@@ -20,40 +20,32 @@ import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/cons
 import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import { dispatchWorkFlow } from '../../index';
-import { DispatchToolModuleProps, RunToolResponse, ToolModuleItemType } from './type.d';
+import { DispatchToolModuleProps, RunToolResponse, ToolNodeItemType } from './type.d';
 import json5 from 'json5';
 import { DispatchFlowResponse } from '../../type';
 import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
-import { AIChatItemType, AIChatItemValueItemType } from '@fastgpt/global/core/chat/type';
+import { AIChatItemType } from '@fastgpt/global/core/chat/type';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
+import { updateToolInputValue } from './utils';
 
 type FunctionRunResponseType = {
-  moduleRunResponse: DispatchFlowResponse;
+  toolRunResponse: DispatchFlowResponse;
   functionCallMsg: ChatCompletionFunctionMessageParam;
 }[];
 
 export const runToolWithFunctionCall = async (
   props: DispatchToolModuleProps & {
     messages: ChatCompletionMessageParam[];
-    toolModules: ToolModuleItemType[];
+    toolNodes: ToolNodeItemType[];
     toolModel: LLMModelItemType;
   },
   response?: RunToolResponse
 ): Promise<RunToolResponse> => {
-  const {
-    toolModel,
-    toolModules,
-    messages,
-    res,
-    runtimeNodes,
-    detail = false,
-    node,
-    stream
-  } = props;
+  const { toolModel, toolNodes, messages, res, runtimeNodes, detail = false, node, stream } = props;
   const assistantResponses = response?.assistantResponses || [];
 
-  const functions: ChatCompletionCreateParams.Function[] = toolModules.map((module) => {
+  const functions: ChatCompletionCreateParams.Function[] = toolNodes.map((item) => {
     const properties: Record<
       string,
       {
@@ -62,7 +54,7 @@ export const runToolWithFunctionCall = async (
         required?: boolean;
       }
     > = {};
-    module.toolParams.forEach((item) => {
+    item.toolParams.forEach((item) => {
       properties[item.key] = {
         type: 'string',
         description: item.toolDescription || ''
@@ -70,12 +62,12 @@ export const runToolWithFunctionCall = async (
     });
 
     return {
-      name: node.nodeId,
-      description: module.intro,
+      name: item.nodeId,
+      description: item.intro,
       parameters: {
         type: 'object',
         properties,
-        required: module.toolParams.filter((item) => item.required).map((item) => item.key)
+        required: item.toolParams.filter((item) => item.required).map((item) => item.key)
       }
     };
   });
@@ -111,21 +103,21 @@ export const runToolWithFunctionCall = async (
       return streamResponse({
         res,
         detail,
-        toolModules,
+        toolNodes,
         stream: aiResponse
       });
     } else {
       const result = aiResponse as ChatCompletion;
       const function_call = result.choices?.[0]?.message?.function_call;
-      const toolModule = toolModules.find((node) => node.nodeId === function_call?.name);
+      const toolNode = toolNodes.find((node) => node.nodeId === function_call?.name);
 
       const toolCalls = function_call
         ? [
             {
               ...function_call,
               id: getNanoid(),
-              toolName: toolModule?.name,
-              toolAvatar: toolModule?.avatar
+              toolName: toolNode?.name,
+              toolAvatar: toolNode?.avatar
             }
           ]
         : [];
@@ -143,9 +135,9 @@ export const runToolWithFunctionCall = async (
       functionCalls.map(async (tool) => {
         if (!tool) return;
 
-        const toolModule = toolModules.find((node) => node.nodeId === tool.name);
+        const toolNode = toolNodes.find((node) => node.nodeId === tool.name);
 
-        if (!toolModule) return;
+        if (!toolNode) return;
 
         const startParams = (() => {
           try {
@@ -155,21 +147,25 @@ export const runToolWithFunctionCall = async (
           }
         })();
 
-        const moduleRunResponse = await dispatchWorkFlow({
+        const toolRunResponse = await dispatchWorkFlow({
           ...props,
-          runtimeNodes: runtimeNodes.map((node) => ({
-            ...node,
-            isEntry: node.nodeId === toolModule.nodeId
-          })),
-          startParams
+          runtimeNodes: runtimeNodes.map((item) =>
+            item.nodeId === toolNode.nodeId
+              ? {
+                  ...item,
+                  isEntry: true,
+                  inputs: updateToolInputValue({ params: startParams, inputs: item.inputs })
+                }
+              : item
+          )
         });
 
         const stringToolResponse = (() => {
-          if (typeof moduleRunResponse.toolResponses === 'object') {
-            return JSON.stringify(moduleRunResponse.toolResponses, null, 2);
+          if (typeof toolRunResponse.toolResponses === 'object') {
+            return JSON.stringify(toolRunResponse.toolResponses, null, 2);
           }
 
-          return moduleRunResponse.toolResponses ? String(moduleRunResponse.toolResponses) : 'none';
+          return toolRunResponse.toolResponses ? String(toolRunResponse.toolResponses) : 'none';
         })();
 
         const functionCallMsg: ChatCompletionFunctionMessageParam = {
@@ -195,14 +191,14 @@ export const runToolWithFunctionCall = async (
         }
 
         return {
-          moduleRunResponse,
+          toolRunResponse,
           functionCallMsg
         };
       })
     )
   ).filter(Boolean) as FunctionRunResponseType;
 
-  const flatToolsResponseData = toolsRunResponse.map((item) => item.moduleRunResponse).flat();
+  const flatToolsResponseData = toolsRunResponse.map((item) => item.toolRunResponse).flat();
 
   const functionCall = functionCalls[0];
   if (functionCall && !res.closed) {
@@ -232,7 +228,7 @@ export const runToolWithFunctionCall = async (
     // tool assistant
     const toolAssistants = toolsRunResponse
       .map((item) => {
-        const assistantResponses = item.moduleRunResponse.assistantResponses || [];
+        const assistantResponses = item.toolRunResponse.assistantResponses || [];
         return assistantResponses;
       })
       .flat();
@@ -300,12 +296,12 @@ export const runToolWithFunctionCall = async (
 async function streamResponse({
   res,
   detail,
-  toolModules,
+  toolNodes,
   stream
 }: {
   res: NextApiResponse;
   detail: boolean;
-  toolModules: ToolModuleItemType[];
+  toolNodes: ToolNodeItemType[];
   stream: StreamChatType;
 }) {
   const write = responseWriteController({
@@ -324,6 +320,7 @@ async function streamResponse({
     }
 
     const responseChoice = part.choices?.[0]?.delta;
+
     if (responseChoice.content) {
       const content = responseChoice?.content || '';
       textAnswer += content;
@@ -344,9 +341,9 @@ async function streamResponse({
       // 流响应中,每次只会返回一个函数，如果带了name，说明触发某个函数
       if (functionCall?.name) {
         functionId = getNanoid();
-        const toolModule = toolModules.find((node) => node.nodeId === functionCall?.name);
+        const toolNode = toolNodes.find((item) => item.nodeId === functionCall?.name);
 
-        if (toolModule) {
+        if (toolNode) {
           if (functionCall?.arguments === undefined) {
             functionCall.arguments = '';
           }
@@ -354,8 +351,8 @@ async function streamResponse({
             ...functionCall,
             id: functionId,
             name: functionCall.name,
-            toolName: toolModule.name,
-            toolAvatar: toolModule.avatar
+            toolName: toolNode.name,
+            toolAvatar: toolNode.avatar
           });
 
           if (detail) {
@@ -365,8 +362,8 @@ async function streamResponse({
               data: JSON.stringify({
                 tool: {
                   id: functionId,
-                  toolName: toolModule.name,
-                  toolAvatar: toolModule.avatar,
+                  toolName: toolNode.name,
+                  toolAvatar: toolNode.avatar,
                   functionName: functionCall.name,
                   params: functionCall.arguments,
                   response: ''

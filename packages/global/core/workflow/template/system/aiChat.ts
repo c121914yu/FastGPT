@@ -91,7 +91,7 @@ export const AiChatModule: FlowNodeTemplateType = {
       label: 'core.module.output.label.New context',
       description: 'core.module.output.description.New context',
       valueType: WorkflowIOValueTypeEnum.chatHistory,
-      type: FlowNodeOutputTypeEnum.source
+      type: FlowNodeOutputTypeEnum.static
     },
     {
       id: NodeOutputKeyEnum.answerText,
@@ -99,7 +99,7 @@ export const AiChatModule: FlowNodeTemplateType = {
       label: 'core.module.output.label.Ai response content',
       description: 'core.module.output.description.Ai response content',
       valueType: WorkflowIOValueTypeEnum.string,
-      type: FlowNodeOutputTypeEnum.source
+      type: FlowNodeOutputTypeEnum.static
     }
   ]
 };

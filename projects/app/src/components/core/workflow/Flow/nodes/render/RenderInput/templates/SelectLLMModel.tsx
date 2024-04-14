@@ -29,14 +29,14 @@ const SelectAiModelRender = ({ item, nodeId }: RenderInputProps) => {
         }
       });
     },
-    [item, nodeId]
+    [item, nodeId, onChangeNode]
   );
 
   useEffect(() => {
     if (!item.value && modelList.length > 0) {
       onChangeModel(modelList[0].model);
     }
-  }, [item.value, modelList, onChangeModel]);
+  }, []);
 
   return (
     <AIModelSelector

@@ -31,21 +31,6 @@ export const flowNode2StoreNodes = ({
     }))
     .filter((item) => item.sourceHandle && item.targetHandle);
 
-  // compute sourceNodes and targetNodes by edges
-  // formatNodes.forEach((node) => {
-  //   const sourceEdges = edges.filter((edge) => edge.target === node.nodeId);
-  //   const targetEdges = edges.filter((edge) => edge.source === node.nodeId);
-
-  //   node.sourceNodes = sourceEdges.map((item) => ({
-  //     nodeId: item.source
-  //   }));
-  //   node.targetNodes = targetEdges.map((item) => ({
-  //     nodeId: item.target,
-  //     sourceHandle: item.sourceHandle || '',
-  //     targetHandle: item.targetHandle || ''
-  //   }));
-  // });
-
   return {
     nodes: formatNodes,
     edges: formatEdges
