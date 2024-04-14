@@ -42,7 +42,7 @@ export const RunAppModule: FlowNodeTemplateType = {
       label: '新的上下文',
       description: '将该应用回复内容拼接到历史记录中，作为新的上下文返回',
       valueType: WorkflowIOValueTypeEnum.chatHistory,
-      type: FlowNodeOutputTypeEnum.source
+      type: FlowNodeOutputTypeEnum.static
     },
     {
       id: NodeOutputKeyEnum.answerText,
@@ -50,7 +50,7 @@ export const RunAppModule: FlowNodeTemplateType = {
       label: '回复的文本',
       description: '将在应用完全结束后触发',
       valueType: WorkflowIOValueTypeEnum.string,
-      type: FlowNodeOutputTypeEnum.source
+      type: FlowNodeOutputTypeEnum.static
     }
   ]
 };

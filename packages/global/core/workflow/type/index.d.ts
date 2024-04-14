@@ -30,6 +30,11 @@ export type FlowNodeCommonType = {
   // data
   inputs: FlowNodeInputItemType[];
   outputs: FlowNodeOutputItemType[];
+
+  // plugin data
+  pluginId?: string;
+  pluginType?: `${PluginTypeEnum}`;
+  parentId?: string;
 };
 
 export type FlowNodeTemplateType = FlowNodeCommonType & {
@@ -56,10 +61,6 @@ export type FlowNodeTemplateType = FlowNodeCommonType & {
   // action
   forbidDelete?: boolean; // forbid delete
   unique?: boolean;
-
-  // plugin data
-  pluginType?: `${PluginTypeEnum}`;
-  parentId?: string;
 };
 export type FlowNodeItemType = FlowNodeTemplateType & {
   nodeId: string;

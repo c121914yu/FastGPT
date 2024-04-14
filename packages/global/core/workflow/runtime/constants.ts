@@ -23,5 +23,7 @@ export enum DispatchNodeResponseKeyEnum {
 
 export const needReplaceReferenceInputTypeList = [
   FlowNodeInputTypeEnum.reference,
-  FlowNodeInputTypeEnum.settingDatasetQuotePrompt
+  FlowNodeInputTypeEnum.settingDatasetQuotePrompt,
+  FlowNodeInputTypeEnum.addInputParam,
+  FlowNodeInputTypeEnum.custom
 ] as string[];

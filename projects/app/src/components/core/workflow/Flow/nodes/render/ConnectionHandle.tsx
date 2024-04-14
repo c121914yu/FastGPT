@@ -19,15 +19,10 @@ const sourceHoverStyles = {
   transform: 'translate(5px,-50%)'
 };
 
-export const ConnectionSourceHandle = ({
-  nodeId,
-  isHover
-}: {
-  nodeId: string;
-  isHover: boolean;
-}) => {
-  const { nodes, edges, connectingEdge } = useFlowProviderStore();
+export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
   const { t } = useTranslation();
+  const { nodes, edges, connectingEdge, hoverNodeId } = useFlowProviderStore();
+  const isHover = hoverNodeId === nodeId;
 
   const node = useMemo(() => nodes.find((node) => node.data.nodeId === nodeId), [nodes, nodeId]);
 
@@ -45,16 +40,7 @@ export const ConnectionSourceHandle = ({
     const connected = edges.some((edge) => edge.sourceHandle === handleId);
 
     const { styles, showAddIcon } = (() => {
-      if (connected || connectingEdge?.handleId === handleId) {
-        return {
-          styles: {
-            ...sourceCommonStyle,
-            ...sourceConnectedStyles
-          },
-          showAddIcon: false
-        };
-      }
-      if ((isHover || node.selected) && connectingEdge?.handleId !== handleId) {
+      if (isHover || node.selected || connectingEdge?.handleId === handleId) {
         return {
           styles: {
             ...sourceCommonStyle,
@@ -63,6 +49,16 @@ export const ConnectionSourceHandle = ({
           showAddIcon: true
         };
       }
+      if (connected) {
+        return {
+          styles: {
+            ...sourceCommonStyle,
+            ...sourceConnectedStyles
+          },
+          showAddIcon: false
+        };
+      }
+
       return {
         styles: undefined,
         showAddIcon: false
@@ -131,6 +127,7 @@ export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
         type="target"
         id={handleId}
         position={Position.Left}
+        isConnectableStart={false}
       />
     );
   }, [connectingEdge, edges, node, nodeId]);

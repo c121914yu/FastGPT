@@ -27,6 +27,11 @@ import RenderInput from './render/RenderInput';
 import RenderOutput from './render/RenderOutput';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
+import {
+  FlowNodeInputItemType,
+  FlowNodeOutputItemType
+} from '@fastgpt/global/core/workflow/type/io';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 const LafAccountModal = dynamic(() => import('@/components/support/laf/LafAccountModal'));
 
@@ -136,6 +141,7 @@ const NodeLaf = (props: NodeProps<FlowNodeItemType>) => {
         });
       }
 
+      // add input variables
       const bodyParams =
         lafFunction?.request?.content?.['application/json']?.schema?.properties || {};
 
@@ -152,35 +158,29 @@ const NodeLaf = (props: NodeProps<FlowNodeItemType>) => {
         }))
       ].filter((item) => !inputs.find((input) => input.key === item.name));
 
-      // add params
       allParams.forEach((param) => {
+        const newInput: FlowNodeInputItemType = {
+          key: param.name,
+          valueType: WorkflowIOValueTypeEnum.string,
+          label: param.name,
+          renderTypeList: [FlowNodeInputTypeEnum.reference],
+          required: param.required,
+          description: param.desc || '',
+          toolDescription: param.desc || '未设置参数描述',
+          canEdit: true,
+          editField: {
+            key: true,
+            valueType: true
+          }
+        };
         onChangeNode({
           nodeId,
           type: 'addInput',
-          key: param.name,
-          value: {
-            key: param.name,
-            valueType: WorkflowIOValueTypeEnum.string,
-            label: param.name,
-            type: FlowNodeInputTypeEnum.target,
-            required: param.required,
-            description: param.desc || '',
-            toolDescription: param.desc || '未设置参数描述',
-            edit: true,
-            editField: {
-              key: true,
-              name: true,
-              description: true,
-              required: true,
-              dataType: true,
-              inputType: true,
-              isToolInput: true
-            },
-            connected: false
-          }
+          value: newInput
         });
       });
 
+      /* add output variables */
       const responseParams =
         lafFunction?.response?.default.content?.['application/json'].schema.properties || {};
       const requiredResponseParams =
@@ -195,26 +195,19 @@ const NodeLaf = (props: NodeProps<FlowNodeItemType>) => {
         }))
       ].filter((item) => !outputs.find((output) => output.key === item.name));
       allResponseParams.forEach((param) => {
+        const newOutput: FlowNodeOutputItemType = {
+          id: getNanoid(),
+          key: param.name,
+          valueType: param.valueType,
+          label: param.name,
+          type: FlowNodeOutputTypeEnum.dynamic,
+          required: param.required,
+          description: param.desc || ''
+        };
         onChangeNode({
           nodeId,
           type: 'addOutput',
-          key: param.name,
-          value: {
-            key: param.name,
-            valueType: param.valueType,
-            label: param.name,
-            type: FlowNodeOutputTypeEnum.source,
-            required: param.required,
-            description: param.desc || '',
-            edit: true,
-            editField: {
-              key: true,
-              description: true,
-              dataType: true,
-              defaultValue: true
-            },
-            targets: []
-          }
+          value: newOutput
         });
       });
     },
@@ -316,7 +309,6 @@ const RenderIO = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
       <>
         <Divider text={t('common.Input')} />
         <Container>
-          <Box mb={3}>自定义Body参数</Box>
           <RenderInput nodeId={nodeId} flowInputList={commonInputs} />
         </Container>
       </>

@@ -22,6 +22,6 @@ export type RunToolResponse = {
   completeMessages?: ChatCompletionMessageParam[];
   assistantResponses?: AIChatItemValueItemType[];
 };
-export type ToolModuleItemType = RuntimeNodeItemType & {
+export type ToolNodeItemType = RuntimeNodeItemType & {
   toolParams: RuntimeNodeItemType['inputs'];
 };

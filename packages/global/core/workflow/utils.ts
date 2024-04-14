@@ -1,4 +1,4 @@
-import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from './node/constant';
+import { FlowNodeTypeEnum } from './node/constant';
 import {
   WorkflowIOValueTypeEnum,
   NodeInputKeyEnum,
@@ -8,13 +8,12 @@ import {
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from './type/io.d';
 import { StoreNodeItemType } from './type';
 import type { VariableItemType, AppTTSConfigType, AppWhisperConfigType } from '../app/type';
-import { Input_Template_Switch } from './template/input';
 import { EditorVariablePickerType } from '../../../web/components/common/Textarea/PromptEditor/type';
 import { defaultWhisperConfig } from '../app/constants';
 
 /* module  */
 export const getGuideModule = (modules: StoreNodeItemType[]) =>
-  modules.find((item) => item.flowNodeType === FlowNodeTypeEnum.userGuide);
+  modules.find((item) => item.flowNodeType === FlowNodeTypeEnum.systemConfig);
 
 export const splitGuideModule = (guideModules?: StoreNodeItemType) => {
   const welcomeText: string =
@@ -57,53 +56,34 @@ export const getOrInitModuleInputValue = (input: FlowNodeInputItemType) => {
 };
 
 export const getModuleInputUiField = (input: FlowNodeInputItemType) => {
-  if (input.type === FlowNodeInputTypeEnum.input || input.type === FlowNodeInputTypeEnum.textarea) {
-    return {
-      placeholder: input.placeholder || input.description
-    };
-  }
+  // if (input.renderTypeList === FlowNodeInputTypeEnum.input || input.type === FlowNodeInputTypeEnum.textarea) {
+  //   return {
+  //     placeholder: input.placeholder || input.description
+  //   };
+  // }
   return {};
 };
 
 export const plugin2ModuleIO = (
   pluginId: string,
-  modules: StoreNodeItemType[]
+  nodes: StoreNodeItemType[]
 ): {
   inputs: FlowNodeInputItemType[];
   outputs: FlowNodeOutputItemType[];
 } => {
-  const pluginInput = modules.find(
-    (module) => module.flowNodeType === FlowNodeTypeEnum.pluginInput
-  );
-  const pluginOutput = modules.find(
-    (module) => module.flowNodeType === FlowNodeTypeEnum.pluginOutput
-  );
+  const pluginInput = nodes.find((node) => node.flowNodeType === FlowNodeTypeEnum.pluginInput);
+  const pluginOutput = nodes.find((node) => node.flowNodeType === FlowNodeTypeEnum.pluginOutput);
 
   return {
     inputs: pluginInput
-      ? [
-          {
-            // plugin id
-            key: NodeInputKeyEnum.pluginId,
-            type: FlowNodeInputTypeEnum.hidden,
-            label: '',
-            value: pluginId,
-            valueType: WorkflowIOValueTypeEnum.string,
-            connected: true,
-            showTargetInApp: false,
-            showTargetInPlugin: false
-          },
-          // switch
-          Input_Template_Switch,
-          ...pluginInput.inputs.map((item) => ({
-            ...item,
-            ...getModuleInputUiField(item),
-            value: getOrInitModuleInputValue(item),
-            edit: false,
-            connected: false
-          }))
-        ]
-      : [Input_Template_Switch],
+      ? pluginInput.inputs.map((item) => ({
+          ...item,
+          ...getModuleInputUiField(item),
+          value: getOrInitModuleInputValue(item),
+          edit: false,
+          connected: false
+        }))
+      : [],
     outputs: pluginOutput
       ? [
           ...pluginOutput.outputs.map((item) => ({

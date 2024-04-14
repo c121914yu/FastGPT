@@ -29,7 +29,7 @@ const defaultCreateField: EditNodeFieldType = {
   label: '',
   key: '',
   description: '',
-  inputType: FlowNodeInputTypeEnum.target,
+  inputType: FlowNodeInputTypeEnum.reference,
   valueType: WorkflowIOValueTypeEnum.string,
   required: true
 };

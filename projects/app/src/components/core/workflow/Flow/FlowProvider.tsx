@@ -23,7 +23,8 @@ import React, {
   createContext,
   useRef,
   useEffect,
-  useMemo
+  useMemo,
+  useState
 } from 'react';
 import { customAlphabet } from 'nanoid';
 import { storeEdgesRenderEdge, storeNode2FlowNode } from '@/web/core/workflow/utils';
@@ -84,6 +85,8 @@ export type useFlowProviderStoreType = {
     commonInputs: FlowNodeInputItemType[];
   };
   hasToolNode: boolean;
+  hoverNodeId: string | undefined;
+  setHoverNodeId: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const StateContext = createContext<useFlowProviderStoreType>({
@@ -156,6 +159,10 @@ const StateContext = createContext<useFlowProviderStoreType>({
   basicNodeTemplates: [],
   initData: function (e: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }): void {
     throw new Error('Function not implemented.');
+  },
+  hoverNodeId: undefined,
+  setHoverNodeId: function (value: React.SetStateAction<string | undefined>): void {
+    throw new Error('Function not implemented.');
   }
 });
 export const useFlowProviderStore = () => useContext(StateContext);
@@ -176,7 +183,8 @@ export const FlowProvider = ({
   const { toast } = useToast();
   const [nodes = [], setNodes, onNodesChange] = useNodesState<FlowNodeItemType>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [connectingEdge, setConnectingEdge] = React.useState<OnConnectStartParams>();
+  const [hoverNodeId, setHoverNodeId] = useState<string>();
+  const [connectingEdge, setConnectingEdge] = useState<OnConnectStartParams>();
 
   const hasToolNode = useMemo(() => {
     return !!nodes.find((node) => node.data.flowNodeType === FlowNodeTypeEnum.tools);
@@ -219,7 +227,6 @@ export const FlowProvider = ({
       for (const change of changes) {
         if (change.type === 'remove') {
           const node = nodes.find((n) => n.id === change.id);
-          console.log(node?.data, '======');
           if (node && node.data.forbidDelete) {
             return toast({
               status: 'warning',
@@ -232,35 +239,6 @@ export const FlowProvider = ({
     },
     [nodes, onNodesChange, t, toast]
   );
-
-  // connect
-  const onConnectStart = useCallback((event: any, params: OnConnectStartParams) => {
-    setConnectingEdge(params);
-  }, []);
-  const onConnectEnd = useCallback(() => {
-    setConnectingEdge(undefined);
-  }, []);
-  const onConnect = useCallback(
-    ({ connect }: { connect: Connection }) => {
-      setEdges((state) =>
-        addEdge(
-          {
-            ...connect,
-            type: EDGE_TYPE
-          },
-          state
-        )
-      );
-    },
-    [setEdges]
-  );
-  const onDelConnect = useCallback(
-    (id: string) => {
-      setEdges((state) => state.filter((item) => item.id !== id));
-    },
-    [setEdges]
-  );
-
   const onDelNode = useCallback(
     (nodeId: string) => {
       setNodes((state) => state.filter((item) => item.id !== nodeId));
@@ -268,7 +246,6 @@ export const FlowProvider = ({
     },
     [setEdges, setNodes]
   );
-
   /* change */
   const onChangeNode = useCallback(
     (props: FlowNodeChangeProps) => {
@@ -403,6 +380,34 @@ export const FlowProvider = ({
     [setNodes]
   );
 
+  // connect
+  const onConnectStart = useCallback((event: any, params: OnConnectStartParams) => {
+    setConnectingEdge(params);
+  }, []);
+  const onConnectEnd = useCallback(() => {
+    setConnectingEdge(undefined);
+  }, []);
+  const onConnect = useCallback(
+    ({ connect }: { connect: Connection }) => {
+      setEdges((state) =>
+        addEdge(
+          {
+            ...connect,
+            type: EDGE_TYPE
+          },
+          state
+        )
+      );
+    },
+    [setEdges]
+  );
+  const onDelConnect = useCallback(
+    (id: string) => {
+      setEdges((state) => state.filter((item) => item.id !== id));
+    },
+    [setEdges]
+  );
+
   /* If the module is connected by a tool, the tool input and the normal input are separated */
   const splitToolInputs = useCallback(
     (inputs: FlowNodeInputItemType[], nodeId: string) => {
@@ -474,6 +479,8 @@ export const FlowProvider = ({
     nodes,
     setNodes,
     onNodesChange: handleNodesChange,
+    hoverNodeId,
+    setHoverNodeId,
     basicNodeTemplates,
     // connect
     connectingEdge,

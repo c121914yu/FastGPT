@@ -12,9 +12,9 @@ import {
 import Container from '../components/Container';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
-import SourceHandle from './render/SourceHandle';
+import { SourceHandle } from './render/Handle';
 import type {
-  EditInputFieldMap,
+  EditInputFieldMapType,
   EditNodeFieldType
 } from '@fastgpt/global/core/workflow/node/type.d';
 import {
@@ -35,7 +35,7 @@ const defaultCreateField: EditNodeFieldType = {
   valueType: WorkflowIOValueTypeEnum.string,
   required: true
 };
-const createEditField: EditInputFieldMap = {
+const createEditField: EditInputFieldMapType = {
   key: true,
   name: true,
   description: true,

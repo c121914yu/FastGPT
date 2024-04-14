@@ -1,14 +1,11 @@
-import { EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
 import { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import React, { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import MyTooltip from '@/components/MyTooltip';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
-import dynamic from 'next/dynamic';
-import { useFlowProviderStore } from '../../../FlowProvider';
-
-const FieldEditModal = dynamic(() => import('../FieldEditModal'));
+import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { SourceHandle } from '../Handle';
 
 const OutputLabel = ({
   nodeId,
@@ -21,9 +18,7 @@ const OutputLabel = ({
   outputs: FlowNodeOutputItemType[];
 }) => {
   const { t } = useTranslation();
-  const { onChangeNode } = useFlowProviderStore();
   const { label = '', description } = item;
-  const [editField, setEditField] = useState<EditNodeFieldType>();
 
   return (
     <Flex
@@ -39,6 +34,9 @@ const OutputLabel = ({
         </MyTooltip>
       )}
       <Box position={'relative'}>{t(label)}</Box>
+      {item.type === FlowNodeOutputTypeEnum.source && (
+        <SourceHandle nodeId={nodeId} handleId={`${nodeId}-${outputKey}`} transformX={20} />
+      )}
     </Flex>
   );
 };

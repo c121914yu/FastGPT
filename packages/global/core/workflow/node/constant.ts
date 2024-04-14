@@ -29,11 +29,10 @@ export enum FlowNodeInputTypeEnum { // render ui
 }
 
 export enum FlowNodeOutputTypeEnum {
-  answer = 'answer',
-  source = 'source',
   hidden = 'hidden',
-
-  addOutputParam = 'addOutputParam'
+  source = 'source',
+  static = 'static',
+  dynamic = 'dynamic'
 }
 
 export enum FlowNodeTypeEnum {

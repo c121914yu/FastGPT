@@ -298,7 +298,7 @@ export function RenderHttpProps({
     ];
     const moduleVariables = formatEditorVariablePickerIcon(
       inputs
-        .filter((input) => input.edit || input.toolDescription)
+        .filter((input) => input.canEdit || input.toolDescription)
         .map((item) => ({
           key: item.key,
           label: item.label
@@ -381,6 +381,7 @@ const RenderForm = ({
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const { onChangeNode } = useFlowProviderStore();
 
   const [list, setList] = useState<PropsArrType[]>(input.value || []);
   const [updateTrigger, setUpdateTrigger] = useState(false);
@@ -554,6 +555,7 @@ const RenderJson = ({
   variables: EditorVariablePickerType[];
 }) => {
   const { t } = useTranslation();
+  const { onChangeNode } = useFlowProviderStore();
   const [_, startSts] = useTransition();
 
   return (
@@ -606,16 +608,9 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
       [NodeInputKeyEnum.httpMethod]: () => (
         <RenderHttpMethodAndUrl nodeId={nodeId} inputs={inputs} />
       ),
-      [NodeInputKeyEnum.httpHeaders]: () => (
-        <>
-          <RenderHttpProps nodeId={nodeId} inputs={inputs} />
-          <Box mt={2} transform={'translateY(10px)'}>
-            {t('core.module.Variable import')}
-          </Box>
-        </>
-      )
+      [NodeInputKeyEnum.httpHeaders]: () => <RenderHttpProps nodeId={nodeId} inputs={inputs} />
     }),
-    [inputs, nodeId, t]
+    [inputs, nodeId]
   );
 
   return (
