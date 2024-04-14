@@ -96,7 +96,6 @@ export enum NodeInputKeyEnum {
 export enum NodeOutputKeyEnum {
   // common
   userChatInput = 'userChatInput',
-  finish = 'finish',
   history = 'history',
   answerText = 'answerText', // module answer. the value will be show and save to history
   success = 'success',
@@ -109,6 +108,8 @@ export enum NodeOutputKeyEnum {
   datasetUnEmpty = 'unEmpty',
   datasetQuoteQA = 'quoteQA',
 
+  // classify
+  cqResult = 'cqResult',
   // context extract
   contextExtractFields = 'fields',
 
@@ -156,10 +157,11 @@ export const variableMap = {
 };
 
 export const DYNAMIC_INPUT_KEY = 'DYNAMIC_INPUT_KEY';
+export const DYNAMIC_INPUT_REFERENCE_KEY = 'DYNAMIC_INPUT_REFERENCE_KEY';
 
 /* run time */
 export enum RuntimeEdgeStatusEnum {
   'waiting' = 'waiting',
-  'running' = 'running',
+  'active' = 'active',
   'skipped' = 'skipped'
 }

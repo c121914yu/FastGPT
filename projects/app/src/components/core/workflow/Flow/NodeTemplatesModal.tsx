@@ -279,7 +279,7 @@ const RenderList = React.memo(function RenderList({
     async ({ template, position }: { template: FlowNodeTemplateType; position: XYPosition }) => {
       if (!reactFlowWrapper?.current) return;
 
-      const templateModule = await (async () => {
+      const templateNode = await (async () => {
         try {
           // get plugin preview module
           if (template.flowNodeType === FlowNodeTypeEnum.pluginModule) {
@@ -307,7 +307,7 @@ const RenderList = React.memo(function RenderList({
       setNodes(
         nodes.concat(
           nodeTemplate2FlowNode({
-            template: templateModule,
+            template: templateNode,
             position: { x: mouseX, y: mouseY - 20 }
           })
         )

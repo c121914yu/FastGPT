@@ -7,7 +7,7 @@ import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
 import RenderOutput from './render/RenderOutput';
 import { useTranslation } from 'next-i18next';
-import { ToolSourceHandle } from './render/ToolHandle';
+import { ToolSourceHandle } from './render/Handle/ToolHandle';
 import { Box } from '@chakra-ui/react';
 
 const NodeTools = ({ data, selected }: NodeProps<FlowNodeItemType>) => {

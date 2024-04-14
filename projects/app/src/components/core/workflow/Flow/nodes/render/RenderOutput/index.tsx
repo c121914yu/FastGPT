@@ -12,7 +12,7 @@ const RenderList: {
   Component: React.ComponentType<RenderOutputProps>;
 }[] = [
   {
-    types: [FlowNodeOutputTypeEnum.addOutputParam],
+    types: [FlowNodeOutputTypeEnum.dynamic],
     Component: dynamic(() => import('./templates/AddOutputParam'))
   }
 ];
@@ -24,57 +24,50 @@ const RenderToolOutput = ({
   nodeId: string;
   flowOutputList: FlowNodeOutputItemType[];
 }) => {
-  const sortOutputs = useMemo(
-    () =>
-      [...flowOutputList].sort((a, b) => {
-        if (a.type === FlowNodeOutputTypeEnum.addOutputParam) {
-          return 1;
-        }
-        if (b.type === FlowNodeOutputTypeEnum.addOutputParam) {
-          return -1;
-        }
+  const outputString = useMemo(() => JSON.stringify(flowOutputList), [flowOutputList]);
+  const copyOutputs = useMemo(() => {
+    const parseOutputs = JSON.parse(outputString) as FlowNodeOutputItemType[];
+    return parseOutputs;
+  }, [outputString]);
 
-        if (a.key === NodeOutputKeyEnum.finish) return -1;
-        if (b.key === NodeOutputKeyEnum.finish) return 1;
-        return 0;
-      }),
-    [flowOutputList]
-  );
+  const Render = useMemo(() => {
+    return (
+      <>
+        {copyOutputs.map((output) => {
+          const RenderComponent = (() => {
+            const Component = RenderList.find(
+              (item) => output.type && item.types.includes(output.type)
+            )?.Component;
 
-  return (
-    <>
-      {sortOutputs.map((output) => {
-        const RenderComponent = (() => {
-          const Component = RenderList.find(
-            (item) => output.type && item.types.includes(output.type)
-          )?.Component;
+            if (!Component) return null;
+            return <Component outputs={copyOutputs} item={output} nodeId={nodeId} />;
+          })();
 
-          if (!Component) return null;
-          return <Component outputs={sortOutputs} item={output} nodeId={nodeId} />;
-        })();
+          return (
+            output.type !== FlowNodeOutputTypeEnum.hidden && (
+              <Box key={output.key} _notLast={{ mb: 7 }} position={'relative'}>
+                {output.label && (
+                  <OutputLabel
+                    nodeId={nodeId}
+                    outputKey={output.key}
+                    outputs={copyOutputs}
+                    {...output}
+                  />
+                )}
+                {!!RenderComponent && (
+                  <Box mt={2} className={'nodrag'}>
+                    {RenderComponent}
+                  </Box>
+                )}
+              </Box>
+            )
+          );
+        })}
+      </>
+    );
+  }, [copyOutputs, nodeId]);
 
-        return (
-          output.type !== FlowNodeOutputTypeEnum.hidden && (
-            <Box key={output.key} _notLast={{ mb: 7 }} position={'relative'}>
-              {output.label && (
-                <OutputLabel
-                  nodeId={nodeId}
-                  outputKey={output.key}
-                  outputs={sortOutputs}
-                  {...output}
-                />
-              )}
-              {!!RenderComponent && (
-                <Box mt={2} className={'nodrag'}>
-                  {RenderComponent}
-                </Box>
-              )}
-            </Box>
-          )
-        );
-      })}
-    </>
-  );
+  return <>{Render}</>;
 };
 
 export default React.memo(RenderToolOutput);

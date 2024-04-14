@@ -17,12 +17,13 @@ import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/cons
 import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import { dispatchWorkFlow } from '../../index';
-import { DispatchToolModuleProps, RunToolResponse, ToolModuleItemType } from './type.d';
+import { DispatchToolModuleProps, RunToolResponse, ToolNodeItemType } from './type.d';
 import json5 from 'json5';
 import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
 import { getNanoid, replaceVariable } from '@fastgpt/global/common/string/tools';
 import { AIChatItemType } from '@fastgpt/global/core/chat/type';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
+import { updateToolInputValue } from './utils';
 
 type FunctionCallCompletion = {
   id: string;
@@ -35,25 +36,16 @@ type FunctionCallCompletion = {
 export const runToolWithPromptCall = async (
   props: DispatchToolModuleProps & {
     messages: ChatCompletionMessageParam[];
-    toolModules: ToolModuleItemType[];
+    toolNodes: ToolNodeItemType[];
     toolModel: LLMModelItemType;
   },
   response?: RunToolResponse
 ): Promise<RunToolResponse> => {
-  const {
-    toolModel,
-    toolModules,
-    messages,
-    res,
-    runtimeModules,
-    detail = false,
-    module,
-    stream
-  } = props;
+  const { toolModel, toolNodes, messages, res, runtimeNodes, detail = false, node, stream } = props;
   const assistantResponses = response?.assistantResponses || [];
 
   const toolsPrompt = JSON.stringify(
-    toolModules.map((module) => {
+    toolNodes.map((item) => {
       const properties: Record<
         string,
         {
@@ -62,7 +54,7 @@ export const runToolWithPromptCall = async (
           required?: boolean;
         }
       > = {};
-      module.toolParams.forEach((item) => {
+      item.toolParams.forEach((item) => {
         properties[item.key] = {
           type: 'string',
           description: item.toolDescription || ''
@@ -70,12 +62,12 @@ export const runToolWithPromptCall = async (
       });
 
       return {
-        toolId: module.moduleId,
-        description: module.intro,
+        toolId: item.nodeId,
+        description: item.intro,
         parameters: {
           type: 'object',
           properties,
-          required: module.toolParams.filter((item) => item.required).map((item) => item.key)
+          required: item.toolParams.filter((item) => item.required).map((item) => item.key)
         }
       };
     })
@@ -118,7 +110,7 @@ export const runToolWithPromptCall = async (
       const { answer } = await streamResponse({
         res,
         detail,
-        toolModules,
+        toolNodes,
         stream: aiResponse
       });
 
@@ -158,11 +150,11 @@ export const runToolWithPromptCall = async (
   const toolsRunResponse = await (async () => {
     if (!parseAnswerResult) return Promise.reject('tool run error');
 
-    const toolModule = toolModules.find((module) => module.moduleId === parseAnswerResult.name);
-    if (!toolModule) return Promise.reject('tool not found');
+    const toolNode = toolNodes.find((item) => item.nodeId === parseAnswerResult.name);
+    if (!toolNode) return Promise.reject('tool not found');
 
-    parseAnswerResult.toolName = toolModule.name;
-    parseAnswerResult.toolAvatar = toolModule.avatar;
+    parseAnswerResult.toolName = toolNode.name;
+    parseAnswerResult.toolAvatar = toolNode.avatar;
 
     // run tool flow
     const startParams = (() => {
@@ -181,8 +173,8 @@ export const runToolWithPromptCall = async (
         data: JSON.stringify({
           tool: {
             id: parseAnswerResult.id,
-            toolName: toolModule.name,
-            toolAvatar: toolModule.avatar,
+            toolName: toolNode.name,
+            toolAvatar: toolNode.avatar,
             functionName: parseAnswerResult.name,
             params: parseAnswerResult.arguments,
             response: ''
@@ -193,11 +185,15 @@ export const runToolWithPromptCall = async (
 
     const moduleRunResponse = await dispatchWorkFlow({
       ...props,
-      runtimeModules: runtimeModules.map((module) => ({
-        ...module,
-        isEntry: module.moduleId === toolModule.moduleId
-      })),
-      startParams
+      runtimeNodes: runtimeNodes.map((item) =>
+        item.nodeId === toolNode.nodeId
+          ? {
+              ...item,
+              isEntry: true,
+              inputs: updateToolInputValue({ params: startParams, inputs: item.inputs })
+            }
+          : item
+      )
     });
 
     const stringToolResponse = (() => {
@@ -233,7 +229,7 @@ export const runToolWithPromptCall = async (
   if (stream && detail) {
     responseWriteNodeStatus({
       res,
-      name: module.name
+      name: node.name
     });
   }
 
@@ -308,7 +304,7 @@ async function streamResponse({
 }: {
   res: NextApiResponse;
   detail: boolean;
-  toolModules: ToolModuleItemType[];
+  toolNodes: ToolNodeItemType[];
   stream: StreamChatType;
 }) {
   const write = responseWriteController({
@@ -326,6 +322,8 @@ async function streamResponse({
     }
 
     const responseChoice = part.choices?.[0]?.delta;
+    // console.log(responseChoice, '---===');
+
     if (responseChoice.content) {
       const content = responseChoice?.content || '';
       textAnswer += content;
@@ -360,7 +358,6 @@ async function streamResponse({
   if (!textAnswer) {
     return Promise.reject('LLM api response empty');
   }
-  // console.log(textAnswer, '---===');
   return { answer: textAnswer.trim() };
 }
 

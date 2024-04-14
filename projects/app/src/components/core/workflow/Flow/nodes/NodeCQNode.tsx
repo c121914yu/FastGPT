@@ -14,7 +14,7 @@ import MyTooltip from '@/components/MyTooltip';
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { useFlowProviderStore } from '../FlowProvider';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
-import SourceHandle from './render/SourceHandle';
+import { SourceHandle } from './render/Handle';
 
 const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
@@ -91,8 +91,9 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                     }}
                   />
                   <SourceHandle
+                    nodeId={nodeId}
                     handleId={`${nodeId}-${item.key}`}
-                    transform="translate(18px,-50%)"
+                    transformX={20}
                   />
                 </Box>
               </Box>

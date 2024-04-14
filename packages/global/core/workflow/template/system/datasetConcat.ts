@@ -18,7 +18,8 @@ import { FlowNodeInputItemType } from '../../type/io.d';
 export const getOneQuoteInputTemplate = (key = getNanoid()): FlowNodeInputItemType => ({
   ...Input_Template_Dataset_Quote,
   key,
-  renderTypeList: [FlowNodeInputTypeEnum.hidden]
+  renderTypeList: [FlowNodeInputTypeEnum.custom],
+  description: ''
 });
 
 export const DatasetConcatModule: FlowNodeTemplateType = {
@@ -39,14 +40,19 @@ export const DatasetConcatModule: FlowNodeTemplateType = {
       value: 1500,
       valueType: WorkflowIOValueTypeEnum.number
     },
-    getOneQuoteInputTemplate('defaultQuote')
+    {
+      key: 'customComponent',
+      renderTypeList: [FlowNodeInputTypeEnum.custom],
+      label: ''
+    },
+    getOneQuoteInputTemplate()
   ],
   outputs: [
     {
       id: NodeOutputKeyEnum.datasetQuoteQA,
       key: NodeOutputKeyEnum.datasetQuoteQA,
       label: 'core.module.Dataset quote.label',
-      type: FlowNodeOutputTypeEnum.source,
+      type: FlowNodeOutputTypeEnum.static,
       valueType: WorkflowIOValueTypeEnum.datasetQuote
     }
   ]

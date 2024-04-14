@@ -14,7 +14,7 @@ import { getPreviewPluginModule } from '@/web/core/plugin/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { LOGO_ICON } from '@fastgpt/global/common/system/constants';
-import { ToolTargetHandle } from './ToolHandle';
+import { ToolTargetHandle } from './Handle/ToolHandle';
 import { useEditTextarea } from '@fastgpt/web/hooks/useEditTextarea';
 import { ConnectionSourceHandle, ConnectionTargetHandle } from './ConnectionHandle';
 
@@ -45,9 +45,15 @@ const NodeCard = (props: Props) => {
 
   const { toast } = useToast();
   const { setLoading } = useSystemStore();
-  const { nodes, splitToolInputs, onDelNode, onCopyNode, onResetNode, onChangeNode } =
-    useFlowProviderStore();
-  const [isHover, setIsHover] = useState(false);
+  const {
+    nodes,
+    splitToolInputs,
+    onDelNode,
+    onCopyNode,
+    onResetNode,
+    onChangeNode,
+    setHoverNodeId
+  } = useFlowProviderStore();
 
   // edit intro
   const { onOpenModal: onOpenIntroModal, EditModal: EditIntroModal } = useEditTextarea({
@@ -232,6 +238,7 @@ const NodeCard = (props: Props) => {
     onResetNode,
     toast,
     onOpenModal,
+    onChangeNode,
     onCopyNode,
     onDelNode,
     onOpenIntroModal
@@ -263,13 +270,13 @@ const NodeCard = (props: Props) => {
           display: 'flex'
         }
       }}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      onMouseEnter={() => setHoverNodeId(nodeId)}
+      onMouseLeave={() => setHoverNodeId(undefined)}
     >
       {Header}
       {children}
       {RenderModal}
-      <ConnectionSourceHandle nodeId={nodeId} isHover={isHover} />
+      <ConnectionSourceHandle nodeId={nodeId} />
       <ConnectionTargetHandle nodeId={nodeId} />
     </Box>
   );

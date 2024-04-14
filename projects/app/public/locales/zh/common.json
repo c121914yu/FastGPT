@@ -929,7 +929,7 @@
       "inputType": {
         "chat history": "历史记录",
         "dynamicTargetInput": "动态外部数据",
-        "input": "输入框",
+        "input": "单行输入框",
         "selectApp": "应用选择",
         "selectDataset": "知识库选择",
         "selectLLMModel": "对话模型选择",
@@ -1055,10 +1055,16 @@
       "Init History Error": "初始化聊天记录失败"
     },
     "workflow": {
+      "Add variable": "新增变量",
       "Can not delete node": "该节点不允许删除",
       "Change input type tip": "修改输入类型会清空已填写的值，请确认！",
+      "Custom variable": "自定义变量",
+      "Dataset quote": "知识库引用",
       "chat": {
         "Quote prompt": "引用提示词"
+      },
+      "inputType": {
+        "Reference": "变量引用"
       }
     }
   },

@@ -10,11 +10,32 @@ import {
 } from '@fastgpt/global/core/workflow/runtime/type';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 
+export const filterWorkflowEdges = (edges: RuntimeEdgeItemType[]) => {
+  return edges.filter(
+    (edge) =>
+      edge.sourceHandle !== NodeOutputKeyEnum.selectedTools &&
+      edge.targetHandle !== NodeOutputKeyEnum.selectedTools
+  );
+};
+export const filterToolNodeIdByEdges = ({
+  nodeId,
+  edges
+}: {
+  nodeId: string;
+  edges: RuntimeEdgeItemType[];
+}) => {
+  return edges
+    .filter(
+      (edge) => edge.source === nodeId && edge.targetHandle === NodeOutputKeyEnum.selectedTools
+    )
+    .map((edge) => edge.target);
+};
+
 /* 
   区分普通连线和递归连线
   递归连线：可以通过往上查询 nodes，最终追溯到自身
 */
-export const splitEdges = ({
+export const splitEdges2WorkflowEdges = ({
   edges,
   allEdges,
   currentNode
@@ -43,26 +64,26 @@ export const splitEdges = ({
   return { commonEdges, recursiveEdges };
 };
 
-export const checkTheModuleConnectedByTool = (
-  modules: StoreNodeItemType[],
-  module: StoreNodeItemType
-) => {
-  let sign = false;
-  const toolModules = modules.filter((item) => item.flowNodeType === FlowNodeTypeEnum.tools);
+// export const checkTheModuleConnectedByTool = (
+//   modules: StoreNodeItemType[],
+//   node: StoreNodeItemType
+// ) => {
+//   let sign = false;
+//   const toolModules = modules.filter((item) => item.flowNodeType === FlowNodeTypeEnum.tools);
 
-  toolModules.forEach((item) => {
-    const toolOutput = item.outputs.find(
-      (output) => output.key === NodeOutputKeyEnum.selectedTools
-    );
-    toolOutput?.targets.forEach((target) => {
-      if (target.moduleId === module.moduleId) {
-        sign = true;
-      }
-    });
-  });
+//   toolModules.forEach((item) => {
+//     const toolOutput = item.outputs.find(
+//       (output) => output.key === NodeOutputKeyEnum.selectedTools
+//     );
+//     toolOutput?.targets.forEach((target) => {
+//       if (target.moduleId === node.moduleId) {
+//         sign = true;
+//       }
+//     });
+//   });
 
-  return sign;
-};
+//   return sign;
+// };
 
 export const getHistories = (history?: ChatItemType[] | number, histories: ChatItemType[] = []) => {
   if (!history) return [];

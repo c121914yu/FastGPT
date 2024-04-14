@@ -21,23 +21,23 @@ import {
   FlowNodeInputTypeEnum,
   FlowNodeOutputTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
-import { EditInputFieldMap, EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type.d';
+import {
+  EditInputFieldMapType,
+  EditNodeFieldType
+} from '@fastgpt/global/core/workflow/node/type.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MySelect from '@fastgpt/web/components/common/MySelect';
 
 const FieldEditModal = ({
   editField = {
-    key: true,
-    name: true,
-    description: true,
-    dataType: true
+    key: true
   },
   defaultField,
   keys = [],
   onClose,
   onSubmit
 }: {
-  editField?: EditInputFieldMap;
+  editField?: EditInputFieldMapType;
   defaultField: EditNodeFieldType;
   keys: string[];
   onClose: () => void;
@@ -51,8 +51,8 @@ const FieldEditModal = ({
 
   const inputTypeList = [
     {
-      label: t('core.module.inputType.target'),
-      value: FlowNodeInputTypeEnum.target,
+      label: t('core.workflow.inputType.Reference'),
+      value: FlowNodeInputTypeEnum.reference,
       valueType: WorkflowIOValueTypeEnum.string
     },
     {
@@ -94,21 +94,22 @@ const FieldEditModal = ({
     }));
 
   const { register, getValues, setValue, handleSubmit, watch } = useForm<EditNodeFieldType>({
-    defaultValues: defaultField
+    defaultValues: {
+      ...defaultField,
+      valueType: defaultField.valueType ?? WorkflowIOValueTypeEnum.string
+    }
   });
   const inputType = watch('inputType');
-  const outputType = watch('outputType');
   const required = watch('required');
   const [refresh, setRefresh] = useState(false);
 
   const showDataTypeSelect = useMemo(() => {
-    if (!editField.dataType) return false;
+    if (!editField.valueType) return false;
     if (inputType === undefined) return true;
-    if (inputType === FlowNodeInputTypeEnum.target) return true;
-    if (outputType === FlowNodeOutputTypeEnum.source) return true;
+    if (inputType === FlowNodeInputTypeEnum.reference) return true;
 
     return false;
-  }, [editField.dataType, inputType, outputType]);
+  }, [editField.valueType, inputType]);
 
   const showRequired = useMemo(() => {
     if (inputType === FlowNodeInputTypeEnum.addInputParam) return false;
@@ -139,12 +140,19 @@ const FieldEditModal = ({
           title: t('core.module.edit.Field Already Exist')
         });
       }
+      if (showDataTypeSelect && !data.valueType) {
+        return toast({
+          status: 'warning',
+          title: '数据类型不能为空'
+        });
+      }
+
       onSubmit({
         data,
         changeKey: !keys.includes(data.key)
       });
     },
-    [isCreate, keys, onSubmit, t, toast]
+    [isCreate, keys, onSubmit, showDataTypeSelect, t, toast]
   );
   const onSubmitError = useCallback(
     (e: Object) => {

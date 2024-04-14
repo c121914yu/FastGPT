@@ -28,12 +28,16 @@ import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/const
 import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { useFlowProviderStore } from '../../FlowProvider';
 import RenderToolInput from '../render/RenderToolInput';
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
+import {
+  FlowNodeInputItemType,
+  FlowNodeOutputItemType
+} from '@fastgpt/global/core/workflow/type/io.d';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
-  const { inputs, outputs, moduleId } = data;
+  const { inputs, outputs, nodeId } = data;
   const { splitToolInputs, onChangeNode } = useFlowProviderStore();
-  const { toolInputs, commonInputs } = splitToolInputs(inputs, moduleId);
+  const { toolInputs, commonInputs } = splitToolInputs(inputs, nodeId);
   const { t } = useTranslation();
   const [editExtractFiled, setEditExtractField] = useState<ContextExtractAgentItemType>();
 
@@ -101,7 +105,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
                           cursor={'pointer'}
                           onClick={() => {
                             onChangeNode({
-                              moduleId,
+                              nodeId,
                               type: 'updateInput',
                               key: NodeInputKeyEnum.extractKeys,
                               value: {
@@ -111,7 +115,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
                             });
 
                             onChangeNode({
-                              moduleId,
+                              nodeId,
                               type: 'delOutput',
                               key: item.key
                             });
@@ -127,7 +131,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
         </Box>
       )
     }),
-    [moduleId, t]
+    [nodeId, t]
   );
 
   return (
@@ -136,7 +140,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
         <>
           <Divider text={t('core.module.tool.Tool input')} />
           <Container>
-            <RenderToolInput moduleId={moduleId} inputs={toolInputs} />
+            <RenderToolInput nodeId={nodeId} inputs={toolInputs} />
           </Container>
         </>
       )}
@@ -144,7 +148,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
         <Divider text={t('common.Input')} />
         <Container>
           <RenderInput
-            moduleId={moduleId}
+            nodeId={nodeId}
             flowInputList={commonInputs}
             CustomComponent={CustomComponent}
           />
@@ -153,7 +157,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
       <>
         <Divider text={t('common.Output')} />
         <Container>
-          <RenderOutput moduleId={moduleId} flowOutputList={outputs} />
+          <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
         </Container>
       </>
 
@@ -172,7 +176,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
               : extracts.concat(data);
 
             onChangeNode({
-              moduleId,
+              nodeId,
               type: 'updateInput',
               key: NodeInputKeyEnum.extractKeys,
               value: {
@@ -181,12 +185,12 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
               }
             });
 
-            const newOutput = {
+            const newOutput: FlowNodeOutputItemType = {
+              id: getNanoid(),
               key: data.key,
               label: `提取结果-${data.desc}`,
               valueType: WorkflowIOValueTypeEnum.string,
-              type: FlowNodeOutputTypeEnum.source,
-              targets: []
+              type: FlowNodeOutputTypeEnum.static
             };
 
             if (exists) {
@@ -194,7 +198,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
                 const output = outputs.find((output) => output.key === data.key);
                 // update
                 onChangeNode({
-                  moduleId,
+                  nodeId,
                   type: 'updateOutput',
                   key: data.key,
                   value: {
@@ -204,7 +208,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
                 });
               } else {
                 onChangeNode({
-                  moduleId,
+                  nodeId,
                   type: 'replaceOutput',
                   key: editExtractFiled.key,
                   value: newOutput
@@ -212,7 +216,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
               }
             } else {
               onChangeNode({
-                moduleId,
+                nodeId,
                 type: 'addOutput',
                 value: newOutput
               });

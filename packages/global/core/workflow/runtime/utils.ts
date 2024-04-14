@@ -49,19 +49,19 @@ export const getReferenceVariableValue = ({
   nodes: RuntimeNodeItemType[];
 }) => {
   if (!Array.isArray(value) || value.length !== 2) {
-    return;
+    return value;
   }
   const sourceNodeId = value[0];
-  const key = value[1];
+  const outputId = value[1];
   const node = nodes.find((node) => node.nodeId === sourceNodeId);
 
   if (!node) {
-    return;
+    return value;
   }
 
-  const outputValue = node.outputs.find((output) => output.key === key)?.value;
+  const outputValue = node.outputs.find((output) => output.id === outputId)?.value;
 
-  return outputValue;
+  return outputValue ?? value;
 };
 
 export const textAdaptGptResponse = ({

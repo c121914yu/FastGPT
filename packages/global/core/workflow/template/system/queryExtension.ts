@@ -53,7 +53,7 @@ export const AiQueryExtension: FlowNodeTemplateType = {
       label: 'core.module.output.label.query extension result',
       description: 'core.module.output.description.query extension result',
       valueType: WorkflowIOValueTypeEnum.string,
-      type: FlowNodeOutputTypeEnum.source
+      type: FlowNodeOutputTypeEnum.static
     }
   ]
 };

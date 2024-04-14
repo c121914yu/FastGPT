@@ -18,7 +18,7 @@ export const ContextExtractModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.contentExtract,
   templateType: FlowNodeTemplateTypeEnum.functionCall,
   flowNodeType: FlowNodeTypeEnum.contentExtract,
-  sourceHandle: getHandleConfig(false, true, false, false),
+  sourceHandle: getHandleConfig(false, false, false, false),
   targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/extract.png',
   name: '文本内容提取',
@@ -80,7 +80,7 @@ export const ContextExtractModule: FlowNodeTemplateType = {
       label: '完整提取结果',
       description: '一个 JSON 字符串，例如：{"name:":"YY","Time":"2023/7/2 18:00"}',
       valueType: WorkflowIOValueTypeEnum.string,
-      type: FlowNodeOutputTypeEnum.source
+      type: FlowNodeOutputTypeEnum.static
     }
   ]
 };

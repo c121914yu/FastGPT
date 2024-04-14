@@ -7,7 +7,7 @@ export const StopToolNode: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.stopTool,
   templateType: FlowNodeTemplateTypeEnum.functionCall,
   flowNodeType: FlowNodeTypeEnum.stopTool,
-  sourceHandle: getHandleConfig(false, true, false, false),
+  sourceHandle: getHandleConfig(false, false, false, false),
   targetHandle: getHandleConfig(false, false, false, true),
   avatar: '/imgs/workflow/toolStop.svg',
   name: '工具调用终止',

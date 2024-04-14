@@ -1,10 +1,12 @@
 import { LLMModelTypeEnum } from '../../ai/constants';
 import { WorkflowIOValueTypeEnum, NodeInputKeyEnum, NodeOutputKeyEnum } from '../constants';
 import { FlowNodeInputTypeEnum, FlowNodeOutputTypeEnum } from '../node/constant';
+import { EditInputFieldMapType } from '../node/type';
 
 export type FlowNodeInputItemType = {
   selectedTypeIndex?: number;
   renderTypeList: `${FlowNodeInputTypeEnum}`[]; // Node Type. Decide on a render style
+
   key: `${NodeInputKeyEnum}` | string;
   valueType?: `${WorkflowIOValueTypeEnum}`; // data type
   value?: any;
@@ -13,10 +15,15 @@ export type FlowNodeInputItemType = {
   required?: boolean;
   toolDescription?: string; // If this field is not empty, it is entered as a tool
 
+  // edit
+  canEdit?: boolean;
+  editField?: EditInputFieldMapType; // 添加
+
   // hideInApp?: boolean;
   // hideInPlugin?: boolean;
 
   // render components params
+  referencePlaceholder?: string;
   placeholder?: string; // input,textarea
 
   list?: { label: string; value: any }[]; // select
@@ -41,3 +48,5 @@ export type FlowNodeOutputItemType = {
   description?: string;
   defaultValue?: any;
 };
+
+export type ReferenceValueProps = [string, string | undefined];

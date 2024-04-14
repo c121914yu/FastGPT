@@ -16,8 +16,8 @@ import { computedNodeInputReference } from '@/web/core/workflow/utils';
 import { useTranslation } from 'next-i18next';
 import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import EmptyTip from '@/components/EmptyTip';
+import type { ReferenceValueProps } from '@fastgpt/global/core/workflow/type/io';
 
-type ReferenceValueProps = [string, string | undefined];
 type SelectProps = {
   value?: ReferenceValueProps;
   placeholder?: string;
@@ -106,7 +106,7 @@ const Reference = ({ item, nodeId }: RenderInputProps) => {
 
   return (
     <ReferSelector
-      placeholder={'选择引用变量'}
+      placeholder={t(item.referencePlaceholder || '选择引用变量')}
       list={referenceList}
       value={formatValue}
       onSelect={onSelect}
@@ -116,7 +116,7 @@ const Reference = ({ item, nodeId }: RenderInputProps) => {
 
 export default React.memo(Reference);
 
-const ReferSelector = ({ placeholder, value, list, onSelect, styles }: SelectProps) => {
+export const ReferSelector = ({ placeholder, value, list, onSelect, styles }: SelectProps) => {
   const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<any>();
@@ -173,19 +173,7 @@ const ReferSelector = ({ placeholder, value, list, onSelect, styles }: SelectPro
   }, [isOpen]);
 
   return (
-    <Box
-      ref={ref}
-      position={'relative'}
-      onMouseEnter={() => {
-        onOpen();
-        clearTimeout(closeTimer.current);
-      }}
-      onMouseLeave={() => {
-        closeTimer.current = setTimeout(() => {
-          onClose();
-        }, 100);
-      }}
-    >
+    <Box ref={ref} position={'relative'}>
       <Button
         justifyContent={'space-between'}
         width={'100%'}
@@ -251,7 +239,7 @@ const ReferSelector = ({ placeholder, value, list, onSelect, styles }: SelectPro
                 {item.label}
               </Flex>
             ))}
-            {list.length === 0 && <EmptyTip text={'没有可用的变量'} pt={1} />}
+            {list.length === 0 && <EmptyTip text={'没有可用的变量'} pt={1} pb={3} />}
           </Box>
           {selectedNodeReference?.[0] && selectedNodeChildren.length > 0 && (
             <Box borderLeft={'base'} pl={2} flex={'1 0 0'}>
