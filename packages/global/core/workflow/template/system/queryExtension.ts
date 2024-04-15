@@ -22,8 +22,8 @@ export const AiQueryExtension: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.chatNode,
   templateType: FlowNodeTemplateTypeEnum.other,
   flowNodeType: FlowNodeTypeEnum.queryExtension,
-  sourceHandle: getHandleConfig(false, true, false, false),
-  targetHandle: getHandleConfig(false, false, false, true),
+  sourceHandle: getHandleConfig(true, true, true, true),
+  targetHandle: getHandleConfig(true, true, true, true),
   avatar: '/imgs/workflow/cfr.svg',
   name: '问题优化',
   intro:

@@ -6,9 +6,11 @@ import type {
 import type { Edge, Node, XYPosition } from 'reactflow';
 import { customAlphabet } from 'nanoid';
 import { moduleTemplatesFlat } from '@fastgpt/global/core/workflow/template/constants';
-import { EDGE_TYPE } from '@fastgpt/global/core/workflow/node/constant';
+import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { EmptyNode } from '@fastgpt/global/core/workflow/template/system/emptyNode';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { getGlobalVariableNode } from '../../../../../../packages/global/core/workflow/template/system/globalVariable';
+import { splitGuideModule } from '@fastgpt/global/core/workflow/utils';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
 export const nodeTemplate2FlowNode = ({
@@ -111,6 +113,14 @@ export const computedNodeInputReference = ({
     });
   };
   findSourceNode(nodeId);
+
+  // add system config node
+  const systemConfigNode = nodes.find(
+    (item) => item.flowNodeType === FlowNodeTypeEnum.systemConfig
+  );
+  if (systemConfigNode) {
+    sourceNodes.push(systemConfigNode);
+  }
 
   return sourceNodes;
 };

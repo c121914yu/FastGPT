@@ -6,7 +6,7 @@ export const sourceCommonStyle = {
   borderWidth: '3px',
   transition: 'all 0.1s'
 };
-export const sourceConnectedStyle = {
+export const handleConnectedStyle = {
   borderColor: lowPrimaryColor,
   width: '14px',
   height: '14px'

@@ -7,6 +7,5 @@ export const connectionLineStyle: React.CSSProperties = {
 };
 
 export const defaultEdgeOptions: DefaultEdgeOptions = {
-  animated: true,
   zIndex: 0
 };

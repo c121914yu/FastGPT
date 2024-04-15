@@ -10,12 +10,22 @@ import { useTranslation } from 'next-i18next';
 import { Connection, Handle, Position } from 'reactflow';
 import { useFlowProviderStore } from '../../../FlowProvider';
 import { useCallback } from 'react';
+import { getHandleId } from '@fastgpt/global/core/workflow/utils';
 
 type ToolHandleProps = BoxProps & {
   nodeId: string;
 };
 export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
   const { t } = useTranslation();
+  const { connectingEdge, edges } = useFlowProviderStore();
+  const handleId = NodeOutputKeyEnum.selectedTools;
+
+  const connected = edges.some((edge) => edge.targetHandle === handleId);
+  // if top handle is connected, return null
+  const hidden =
+    !connected &&
+    (connectingEdge?.handleId !== NodeOutputKeyEnum.selectedTools ||
+      edges.some((edge) => edge.targetHandle === getHandleId(nodeId, 'target', 'top')));
 
   const valueTypeMap = FlowValueTypeMap[WorkflowIOValueTypeEnum.tools];
 
@@ -33,7 +43,7 @@ export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
           backgroundColor: 'transparent'
         }}
         type="target"
-        id={NodeOutputKeyEnum.selectedTools}
+        id={handleId}
         position={Position.Top}
       >
         <Box
@@ -42,6 +52,7 @@ export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
           border={'4px solid #5E8FFF'}
           transform={'translate(-40%,-30%) rotate(45deg)'}
           pointerEvents={'none'}
+          visibility={hidden ? 'hidden' : 'visible'}
         />
       </Handle>
     </MyTooltip>
@@ -50,31 +61,20 @@ export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
 
 export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
   const { t } = useTranslation();
-  const { setEdges, nodes } = useFlowProviderStore();
+  const { setEdges } = useFlowProviderStore();
 
   const valueTypeMap = FlowValueTypeMap[WorkflowIOValueTypeEnum.tools];
 
   /* onConnect edge, delete tool input and switch */
-  const onConnect = useCallback(
-    (e: Connection) => {
-      const node = nodes.find((node) => node.id === e.target);
-      if (!node) return;
-      const inputs = node.data.inputs;
-      setEdges((edges) =>
-        edges.filter((edge) => {
-          const input = inputs.find((input) => input.key === edge.targetHandle);
-          if (
-            edge.target === node.id &&
-            (!!input?.toolDescription || input?.key === NodeInputKeyEnum.switch)
-          ) {
-            return false;
-          }
-          return true;
-        })
-      );
-    },
-    [nodes, setEdges]
-  );
+  const onConnect = useCallback((e: Connection) => {
+    setEdges((edges) =>
+      edges.filter((edge) => {
+        if (edge.target !== e.target) return true;
+        if (edge.targetHandle === NodeOutputKeyEnum.selectedTools) return true;
+        return false;
+      })
+    );
+  }, []);
 
   return (
     <MyTooltip

@@ -114,6 +114,7 @@ export const iconPaths = {
   'core/modules/teamPlugin': () => import('./icons/core/modules/teamPlugin.svg'),
   'core/modules/variable': () => import('./icons/core/modules/variable.svg'),
   'core/modules/welcomeText': () => import('./icons/core/modules/welcomeText.svg'),
+  'core/workflow/closeEdge': () => import('./icons/core/workflow/closeEdge.svg'),
   date: () => import('./icons/date.svg'),
   delete: () => import('./icons/delete.svg'),
   edit: () => import('./icons/edit.svg'),
