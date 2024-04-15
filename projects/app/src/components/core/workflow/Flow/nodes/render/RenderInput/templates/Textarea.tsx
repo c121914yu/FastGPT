@@ -11,12 +11,12 @@ import {
 
 const TextareaRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
-  const { nodes, onChangeNode } = useFlowProviderStore();
+  const { nodeList, onChangeNode } = useFlowProviderStore();
 
   // get variable
   const variables = useMemo(() => {
     const globalVariables = formatEditorVariablePickerIcon(
-      splitGuideModule(getGuideModule(nodes.map((node) => node.data)))?.variableModules || []
+      splitGuideModule(getGuideModule(nodeList))?.variableModules || []
     );
     const moduleVariables = formatEditorVariablePickerIcon(
       inputs
@@ -34,7 +34,7 @@ const TextareaRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
     ];
 
     return [...globalVariables, ...moduleVariables, ...systemVariables];
-  }, [inputs, nodes, t]);
+  }, [nodeList, inputs, t]);
 
   const onChange = useCallback(
     (e: string) => {
@@ -51,16 +51,20 @@ const TextareaRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
     [item, nodeId, onChangeNode]
   );
 
-  return (
-    <PromptEditor
-      variables={variables}
-      title={t(item.label)}
-      h={150}
-      placeholder={t(item.placeholder || '')}
-      value={item.value}
-      onChange={onChange}
-    />
-  );
+  const Render = useMemo(() => {
+    return (
+      <PromptEditor
+        variables={variables}
+        title={t(item.label)}
+        h={150}
+        placeholder={t(item.placeholder || '')}
+        value={item.value}
+        onChange={onChange}
+      />
+    );
+  }, [item.label, item.placeholder, item.value, onChange, t, variables]);
+
+  return Render;
 };
 
 export default React.memo(TextareaRender);

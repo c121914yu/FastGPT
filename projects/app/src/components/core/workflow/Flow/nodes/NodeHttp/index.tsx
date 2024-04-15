@@ -123,7 +123,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         }
       });
     },
-    [nodeId, requestUrl]
+    [nodeId, onChangeNode, requestUrl]
   );
   const onBlurUrl = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,70 +180,86 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
     [inputs, nodeId, requestUrl, t, toast]
   );
 
-  return (
-    <Box>
-      <Box mb={2} display={'flex'} justifyContent={'space-between'}>
-        <Box>{t('core.module.Http request settings')}</Box>
-        <Button variant={'link'} onClick={onOpenCurl}>
-          {t('core.module.http.curl import')}
-        </Button>
-      </Box>
-      <Flex alignItems={'center'} className="nodrag">
-        <MySelect
-          h={'34px'}
-          w={'88px'}
-          bg={'myGray.50'}
-          width={'100%'}
-          value={requestMethods?.value}
-          list={[
-            {
-              label: 'GET',
-              value: 'GET'
-            },
-            {
-              label: 'POST',
-              value: 'POST'
-            },
-            {
-              label: 'PUT',
-              value: 'PUT'
-            },
-            {
-              label: 'DELETE',
-              value: 'DELETE'
-            },
-            {
-              label: 'PATCH',
-              value: 'PATCH'
-            }
-          ]}
-          onchange={(e) => {
-            onChangeNode({
-              nodeId,
-              type: 'updateInput',
-              key: NodeInputKeyEnum.httpMethod,
-              value: {
-                ...requestMethods,
-                value: e
+  const Render = useMemo(() => {
+    return (
+      <Box>
+        <Box mb={2} display={'flex'} justifyContent={'space-between'}>
+          <Box>{t('core.module.Http request settings')}</Box>
+          <Button variant={'link'} onClick={onOpenCurl}>
+            {t('core.module.http.curl import')}
+          </Button>
+        </Box>
+        <Flex alignItems={'center'} className="nodrag">
+          <MySelect
+            h={'34px'}
+            w={'88px'}
+            bg={'myGray.50'}
+            width={'100%'}
+            value={requestMethods?.value}
+            list={[
+              {
+                label: 'GET',
+                value: 'GET'
+              },
+              {
+                label: 'POST',
+                value: 'POST'
+              },
+              {
+                label: 'PUT',
+                value: 'PUT'
+              },
+              {
+                label: 'DELETE',
+                value: 'DELETE'
+              },
+              {
+                label: 'PATCH',
+                value: 'PATCH'
               }
-            });
-          }}
-        />
-        <Input
-          flex={'1 0 0'}
-          ml={2}
-          h={'34px'}
-          value={requestUrl?.value}
-          placeholder={t('core.module.input.label.Http Request Url')}
-          fontSize={'xs'}
-          onChange={onChangeUrl}
-          onBlur={onBlurUrl}
-        />
-      </Flex>
+            ]}
+            onchange={(e) => {
+              onChangeNode({
+                nodeId,
+                type: 'updateInput',
+                key: NodeInputKeyEnum.httpMethod,
+                value: {
+                  ...requestMethods,
+                  value: e
+                }
+              });
+            }}
+          />
+          <Input
+            flex={'1 0 0'}
+            ml={2}
+            h={'34px'}
+            value={requestUrl?.value}
+            placeholder={t('core.module.input.label.Http Request Url')}
+            fontSize={'xs'}
+            onChange={onChangeUrl}
+            onBlur={onBlurUrl}
+          />
+        </Flex>
 
-      {isOpenCurl && <CurlImportModal nodeId={nodeId} inputs={inputs} onClose={onCloseCurl} />}
-    </Box>
-  );
+        {isOpenCurl && <CurlImportModal nodeId={nodeId} inputs={inputs} onClose={onCloseCurl} />}
+      </Box>
+    );
+  }, [
+    inputs,
+    isOpenCurl,
+    nodeId,
+    onBlurUrl,
+    onChangeNode,
+    onChangeUrl,
+    onCloseCurl,
+    onOpenCurl,
+    requestMethods,
+    requestUrl?.value,
+    t
+  ]);
+
+  return Render;
 });
 
 export function RenderHttpProps({
@@ -314,59 +330,85 @@ export function RenderHttpProps({
       .join('\n');
   }, [variables]);
 
-  return (
-    <Box>
-      <Flex alignItems={'center'} mb={2}>
-        {t('core.module.Http request props')}
-        <MyTooltip label={t('core.module.http.Props tip', { variable: variableText })}>
-          <QuestionOutlineIcon ml={1} />
-        </MyTooltip>
-      </Flex>
-      <Tabs
-        list={[
-          { label: <RenderPropsItem text="Params" num={paramsLength} />, id: TabEnum.params },
-          ...(!['GET', 'DELETE'].includes(requestMethods)
-            ? [
-                {
-                  label: (
-                    <Flex alignItems={'center'}>
-                      Body
-                      {jsonBody?.value && <Box ml={1}>✅</Box>}
-                    </Flex>
-                  ),
-                  id: TabEnum.body
-                }
-              ]
-            : []),
-          { label: <RenderPropsItem text="Headers" num={headersLength} />, id: TabEnum.headers }
-        ]}
-        activeId={selectedTab}
-        onChange={(e) => setSelectedTab(e as any)}
-      />
-      {params &&
-        headers &&
-        jsonBody &&
-        {
-          [TabEnum.params]: (
-            <RenderForm
-              nodeId={nodeId}
-              input={params}
-              variables={variables}
-              tabType={TabEnum.params}
-            />
-          ),
-          [TabEnum.body]: <RenderJson nodeId={nodeId} variables={variables} input={jsonBody} />,
-          [TabEnum.headers]: (
-            <RenderForm
-              nodeId={nodeId}
-              input={headers}
-              variables={variables}
-              tabType={TabEnum.headers}
-            />
-          )
-        }[selectedTab]}
-    </Box>
+  const stringifyVariables = useMemo(
+    () =>
+      JSON.stringify({
+        params,
+        headers,
+        jsonBody,
+        variables
+      }),
+    [headers, jsonBody, params, variables]
   );
+
+  const Render = useMemo(() => {
+    console.log(11111);
+    const { params, headers, jsonBody, variables } = JSON.parse(stringifyVariables);
+    return (
+      <Box>
+        <Flex alignItems={'center'} mb={2}>
+          {t('core.module.Http request props')}
+          <MyTooltip label={t('core.module.http.Props tip', { variable: variableText })}>
+            <QuestionOutlineIcon ml={1} />
+          </MyTooltip>
+        </Flex>
+        <Tabs
+          list={[
+            { label: <RenderPropsItem text="Params" num={paramsLength} />, id: TabEnum.params },
+            ...(!['GET', 'DELETE'].includes(requestMethods)
+              ? [
+                  {
+                    label: (
+                      <Flex alignItems={'center'}>
+                        Body
+                        {jsonBody?.value && <Box ml={1}>✅</Box>}
+                      </Flex>
+                    ),
+                    id: TabEnum.body
+                  }
+                ]
+              : []),
+            { label: <RenderPropsItem text="Headers" num={headersLength} />, id: TabEnum.headers }
+          ]}
+          activeId={selectedTab}
+          onChange={(e) => setSelectedTab(e as any)}
+        />
+        {params &&
+          headers &&
+          jsonBody &&
+          {
+            [TabEnum.params]: (
+              <RenderForm
+                nodeId={nodeId}
+                input={params}
+                variables={variables}
+                tabType={TabEnum.params}
+              />
+            ),
+            [TabEnum.body]: <RenderJson nodeId={nodeId} variables={variables} input={jsonBody} />,
+            [TabEnum.headers]: (
+              <RenderForm
+                nodeId={nodeId}
+                input={headers}
+                variables={variables}
+                tabType={TabEnum.headers}
+              />
+            )
+          }[selectedTab]}
+      </Box>
+    );
+  }, [
+    headersLength,
+    nodeId,
+    paramsLength,
+    requestMethods,
+    selectedTab,
+    stringifyVariables,
+    t,
+    variableText
+  ]);
+
+  return Render;
 }
 const RenderForm = ({
   nodeId,

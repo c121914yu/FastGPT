@@ -52,18 +52,22 @@ const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
     return JSON.stringify(item.value, null, 2);
   }, [item.value]);
 
-  return (
-    <JSONEditor
-      bg={'myGray.50'}
-      placeholder={item.placeholder}
-      resize
-      value={value}
-      onChange={(e) => {
-        update(e);
-      }}
-      variables={variables}
-    />
-  );
+  const Render = useMemo(() => {
+    return (
+      <JSONEditor
+        bg={'myGray.50'}
+        placeholder={item.placeholder}
+        resize
+        value={value}
+        onChange={(e) => {
+          update(e);
+        }}
+        variables={variables}
+      />
+    );
+  }, [item.placeholder, update, value, variables]);
+
+  return Render;
 };
 
 export default React.memo(JsonEditor);

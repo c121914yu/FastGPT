@@ -36,12 +36,12 @@ type SelectProps = {
 
 const Reference = ({ item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
-  const { onChangeNode, nodes, edges } = useFlowProviderStore();
+  const { onChangeNode, nodeList, edges } = useFlowProviderStore();
 
   const referenceList = useMemo(() => {
     const sourceNodes = computedNodeInputReference({
       nodeId,
-      nodes: nodes.map((node) => node.data),
+      nodes: nodeList,
       edges: edges
     });
 
@@ -76,7 +76,7 @@ const Reference = ({ item, nodeId }: RenderInputProps) => {
       .filter((item) => item.children.length > 0);
 
     return list;
-  }, [edges, item.valueType, nodeId, nodes, t]);
+  }, [edges, item.valueType, nodeId, nodeList, t]);
 
   const onSelect = useCallback(
     (e: any) => {
@@ -105,14 +105,18 @@ const Reference = ({ item, nodeId }: RenderInputProps) => {
     return undefined;
   }, [item.value]);
 
-  return (
-    <ReferSelector
-      placeholder={t(item.referencePlaceholder || '选择引用变量')}
-      list={referenceList}
-      value={formatValue}
-      onSelect={onSelect}
-    />
-  );
+  const Render = useMemo(() => {
+    return (
+      <ReferSelector
+        placeholder={t(item.referencePlaceholder || '选择引用变量')}
+        list={referenceList}
+        value={formatValue}
+        onSelect={onSelect}
+      />
+    );
+  }, [formatValue, item.referencePlaceholder, onSelect, referenceList, t]);
+
+  return Render;
 };
 
 export default React.memo(Reference);

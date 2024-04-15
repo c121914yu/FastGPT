@@ -53,7 +53,7 @@ const NodeTemplatesModal = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   const [currentParent, setCurrentParent] = useState<RenderListProps['currentParent']>();
   const [searchKey, setSearchKey] = useState('');
   const { feConfigs } = useSystemStore();
-  const { nodes, basicNodeTemplates } = useFlowProviderStore();
+  const { nodes, basicNodeTemplates, hasToolNode } = useFlowProviderStore();
 
   const {
     systemNodeTemplates,
@@ -62,8 +62,6 @@ const NodeTemplatesModal = ({ isOpen, onClose }: ModuleTemplateListProps) => {
     loadTeamPluginNodeTemplates
   } = useWorkflowStore();
   const [templateType, setTemplateType] = useState(TemplateTypeEnum.basic);
-
-  const hasToolNode = nodes.some((node) => node.data.flowNodeType === FlowNodeTypeEnum.tools);
 
   const templatesString = useMemo(() => {
     const map = {
