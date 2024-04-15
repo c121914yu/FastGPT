@@ -58,12 +58,6 @@ const SelectDatasetRender = ({ inputs = [], item, nodeId }: RenderInputProps) =>
     return maxTokens;
   }, [llmModelList, nodes]);
 
-  const {
-    isOpen: isOpenDatasetPrams,
-    onOpen: onOpenDatasetParams,
-    onClose: onCloseDatasetParams
-  } = useDisclosure();
-
   useQuery(['loadAllDatasets'], loadAllDatasets);
 
   useEffect(() => {
@@ -78,90 +72,78 @@ const SelectDatasetRender = ({ inputs = [], item, nodeId }: RenderInputProps) =>
     });
   }, [inputs]);
 
-  return (
-    <>
-      <Grid gridTemplateColumns={'repeat(2, minmax(0, 1fr))'} gridGap={4} minW={'350px'} w={'100%'}>
-        <Button
-          h={'36px'}
-          leftIcon={<MyIcon name={'common/selectLight'} w={'14px'} />}
-          onClick={onOpenDatasetSelect}
+  const Render = useMemo(() => {
+    return (
+      <>
+        <Grid
+          gridTemplateColumns={'repeat(2, minmax(0, 1fr))'}
+          gridGap={4}
+          minW={'350px'}
+          w={'100%'}
         >
-          {t('common.Choose')}
-        </Button>
-        {/* <Button
-          h={'36px'}
-          variant={'whitePrimary'}
-          leftIcon={<MyIcon name={'common/settingLight'} w={'14px'} />}
-          onClick={onOpenDatasetParams}
-        >
-          {t('core.dataset.search.Params Setting')}
-        </Button> */}
-        {selectedDatasets.map((item) => (
-          <Flex
-            key={item._id}
-            alignItems={'center'}
+          <Button
             h={'36px'}
-            border={theme.borders.base}
-            px={2}
-            borderRadius={'md'}
+            leftIcon={<MyIcon name={'common/selectLight'} w={'14px'} />}
+            onClick={onOpenDatasetSelect}
           >
-            <Avatar src={item.avatar} w={'24px'}></Avatar>
-            <Box
-              ml={3}
-              flex={'1 0 0'}
-              w={0}
-              className="textEllipsis"
-              fontWeight={'bold'}
-              fontSize={['md', 'lg', 'xl']}
+            {t('common.Choose')}
+          </Button>
+          {selectedDatasets.map((item) => (
+            <Flex
+              key={item._id}
+              alignItems={'center'}
+              h={'36px'}
+              border={theme.borders.base}
+              px={2}
+              borderRadius={'md'}
             >
-              {item.name}
-            </Box>
-          </Flex>
-        ))}
-      </Grid>
-      {isOpenDatasetSelect && (
-        <DatasetSelectModal
-          isOpen={isOpenDatasetSelect}
-          defaultSelectedDatasets={item.value}
-          onChange={(e) => {
-            onChangeNode({
-              nodeId,
-              key: item.key,
-              type: 'updateInput',
-              value: {
-                ...item,
-                value: e
-              }
-            });
-          }}
-          onClose={onCloseDatasetSelect}
-        />
-      )}
-      {/* {isOpenDatasetPrams && (
-        <DatasetParamsModal
-          {...data}
-          maxTokens={tokenLimit}
-          onClose={onCloseDatasetParams}
-          onSuccess={(e) => {
-            for (let key in e) {
-              const item = inputs.find((input) => input.key === key);
-              if (!item) continue;
+              <Avatar src={item.avatar} w={'24px'}></Avatar>
+              <Box
+                ml={3}
+                flex={'1 0 0'}
+                w={0}
+                className="textEllipsis"
+                fontWeight={'bold'}
+                fontSize={['md', 'lg', 'xl']}
+              >
+                {item.name}
+              </Box>
+            </Flex>
+          ))}
+        </Grid>
+        {isOpenDatasetSelect && (
+          <DatasetSelectModal
+            isOpen={isOpenDatasetSelect}
+            defaultSelectedDatasets={item.value}
+            onChange={(e) => {
               onChangeNode({
                 nodeId,
+                key: item.key,
                 type: 'updateInput',
-                key,
                 value: {
                   ...item,
-                  //@ts-ignore
-                  value: e[key]
+                  value: e
                 }
               });
-            }
-          }}
-        />
-      )} */}
-    </>
-  );
+            }}
+            onClose={onCloseDatasetSelect}
+          />
+        )}
+      </>
+    );
+  }, [
+    isOpenDatasetSelect,
+    item,
+    nodeId,
+    onChangeNode,
+    onCloseDatasetSelect,
+    onOpenDatasetSelect,
+    selectedDatasets,
+    t,
+    theme.borders.base
+  ]);
+
+  return Render;
 };
 
 export default React.memo(SelectDatasetRender);

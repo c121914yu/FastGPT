@@ -81,8 +81,6 @@ type Props = {
   mb?: number;
 };
 const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 6 }: Props) => {
-  const { mode } = useFlowProviderStore();
-
   const copyInputs = useMemo(() => JSON.stringify(flowInputList), [flowInputList]);
   const filterInputs = useMemo(() => {
     const parseSortInputs = JSON.parse(copyInputs) as FlowNodeInputItemType[];
@@ -109,7 +107,7 @@ const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 6 }: Props) 
 
       return renderType !== FlowNodeInputTypeEnum.hidden ? (
         <Box key={input.key} _notLast={{ mb }} position={'relative'}>
-          {!!input.label && <InputLabel nodeId={nodeId} mode={mode} input={input} />}
+          {!!input.label && <InputLabel nodeId={nodeId} input={input} />}
           {!!RenderComponent && (
             <Box mt={1} className={'nodrag'}>
               {RenderComponent}
@@ -118,7 +116,7 @@ const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 6 }: Props) 
         </Box>
       ) : null;
     });
-  }, [filterInputs, mb, memoCustomComponent, mode, nodeId]);
+  }, [filterInputs, mb, memoCustomComponent, nodeId]);
 
   return <>{Render}</>;
 };

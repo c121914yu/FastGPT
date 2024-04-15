@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { RenderInputProps } from '../type';
 import {
   NumberDecrementStepper,
@@ -12,30 +12,34 @@ import { useFlowProviderStore } from '../../../../FlowProvider';
 const NumberInputRender = ({ item, nodeId }: RenderInputProps) => {
   const { onChangeNode } = useFlowProviderStore();
 
-  return (
-    <NumberInput
-      defaultValue={item.value}
-      min={item.min}
-      max={item.max}
-      onChange={(e) => {
-        onChangeNode({
-          nodeId,
-          type: 'updateInput',
-          key: item.key,
-          value: {
-            ...item,
-            value: Number(e)
-          }
-        });
-      }}
-    >
-      <NumberInputField />
-      <NumberInputStepper>
-        <NumberIncrementStepper />
-        <NumberDecrementStepper />
-      </NumberInputStepper>
-    </NumberInput>
-  );
+  const Render = useMemo(() => {
+    return (
+      <NumberInput
+        defaultValue={item.value}
+        min={item.min}
+        max={item.max}
+        onChange={(e) => {
+          onChangeNode({
+            nodeId,
+            type: 'updateInput',
+            key: item.key,
+            value: {
+              ...item,
+              value: Number(e)
+            }
+          });
+        }}
+      >
+        <NumberInputField />
+        <NumberInputStepper>
+          <NumberIncrementStepper />
+          <NumberDecrementStepper />
+        </NumberInputStepper>
+      </NumberInput>
+    );
+  }, [item, nodeId, onChangeNode]);
+
+  return Render;
 };
 
 export default React.memo(NumberInputRender);

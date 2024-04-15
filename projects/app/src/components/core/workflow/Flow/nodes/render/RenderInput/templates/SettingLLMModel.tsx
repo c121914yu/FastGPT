@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import type { RenderInputProps } from '../type';
 import { useFlowProviderStore } from '../../../../FlowProvider';
 import type { SettingAIDataType } from '@fastgpt/global/core/app/type.d';
@@ -28,23 +28,31 @@ const SelectAiModelRender = ({ item, inputs = [], nodeId }: RenderInputProps) =>
     [inputs, nodeId, onChangeNode]
   );
 
-  const llmModelData: SettingAIDataType = {
-    model: inputs.find((input) => input.key === NodeInputKeyEnum.aiModel)?.value ?? '',
-    maxToken: inputs.find((input) => input.key === NodeInputKeyEnum.aiChatMaxToken)?.value ?? 2048,
-    temperature:
-      inputs.find((input) => input.key === NodeInputKeyEnum.aiChatTemperature)?.value ?? 1,
-    isResponseAnswerText: inputs.find(
-      (input) => input.key === NodeInputKeyEnum.aiChatIsResponseText
-    )?.value
-  };
-
-  return (
-    <SettingLLMModel
-      llmModelType={item.llmModelType}
-      defaultData={llmModelData}
-      onChange={onChangeModel}
-    />
+  const llmModelData: SettingAIDataType = useMemo(
+    () => ({
+      model: inputs.find((input) => input.key === NodeInputKeyEnum.aiModel)?.value ?? '',
+      maxToken:
+        inputs.find((input) => input.key === NodeInputKeyEnum.aiChatMaxToken)?.value ?? 2048,
+      temperature:
+        inputs.find((input) => input.key === NodeInputKeyEnum.aiChatTemperature)?.value ?? 1,
+      isResponseAnswerText: inputs.find(
+        (input) => input.key === NodeInputKeyEnum.aiChatIsResponseText
+      )?.value
+    }),
+    [inputs]
   );
+
+  const Render = useMemo(() => {
+    return (
+      <SettingLLMModel
+        llmModelType={item.llmModelType}
+        defaultData={llmModelData}
+        onChange={onChangeModel}
+      />
+    );
+  }, [item.llmModelType, llmModelData, onChangeModel]);
+
+  return Render;
 };
 
 export default React.memo(SelectAiModelRender);

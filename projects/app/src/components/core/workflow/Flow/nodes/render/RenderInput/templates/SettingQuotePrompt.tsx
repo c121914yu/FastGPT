@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import type { RenderInputProps } from '../type';
 import { Box, BoxProps, Button, Flex, ModalFooter, useDisclosure } from '@chakra-ui/react';
 import { useFlowProviderStore } from '../../../../FlowProvider';
@@ -24,11 +24,19 @@ import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import Reference from './Reference';
 
+const LabelStyles: BoxProps = {
+  fontSize: ['sm', 'md']
+};
+const selectTemplateBtn: BoxProps = {
+  color: 'primary.500',
+  cursor: 'pointer'
+};
+
 const SettingQuotePrompt = (props: RenderInputProps) => {
   const { inputs = [], nodeId } = props;
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { nodes, onChangeNode } = useFlowProviderStore();
+  const { nodeList, onChangeNode } = useFlowProviderStore();
   const { watch, setValue, handleSubmit } = useForm({
     defaultValues: {
       quoteTemplate: inputs.find((input) => input.key === 'quoteTemplate')?.value || '',
@@ -40,7 +48,7 @@ const SettingQuotePrompt = (props: RenderInputProps) => {
 
   const variables = useMemo(() => {
     const globalVariables = formatEditorVariablePickerIcon(
-      splitGuideModule(getGuideModule(nodes.map((node) => node.data)))?.variableModules || []
+      splitGuideModule(getGuideModule(nodeList))?.variableModules || []
     );
 
     const systemVariables = [
@@ -51,203 +59,226 @@ const SettingQuotePrompt = (props: RenderInputProps) => {
     ];
 
     return [...globalVariables, ...systemVariables];
-  }, [nodes, t]);
+  }, [nodeList, t]);
 
   const [selectTemplateData, setSelectTemplateData] = useState<{
     title: string;
     templates: PromptTemplateItem[];
   }>();
-  const quoteTemplateVariables = (() => [
-    {
-      key: 'q',
-      label: 'q',
-      icon: 'core/app/simpleMode/variable'
-    },
-    {
-      key: 'a',
-      label: 'a',
-      icon: 'core/app/simpleMode/variable'
-    },
-    {
-      key: 'source',
-      label: t('core.dataset.search.Source name'),
-      icon: 'core/app/simpleMode/variable'
-    },
-    {
-      key: 'sourceId',
-      label: t('core.dataset.search.Source id'),
-      icon: 'core/app/simpleMode/variable'
-    },
-    {
-      key: 'index',
-      label: t('core.dataset.search.Quote index'),
-      icon: 'core/app/simpleMode/variable'
-    },
-    ...variables
-  ])();
-  const quotePromptVariables = (() => [
-    {
-      key: 'quote',
-      label: t('core.app.Quote templates'),
-      icon: 'core/app/simpleMode/variable'
-    },
-    {
-      key: 'question',
-      label: t('core.module.input.label.user question'),
-      icon: 'core/app/simpleMode/variable'
-    },
-    ...variables
-  ])();
+  const quoteTemplateVariables = useMemo(
+    () => [
+      {
+        key: 'q',
+        label: 'q',
+        icon: 'core/app/simpleMode/variable'
+      },
+      {
+        key: 'a',
+        label: 'a',
+        icon: 'core/app/simpleMode/variable'
+      },
+      {
+        key: 'source',
+        label: t('core.dataset.search.Source name'),
+        icon: 'core/app/simpleMode/variable'
+      },
+      {
+        key: 'sourceId',
+        label: t('core.dataset.search.Source id'),
+        icon: 'core/app/simpleMode/variable'
+      },
+      {
+        key: 'index',
+        label: t('core.dataset.search.Quote index'),
+        icon: 'core/app/simpleMode/variable'
+      },
+      ...variables
+    ],
+    [t, variables]
+  );
+  const quotePromptVariables = useMemo(
+    () => [
+      {
+        key: 'quote',
+        label: t('core.app.Quote templates'),
+        icon: 'core/app/simpleMode/variable'
+      },
+      {
+        key: 'question',
+        label: t('core.module.input.label.user question'),
+        icon: 'core/app/simpleMode/variable'
+      },
+      ...variables
+    ],
+    [t, variables]
+  );
 
-  const LabelStyles: BoxProps = {
-    fontSize: ['sm', 'md']
-  };
-  const selectTemplateBtn: BoxProps = {
-    color: 'primary.500',
-    cursor: 'pointer'
-  };
+  const onSubmit = useCallback(
+    (data: { quoteTemplate: string; quotePrompt: string }) => {
+      const quoteTemplateInput = inputs.find(
+        (input) => input.key === NodeInputKeyEnum.aiChatQuoteTemplate
+      );
+      const quotePromptInput = inputs.find(
+        (input) => input.key === NodeInputKeyEnum.aiChatQuotePrompt
+      );
+      if (quoteTemplateInput) {
+        onChangeNode({
+          nodeId,
+          type: 'updateInput',
+          key: quoteTemplateInput.key,
+          value: {
+            ...quoteTemplateInput,
+            value: data.quoteTemplate
+          }
+        });
+      }
+      if (quotePromptInput) {
+        onChangeNode({
+          nodeId,
+          type: 'updateInput',
+          key: quotePromptInput.key,
+          value: {
+            ...quotePromptInput,
+            value: data.quotePrompt
+          }
+        });
+      }
+      onClose();
+    },
+    [inputs, nodeId, onChangeNode, onClose]
+  );
 
-  const onSubmit = (data: { quoteTemplate: string; quotePrompt: string }) => {
-    const quoteTemplateInput = inputs.find(
-      (input) => input.key === NodeInputKeyEnum.aiChatQuoteTemplate
-    );
-    const quotePromptInput = inputs.find(
-      (input) => input.key === NodeInputKeyEnum.aiChatQuotePrompt
-    );
-    if (quoteTemplateInput) {
-      onChangeNode({
-        nodeId,
-        type: 'updateInput',
-        key: quoteTemplateInput.key,
-        value: {
-          ...quoteTemplateInput,
-          value: data.quoteTemplate
-        }
-      });
-    }
-    if (quotePromptInput) {
-      onChangeNode({
-        nodeId,
-        type: 'updateInput',
-        key: quotePromptInput.key,
-        value: {
-          ...quotePromptInput,
-          value: data.quotePrompt
-        }
-      });
-    }
-    onClose();
-  };
+  const Render = useMemo(() => {
+    return (
+      <>
+        <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
+          <Box position={'relative'}>{t('core.workflow.chat.Quote prompt')}</Box>
+          <MyTooltip label={t('core.module.Setting quote prompt')}>
+            <MyIcon
+              ml={1}
+              name={'common/settingLight'}
+              w={'14px'}
+              cursor={'pointer'}
+              onClick={onOpen}
+            />
+          </MyTooltip>
+        </Flex>
+        <Box mt={1}>
+          <Reference {...props} />
+        </Box>
 
-  return (
-    <>
-      <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-        <Box position={'relative'}>{t('core.workflow.chat.Quote prompt')}</Box>
-        <MyTooltip label={t('core.module.Setting quote prompt')}>
-          <MyIcon
-            ml={1}
-            name={'common/settingLight'}
-            w={'14px'}
-            cursor={'pointer'}
-            onClick={onOpen}
-          />
-        </MyTooltip>
-      </Flex>
-      <Box mt={1}>
-        <Reference {...props} />
-      </Box>
+        <MyModal
+          isOpen={isOpen}
+          iconSrc={'modal/edit'}
+          title={t('core.module.Quote prompt setting')}
+          w={'600px'}
+        >
+          <ModalBody>
+            <Box>
+              <Flex {...LabelStyles} mb={1}>
+                {t('core.app.Quote templates')}
+                <MyTooltip
+                  label={t('template.Quote Content Tip', {
+                    default: Prompt_QuoteTemplateList[0].value
+                  })}
+                  forceShow
+                >
+                  <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
+                </MyTooltip>
+                <Box flex={1} />
+                <Box
+                  {...selectTemplateBtn}
+                  onClick={() =>
+                    setSelectTemplateData({
+                      title: t('core.app.Select quote template'),
+                      templates: Prompt_QuoteTemplateList
+                    })
+                  }
+                >
+                  {t('common.Select template')}
+                </Box>
+              </Flex>
 
-      <MyModal
-        isOpen={isOpen}
-        iconSrc={'modal/edit'}
-        title={t('core.module.Quote prompt setting')}
-        w={'600px'}
-      >
-        <ModalBody>
-          <Box>
-            <Flex {...LabelStyles} mb={1}>
-              {t('core.app.Quote templates')}
-              <MyTooltip
-                label={t('template.Quote Content Tip', {
+              <PromptEditor
+                variables={quoteTemplateVariables}
+                h={160}
+                title={t('core.app.Quote templates')}
+                placeholder={t('template.Quote Content Tip', {
                   default: Prompt_QuoteTemplateList[0].value
                 })}
-                forceShow
-              >
-                <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
-              </MyTooltip>
-              <Box flex={1} />
-              <Box
-                {...selectTemplateBtn}
-                onClick={() =>
-                  setSelectTemplateData({
-                    title: t('core.app.Select quote template'),
-                    templates: Prompt_QuoteTemplateList
-                  })
-                }
-              >
-                {t('common.Select template')}
-              </Box>
-            </Flex>
+                value={aiChatQuoteTemplate}
+                onChange={(e) => {
+                  setValue('quoteTemplate', e);
+                }}
+              />
+            </Box>
+            <Box mt={4}>
+              <Flex {...LabelStyles} mb={1}>
+                {t('core.app.Quote prompt')}
+                <MyTooltip
+                  label={t('template.Quote Prompt Tip', {
+                    default: Prompt_QuotePromptList[0].value
+                  })}
+                  forceShow
+                >
+                  <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
+                </MyTooltip>
+              </Flex>
+              <PromptEditor
+                variables={quotePromptVariables}
+                title={t('core.app.Quote prompt')}
+                h={280}
+                placeholder={t('template.Quote Prompt Tip', {
+                  default: Prompt_QuotePromptList[0].value
+                })}
+                value={aiChatQuotePrompt}
+                onChange={(e) => {
+                  setValue('quotePrompt', e);
+                }}
+              />
+            </Box>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant={'whiteBase'} mr={2} onClick={onClose}>
+              {t('common.Close')}
+            </Button>
+            <Button onClick={handleSubmit(onSubmit)}>{t('common.Confirm')}</Button>
+          </ModalFooter>
+        </MyModal>
+        {!!selectTemplateData && (
+          <PromptTemplate
+            title={selectTemplateData.title}
+            templates={selectTemplateData.templates}
+            onClose={() => setSelectTemplateData(undefined)}
+            onSuccess={(e) => {
+              const quoteVal = e.value;
+              const promptVal = Prompt_QuotePromptList.find(
+                (item) => item.title === e.title
+              )?.value;
+              setValue('quoteTemplate', quoteVal);
+              setValue('quotePrompt', promptVal);
+            }}
+          />
+        )}
+      </>
+    );
+  }, [
+    aiChatQuotePrompt,
+    aiChatQuoteTemplate,
+    handleSubmit,
+    isOpen,
+    onClose,
+    onOpen,
+    onSubmit,
+    props,
+    quotePromptVariables,
+    quoteTemplateVariables,
+    selectTemplateData,
+    setValue,
+    t
+  ]);
 
-            <PromptEditor
-              variables={quoteTemplateVariables}
-              h={160}
-              title={t('core.app.Quote templates')}
-              placeholder={t('template.Quote Content Tip', {
-                default: Prompt_QuoteTemplateList[0].value
-              })}
-              value={aiChatQuoteTemplate}
-              onChange={(e) => {
-                setValue('quoteTemplate', e);
-              }}
-            />
-          </Box>
-          <Box mt={4}>
-            <Flex {...LabelStyles} mb={1}>
-              {t('core.app.Quote prompt')}
-              <MyTooltip
-                label={t('template.Quote Prompt Tip', { default: Prompt_QuotePromptList[0].value })}
-                forceShow
-              >
-                <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
-              </MyTooltip>
-            </Flex>
-            <PromptEditor
-              variables={quotePromptVariables}
-              title={t('core.app.Quote prompt')}
-              h={280}
-              placeholder={t('template.Quote Prompt Tip', {
-                default: Prompt_QuotePromptList[0].value
-              })}
-              value={aiChatQuotePrompt}
-              onChange={(e) => {
-                setValue('quotePrompt', e);
-              }}
-            />
-          </Box>
-        </ModalBody>
-        <ModalFooter>
-          <Button variant={'whiteBase'} mr={2} onClick={onClose}>
-            {t('common.Close')}
-          </Button>
-          <Button onClick={handleSubmit(onSubmit)}>{t('common.Confirm')}</Button>
-        </ModalFooter>
-      </MyModal>
-      {!!selectTemplateData && (
-        <PromptTemplate
-          title={selectTemplateData.title}
-          templates={selectTemplateData.templates}
-          onClose={() => setSelectTemplateData(undefined)}
-          onSuccess={(e) => {
-            const quoteVal = e.value;
-            const promptVal = Prompt_QuotePromptList.find((item) => item.title === e.title)?.value;
-            setValue('quoteTemplate', quoteVal);
-            setValue('quotePrompt', promptVal);
-          }}
-        />
-      )}
-    </>
-  );
+  return Render;
 };
 
 export default React.memo(SettingQuotePrompt);

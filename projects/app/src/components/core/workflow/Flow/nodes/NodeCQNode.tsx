@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { NodeProps } from 'reactflow';
+import { NodeProps, Position } from 'reactflow';
 import { Box, Button, Flex, Textarea } from '@chakra-ui/react';
 import NodeCard from './render/NodeCard';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
@@ -93,7 +93,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                   <SourceHandle
                     nodeId={nodeId}
                     handleId={`${nodeId}-${item.key}`}
-                    position={'right'}
+                    position={Position.Right}
                     translate={[20, 0]}
                   />
                 </Box>

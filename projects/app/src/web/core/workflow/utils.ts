@@ -142,6 +142,10 @@ export const checkWorkflowNodeAndConnection = ({
 
     if (
       inputs.some((input) => {
+        if (input.required) {
+          if (Array.isArray(input.value) && input.value.length === 0) return true;
+          if (input.value === undefined) return true;
+        }
         const renderType = input.renderTypeList[input.selectedTypeIndex || 0];
         if (renderType === FlowNodeInputTypeEnum.reference && input.required) {
           if (!input.value || !Array.isArray(input.value) || input.value.length !== 2) {

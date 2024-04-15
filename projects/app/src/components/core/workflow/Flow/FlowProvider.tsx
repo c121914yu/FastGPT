@@ -22,7 +22,6 @@ import React, {
   useCallback,
   createContext,
   useRef,
-  useEffect,
   useMemo,
   useState
 } from 'react';
@@ -33,19 +32,11 @@ import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
 type OnChange<ChangesType> = (changes: ChangesType[]) => void;
-type requestEventType =
-  | 'onChangeNode'
-  | 'onCopyNode'
-  | 'onResetNode'
-  | 'onDelNode'
-  | 'onDelConnect'
-  | 'setNodes';
 
 export type useFlowProviderStoreType = {
   // connect
@@ -58,6 +49,7 @@ export type useFlowProviderStoreType = {
   mode: 'app' | 'plugin';
   filterAppIds: string[];
   nodes: Node<FlowNodeItemType, string | undefined>[];
+  nodeList: FlowNodeItemType[];
   setNodes: Dispatch<SetStateAction<Node<FlowNodeItemType, string | undefined>[]>>;
   onNodesChange: OnChange<NodeChange>;
   edges: Edge<any>[];
@@ -167,7 +159,8 @@ const StateContext = createContext<useFlowProviderStoreType>({
   },
   onUpdateNodeError: function (nodeId: string, isError: Boolean): void {
     throw new Error('Function not implemented.');
-  }
+  },
+  nodeList: []
 });
 export const useFlowProviderStore = () => useContext(StateContext);
 
@@ -189,6 +182,12 @@ export const FlowProvider = ({
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [hoverNodeId, setHoverNodeId] = useState<string>();
   const [connectingEdge, setConnectingEdge] = useState<OnConnectStartParams>();
+
+  const stringifyNodes = useMemo(() => JSON.stringify(nodes.map((node) => node.data)), [nodes]);
+  const nodeList = useMemo(
+    () => JSON.parse(stringifyNodes) as FlowNodeItemType[],
+    [stringifyNodes]
+  );
 
   const hasToolNode = useMemo(() => {
     return !!nodes.find((node) => node.data.flowNodeType === FlowNodeTypeEnum.tools);
@@ -226,23 +225,20 @@ export const FlowProvider = ({
   );
 
   // node
-  const handleNodesChange = useCallback(
-    (changes: NodeChange[]) => {
-      for (const change of changes) {
-        if (change.type === 'remove') {
-          const node = nodes.find((n) => n.id === change.id);
-          if (node && node.data.forbidDelete) {
-            return toast({
-              status: 'warning',
-              title: t('core.workflow.Can not delete node')
-            });
-          }
+  const handleNodesChange = useCallback((changes: NodeChange[]) => {
+    for (const change of changes) {
+      if (change.type === 'remove') {
+        const node = nodes.find((n) => n.id === change.id);
+        if (node && node.data.forbidDelete) {
+          return toast({
+            status: 'warning',
+            title: t('core.workflow.Can not delete node')
+          });
         }
       }
-      onNodesChange(changes);
-    },
-    [nodes, onNodesChange, t, toast]
-  );
+    }
+    onNodesChange(changes);
+  }, []);
   const onDelNode = useCallback(
     (nodeId: string) => {
       setNodes((state) => state.filter((item) => item.id !== nodeId));
@@ -494,6 +490,7 @@ export const FlowProvider = ({
     onEdgesChange,
     // nodes
     nodes,
+    nodeList,
     setNodes,
     onDelNode,
     onNodesChange: handleNodesChange,
