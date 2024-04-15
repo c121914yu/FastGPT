@@ -17,6 +17,7 @@ import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import MyMenu from '@fastgpt/web/components/common/MyMenu';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { checkWorkflowNodeAndConnection } from '@/web/core/workflow/utils';
 
 const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 
@@ -48,14 +49,23 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
   });
   const { isOpen: isOpenImport, onOpen: onOpenImport, onClose: onCloseImport } = useDisclosure();
   const { updateAppDetail } = useAppStore();
-  const { nodes, edges } = useFlowProviderStore();
+  const { nodes, edges, onUpdateNodeError } = useFlowProviderStore();
   const [isSaving, setIsSaving] = useState(false);
 
   const flowData2StoreDataAndCheck = useCallback(async () => {
-    const data = flowNode2StoreNodes({ nodes, edges });
+    const checkResults = checkWorkflowNodeAndConnection({ nodes, edges });
+    if (!checkResults) {
+      const storeNodes = flowNode2StoreNodes({ nodes, edges });
 
-    return data;
-  }, [edges, nodes]);
+      return storeNodes;
+    } else {
+      checkResults.forEach((nodeId) => onUpdateNodeError(nodeId, true));
+      toast({
+        status: 'warning',
+        title: t('core.workflow.Check Failed')
+      });
+    }
+  }, [edges, nodes, onUpdateNodeError, t, toast]);
 
   const onclickSave = useCallback(
     async ({ nodes, edges }: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => {

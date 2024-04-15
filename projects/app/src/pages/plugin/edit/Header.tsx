@@ -14,6 +14,7 @@ import { useToast } from '@fastgpt/web/hooks/useToast';
 import MyMenu from '@fastgpt/web/components/common/MyMenu';
 import { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { checkWorkflowNodeAndConnection } from '@/web/core/workflow/utils';
 
 const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 const PreviewPlugin = dynamic(() => import('./Preview'));
@@ -25,15 +26,24 @@ const Header = ({ plugin, onClose }: Props) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { copyData } = useCopyData();
-  const { nodes, edges } = useFlowProviderStore();
+  const { nodes, edges, onUpdateNodeError } = useFlowProviderStore();
   const { isOpen: isOpenImport, onOpen: onOpenImport, onClose: onCloseImport } = useDisclosure();
   const [previewModules, setPreviewModules] = React.useState<StoreNodeItemType[]>();
 
   const flowData2StoreDataAndCheck = useCallback(async () => {
-    const storeNodes = flowNode2StoreNodes({ nodes, edges });
+    const checkResults = checkWorkflowNodeAndConnection({ nodes, edges });
+    if (!checkResults) {
+      const storeNodes = flowNode2StoreNodes({ nodes, edges });
 
-    return storeNodes;
-  }, [edges, nodes]);
+      return storeNodes;
+    } else {
+      checkResults.forEach((nodeId) => onUpdateNodeError(nodeId, true));
+      toast({
+        status: 'warning',
+        title: t('core.workflow.Check Failed')
+      });
+    }
+  }, [edges, nodes, onUpdateNodeError, t, toast]);
 
   const { mutate: onclickSave, isLoading } = useRequest({
     mutationFn: ({ nodes, edges }: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => {

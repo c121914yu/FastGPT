@@ -87,6 +87,7 @@ export type useFlowProviderStoreType = {
   hasToolNode: boolean;
   hoverNodeId: string | undefined;
   setHoverNodeId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  onUpdateNodeError: (node: string, isError: Boolean) => void;
 };
 
 const StateContext = createContext<useFlowProviderStoreType>({
@@ -162,6 +163,9 @@ const StateContext = createContext<useFlowProviderStoreType>({
   },
   hoverNodeId: undefined,
   setHoverNodeId: function (value: React.SetStateAction<string | undefined>): void {
+    throw new Error('Function not implemented.');
+  },
+  onUpdateNodeError: function (nodeId: string, isError: Boolean): void {
     throw new Error('Function not implemented.');
   }
 });
@@ -346,7 +350,6 @@ export const FlowProvider = ({
     },
     [onDelEdge, setNodes, toast]
   );
-
   const onCopyNode = useCallback(
     (nodeId: string) => {
       setNodes((nodes) => {
@@ -375,6 +378,20 @@ export const FlowProvider = ({
             }
           })
         );
+      });
+    },
+    [setNodes]
+  );
+  const onUpdateNodeError = useCallback(
+    (nodeId: string, isError: Boolean) => {
+      setNodes((nodes) => {
+        return nodes.map((item) => {
+          if (item.data?.nodeId === nodeId) {
+            //@ts-ignore
+            item.data.isError = isError;
+          }
+          return item;
+        });
       });
     },
     [setNodes]
@@ -478,19 +495,21 @@ export const FlowProvider = ({
     // nodes
     nodes,
     setNodes,
+    onDelNode,
     onNodesChange: handleNodesChange,
     hoverNodeId,
     setHoverNodeId,
+    onCopyNode,
+    onUpdateNodeError,
+
     basicNodeTemplates,
     // connect
     connectingEdge,
     onConnectStart,
     onConnectEnd,
     onFixView,
-    onDelNode,
     onChangeNode,
     onResetNode,
-    onCopyNode,
     onDelEdge,
     onDelConnect,
     onConnect,
