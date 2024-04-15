@@ -344,7 +344,7 @@ const RenderList = React.memo(function RenderList({
                   onDragEnd={(e) => {
                     if (e.clientX < sliderWidth) return;
                     onAddNode({
-                      template: template,
+                      template,
                       position: { x: e.clientX, y: e.clientY }
                     });
                   }}

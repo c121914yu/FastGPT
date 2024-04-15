@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Handle, Position } from 'reactflow';
 import { useFlowProviderStore } from '../../../FlowProvider';
 import { SmallAddIcon } from '@chakra-ui/icons';
-import { sourceHoverStyle, sourceCommonStyle, sourceConnectedStyle } from './style';
+import { handleHighLightStyle, sourceCommonStyle, sourceConnectedStyle } from './style';
 
 type Props = {
   nodeId: string;
@@ -102,7 +102,7 @@ export const SourceHandle = (props: Props) => {
       position={Position.Right}
       activeStyle={{
         ...sourceCommonStyle,
-        ...sourceHoverStyle
+        ...handleHighLightStyle
       }}
       connectedStyle={{
         ...sourceCommonStyle,

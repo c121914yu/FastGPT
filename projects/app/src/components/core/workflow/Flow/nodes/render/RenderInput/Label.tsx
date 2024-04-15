@@ -16,7 +16,6 @@ const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 type Props = {
   nodeId: string;
   input: FlowNodeInputItemType;
-  mode: useFlowProviderStoreType['mode'];
 };
 
 const InputLabel = ({ nodeId, input }: Props) => {
@@ -127,7 +126,7 @@ const InputLabel = ({ nodeId, input }: Props) => {
           }}
         />
       )}
-      {renderTypeList.length > 1 && (
+      {renderTypeList && renderTypeList.length > 1 && (
         <Box ml={1}>
           <NodeInputSelect
             renderTypeList={renderTypeList}

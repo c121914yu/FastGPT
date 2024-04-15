@@ -16,7 +16,7 @@ import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { LOGO_ICON } from '@fastgpt/global/common/system/constants';
 import { ToolTargetHandle } from './Handle/ToolHandle';
 import { useEditTextarea } from '@fastgpt/web/hooks/useEditTextarea';
-import { ConnectionSourceHandle, ConnectionTargetHandle } from './ConnectionHandle';
+import { ConnectionSourceHandle, ConnectionTargetHandle } from './Handle/ConnectionHandle';
 
 type Props = FlowNodeItemType & {
   children?: React.ReactNode | React.ReactNode[] | string;

@@ -36,6 +36,6 @@ export const getSystemPlugTemplates = () =>
   GET<FlowNodeTemplateType[]>('/core/plugin/pluginTemplate/getSystemPluginTemplates');
 
 export const getPreviewPluginModule = (id: string) =>
-  GET<FlowNodeTemplateType>('/core/plugin/getPreviewModule', { id });
+  GET<FlowNodeTemplateType>('/core/plugin/getPreviewNode', { id });
 export const getOnePlugin = (id: string) => GET<PluginItemSchema>('/core/plugin/detail', { id });
 export const delOnePlugin = (pluginId: string) => DELETE('/core/plugin/delete', { pluginId });

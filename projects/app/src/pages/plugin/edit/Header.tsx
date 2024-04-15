@@ -13,6 +13,7 @@ import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MyMenu from '@fastgpt/web/components/common/MyMenu';
 import { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
+import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 
 const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 const PreviewPlugin = dynamic(() => import('./Preview'));
@@ -28,17 +29,18 @@ const Header = ({ plugin, onClose }: Props) => {
   const { isOpen: isOpenImport, onOpen: onOpenImport, onClose: onCloseImport } = useDisclosure();
   const [previewModules, setPreviewModules] = React.useState<StoreNodeItemType[]>();
 
-  const flow2ModulesAndCheck = useCallback(async () => {
+  const flowData2StoreDataAndCheck = useCallback(async () => {
     const storeNodes = flowNode2StoreNodes({ nodes, edges });
 
     return storeNodes;
   }, [edges, nodes]);
 
   const { mutate: onclickSave, isLoading } = useRequest({
-    mutationFn: (modules: StoreNodeItemType[]) => {
+    mutationFn: ({ nodes, edges }: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => {
       return putUpdatePlugin({
         id: plugin._id,
-        modules
+        modules: nodes,
+        edges
       });
     },
     successToast: '保存配置成功',
@@ -85,15 +87,15 @@ const Header = ({ plugin, onClose }: Props) => {
               label: t('app.Export Configs'),
               icon: 'export',
               onClick: async () => {
-                const modules = await flow2ModulesAndCheck();
-                if (modules) {
-                  copyData(filterExportModules(modules), t('app.Export Config Successful'));
+                const data = await flowData2StoreDataAndCheck();
+                if (data) {
+                  copyData(filterExportModules(data.nodes), t('app.Export Config Successful'));
                 }
               }
             }
           ]}
         />
-        <MyTooltip label={t('module.Preview Plugin')}>
+        {/* <MyTooltip label={t('module.Preview Plugin')}>
           <IconButton
             mr={[3, 5]}
             icon={<MyIcon name={'core/modules/previewLight'} w={['14px', '16px']} />}
@@ -101,19 +103,19 @@ const Header = ({ plugin, onClose }: Props) => {
             aria-label={'save'}
             variant={'whitePrimary'}
             onClick={async () => {
-              const modules = await flow2ModulesAndCheck();
+              const modules = await flowData2StoreDataAndCheck();
               if (modules) {
                 setPreviewModules(modules);
               }
             }}
           />
-        </MyTooltip>
+        </MyTooltip> */}
         <Button
           size={'sm'}
           isLoading={isLoading}
           leftIcon={<MyIcon name={'common/saveFill'} w={['14px', '16px']} />}
           onClick={async () => {
-            const modules = await flow2ModulesAndCheck();
+            const modules = await flowData2StoreDataAndCheck();
             if (modules) {
               onclickSave(modules);
             }
