@@ -1,21 +1,22 @@
 import React, { useMemo } from 'react';
-import { Handle, Position, useStore } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 import { useTranslation } from 'next-i18next';
-import { useFlowProviderStore } from '../../FlowProvider';
+import { useFlowProviderStore } from '../../../FlowProvider';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import {
   primaryColor,
   sourceCommonStyle,
   sourceConnectedStyle,
-  sourceHoverStyle
-} from '@/web/core/workflow/constants/handleStyle';
+  handleHighLightStyle,
+  lowPrimaryColor
+} from './style';
 
 const sourceConnectedStyles = {
   ...sourceConnectedStyle,
   transform: 'translate(3px,-50%)'
 };
 const sourceHoverStyles = {
-  ...sourceHoverStyle,
+  ...handleHighLightStyle,
   transform: 'translate(5px,-50%)'
 };
 
@@ -64,7 +65,7 @@ export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
         showAddIcon: false
       };
     })();
-
+    console.log(sourceConnectedStyles);
     return (
       <Handle
         style={
@@ -115,10 +116,10 @@ export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
                 width: '14px',
                 height: '14px',
                 transform: 'translate(-2px, -50%)',
-                borderColor: primaryColor,
                 backgroundColor: 'white',
                 borderWidth: '3px',
-                transition: 'all 0.1s'
+                transition: 'all 0.1s',
+                borderColor: connectingEdge ? primaryColor : lowPrimaryColor
               }
             : {
                 visibility: 'hidden'

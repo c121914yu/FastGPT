@@ -1,16 +1,18 @@
 export const primaryColor = '#3370FF';
+export const lowPrimaryColor = '#94B5FF';
 
 export const sourceCommonStyle = {
-  borderColor: primaryColor,
   backgroundColor: 'white',
   borderWidth: '3px',
   transition: 'all 0.1s'
 };
 export const sourceConnectedStyle = {
+  borderColor: lowPrimaryColor,
   width: '14px',
   height: '14px'
 };
-export const sourceHoverStyle = {
+export const handleHighLightStyle = {
+  borderColor: primaryColor,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

@@ -4,22 +4,14 @@ import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants
 
 export const defaultEditFormData: FlowNodeInputItemType = {
   valueType: 'string',
-  type: FlowNodeInputTypeEnum.target,
+  renderTypeList: [FlowNodeInputTypeEnum.reference],
   key: '',
   label: '',
   toolDescription: '',
   required: true,
-  edit: true,
+  canEdit: true,
   editField: {
     key: true,
-    description: true,
-    dataType: true
-  },
-  defaultEditField: {
-    label: '',
-    key: '',
-    description: '',
-    inputType: FlowNodeInputTypeEnum.target,
-    valueType: WorkflowIOValueTypeEnum.string
+    description: true
   }
 };
