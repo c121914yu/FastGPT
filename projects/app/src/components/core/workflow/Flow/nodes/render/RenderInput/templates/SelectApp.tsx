@@ -23,6 +23,7 @@ const SelectAppRender = ({ item, nodeId }: RenderInputProps) => {
   const filterAppString = useMemo(() => filterAppIds.join(','), [filterAppIds]);
 
   const Render = useMemo(() => {
+    console.log(1111);
     return (
       <>
         <Box onClick={onOpenSelectApp}>
@@ -71,6 +72,7 @@ const SelectAppRender = ({ item, nodeId }: RenderInputProps) => {
     isOpenSelectApp,
     item,
     nodeId,
+    onChangeNode,
     onCloseSelectApp,
     onOpenSelectApp,
     t,

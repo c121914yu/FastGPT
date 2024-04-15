@@ -17,7 +17,7 @@ const AddInputParam = (props: RenderInputProps) => {
   const { item, inputs, nodeId } = props;
   const { t } = useTranslation();
   const { onChangeNode, mode } = useFlowProviderStore();
-  const inputValue = (item.value || []) as FlowNodeInputItemType[];
+  const inputValue = useMemo(() => (item.value || []) as FlowNodeInputItemType[], [item.value]);
 
   const [editField, setEditField] = useState<EditNodeFieldType>();
   const inputIndex = useMemo(
@@ -49,43 +49,47 @@ const AddInputParam = (props: RenderInputProps) => {
     [inputIndex, item, nodeId, onChangeNode]
   );
 
-  return (
-    <>
-      <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-        <Box position={'relative'}>
-          {t('core.workflow.Custom variable')}
-          {item.description && <QuestionTip label={t(item.description)} />}
-        </Box>
-        <Box flex={'1 0 0'} />
-        <Button
-          variant={'transparentBase'}
-          leftIcon={<SmallAddIcon />}
-          iconSpacing={1}
-          size={'sm'}
-          mr={'-5px'}
-          fontSize={'md'}
-          onClick={() => setEditField({})}
-        >
-          {t('common.Add New')}
-        </Button>
-      </Flex>
-      {mode === 'plugin' && (
-        <Box mt={1}>
-          <Reference {...props} />
-        </Box>
-      )}
+  const Render = useMemo(() => {
+    return (
+      <>
+        <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
+          <Box position={'relative'}>
+            {t('core.workflow.Custom variable')}
+            {item.description && <QuestionTip label={t(item.description)} />}
+          </Box>
+          <Box flex={'1 0 0'} />
+          <Button
+            variant={'transparentBase'}
+            leftIcon={<SmallAddIcon />}
+            iconSpacing={1}
+            size={'sm'}
+            mr={'-5px'}
+            fontSize={'md'}
+            onClick={() => setEditField({})}
+          >
+            {t('common.Add New')}
+          </Button>
+        </Flex>
+        {mode === 'plugin' && (
+          <Box mt={1}>
+            <Reference {...props} />
+          </Box>
+        )}
 
-      {!!editField && (
-        <FieldEditModal
-          editField={item.editField}
-          defaultField={editField}
-          keys={inputValue.map((input) => input.key)}
-          onClose={() => setEditField(undefined)}
-          onSubmit={onAddField}
-        />
-      )}
-    </>
-  );
+        {!!editField && (
+          <FieldEditModal
+            editField={item.editField}
+            defaultField={editField}
+            keys={inputValue.map((input) => input.key)}
+            onClose={() => setEditField(undefined)}
+            onSubmit={onAddField}
+          />
+        )}
+      </>
+    );
+  }, [editField, inputValue, item.description, item.editField, mode, onAddField, props, t]);
+
+  return Render;
 };
 
 export default React.memo(AddInputParam);

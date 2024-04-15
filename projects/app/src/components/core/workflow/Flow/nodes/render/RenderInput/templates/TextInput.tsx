@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { RenderInputProps } from '../type';
 import { Input } from '@chakra-ui/react';
 import { useFlowProviderStore } from '../../../../FlowProvider';
@@ -6,23 +6,27 @@ import { useFlowProviderStore } from '../../../../FlowProvider';
 const TextInput = ({ item, nodeId }: RenderInputProps) => {
   const { onChangeNode } = useFlowProviderStore();
 
-  return (
-    <Input
-      placeholder={item.placeholder}
-      defaultValue={item.value}
-      onBlur={(e) => {
-        onChangeNode({
-          nodeId,
-          type: 'updateInput',
-          key: item.key,
-          value: {
-            ...item,
-            value: e.target.value
-          }
-        });
-      }}
-    />
-  );
+  const Render = useMemo(() => {
+    return (
+      <Input
+        placeholder={item.placeholder}
+        defaultValue={item.value}
+        onBlur={(e) => {
+          onChangeNode({
+            nodeId,
+            type: 'updateInput',
+            key: item.key,
+            value: {
+              ...item,
+              value: e.target.value
+            }
+          });
+        }}
+      />
+    );
+  }, [item, nodeId, onChangeNode]);
+
+  return Render;
 };
 
 export default React.memo(TextInput);

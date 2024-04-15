@@ -17,7 +17,6 @@ import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { checkWorkflowNodeAndConnection } from '@/web/core/workflow/utils';
 
 const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
-const PreviewPlugin = dynamic(() => import('./Preview'));
 
 type Props = { plugin: PluginItemSchema; onClose: () => void };
 
@@ -135,13 +134,6 @@ const Header = ({ plugin, onClose }: Props) => {
         </Button>
       </Flex>
       {isOpenImport && <ImportSettings onClose={onCloseImport} />}
-      {!!previewModules && (
-        <PreviewPlugin
-          plugin={plugin}
-          modules={previewModules}
-          onClose={() => setPreviewModules(undefined)}
-        />
-      )}
     </>
   );
 };

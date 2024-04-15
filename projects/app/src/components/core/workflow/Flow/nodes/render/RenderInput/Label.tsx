@@ -1,5 +1,5 @@
 import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useFlowProviderStore, useFlowProviderStoreType } from '../../../FlowProvider';
 import { Box, Flex } from '@chakra-ui/react';
@@ -42,101 +42,119 @@ const InputLabel = ({ nodeId, input }: Props) => {
     [input, nodeId, onChangeNode, renderTypeList]
   );
 
-  return (
-    <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-      <Box position={'relative'}>
-        {t(label)}
-        {description && (
-          <MyTooltip label={t(description)} forceShow>
-            <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
-          </MyTooltip>
+  const RenderLabel = useMemo(() => {
+    return (
+      <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
+        <Box position={'relative'}>
+          {t(label)}
+          {description && (
+            <MyTooltip label={t(description)} forceShow>
+              <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
+            </MyTooltip>
+          )}
+        </Box>
+        {canEdit && (
+          <>
+            <MyIcon
+              name={'common/settingLight'}
+              w={'14px'}
+              cursor={'pointer'}
+              ml={3}
+              _hover={{ color: 'primary.500' }}
+              onClick={() =>
+                setEditField({
+                  inputType: renderTypeList[0],
+                  valueType: valueType,
+                  key,
+                  label,
+                  description
+                })
+              }
+            />
+            <MyIcon
+              className="delete"
+              name={'delete'}
+              w={'14px'}
+              cursor={'pointer'}
+              ml={2}
+              _hover={{ color: 'red.500' }}
+              onClick={() => {
+                onChangeNode({
+                  nodeId,
+                  type: 'delInput',
+                  key: key
+                });
+              }}
+            />
+          </>
         )}
-      </Box>
-      {canEdit && (
-        <>
-          <MyIcon
-            name={'common/settingLight'}
-            w={'14px'}
-            cursor={'pointer'}
-            ml={3}
-            _hover={{ color: 'primary.500' }}
-            onClick={() =>
-              setEditField({
-                inputType: renderTypeList[0],
-                valueType: valueType,
-                key,
-                label,
-                description
-              })
-            }
-          />
-          <MyIcon
-            className="delete"
-            name={'delete'}
-            w={'14px'}
-            cursor={'pointer'}
-            ml={2}
-            _hover={{ color: 'red.500' }}
-            onClick={() => {
-              onChangeNode({
-                nodeId,
-                type: 'delInput',
-                key: key
-              });
+
+        {!!editField?.key && (
+          <FieldEditModal
+            editField={input.editField}
+            keys={[editField.key]}
+            defaultField={editField}
+            onClose={() => setEditField(undefined)}
+            onSubmit={({ data, changeKey }) => {
+              if (!data.inputType || !data.key || !data.label || !editField.key) return;
+
+              const newInput: FlowNodeInputItemType = {
+                ...input,
+                renderTypeList: [data.inputType],
+                valueType: data.valueType,
+                key: data.key,
+                required: data.required,
+                label: data.label,
+                description: data.description
+              };
+
+              if (changeKey) {
+                onChangeNode({
+                  nodeId,
+                  type: 'replaceInput',
+                  key: editField.key,
+                  value: newInput
+                });
+              } else {
+                onChangeNode({
+                  nodeId,
+                  type: 'updateInput',
+                  key: newInput.key,
+                  value: newInput
+                });
+              }
+              setEditField(undefined);
             }}
           />
-        </>
-      )}
+        )}
+        {renderTypeList && renderTypeList.length > 1 && (
+          <Box ml={1}>
+            <NodeInputSelect
+              renderTypeList={renderTypeList}
+              renderTypeIndex={selectedTypeIndex}
+              onChange={onChangeRenderType}
+            />
+          </Box>
+        )}
+      </Flex>
+    );
+  }, [
+    canEdit,
+    description,
+    editField,
+    input,
+    key,
+    label,
+    nodeId,
+    onChangeNode,
+    onChangeRenderType,
+    renderTypeList,
+    selectedTypeIndex,
+    t,
+    valueType
+  ]);
 
-      {!!editField?.key && (
-        <FieldEditModal
-          editField={input.editField}
-          keys={[editField.key]}
-          defaultField={editField}
-          onClose={() => setEditField(undefined)}
-          onSubmit={({ data, changeKey }) => {
-            if (!data.inputType || !data.key || !data.label || !editField.key) return;
-
-            const newInput: FlowNodeInputItemType = {
-              ...input,
-              renderTypeList: [data.inputType],
-              valueType: data.valueType,
-              key: data.key,
-              required: data.required,
-              label: data.label,
-              description: data.description
-            };
-
-            if (changeKey) {
-              onChangeNode({
-                nodeId,
-                type: 'replaceInput',
-                key: editField.key,
-                value: newInput
-              });
-            } else {
-              onChangeNode({
-                nodeId,
-                type: 'updateInput',
-                key: newInput.key,
-                value: newInput
-              });
-            }
-            setEditField(undefined);
-          }}
-        />
-      )}
-      {renderTypeList && renderTypeList.length > 1 && (
-        <Box ml={1}>
-          <NodeInputSelect
-            renderTypeList={renderTypeList}
-            renderTypeIndex={selectedTypeIndex}
-            onChange={onChangeRenderType}
-          />
-        </Box>
-      )}
-    </Flex>
-  );
+  return <>{RenderLabel}</>;
 };
 
 export default React.memo(InputLabel);
