@@ -14,7 +14,11 @@ export const initWorkflowEdgeStatus = (edges: StoreEdgeItemType[]): RuntimeEdgeI
 };
 
 export const getDefaultEntryNodeIds = (nodes: (StoreNodeItemType | RuntimeNodeItemType)[]) => {
-  const entryList = [FlowNodeTypeEnum.workflowStart, FlowNodeTypeEnum.pluginInput];
+  const entryList = [
+    FlowNodeTypeEnum.systemConfig,
+    FlowNodeTypeEnum.workflowStart,
+    FlowNodeTypeEnum.pluginInput
+  ];
   return nodes
     .filter((node) => entryList.includes(node.flowNodeType as any))
     .map((item) => item.nodeId);
@@ -25,24 +29,20 @@ export const storeNodes2RuntimeNodes = (
   entryNodeIds: string[]
 ): RuntimeNodeItemType[] => {
   return (
-    nodes
-      ?.filter((item) => {
-        return ![FlowNodeTypeEnum.systemConfig].includes(item.nodeId as any);
-      })
-      .map<RuntimeNodeItemType>((node) => {
-        return {
-          nodeId: node.nodeId,
-          name: node.name,
-          avatar: node.avatar,
-          intro: node.intro,
-          flowNodeType: node.flowNodeType,
-          showStatus: node.showStatus,
-          isEntry: entryNodeIds.includes(node.nodeId),
-          inputs: node.inputs,
-          outputs: node.outputs,
-          pluginId: node.pluginId
-        };
-      }) || []
+    nodes.map<RuntimeNodeItemType>((node) => {
+      return {
+        nodeId: node.nodeId,
+        name: node.name,
+        avatar: node.avatar,
+        intro: node.intro,
+        flowNodeType: node.flowNodeType,
+        showStatus: node.showStatus,
+        isEntry: entryNodeIds.includes(node.nodeId),
+        inputs: node.inputs,
+        outputs: node.outputs,
+        pluginId: node.pluginId
+      };
+    }) || []
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { BezierEdge, getBezierPath, EdgeLabelRenderer, EdgeProps } from 'reactflow';
 import { useFlowProviderStore } from '../FlowProvider';
 import { Flex } from '@chakra-ui/react';
@@ -17,7 +17,6 @@ const ButtonEdge = (props: EdgeProps) => {
     targetPosition,
     selected,
     sourceHandleId,
-    animated,
     style = {}
   } = props;
 
@@ -40,40 +39,46 @@ const ButtonEdge = (props: EdgeProps) => {
   const isToolEdge = sourceHandleId === NodeOutputKeyEnum.selectedTools;
 
   const memoEdgeLabel = useMemo(() => {
+    const arrowTransform = (() => {
+      if (targetPosition === 'left') {
+        return `translate(-85%, -50%) translate(${targetX}px,${targetY}px) rotate(0deg)`;
+      }
+      if (targetPosition === 'right') {
+        return `translate(0%, -60%) translate(${targetX}px,${targetY}px) rotate(-180deg)`;
+      }
+      if (targetPosition === 'bottom') {
+        return `translate(-55%, -20%) translate(${targetX}px,${targetY}px) rotate(-90deg)`;
+      }
+      if (targetPosition === 'top') {
+        return `translate(-50%, -90%) translate(${targetX}px,${targetY}px) rotate(90deg)`;
+      }
+    })();
     return (
       <EdgeLabelRenderer>
-        <Flex
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'absolute'}
-          transform={`translate(-50%, -50%) translate(${labelX}px,${labelY}px)`}
-          pointerEvents={'all'}
-          w={'20px'}
-          h={'20px'}
-          bg={'white'}
-          borderRadius={'20px'}
-          color={'black'}
-          cursor={'pointer'}
-          borderWidth={'1px'}
-          borderColor={'borderColor.low'}
-          zIndex={highlightEdge ? 1000 : 0}
-          _hover={{
-            boxShadow: '0 0 6px 2px rgba(0, 0, 0, 0.08)'
-          }}
-          onClick={() => onDelConnect(id)}
-        >
-          <MyIcon
-            name="closeSolid"
-            w={'100%'}
-            color={highlightEdge ? 'primary.700' : 'myGray.400'}
-          ></MyIcon>
-        </Flex>
+        {highlightEdge && (
+          <Flex
+            alignItems={'center'}
+            justifyContent={'center'}
+            position={'absolute'}
+            transform={`translate(-50%, -50%) translate(${labelX}px,${labelY}px)`}
+            pointerEvents={'all'}
+            w={'17px'}
+            h={'17px'}
+            bg={'white'}
+            borderRadius={'17px'}
+            cursor={'pointer'}
+            zIndex={1000}
+            onClick={() => onDelConnect(id)}
+          >
+            <MyIcon name={'core/workflow/closeEdge'} w={'100%'}></MyIcon>
+          </Flex>
+        )}
         {!isToolEdge && (
           <Flex
             alignItems={'center'}
             justifyContent={'center'}
             position={'absolute'}
-            transform={`translate(-78%, -50%) translate(${targetX}px,${targetY}px)`}
+            transform={arrowTransform}
             pointerEvents={'all'}
             w={'16px'}
             h={'16px'}
@@ -83,23 +88,40 @@ const ButtonEdge = (props: EdgeProps) => {
             <MyIcon
               name={'common/rightArrowLight'}
               w={'100%'}
-              color={highlightEdge ? 'primary.700' : 'myGray.400'}
+              {...(highlightEdge
+                ? {
+                    color: 'primary.500',
+                    fontWeight: 'bold'
+                  }
+                : {
+                    color: 'primary.300'
+                  })}
             ></MyIcon>
           </Flex>
         )}
       </EdgeLabelRenderer>
     );
-  }, [labelX, labelY, highlightEdge, isToolEdge, targetX, targetY, onDelConnect, id]);
+  }, [
+    labelX,
+    labelY,
+    highlightEdge,
+    isToolEdge,
+    targetPosition,
+    targetX,
+    targetY,
+    onDelConnect,
+    id
+  ]);
 
   const memoBezierEdge = useMemo(() => {
     const edgeStyle: React.CSSProperties = {
       ...style,
       ...(highlightEdge
         ? {
-            strokeWidth: 5,
+            strokeWidth: 4,
             stroke: '#3370ff'
           }
-        : { strokeWidth: 2, zIndex: 2, stroke: 'myGray.300' })
+        : { strokeWidth: 2, zIndex: 2, stroke: '#94B5FF' })
     };
 
     return <BezierEdge {...props} style={edgeStyle} />;

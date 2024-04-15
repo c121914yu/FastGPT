@@ -19,7 +19,7 @@ export const ContextExtractModule: FlowNodeTemplateType = {
   templateType: FlowNodeTemplateTypeEnum.functionCall,
   flowNodeType: FlowNodeTypeEnum.contentExtract,
   sourceHandle: getHandleConfig(false, false, false, false),
-  targetHandle: getHandleConfig(false, false, false, true),
+  targetHandle: getHandleConfig(true, false, true, true),
   avatar: '/imgs/workflow/extract.png',
   name: '文本内容提取',
   intro: '可从文本中提取指定的数据，例如：sql语句、搜索关键词、代码等',
