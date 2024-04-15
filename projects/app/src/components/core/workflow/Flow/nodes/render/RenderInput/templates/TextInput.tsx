@@ -10,6 +10,7 @@ const TextInput = ({ item, nodeId }: RenderInputProps) => {
     <Input
       placeholder={item.placeholder}
       defaultValue={item.value}
+      maxLength={item.maxLength}
       onBlur={(e) => {
         onChangeNode({
           nodeId,

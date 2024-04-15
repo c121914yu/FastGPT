@@ -4,30 +4,26 @@ import NodeCard from './render/NodeCard';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import dynamic from 'next/dynamic';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
-import {
-  FlowNodeInputTypeEnum,
-  FlowNodeOutputTypeEnum
-} from '@fastgpt/global/core/workflow/node/constant';
-import Container from '../components/Container';
-import MyIcon from '@fastgpt/web/components/common/Icon';
-import MyTooltip from '@/components/MyTooltip';
-import { SourceHandle } from './render/Handle';
-import type {
-  EditInputFieldMapType,
-  EditNodeFieldType
-} from '@fastgpt/global/core/workflow/node/type.d';
+import { SmallAddIcon } from '@chakra-ui/icons';
 import {
   FlowNodeInputItemType,
   FlowNodeOutputItemType
 } from '@fastgpt/global/core/workflow/type/io.d';
-import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import Container from '../components/Container';
+import Label from './render/RenderInput/Label';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
+
+import type {
+  EditInputFieldMapType,
+  EditNodeFieldType
+} from '@fastgpt/global/core/workflow/node/type.d';
 import { useTranslation } from 'next-i18next';
 import { useFlowProviderStore } from '../FlowProvider';
-import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
-import { getNanoid } from '@fastgpt/global/common/string/tools';
-import RenderInput from './render/RenderInput';
-import Label from './render/RenderInput/Label';
+import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import {
+  FlowNodeInputTypeEnum,
+  FlowNodeOutputTypeEnum
+} from '@fastgpt/global/core/workflow/node/constant';
 
 const FieldEditModal = dynamic(() => import('./render/FieldEditModal'));
 
@@ -52,10 +48,10 @@ const createEditField: EditInputFieldMapType = {
 const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { nodeId, inputs, outputs } = data;
+
   const { onChangeNode, mode } = useFlowProviderStore();
 
   const [createField, setCreateField] = useState<EditNodeFieldType>();
-  const [editField, setEditField] = useState<EditNodeFieldType>();
 
   return (
     <NodeCard minW={'300px'} selected={selected} forbidMenu {...data}>
@@ -77,7 +73,11 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         </Flex>
         {inputs.map((input) => (
           <Box key={input.key} mt={3}>
-            <Label nodeId={nodeId} input={input} />
+            <Label
+              nodeId={nodeId}
+              input={input}
+              output={outputs.find((output) => output.key === input.key) as FlowNodeOutputItemType}
+            />
           </Box>
         ))}
       </Container>
@@ -101,8 +101,13 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               description: data.description,
               toolDescription: data.isToolInput ? data.description : undefined,
               canEdit: true,
-              editField: createEditField
+              value: data.defaultValue,
+              editField: createEditField,
+              maxLength: data.maxLength,
+              max: data.max,
+              min: data.min
             };
+
             onChangeNode({
               nodeId,
               type: 'addInput',
@@ -122,82 +127,6 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               value: newOutput
             });
             setCreateField(undefined);
-          }}
-        />
-      )}
-      {!!editField?.key && (
-        <FieldEditModal
-          editField={createEditField}
-          defaultField={editField}
-          keys={[editField.key]}
-          onClose={() => setEditField(undefined)}
-          onSubmit={({ data, changeKey }) => {
-            if (!data.inputType || !data.key || !data.label || !editField.key) return;
-
-            // check key valid
-            const memInput = inputs.find((item) => item.key === editField.key);
-            const memOutput = outputs.find((item) => item.key === editField.key);
-
-            if (!memInput || !memOutput) return setEditField(undefined);
-
-            const newInput: FlowNodeInputItemType = {
-              ...memInput,
-              renderTypeList: [data.inputType],
-              valueType: data.valueType,
-              key: data.key,
-              required: data.required,
-              label: data.label,
-              description: data.description,
-              toolDescription: data.isToolInput ? data.description : undefined,
-              ...(data.inputType === FlowNodeInputTypeEnum.addInputParam
-                ? {
-                    editField: {
-                      key: true,
-                      name: true,
-                      description: true,
-                      required: true,
-                      valueType: true,
-                      inputType: false
-                    }
-                  }
-                : {})
-            };
-            const newOutput: FlowNodeOutputItemType = {
-              ...memOutput,
-              valueType: data.valueType,
-              key: data.key,
-              label: data.label
-            };
-            console.log(data);
-            if (changeKey) {
-              onChangeNode({
-                nodeId,
-                type: 'replaceInput',
-                key: editField.key,
-                value: newInput
-              });
-              onChangeNode({
-                nodeId,
-                type: 'replaceOutput',
-                key: editField.key,
-                value: newOutput
-              });
-            } else {
-              onChangeNode({
-                nodeId,
-                type: 'updateInput',
-                key: newInput.key,
-                value: newInput
-              });
-              onChangeNode({
-                nodeId,
-                type: 'updateOutput',
-                key: newOutput.key,
-                value: newOutput
-              });
-            }
-
-            setEditField(undefined);
           }}
         />
       )}

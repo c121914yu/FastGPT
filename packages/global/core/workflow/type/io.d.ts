@@ -15,6 +15,8 @@ export type FlowNodeInputItemType = {
   required?: boolean;
   toolDescription?: string; // If this field is not empty, it is entered as a tool
 
+  maxLength?: number; // input,textarea
+
   // edit
   canEdit?: boolean;
   editField?: EditInputFieldMapType; // 添加

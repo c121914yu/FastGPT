@@ -27,5 +27,9 @@ export type EditNodeFieldType = {
   label?: string;
   description?: string;
   isToolInput?: boolean;
+
   defaultValue?: string;
+  maxLength?: number;
+  max?: number;
+  min?: number;
 };

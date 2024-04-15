@@ -17,9 +17,11 @@ import { EditorVariablePickerType } from './type.d';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import FocusPlugin from './plugins/FocusPlugin';
 import { textToEditorState } from './utils';
+import { MaxLengthPlugin } from './plugins/MaxLengthPlugin';
 
 export default function Editor({
   h = 200,
+  maxLength,
   showResize = true,
   showOpenModal = true,
   onOpenModal,
@@ -30,6 +32,7 @@ export default function Editor({
   placeholder = ''
 }: {
   h?: number;
+  maxLength?: number;
   showResize?: boolean;
   showOpenModal?: boolean;
   onOpenModal?: () => void;
@@ -109,6 +112,7 @@ export default function Editor({
           ErrorBoundary={LexicalErrorBoundary}
         />
         <HistoryPlugin />
+        <MaxLengthPlugin maxLength={maxLength || 999999} />
         <FocusPlugin focus={focus} setFocus={setFocus} />
         <OnChangePlugin
           onChange={(editorState, editor) => {
