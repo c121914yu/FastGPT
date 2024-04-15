@@ -17,6 +17,8 @@ export type RuntimeNodeItemType = {
 
   inputs: FlowNodeInputItemType[];
   outputs: FlowNodeOutputItemType[];
+
+  pluginId?: string;
 };
 
 export type RuntimeEdgeItemType = StoreEdgeItemType & {

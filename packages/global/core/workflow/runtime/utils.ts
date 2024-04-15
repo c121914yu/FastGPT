@@ -5,10 +5,12 @@ import { StoreEdgeItemType } from '../type/edge';
 import { RuntimeEdgeItemType, RuntimeNodeItemType } from './type';
 
 export const initWorkflowEdgeStatus = (edges: StoreEdgeItemType[]): RuntimeEdgeItemType[] => {
-  return edges.map((edge) => ({
-    ...edge,
-    status: 'waiting'
-  }));
+  return (
+    edges?.map((edge) => ({
+      ...edge,
+      status: 'waiting'
+    })) || []
+  );
 };
 
 export const getDefaultEntryNodeIds = (nodes: (StoreNodeItemType | RuntimeNodeItemType)[]) => {
@@ -22,23 +24,26 @@ export const storeNodes2RuntimeNodes = (
   nodes: StoreNodeItemType[],
   entryNodeIds: string[]
 ): RuntimeNodeItemType[] => {
-  return nodes
-    .filter((item) => {
-      return ![FlowNodeTypeEnum.systemConfig].includes(item.nodeId as any);
-    })
-    .map<RuntimeNodeItemType>((node) => {
-      return {
-        nodeId: node.nodeId,
-        name: node.name,
-        avatar: node.avatar,
-        intro: node.intro,
-        flowNodeType: node.flowNodeType,
-        showStatus: node.showStatus,
-        isEntry: entryNodeIds.includes(node.nodeId),
-        inputs: node.inputs,
-        outputs: node.outputs
-      };
-    });
+  return (
+    nodes
+      ?.filter((item) => {
+        return ![FlowNodeTypeEnum.systemConfig].includes(item.nodeId as any);
+      })
+      .map<RuntimeNodeItemType>((node) => {
+        return {
+          nodeId: node.nodeId,
+          name: node.name,
+          avatar: node.avatar,
+          intro: node.intro,
+          flowNodeType: node.flowNodeType,
+          showStatus: node.showStatus,
+          isEntry: entryNodeIds.includes(node.nodeId),
+          inputs: node.inputs,
+          outputs: node.outputs,
+          pluginId: node.pluginId
+        };
+      }) || []
+  );
 };
 
 export const getReferenceVariableValue = ({

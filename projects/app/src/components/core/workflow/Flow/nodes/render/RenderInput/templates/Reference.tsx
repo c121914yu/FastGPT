@@ -17,6 +17,7 @@ import { useTranslation } from 'next-i18next';
 import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import EmptyTip from '@/components/EmptyTip';
 import type { ReferenceValueProps } from '@fastgpt/global/core/workflow/type/io';
+import Avatar from '@/components/Avatar';
 
 type SelectProps = {
   value?: ReferenceValueProps;
@@ -52,7 +53,7 @@ const Reference = ({ item, nodeId }: RenderInputProps) => {
         return {
           label: (
             <Flex alignItems={'center'}>
-              <Image mr={1} src={node.avatar} w={'14px'} alt={''} />
+              <Avatar mr={1} src={node.avatar} w={'14px'} borderRadius={'ms'} />
               <Box>{node.name}</Box>
             </Flex>
           ),

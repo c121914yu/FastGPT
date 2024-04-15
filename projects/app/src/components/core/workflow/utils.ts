@@ -20,7 +20,8 @@ export const flowNode2StoreNodes = ({
     showStatus: item.data.showStatus,
     position: item.position,
     inputs: item.data.inputs,
-    outputs: item.data.outputs
+    outputs: item.data.outputs,
+    pluginId: item.data.pluginId
   }));
   const formatEdges: StoreEdgeItemType[] = edges
     .map((item) => ({

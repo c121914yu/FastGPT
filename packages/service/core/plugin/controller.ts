@@ -49,7 +49,8 @@ const getPluginTemplateById = async (id: string): Promise<PluginTemplateType> =>
       intro: item.intro,
       showStatus: true,
       source: PluginSourceEnum.personal,
-      modules: item.modules,
+      nodes: item.modules,
+      edges: item.edges,
       templateType: FlowNodeTemplateTypeEnum.personalPlugin
     };
   }
@@ -57,15 +58,12 @@ const getPluginTemplateById = async (id: string): Promise<PluginTemplateType> =>
 };
 
 /* format plugin modules to plugin preview module */
-export async function getPluginPreviewModule({
-  id
-}: {
-  id: string;
-}): Promise<FlowNodeTemplateType> {
+export async function getPluginPreviewNode({ id }: { id: string }): Promise<FlowNodeTemplateType> {
   const plugin = await getPluginTemplateById(id);
 
   return {
     id: plugin.id,
+    pluginId: plugin.id,
     templateType: plugin.templateType,
     flowNodeType: FlowNodeTypeEnum.pluginModule,
     avatar: plugin.avatar,
@@ -75,7 +73,7 @@ export async function getPluginPreviewModule({
     isTool: plugin.isTool,
     sourceHandle: getHandleConfig(false, true, false, false),
     targetHandle: getHandleConfig(false, false, false, true),
-    ...plugin2ModuleIO(plugin.id, plugin.modules)
+    ...plugin2ModuleIO(plugin.id, plugin.nodes)
   };
 }
 
@@ -88,6 +86,7 @@ export async function getPluginRuntimeById(id: string): Promise<PluginRuntimeTyp
     name: plugin.name,
     avatar: plugin.avatar,
     showStatus: plugin.showStatus,
-    modules: plugin.modules
+    nodes: plugin.nodes,
+    edges: plugin.edges
   };
 }

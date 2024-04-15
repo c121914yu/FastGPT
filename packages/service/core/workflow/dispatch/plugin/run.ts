@@ -1,25 +1,30 @@
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { dispatchWorkFlow } from '../index';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { DYNAMIC_INPUT_KEY, NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { DYNAMIC_INPUT_KEY } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getPluginRuntimeById } from '../../../plugin/controller';
 import { authPluginCanUse } from '../../../../support/permission/auth/plugin';
-import { setWorkflowDefaultEntries } from '@fastgpt/global/core/workflow/runtime/utils';
+import {
+  getDefaultEntryNodeIds,
+  initWorkflowEdgeStatus,
+  storeNodes2RuntimeNodes
+} from '@fastgpt/global/core/workflow/runtime/utils';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
+import { updateToolInputValue } from '../agent/runTool/utils';
 
 type RunPluginProps = ModuleDispatchProps<{
-  [NodeInputKeyEnum.pluginId]: string;
   [key: string]: any;
 }>;
 type RunPluginResponse = DispatchNodeResultType<{}>;
 
 export const dispatchRunPlugin = async (props: RunPluginProps): Promise<RunPluginResponse> => {
   const {
+    node: { pluginId },
     mode,
     teamId,
     tmbId,
-    params: { pluginId, ...data }
+    params: data
   } = props;
 
   if (!pluginId) {
@@ -30,7 +35,7 @@ export const dispatchRunPlugin = async (props: RunPluginProps): Promise<RunPlugi
   const plugin = await getPluginRuntimeById(pluginId);
 
   // concat dynamic inputs
-  const inputModule = plugin.modules.find(
+  const inputModule = plugin.nodes.find(
     (item) => item.flowNodeType === FlowNodeTypeEnum.pluginInput
   );
   if (!inputModule) return Promise.reject('Plugin error, It has no set input.');
@@ -57,12 +62,17 @@ export const dispatchRunPlugin = async (props: RunPluginProps): Promise<RunPlugi
 
   const { flowResponses, flowUsages, assistantResponses } = await dispatchWorkFlow({
     ...props,
-    modules: setWorkflowDefaultEntries(plugin.modules).map((module) => ({
-      ...module,
-      showStatus: false
-    })),
-    runtimeModules: undefined, // must reset
-    startParams
+    runtimeNodes: storeNodes2RuntimeNodes(plugin.nodes, getDefaultEntryNodeIds(plugin.nodes)).map(
+      (node) => ({
+        ...node,
+        showStatus: false,
+        inputs: updateToolInputValue({
+          inputs: node.inputs,
+          params: startParams
+        })
+      })
+    ),
+    runtimeEdges: initWorkflowEdgeStatus(plugin.edges)
   });
 
   const output = flowResponses.find((item) => item.moduleType === FlowNodeTypeEnum.pluginOutput);

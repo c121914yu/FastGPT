@@ -6,7 +6,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 const ButtonEdge = (props: EdgeProps) => {
-  const { nodes, onDelConnect } = useFlowProviderStore();
+  const { nodes, onDelConnect, connectingEdge } = useFlowProviderStore();
   const {
     id,
     sourceX,
@@ -21,12 +21,12 @@ const ButtonEdge = (props: EdgeProps) => {
     style = {}
   } = props;
 
-  const active = (() => {
+  const highlightEdge = useMemo(() => {
     const connectNode = nodes.find((node) => {
-      return (node.id === props.source || node.id === props.target) && node.selected;
+      return node.selected && (node.id === props.source || node.id === props.target);
     });
     return !!(connectNode || selected);
-  })();
+  }, [nodes, props.source, props.target, selected]);
 
   const [, labelX, labelY] = getBezierPath({
     sourceX,
@@ -56,7 +56,7 @@ const ButtonEdge = (props: EdgeProps) => {
           cursor={'pointer'}
           borderWidth={'1px'}
           borderColor={'borderColor.low'}
-          zIndex={active ? 1000 : 0}
+          zIndex={highlightEdge ? 1000 : 0}
           _hover={{
             boxShadow: '0 0 6px 2px rgba(0, 0, 0, 0.08)'
           }}
@@ -65,7 +65,7 @@ const ButtonEdge = (props: EdgeProps) => {
           <MyIcon
             name="closeSolid"
             w={'100%'}
-            color={active ? 'primary.700' : 'myGray.400'}
+            color={highlightEdge ? 'primary.700' : 'myGray.400'}
           ></MyIcon>
         </Flex>
         {!isToolEdge && (
@@ -78,23 +78,23 @@ const ButtonEdge = (props: EdgeProps) => {
             w={'16px'}
             h={'16px'}
             bg={'white'}
-            zIndex={active ? 1000 : 0}
+            zIndex={highlightEdge ? 1000 : 0}
           >
             <MyIcon
               name={'common/rightArrowLight'}
               w={'100%'}
-              color={active ? 'primary.700' : 'myGray.400'}
+              color={highlightEdge ? 'primary.700' : 'myGray.400'}
             ></MyIcon>
           </Flex>
         )}
       </EdgeLabelRenderer>
     );
-  }, [labelX, labelY, active, isToolEdge, targetX, targetY, id]);
+  }, [labelX, labelY, highlightEdge, isToolEdge, targetX, targetY, onDelConnect, id]);
 
   const memoBezierEdge = useMemo(() => {
     const edgeStyle: React.CSSProperties = {
       ...style,
-      ...(active
+      ...(highlightEdge
         ? {
             strokeWidth: 5,
             stroke: '#3370ff'
@@ -103,7 +103,7 @@ const ButtonEdge = (props: EdgeProps) => {
     };
 
     return <BezierEdge {...props} style={edgeStyle} />;
-  }, [style, active, props]);
+  }, [style, highlightEdge, props]);
 
   return (
     <>

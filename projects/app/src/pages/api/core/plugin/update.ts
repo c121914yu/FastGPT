@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     await connectToDatabase();
     const body = req.body as UpdatePluginParams;
 
-    const { id, ...props } = body;
+    const { id, modules, edges, ...props } = body;
 
     const { teamId, tmbId } = await authPluginCrud({ req, authToken: true, id, per: 'owner' });
 
@@ -22,13 +22,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       intro: props.intro,
       avatar: props.avatar,
       parentId: props.parentId,
-      ...(props.modules &&
-        props.modules.length > 0 && {
-          modules: props.modules
+      ...(modules &&
+        modules.length > 0 && {
+          modules: modules
         }),
+      ...(edges && edges.length > 0 && { edges }),
       metadata: props.metadata
     };
-
+    console.log(updateData);
     if (props.metadata?.apiSchemaStr) {
       await mongoSessionRun(async (session) => {
         // update children

@@ -50,6 +50,10 @@ const PluginSchema = new Schema({
     type: Array,
     default: []
   },
+  edges: {
+    type: Array,
+    default: []
+  },
   metadata: {
     type: {
       pluginUid: String,

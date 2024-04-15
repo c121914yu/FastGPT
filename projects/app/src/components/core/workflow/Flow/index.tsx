@@ -26,13 +26,13 @@ import { useTranslation } from 'next-i18next';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
+import { connectionLineStyle, defaultEdgeOptions } from '../constants';
 
 const NodeSimple = dynamic(() => import('./nodes/NodeSimple'));
 const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
   [FlowNodeTypeEnum.emptyNode]: NodeSimple,
   [FlowNodeTypeEnum.systemConfig]: dynamic(() => import('./nodes/NodeSystemConfig')),
   [FlowNodeTypeEnum.workflowStart]: dynamic(() => import('./nodes/NodeWorkflowStart')),
-  [FlowNodeTypeEnum.historyNode]: NodeSimple,
   [FlowNodeTypeEnum.chatNode]: NodeSimple,
   [FlowNodeTypeEnum.datasetSearchNode]: NodeSimple,
   [FlowNodeTypeEnum.datasetConcatNode]: dynamic(() => import('./nodes/NodeDatasetConcat')),
@@ -40,7 +40,6 @@ const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
   [FlowNodeTypeEnum.classifyQuestion]: dynamic(() => import('./nodes/NodeCQNode')),
   [FlowNodeTypeEnum.contentExtract]: dynamic(() => import('./nodes/NodeExtract')),
   [FlowNodeTypeEnum.httpRequest468]: dynamic(() => import('./nodes/NodeHttp')),
-  [FlowNodeTypeEnum.httpRequest]: NodeSimple,
   [FlowNodeTypeEnum.runApp]: NodeSimple,
   [FlowNodeTypeEnum.pluginInput]: dynamic(() => import('./nodes/NodePluginInput')),
   [FlowNodeTypeEnum.pluginOutput]: dynamic(() => import('./nodes/NodePluginOutput')),
@@ -97,12 +96,9 @@ const Container = React.memo(function Container() {
       edges={edges}
       minZoom={0.1}
       maxZoom={1.5}
-      defaultEdgeOptions={{
-        animated: true,
-        zIndex: 0
-      }}
+      defaultEdgeOptions={defaultEdgeOptions}
       elevateEdgesOnSelect
-      connectionLineStyle={{ strokeWidth: 2, stroke: '#5A646Es' }}
+      connectionLineStyle={connectionLineStyle}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
       onNodesChange={onNodesChange}
