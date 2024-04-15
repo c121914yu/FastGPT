@@ -11,6 +11,10 @@ import type { VariableItemType, AppTTSConfigType, AppWhisperConfigType } from '.
 import { EditorVariablePickerType } from '../../../web/components/common/Textarea/PromptEditor/type';
 import { defaultWhisperConfig } from '../app/constants';
 
+export const getHandleId = (nodeId: string, type: 'source' | 'target', key: string) => {
+  return `${nodeId}-${type}-${key}`;
+};
+
 /* module  */
 export const getGuideModule = (modules: StoreNodeItemType[]) =>
   modules.find((item) => item.flowNodeType === FlowNodeTypeEnum.systemConfig);

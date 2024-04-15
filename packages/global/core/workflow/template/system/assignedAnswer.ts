@@ -11,8 +11,8 @@ export const AssignedAnswerModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.answerNode,
   templateType: FlowNodeTemplateTypeEnum.textAnswer,
   flowNodeType: FlowNodeTypeEnum.answerNode,
-  sourceHandle: getHandleConfig(false, true, false, false),
-  targetHandle: getHandleConfig(false, false, false, true),
+  sourceHandle: getHandleConfig(true, true, true, true),
+  targetHandle: getHandleConfig(true, true, true, true),
   avatar: '/imgs/workflow/reply.png',
   name: '指定回复',
   intro:

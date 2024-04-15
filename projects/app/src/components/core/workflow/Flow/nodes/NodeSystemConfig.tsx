@@ -3,7 +3,7 @@ import { NodeProps } from 'reactflow';
 import { Box, Flex, Textarea, useTheme } from '@chakra-ui/react';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { welcomeTextTip } from '@fastgpt/global/core/workflow/template/tip';
 
 import VariableEdit from '../../../app/VariableEdit';
@@ -114,8 +114,19 @@ function ChatStartVariable({ data }: { data: FlowNodeItemType }) {
           value
         }
       });
+      onChangeNode({
+        nodeId,
+        type: 'attr',
+        key: 'outputs',
+        value: value.map((item) => ({
+          id: item.key,
+          key: item.key,
+          valueType: WorkflowIOValueTypeEnum.string,
+          label: item.label
+        }))
+      });
     },
-    [inputs, nodeId]
+    [inputs, nodeId, onChangeNode]
   );
 
   return <VariableEdit variables={variables} onChange={(e) => updateVariables(e)} />;
