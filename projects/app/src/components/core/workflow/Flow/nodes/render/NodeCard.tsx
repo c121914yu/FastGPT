@@ -40,7 +40,8 @@ const NodeCard = (props: Props) => {
     inputs,
     selected,
     forbidMenu,
-    isTool = false
+    isTool = false,
+    isError = false
   } = props;
 
   const { toast } = useToast();
@@ -52,7 +53,8 @@ const NodeCard = (props: Props) => {
     onCopyNode,
     onResetNode,
     onChangeNode,
-    setHoverNodeId
+    setHoverNodeId,
+    onUpdateNodeError
   } = useFlowProviderStore();
 
   // edit intro
@@ -261,7 +263,6 @@ const NodeCard = (props: Props) => {
       maxW={maxW}
       bg={'white'}
       borderWidth={'1px'}
-      borderColor={selected ? 'primary.600' : 'borderColor.base'}
       borderRadius={'md'}
       boxShadow={'1'}
       _hover={{
@@ -272,6 +273,14 @@ const NodeCard = (props: Props) => {
       }}
       onMouseEnter={() => setHoverNodeId(nodeId)}
       onMouseLeave={() => setHoverNodeId(undefined)}
+      {...(isError
+        ? {
+            borderColor: 'red.500',
+            onMouseDownCapture: () => onUpdateNodeError(nodeId, false)
+          }
+        : {
+            borderColor: selected ? 'primary.600' : 'borderColor.base'
+          })}
     >
       {Header}
       {children}

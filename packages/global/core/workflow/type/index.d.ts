@@ -64,6 +64,7 @@ export type FlowNodeTemplateType = FlowNodeCommonType & {
 };
 export type FlowNodeItemType = FlowNodeTemplateType & {
   nodeId: string;
+  isError?: boolean;
 };
 export type nodeTemplateListType = {
   type: `${FlowNodeTemplateTypeEnum}`;

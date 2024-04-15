@@ -63,6 +63,8 @@ const NodeTemplatesModal = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   } = useWorkflowStore();
   const [templateType, setTemplateType] = useState(TemplateTypeEnum.basic);
 
+  const hasToolNode = nodes.some((node) => node.data.flowNodeType === FlowNodeTypeEnum.tools);
+
   const templatesString = useMemo(() => {
     const map = {
       [TemplateTypeEnum.basic]: basicNodeTemplates.filter((item) => {
@@ -77,6 +79,10 @@ const NodeTemplatesModal = ({ isOpen, onClose }: ModuleTemplateListProps) => {
         if (item.flowNodeType === FlowNodeTypeEnum.lafModule && !feConfigs.lafEnv) {
           return false;
         }
+        // tool stop
+        if (!hasToolNode && item.flowNodeType === FlowNodeTypeEnum.stopTool) {
+          return false;
+        }
         return true;
       }),
       [TemplateTypeEnum.systemPlugin]: systemNodeTemplates,
@@ -88,6 +94,7 @@ const NodeTemplatesModal = ({ isOpen, onClose }: ModuleTemplateListProps) => {
   }, [
     basicNodeTemplates,
     feConfigs.lafEnv,
+    hasToolNode,
     nodes,
     searchKey,
     systemNodeTemplates,
