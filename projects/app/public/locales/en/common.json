@@ -1056,6 +1056,7 @@
       "Add variable": "Add",
       "Can not delete node": "Can not delete the node",
       "Change input type tip": "Changing the input type will empty the entered values, please confirm!",
+      "Check Failed": "Workflow verification fails. Check whether the node or connection is normal",
       "Custom inputs": "Inputs",
       "Custom outputs": "Outputs",
       "Custom variable": "Custom variable",

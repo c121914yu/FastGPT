@@ -1058,6 +1058,7 @@
       "Add variable": "新增变量",
       "Can not delete node": "该节点不允许删除",
       "Change input type tip": "修改输入类型会清空已填写的值，请确认！",
+      "Check Failed": "工作流校验失败，请检查节点或连线是否正常",
       "Custom inputs": "自定义输入",
       "Custom outputs": "自定义输出",
       "Custom variable": "自定义变量",
