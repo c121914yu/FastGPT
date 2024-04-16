@@ -456,6 +456,16 @@ export const FlowProvider = ({
             response: result || {}
           }
         });
+        setNodes((state) =>
+          state.map((node) =>
+            node.data.nodeId === nodeId
+              ? {
+                  ...node,
+                  selected: true
+                }
+              : node
+          )
+        );
       } catch (error) {
         onChangeNode({
           nodeId,
@@ -469,7 +479,7 @@ export const FlowProvider = ({
         console.log(error);
       }
     },
-    [appId, onChangeNode]
+    [appId, onChangeNode, setNodes]
   );
 
   // connect

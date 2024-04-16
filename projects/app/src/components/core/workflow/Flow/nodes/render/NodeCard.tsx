@@ -61,7 +61,7 @@ const NodeCard = (props: Props) => {
     return (
       <Box position={'relative'}>
         {/* debug */}
-        <NodeDebug nodeId={nodeId} debugResult={debugResult} />
+        <NodeDebugResponse nodeId={nodeId} debugResult={debugResult} />
         <Box className="custom-drag-handle" px={4} py={3}>
           {/* tool target handle */}
           {showToolHandle && <ToolTargetHandle nodeId={nodeId} />}
@@ -149,6 +149,7 @@ const MenuRender = React.memo(function MenuRender({
   const { t } = useTranslation();
   const { toast } = useToast();
   const { setLoading } = useSystemStore();
+  const { openDebugNode, DebugInputModal } = useDebug();
 
   const { openConfirm: onOpenConfirmSync, ConfirmModal: ConfirmSyncModal } = useConfirm({
     content: t('module.Confirm Sync Plugin')
@@ -167,6 +168,12 @@ const MenuRender = React.memo(function MenuRender({
 
   const Render = useMemo(() => {
     const menuList = [
+      {
+        icon: 'core/workflow/debug',
+        label: t('core.workflow.Debug'),
+        variant: 'whiteBase',
+        onClick: () => openDebugNode({ entryNodeId: nodeId })
+      },
       ...(flowNodeType === FlowNodeTypeEnum.pluginModule
         ? [
             {
@@ -256,7 +263,7 @@ const MenuRender = React.memo(function MenuRender({
               <Button
                 size={'xs'}
                 variant={item.variant}
-                leftIcon={<MyIcon name={item.icon as any} w={'12px'} />}
+                leftIcon={<MyIcon name={item.icon as any} w={'13px'} />}
                 onClick={item.onClick}
               >
                 {item.label}
@@ -267,11 +274,13 @@ const MenuRender = React.memo(function MenuRender({
         <EditTitleModal maxLength={20} />
         <ConfirmSyncModal />
         <ConfirmDeleteModal />
+        <DebugInputModal />
       </>
     );
   }, [
     ConfirmDeleteModal,
     ConfirmSyncModal,
+    DebugInputModal,
     EditTitleModal,
     flowNodeType,
     inputs,
@@ -284,6 +293,7 @@ const MenuRender = React.memo(function MenuRender({
     onOpenConfirmSync,
     onOpenCustomTitleModal,
     onResetNode,
+    openDebugNode,
     setLoading,
     t,
     toast
@@ -351,7 +361,7 @@ const NodeIntro = React.memo(function NodeIntro({
   return Render;
 });
 
-const NodeDebug = React.memo(function NodeDebug({
+const NodeDebugResponse = React.memo(function NodeDebugResponse({
   nodeId,
   debugResult
 }: {
@@ -359,7 +369,6 @@ const NodeDebug = React.memo(function NodeDebug({
   debugResult: FlowNodeItemType['debugResult'];
 }) {
   const { t } = useTranslation();
-  const { openDebugNode, DebugInputModal } = useDebug();
   const { onChangeNode } = useFlowProviderStore();
 
   const RenderStatus = useMemo(() => {
@@ -369,7 +378,7 @@ const NodeDebug = React.memo(function NodeDebug({
         text: t('core.workflow.Running')
       },
       success: {
-        bg: 'green.200',
+        bg: 'green.50',
         text: t('core.workflow.Success')
       },
       failed: {
@@ -384,9 +393,11 @@ const NodeDebug = React.memo(function NodeDebug({
 
     return !!debugResult ? (
       <>
-        <Flex px={4} bg={statusData.bg} borderTopRadius={'md'} py={1}>
+        <Flex px={4} bg={statusData.bg} borderTopRadius={'md'} py={2}>
           <MyIcon name={'support/account/loginoutLight'} w={'14px'} mr={1} />
-          <Box>{statusData.text}</Box>
+          <Box color={'myGray.900'} fontWeight={'bold'}>
+            {statusData.text}
+          </Box>
         </Flex>
         {/* result */}
         {response && (
@@ -397,7 +408,7 @@ const NodeDebug = React.memo(function NodeDebug({
             top={0}
             zIndex={10}
             w={'300px'}
-            py={2}
+            py={3}
             border={'base'}
           >
             <Flex px={4} justifyContent={'space-between'} mb={1}>
@@ -422,40 +433,5 @@ const NodeDebug = React.memo(function NodeDebug({
     ) : null;
   }, [debugResult, nodeId, onChangeNode, t]);
 
-  const RenderDebugInput = useMemo(() => {
-    return (
-      <>
-        <Box
-          className="nodrag controller-debug"
-          // bg={'red'}
-          position={'absolute'}
-          right={'-20px'}
-          top={'-55px'}
-          pl={'20px'}
-          pr={'20px'}
-          pb={'20px'}
-          pt={'20px'}
-          display={'none'}
-        >
-          <MyTooltip label={t('core.workflow.Run from here')}>
-            <IconButton
-              icon={<MyIcon name={'chatSend'} w={'14px'} />}
-              aria-label={''}
-              variant={'whitePrimary'}
-              size={'sm'}
-              onClick={() => openDebugNode({ entryNodeId: nodeId })}
-            />
-          </MyTooltip>
-        </Box>
-        <DebugInputModal />
-      </>
-    );
-  }, [DebugInputModal, nodeId, openDebugNode]);
-
-  return (
-    <>
-      {RenderStatus}
-      {RenderDebugInput}
-    </>
-  );
+  return <>{RenderStatus}</>;
 });

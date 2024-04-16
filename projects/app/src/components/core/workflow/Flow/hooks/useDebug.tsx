@@ -144,7 +144,12 @@ export const useDebug = () => {
     };
 
     return (
-      <MyRightDrawer onClose={onClose} title={t('core.workflow.Debug Node')}>
+      <MyRightDrawer
+        onClose={onClose}
+        iconSrc="core/workflow/debugBlue"
+        title={t('core.workflow.Debug Node')}
+        maxW={['90vw', '35vw']}
+      >
         <Flex flexDirection={'column'} h={'100%'}>
           <Box flex={'1 0 0'} overflow={'auto'}>
             {referenceInputs.map((input) => {
