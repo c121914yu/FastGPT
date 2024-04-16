@@ -211,6 +211,7 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     onChangeRenderType,
     output,
     renderTypeList,
+    required,
     selectedTypeIndex,
     t,
     toolDescription,

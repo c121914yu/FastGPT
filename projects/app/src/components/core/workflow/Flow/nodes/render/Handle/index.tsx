@@ -4,6 +4,7 @@ import { useFlowProviderStore } from '../../../FlowProvider';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import { handleHighLightStyle, sourceCommonStyle, handleConnectedStyle } from './style';
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { Box } from '@chakra-ui/react';
 
 type Props = {
   nodeId: string;
@@ -97,6 +98,7 @@ const MySourceHandle = React.memo(function MySourceHandle({
         type="source"
         id={handleId}
         position={position}
+        isConnectableEnd={false}
       >
         {showAddIcon && (
           <SmallAddIcon pointerEvents={'none'} color={'primary.600'} fontWeight={'bold'} />
@@ -201,6 +203,7 @@ const MyTargetHandle = React.memo(function MyTargetHandle({
         type="target"
         id={handleId}
         position={position}
+        isConnectableStart={false}
       ></Handle>
     );
   }, [styles, transform, handleId, position]);

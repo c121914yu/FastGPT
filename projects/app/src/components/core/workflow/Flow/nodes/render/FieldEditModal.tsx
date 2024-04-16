@@ -55,49 +55,49 @@ const FieldEditModal = ({
       valueType: WorkflowIOValueTypeEnum.string
     },
     {
-      label: t('core.module.inputType.input'),
+      label: t('core.workflow.inputType.input'),
       value: FlowNodeInputTypeEnum.input,
       valueType: WorkflowIOValueTypeEnum.string
     },
     {
-      label: t('core.module.inputType.textarea'),
+      label: t('core.workflow.inputType.textarea'),
       value: FlowNodeInputTypeEnum.textarea,
       valueType: WorkflowIOValueTypeEnum.string
     },
     {
-      label: t('core.module.inputType.JSON Editor'),
+      label: t('core.workflow.inputType.JSON Editor'),
       value: FlowNodeInputTypeEnum.JSONEditor,
       valueType: WorkflowIOValueTypeEnum.string
     },
     {
-      label: t('core.module.inputType.number input'),
+      label: t('core.workflow.inputType.number input'),
       value: FlowNodeInputTypeEnum.numberInput,
       valueType: WorkflowIOValueTypeEnum.number
     },
     {
-      label: t('core.module.inputType.switch'),
+      label: t('core.workflow.inputType.switch'),
       value: FlowNodeInputTypeEnum.switch,
       valueType: WorkflowIOValueTypeEnum.boolean
     },
     {
-      label: t('core.module.inputType.selectApp'),
+      label: t('core.workflow.inputType.selectApp'),
       value: FlowNodeInputTypeEnum.selectApp,
       valueType: WorkflowIOValueTypeEnum.selectApp
     },
     {
-      label: t('core.module.inputType.selectLLMModel'),
+      label: t('core.workflow.inputType.selectLLMModel'),
       value: FlowNodeInputTypeEnum.selectLLMModel,
       valueType: WorkflowIOValueTypeEnum.string
     },
     {
-      label: t('core.module.inputType.selectDataset'),
+      label: t('core.workflow.inputType.selectDataset'),
       value: FlowNodeInputTypeEnum.selectDataset,
       valueType: WorkflowIOValueTypeEnum.selectDataset
     },
     ...(showDynamicInputSelect
       ? [
           {
-            label: t('core.module.inputType.dynamicTargetInput'),
+            label: t('core.workflow.inputType.dynamicTargetInput'),
             value: FlowNodeInputTypeEnum.addInputParam,
             valueType: WorkflowIOValueTypeEnum.any
           }

@@ -156,7 +156,7 @@ export const useDebug = () => {
               const required = input.required || false;
               return (
                 <Box key={input.key} _notLast={{ mb: 4 }} px={1}>
-                  <Box display={'inline-block'} position={'relative'}>
+                  <Box display={'inline-block'} position={'relative'} mb={1}>
                     {required && (
                       <Box position={'absolute'} right={-2} top={-1} color={'red.600'}>
                         *
@@ -171,12 +171,18 @@ export const useDebug = () => {
                           {...register(input.key, {
                             required
                           })}
+                          bg={'myGray.50'}
                         />
                       );
                     }
                     if (input.valueType === WorkflowIOValueTypeEnum.number) {
                       return (
-                        <NumberInput step={input.step} min={input.min} max={input.max}>
+                        <NumberInput
+                          step={input.step}
+                          min={input.min}
+                          max={input.max}
+                          bg={'myGray.50'}
+                        >
                           <NumberInputField
                             {...register(input.key, {
                               required: input.required,
