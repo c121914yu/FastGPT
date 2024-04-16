@@ -1,4 +1,4 @@
-import { FlowNodeTypeEnum } from './node/constant';
+import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from './node/constant';
 import {
   WorkflowIOValueTypeEnum,
   NodeInputKeyEnum,
@@ -13,6 +13,19 @@ import { defaultWhisperConfig } from '../app/constants';
 
 export const getHandleId = (nodeId: string, type: 'source' | 'target', key: string) => {
   return `${nodeId}-${type}-${key}`;
+};
+
+export const checkInputIsReference = (input: FlowNodeInputItemType) => {
+  const value = input.value;
+  if (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    typeof value[0] === 'string' &&
+    typeof value[1] === 'string'
+  ) {
+    return true;
+  }
+  return false;
 };
 
 /* module  */

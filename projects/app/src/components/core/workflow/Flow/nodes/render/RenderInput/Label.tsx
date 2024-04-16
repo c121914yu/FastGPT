@@ -29,6 +29,7 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
   const {
     description,
     toolDescription,
+    required,
     label,
     selectedTypeIndex,
     renderTypeList,
@@ -64,6 +65,11 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     return (
       <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
         <Box position={'relative'}>
+          {required && (
+            <Box position={'absolute'} left={-2} top={-1} color={'red.600'}>
+              *
+            </Box>
+          )}
           {t(label)}
           {description && (
             <MyTooltip label={t(description)} forceShow>
@@ -196,6 +202,9 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     input,
     key,
     label,
+    max,
+    maxLength,
+    min,
     mode,
     nodeId,
     onChangeNode,
@@ -204,6 +213,8 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     renderTypeList,
     selectedTypeIndex,
     t,
+    toolDescription,
+    value,
     valueType
   ]);
 

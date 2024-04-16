@@ -22,14 +22,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       intro: props.intro,
       avatar: props.avatar,
       parentId: props.parentId,
-      ...(modules &&
-        modules.length > 0 && {
-          modules: modules
-        }),
-      ...(edges && edges.length > 0 && { edges }),
+      ...(modules && {
+        modules: modules
+      }),
+      ...(edges && { edges }),
       metadata: props.metadata
     };
-    console.log(updateData);
+
     if (props.metadata?.apiSchemaStr) {
       await mongoSessionRun(async (session) => {
         // update children

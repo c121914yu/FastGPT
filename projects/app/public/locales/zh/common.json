@@ -611,8 +611,7 @@
             "success": "开始同步"
           }
         },
-        "training": {
-        }
+        "training": {}
       },
       "data": {
         "Auxiliary Data": "辅助数据",
@@ -1073,7 +1072,12 @@
       "Custom outputs": "自定义输出",
       "Custom variable": "自定义变量",
       "Dataset quote": "知识库引用",
-      "Run from here": "从这里开始运行调试",
+      "Debug Node": "Debug模式",
+      "Failed": "运行失败",
+      "Run from here": "从这里开始运行",
+      "Run result": "运行结果",
+      "Running": "运行中",
+      "Success": "运行成功",
       "chat": {
         "Quote prompt": "引用提示词"
       },

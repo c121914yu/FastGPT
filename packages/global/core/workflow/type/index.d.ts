@@ -9,6 +9,7 @@ import { DispatchNodeResponseKeyEnum } from '../runtime/constants';
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from './io.d';
 import { UserModelSchema } from '../../../support/user/type';
 import {
+  ChatHistoryItemResType,
   ChatItemType,
   ChatItemValueItemType,
   ToolRunResponseItemType,
@@ -65,6 +66,11 @@ export type FlowNodeTemplateType = FlowNodeCommonType & {
 export type FlowNodeItemType = FlowNodeTemplateType & {
   nodeId: string;
   isError?: boolean;
+  debugResult?: {
+    status: 'running' | 'success' | 'failed';
+    message?: string;
+    response?: ChatHistoryItemResType;
+  };
 };
 export type nodeTemplateListType = {
   type: `${FlowNodeTemplateTypeEnum}`;
@@ -120,11 +126,11 @@ export type ContextExtractAgentItemType = {
 
 export type ChatDispatchProps = {
   res: NextApiResponse;
-  mode: 'test' | 'chat';
+  mode: 'test' | 'chat' | 'debug';
   teamId: string;
   tmbId: string;
   user: UserModelSchema;
-  appId: string;
+  appId?: string;
   chatId?: string;
   responseChatItemId?: string;
   histories: ChatItemType[];

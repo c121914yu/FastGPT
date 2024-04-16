@@ -6,6 +6,7 @@ import {
   FlowNodeTemplateTypeEnum
 } from '../../constants';
 import { getHandleConfig } from '../utils';
+import { Input_Template_UserChatInput } from '../input';
 
 export const WorkflowStart: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.workflowStart,
@@ -18,7 +19,7 @@ export const WorkflowStart: FlowNodeTemplateType = {
   intro: '',
   forbidDelete: true,
   unique: true,
-  inputs: [],
+  inputs: [{ ...Input_Template_UserChatInput, toolDescription: '用户问题' }],
   outputs: [
     {
       id: NodeOutputKeyEnum.userChatInput,

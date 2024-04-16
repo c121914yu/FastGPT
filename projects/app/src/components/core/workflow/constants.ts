@@ -1,3 +1,4 @@
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type';
 import React from 'react';
 import { DefaultEdgeOptions } from 'reactflow';
 
@@ -8,4 +9,9 @@ export const connectionLineStyle: React.CSSProperties = {
 
 export const defaultEdgeOptions: DefaultEdgeOptions = {
   zIndex: 0
+};
+
+export const defaultRunningStatus: FlowNodeItemType['debugResult'] = {
+  status: 'running',
+  message: ''
 };

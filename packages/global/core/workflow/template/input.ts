@@ -59,6 +59,7 @@ export const Input_Template_Dataset_Quote: FlowNodeInputItemType = {
   key: NodeInputKeyEnum.aiChatDatasetQuote,
   renderTypeList: [FlowNodeInputTypeEnum.settingDatasetQuotePrompt],
   label: '',
-  description: 'core.module.Dataset quote.Input description',
+  debugLabel: '知识库引用',
+  description: '',
   valueType: WorkflowIOValueTypeEnum.datasetQuote
 };
