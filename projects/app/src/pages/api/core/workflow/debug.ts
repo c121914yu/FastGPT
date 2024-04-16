@@ -1,50 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '@/service/mongo';
-import { sseErrRes } from '@fastgpt/service/common/response';
-import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
-import { responseWrite } from '@fastgpt/service/common/response';
+import { jsonRes } from '@fastgpt/service/common/response';
 import { pushChatUsage } from '@/service/support/wallet/usage/push';
 import { UsageSourceEnum } from '@fastgpt/global/support/wallet/usage/constants';
-import type { ChatItemType, ChatItemValueItemType } from '@fastgpt/global/core/chat/type';
 import { authApp } from '@fastgpt/service/support/permission/auth/app';
 import { dispatchWorkFlow } from '@fastgpt/service/core/workflow/dispatch';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
 import { getUserChatInfoAndAuthTeamPoints } from '@/service/support/permission/auth/team';
-import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
-import { RuntimeEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
-import { RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
-
-export type Props = {
-  history: ChatItemType[];
-  prompt: ChatItemValueItemType[];
-  nodes: RuntimeNodeItemType[];
-  edges: RuntimeEdgeItemType[];
-  variables: Record<string, any>;
-  appId: string;
-  appName: string;
-};
+import { PostWorkflowDebugProps } from '@/global/core/workflow/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.on('close', () => {
-    res.end();
-  });
-  res.on('error', () => {
-    console.log('error: ', 'request error');
-    res.end();
-  });
-
-  const {
-    nodes = [],
-    edges = [],
-    history = [],
-    prompt,
-    variables = {},
-    appName,
-    appId
-  } = req.body as Props;
+  const { nodes = [], edges = [], variables = {}, appId } = req.body as PostWorkflowDebugProps;
   try {
     await connectToDatabase();
-    if (!history || !nodes || !prompt || prompt.length === 0) {
+    if (!nodes) {
       throw new Error('Prams Error');
     }
     if (!Array.isArray(nodes)) {
@@ -66,12 +35,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // auth balance
     const { user } = await getUserChatInfoAndAuthTeamPoints(tmbId);
 
-    const { text, files } = chatValue2RuntimePrompt(prompt);
-
     /* start process */
     const { flowResponses, flowUsages } = await dispatchWorkFlow({
       res,
-      mode: 'test',
+      mode: 'debug',
       teamId,
       tmbId,
       user,
@@ -80,39 +47,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       runtimeEdges: edges,
       variables: {
         ...variables,
-        userChatInput: text
+        userChatInput: ''
       },
-      inputFiles: files,
-      histories: history,
-      stream: true,
+      inputFiles: [],
+      histories: [],
+      stream: false,
       detail: true,
       maxRunTimes: 200
     });
 
-    responseWrite({
-      res,
-      event: SseResponseEventEnum.answer,
-      data: '[DONE]'
-    });
-    responseWrite({
-      res,
-      event: SseResponseEventEnum.flowResponses,
-      data: JSON.stringify(flowResponses)
-    });
-    res.end();
-
     pushChatUsage({
-      appName,
+      appName: '工作流Debug',
       appId,
       teamId,
       tmbId,
       source: UsageSourceEnum.fastgpt,
       flowUsages
     });
+
+    jsonRes(res, {
+      data: flowResponses[0]
+    });
   } catch (err: any) {
-    res.status(500);
-    sseErrRes(res, err);
-    res.end();
+    jsonRes(res, {
+      code: 500,
+      error: err
+    });
   }
 }
 

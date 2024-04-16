@@ -65,7 +65,7 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
     detail = false,
     user,
     histories,
-    node: { name, outputs },
+    node: { name },
     inputFiles = [],
     params: {
       model,

@@ -11,6 +11,7 @@ export type FlowNodeInputItemType = {
   valueType?: `${WorkflowIOValueTypeEnum}`; // data type
   value?: any;
   label: string;
+  debugLabel?: string;
   description?: string; // field desc
   required?: boolean;
   toolDescription?: string; // If this field is not empty, it is entered as a tool
