@@ -833,6 +833,7 @@
         "Input description": "可接收知识库搜索的结果。",
         "label": "知识库引用"
       },
+      "Default Value": "默认值",
       "Default value": "默认值",
       "Default value placeholder": "不填则默认返回空字符",
       "Edit intro": "编辑描述",
@@ -844,13 +845,20 @@
       "Http request settings": "请求配置",
       "Input Type": "输入类型",
       "Laf sync params": "同步参数",
+      "Max Length": "最大长度",
+      "Max Length placeholder": "输入文本的最大长度",
+      "Max Value": "最大值",
+      "Min Value": "最小值",
+      "Model List": "模型列表",
       "Plugin output must connect": "自定义输出必须全部连接",
+      "Plugin tool Description": "工具参数需要描述",
       "QueryExtension": {
         "placeholder": "例如:\n关于 python 的介绍和使用等问题。\n当前对话与游戏《GTA5》有关。",
         "tip": "描述当前对话的范围，便于AI补全首次问题或模糊的问题，从而增强知识库连续对话的能力。建议开启该功能后，都简单的描述在对话的背景，否则容易造成补全对象不准确。"
       },
       "Quote prompt setting": "引用提示词配置",
       "Qupte prompt setting": "",
+      "Select Data List": "数据列表",
       "Select app": "选择应用",
       "Setting quote prompt": "配置引用提示词",
       "Unlink tip": "【{{name}}】存在未填或未连接参数",
@@ -927,15 +935,17 @@
         }
       },
       "inputType": {
+        "JSON Editor": "JSON 输入框",
         "chat history": "历史记录",
         "dynamicTargetInput": "动态外部数据",
         "input": "单行输入框",
+        "number input": "数字输入框",
         "selectApp": "应用选择",
         "selectDataset": "知识库选择",
         "selectLLMModel": "对话模型选择",
         "switch": "开关",
         "target": "外部数据",
-        "textarea": "段落输入"
+        "textarea": "多行输入框"
       },
       "laf": {
         "Select laf function": "选择laf函数"
