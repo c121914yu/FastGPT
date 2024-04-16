@@ -33,6 +33,7 @@ export default React.memo(function FlowEdit(props: Props) {
 
   return (
     <FlowProvider
+      appId={props.app._id}
       mode={'app'}
       filterAppIds={filterAppIds}
       basicNodeTemplates={appSystemModuleTemplates}
