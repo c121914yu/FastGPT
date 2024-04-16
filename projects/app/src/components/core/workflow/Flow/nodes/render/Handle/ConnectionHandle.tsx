@@ -102,7 +102,7 @@ export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
 };
 
 export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
-  const { nodes, edges, connectingEdge } = useFlowProviderStore();
+  const { nodes, connectingEdge } = useFlowProviderStore();
 
   const node = useMemo(() => nodes.find((node) => node.data.nodeId === nodeId), [nodes, nodeId]);
 
