@@ -1073,6 +1073,7 @@
       "Custom outputs": "自定义输出",
       "Custom variable": "自定义变量",
       "Dataset quote": "知识库引用",
+      "Run from here": "从这里开始运行调试",
       "chat": {
         "Quote prompt": "引用提示词"
       },

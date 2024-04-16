@@ -5,14 +5,13 @@ import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import Divider from '../components/Divider';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
-import RenderOutput from './render/RenderOutput';
 import { useTranslation } from 'next-i18next';
 import { ToolSourceHandle } from './render/Handle/ToolHandle';
 import { Box } from '@chakra-ui/react';
 
 const NodeTools = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
-  const { nodeId, inputs, outputs } = data;
+  const { nodeId, inputs } = data;
 
   return (
     <NodeCard minW={'350px'} selected={selected} {...data}>
