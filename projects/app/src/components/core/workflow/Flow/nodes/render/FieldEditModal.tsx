@@ -7,26 +7,25 @@ import {
   Flex,
   Switch,
   Input,
-  Textarea
+  Textarea,
+  Stack
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import MyModal from '@fastgpt/web/components/common/MyModal';
-import {
-  DYNAMIC_INPUT_KEY,
-  WorkflowIOValueTypeEnum
-} from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
-import {
-  FlowNodeInputTypeEnum,
-  FlowNodeOutputTypeEnum
-} from '@fastgpt/global/core/workflow/node/constant';
+import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import {
   EditInputFieldMapType,
   EditNodeFieldType
 } from '@fastgpt/global/core/workflow/node/type.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MySelect from '@fastgpt/web/components/common/MySelect';
+import {
+  DYNAMIC_INPUT_KEY,
+  WorkflowIOValueTypeEnum
+} from '@fastgpt/global/core/workflow/constants';
+import JsonEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
 
 const FieldEditModal = ({
   editField = {
@@ -66,9 +65,29 @@ const FieldEditModal = ({
       valueType: WorkflowIOValueTypeEnum.string
     },
     {
+      label: t('core.module.inputType.JSON Editor'),
+      value: FlowNodeInputTypeEnum.JSONEditor,
+      valueType: WorkflowIOValueTypeEnum.string
+    },
+    {
+      label: t('core.module.inputType.number input'),
+      value: FlowNodeInputTypeEnum.numberInput,
+      valueType: WorkflowIOValueTypeEnum.number
+    },
+    {
       label: t('core.module.inputType.switch'),
       value: FlowNodeInputTypeEnum.switch,
       valueType: WorkflowIOValueTypeEnum.boolean
+    },
+    {
+      label: t('core.module.inputType.selectApp'),
+      value: FlowNodeInputTypeEnum.selectApp,
+      valueType: WorkflowIOValueTypeEnum.selectApp
+    },
+    {
+      label: t('core.module.inputType.selectLLMModel'),
+      value: FlowNodeInputTypeEnum.selectLLMModel,
+      valueType: WorkflowIOValueTypeEnum.string
     },
     {
       label: t('core.module.inputType.selectDataset'),
@@ -100,8 +119,15 @@ const FieldEditModal = ({
     }
   });
   const inputType = watch('inputType');
-  const required = watch('required');
+  const isToolInput = watch('isToolInput');
+  const maxLength = watch('maxLength');
+  const max = watch('max');
+  const min = watch('min');
   const [refresh, setRefresh] = useState(false);
+
+  const showToolInput = useMemo(() => {
+    return editField.isToolInput && inputType === FlowNodeInputTypeEnum.reference;
+  }, [editField.isToolInput, inputType]);
 
   const showDataTypeSelect = useMemo(() => {
     if (!editField.valueType) return false;
@@ -111,11 +137,22 @@ const FieldEditModal = ({
     return false;
   }, [editField.valueType, inputType]);
 
-  const showRequired = useMemo(() => {
-    if (inputType === FlowNodeInputTypeEnum.addInputParam) return false;
+  const showDefaultValue = useMemo(() => {
+    if (inputType === FlowNodeInputTypeEnum.input) return true;
+    if (inputType === FlowNodeInputTypeEnum.textarea) return true;
+    if (inputType === FlowNodeInputTypeEnum.JSONEditor) return true;
+    if (inputType === FlowNodeInputTypeEnum.numberInput) return true;
+    if (inputType === FlowNodeInputTypeEnum.switch) return true;
 
-    return editField.required || editField.defaultValue;
-  }, [editField.defaultValue, editField.required, inputType]);
+    return false;
+  }, [inputType]);
+
+  const showMaxLenInput = useMemo(() => {
+    if (inputType === FlowNodeInputTypeEnum.input) return true;
+    if (inputType === FlowNodeInputTypeEnum.textarea) return true;
+
+    return false;
+  }, [inputType]);
 
   const showNameInput = useMemo(() => {
     return editField.name;
@@ -130,6 +167,12 @@ const FieldEditModal = ({
   const showDescriptionInput = useMemo(() => {
     return editField.description;
   }, [editField.description]);
+
+  const showMinMaxInput = useMemo(() => {
+    if (inputType === FlowNodeInputTypeEnum.numberInput) return true;
+
+    return false;
+  }, [inputType]);
 
   const onSubmitSuccess = useCallback(
     (data: EditNodeFieldType) => {
@@ -146,7 +189,6 @@ const FieldEditModal = ({
           title: '数据类型不能为空'
         });
       }
-
       onSubmit({
         data,
         changeKey: !keys.includes(data.key)
@@ -175,131 +217,174 @@ const FieldEditModal = ({
       iconSrc="/imgs/workflow/extract.png"
       title={t('core.module.edit.Field Edit')}
       onClose={onClose}
+      maxW={'1000px'}
     >
       <ModalBody overflow={'visible'}>
-        {/* input type select: target, input, textarea.... */}
-        {editField.inputType && (
-          <Flex alignItems={'center'} mb={5}>
-            <Box flex={'0 0 70px'}>{t('core.module.Input Type')}</Box>
-            <MySelect
-              w={'288px'}
-              list={inputTypeList}
-              value={getValues('inputType')}
-              onchange={(e: string) => {
-                const type = e as `${FlowNodeInputTypeEnum}`;
-                const selectedItem = inputTypeList.find((item) => item.value === type);
-                setValue('inputType', type);
-                setValue('valueType', selectedItem?.valueType);
+        <Flex>
+          <Stack mr={8} w={'300px'}>
+            {editField.inputType && (
+              <Flex alignItems={'center'} mb={5}>
+                <Box flex={'0 0 70px'}>{t('core.module.Input Type')}</Box>
+                <Box flex={1}>
+                  <MySelect
+                    w={'full'}
+                    list={inputTypeList}
+                    value={getValues('inputType')}
+                    onchange={(e: string) => {
+                      const type = e as `${FlowNodeInputTypeEnum}`;
+                      const selectedItem = inputTypeList.find((item) => item.value === type);
+                      setValue('inputType', type);
+                      setValue('valueType', selectedItem?.valueType);
 
-                if (type === FlowNodeInputTypeEnum.selectDataset) {
-                  setValue('label', selectedItem?.label);
-                } else if (type === FlowNodeInputTypeEnum.addInputParam) {
-                  setValue('label', t('core.module.valueType.dynamicTargetInput'));
-                  setValue('key', DYNAMIC_INPUT_KEY);
-                  setValue('required', false);
-                }
+                      if (type === FlowNodeInputTypeEnum.selectDataset) {
+                        setValue('label', selectedItem?.label);
+                      } else if (type === FlowNodeInputTypeEnum.addInputParam) {
+                        setValue('label', t('core.module.valueType.dynamicTargetInput'));
+                        setValue('key', DYNAMIC_INPUT_KEY);
+                        setValue('required', false);
+                      }
 
-                setRefresh(!refresh);
-              }}
-            />
-          </Flex>
-        )}
-        {showRequired && (
-          <Flex alignItems={'center'} mb={5}>
-            <Box flex={'0 0 70px'}>{t('common.Require Input')}</Box>
-            <Switch
-              {...register('required', {
-                onChange(e) {
-                  if (!e.target.checked) {
-                    setValue('defaultValue', '');
+                      setRefresh(!refresh);
+                    }}
+                  />
+                </Box>
+              </Flex>
+            )}
+            {showNameInput && (
+              <Flex mb={5} alignItems={'center'}>
+                <Box flex={'0 0 70px'}>{t('core.module.Field Name')}</Box>
+                <Input
+                  bg={'myGray.50'}
+                  placeholder="预约字段/sql语句……"
+                  {...register('label', { required: true })}
+                />
+              </Flex>
+            )}
+            {showKeyInput && (
+              <Flex mb={5} alignItems={'center'}>
+                <Box flex={'0 0 70px'}>{t('core.module.Field key')}</Box>
+                <Input
+                  bg={'myGray.50'}
+                  placeholder="appointment/sql"
+                  {...register('key', {
+                    required: true,
+                    onChange: (e) => {
+                      const value = e.target.value;
+                      // auto fill label
+                      if (!showNameInput) {
+                        setValue('label', value);
+                      }
+                    }
+                  })}
+                />
+              </Flex>
+            )}
+            {showDescriptionInput && (
+              <Box mb={5} alignItems={'flex-start'}>
+                <Box flex={'0 0 70px'} mb={'1px'}>
+                  {t('core.module.Field Description')}
+                </Box>
+                <Textarea
+                  bg={'myGray.50'}
+                  placeholder={
+                    isToolInput ? t('core.module.Plugin tool Description') : t('common.choosable')
                   }
-                }
-              })}
-            />
-          </Flex>
-        )}
-        {showRequired && required && editField.defaultValue && (
-          <Flex alignItems={'center'} mb={5}>
-            <Box flex={['0 0 70px']}>{t('core.module.Default value')}</Box>
-            <Input
-              bg={'myGray.50'}
-              placeholder={t('core.module.Default value placeholder')}
-              {...register('defaultValue')}
-            />
-          </Flex>
-        )}
-        {editField.isToolInput && (
-          <Flex alignItems={'center'} mb={5}>
-            <Box flex={'0 0 70px'}>工具参数</Box>
-            <Switch {...register('isToolInput')} />
-          </Flex>
-        )}
-        {showDataTypeSelect && (
-          <Flex mb={5} alignItems={'center'}>
-            <Box flex={'0 0 70px'}>{t('core.module.Data Type')}</Box>
-            <MySelect
-              w={'288px'}
-              list={dataTypeSelectList}
-              value={getValues('valueType')}
-              onchange={(e: string) => {
-                const type = e as `${WorkflowIOValueTypeEnum}`;
-                setValue('valueType', type);
+                  rows={5}
+                  {...register('description', { required: isToolInput ? true : false })}
+                />
+              </Box>
+            )}
+          </Stack>
+          <Stack w={'300px'}>
+            {showToolInput && (
+              <Flex alignItems={'center'} mb={5}>
+                <Box flex={'0 0 70px'}>工具参数</Box>
+                <Switch {...register('isToolInput')} />
+              </Flex>
+            )}
+            {showDataTypeSelect && (
+              <Flex mb={5} alignItems={'center'}>
+                <Box flex={'0 0 70px'}>{t('core.module.Data Type')}</Box>
+                <Box flex={1}>
+                  <MySelect
+                    w={'full'}
+                    list={dataTypeSelectList}
+                    value={getValues('valueType')}
+                    onchange={(e: string) => {
+                      const type = e as `${WorkflowIOValueTypeEnum}`;
+                      setValue('valueType', type);
 
-                if (
-                  type === WorkflowIOValueTypeEnum.chatHistory ||
-                  type === WorkflowIOValueTypeEnum.datasetQuote
-                ) {
-                  const label = dataTypeSelectList.find((item) => item.value === type)?.label;
-                  setValue('label', label);
-                }
+                      if (
+                        type === WorkflowIOValueTypeEnum.chatHistory ||
+                        type === WorkflowIOValueTypeEnum.datasetQuote
+                      ) {
+                        const label = dataTypeSelectList.find((item) => item.value === type)?.label;
+                        setValue('label', label);
+                      }
 
-                setRefresh(!refresh);
-              }}
-            />
-          </Flex>
-        )}
-        {showNameInput && (
-          <Flex mb={5} alignItems={'center'}>
-            <Box flex={'0 0 70px'}>{t('core.module.Field Name')}</Box>
-            <Input
-              bg={'myGray.50'}
-              placeholder="预约字段/sql语句……"
-              {...register('label', { required: true })}
-            />
-          </Flex>
-        )}
-        {showKeyInput && (
-          <Flex mb={5} alignItems={'center'}>
-            <Box flex={'0 0 70px'}>{t('core.module.Field key')}</Box>
-            <Input
-              bg={'myGray.50'}
-              placeholder="appointment/sql"
-              {...register('key', {
-                required: true,
-                onChange: (e) => {
-                  const value = e.target.value;
-                  // auto fill label
-                  if (!showNameInput) {
-                    setValue('label', value);
-                  }
-                }
-              })}
-            />
-          </Flex>
-        )}
-        {showDescriptionInput && (
-          <Box mb={5} alignItems={'flex-start'}>
-            <Box flex={'0 0 70px'} mb={'1px'}>
-              {t('core.module.Field Description')}
-            </Box>
-            <Textarea
-              bg={'myGray.50'}
-              placeholder={t('common.choosable')}
-              rows={5}
-              {...register('description')}
-            />
-          </Box>
-        )}
+                      setRefresh(!refresh);
+                    }}
+                  />
+                </Box>
+              </Flex>
+            )}
+            {showDefaultValue && (
+              <Flex mb={5} alignItems={'center'}>
+                <Box flex={'0 0 70px'}>{t('core.module.Default Value')}</Box>
+                {inputType === FlowNodeInputTypeEnum.numberInput && (
+                  <Input
+                    bg={'myGray.50'}
+                    max={max}
+                    min={min}
+                    type={'number'}
+                    {...register('defaultValue')}
+                  />
+                )}
+                {inputType === FlowNodeInputTypeEnum.input && (
+                  <Input bg={'myGray.50'} maxLength={maxLength} {...register('defaultValue')} />
+                )}
+                {inputType === FlowNodeInputTypeEnum.textarea && (
+                  <Textarea bg={'myGray.50'} maxLength={maxLength} {...register('defaultValue')} />
+                )}
+                {inputType === FlowNodeInputTypeEnum.JSONEditor && (
+                  <JsonEditor
+                    resize
+                    w={'full'}
+                    onChange={(e) => {
+                      setValue('defaultValue', e);
+                    }}
+                    defaultValue={getValues('defaultValue')}
+                  />
+                )}
+                {inputType === FlowNodeInputTypeEnum.switch && (
+                  <Switch {...register('defaultValue')} />
+                )}
+              </Flex>
+            )}
+            {showMaxLenInput && (
+              <Flex mb={5} alignItems={'center'}>
+                <Box flex={'0 0 70px'}>{t('core.module.Max Length')}</Box>
+                <Input
+                  bg={'myGray.50'}
+                  placeholder={t('core.module.Max Length placeholder')}
+                  {...register('maxLength')}
+                />
+              </Flex>
+            )}
+            {showMinMaxInput && (
+              <Box>
+                <Flex mb={5} alignItems={'center'}>
+                  <Box flex={'0 0 70px'}>{t('core.module.Max Value')}</Box>
+                  <Input bg={'myGray.50'} type={'number'} {...register('max')} />
+                </Flex>
+                <Flex mb={5} alignItems={'center'}>
+                  <Box flex={'0 0 70px'}>{t('core.module.Min Value')}</Box>
+                  <Input bg={'myGray.50'} type={'number'} {...register('min')} />
+                </Flex>
+              </Box>
+            )}
+          </Stack>
+        </Flex>
       </ModalBody>
 
       <ModalFooter>

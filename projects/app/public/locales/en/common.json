@@ -831,6 +831,7 @@
         "Input description": "",
         "label": "Dataset quote"
       },
+      "Default Value": "Default value",
       "Default value": "Default ",
       "Default value placeholder": "Null characters are returned by default",
       "Edit intro": "Edit",
@@ -842,13 +843,20 @@
       "Http request settings": "Request settings",
       "Input Type": "Input Type",
       "Laf sync params": "Sync params",
+      "Max Length": "Max Length",
+      "Max Length placeholder": "The max length of input text",
+      "Max Value": "Max Value",
+      "Min Value": "",
+      "Model List": "Model list",
       "Plugin output must connect": "Custom outputs must all be connected",
+      "Plugin tool Description": "",
       "QueryExtension": {
         "placeholder": "Questions about python introduction and usage, etc. The current conversation is related to the game GTA5.",
         "tip": "Describes the scope of the current conversation, making it easier for the AI to complete first or vague questions, thereby enhancing the knowledge base's ability to continue conversations.If \n is empty, the question completion function is not used in the first conversation. "
       },
       "Quote prompt setting": "Quote prompt setting",
       "Qupte prompt setting": "",
+      "Select Data List": "Data list",
       "Select app": "Select app",
       "Setting quote prompt": "Setting quote prompt",
       "Unlink tip": "[{{name}}] An unfilled or unconnected parameter exists",
@@ -925,9 +933,11 @@
         }
       },
       "inputType": {
+        "JSON Editor": "JSON Editor",
         "chat history": "History",
         "dynamicTargetInput": "dynamic Target Input",
         "input": "Input",
+        "number input": "number input",
         "selectApp": "App Selector",
         "selectDataset": "Dataset Selector",
         "selectLLMModel": "Select Chat Model",

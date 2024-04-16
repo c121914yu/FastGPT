@@ -1,7 +1,10 @@
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
+import {
+  FlowNodeInputItemType,
+  FlowNodeOutputItemType
+} from '@fastgpt/global/core/workflow/type/io.d';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'next-i18next';
-import { useFlowProviderStore, useFlowProviderStoreType } from '../../../FlowProvider';
+import { useFlowProviderStore } from '../../../FlowProvider';
 import { Box, Flex } from '@chakra-ui/react';
 import MyTooltip from '@/components/MyTooltip';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
@@ -16,12 +19,27 @@ const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 type Props = {
   nodeId: string;
   input: FlowNodeInputItemType;
+  output?: FlowNodeOutputItemType;
+  mode?: 'app' | 'plugin';
 };
 
-const InputLabel = ({ nodeId, input }: Props) => {
+const InputLabel = ({ nodeId, input, output, mode }: Props) => {
   const { t } = useTranslation();
   const { onChangeNode } = useFlowProviderStore();
-  const { description, label, selectedTypeIndex, renderTypeList, valueType, canEdit, key } = input;
+  const {
+    description,
+    toolDescription,
+    label,
+    selectedTypeIndex,
+    renderTypeList,
+    valueType,
+    canEdit,
+    key,
+    value,
+    maxLength,
+    max,
+    min
+  } = input;
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
   const onChangeRenderType = useCallback(
@@ -53,7 +71,7 @@ const InputLabel = ({ nodeId, input }: Props) => {
             </MyTooltip>
           )}
         </Box>
-        {canEdit && (
+        {mode === 'plugin' && canEdit && (
           <>
             <MyIcon
               name={'common/settingLight'}
@@ -67,7 +85,12 @@ const InputLabel = ({ nodeId, input }: Props) => {
                   valueType: valueType,
                   key,
                   label,
-                  description
+                  description,
+                  isToolInput: !!toolDescription,
+                  defaultValue: value,
+                  maxLength,
+                  max,
+                  min
                 })
               }
             />
@@ -82,6 +105,11 @@ const InputLabel = ({ nodeId, input }: Props) => {
                 onChangeNode({
                   nodeId,
                   type: 'delInput',
+                  key: key
+                });
+                onChangeNode({
+                  nodeId,
+                  type: 'delOutput',
                   key: key
                 });
               }}
@@ -105,7 +133,18 @@ const InputLabel = ({ nodeId, input }: Props) => {
                 key: data.key,
                 required: data.required,
                 label: data.label,
-                description: data.description
+                description: data.description,
+                toolDescription: data.isToolInput ? data.description : undefined,
+                maxLength: data.maxLength,
+                value: data.defaultValue,
+                max: data.max,
+                min: data.min
+              };
+              const newOutput: FlowNodeOutputItemType = {
+                ...(output as FlowNodeOutputItemType),
+                valueType: data.valueType,
+                key: data.key,
+                label: data.label
               };
 
               if (changeKey) {
@@ -115,12 +154,24 @@ const InputLabel = ({ nodeId, input }: Props) => {
                   key: editField.key,
                   value: newInput
                 });
+                onChangeNode({
+                  nodeId,
+                  type: 'replaceOutput',
+                  key: editField.key,
+                  value: newOutput
+                });
               } else {
                 onChangeNode({
                   nodeId,
                   type: 'updateInput',
                   key: newInput.key,
                   value: newInput
+                });
+                onChangeNode({
+                  nodeId,
+                  type: 'updateOutput',
+                  key: newOutput.key,
+                  value: newOutput
                 });
               }
               setEditField(undefined);
@@ -145,9 +196,11 @@ const InputLabel = ({ nodeId, input }: Props) => {
     input,
     key,
     label,
+    mode,
     nodeId,
     onChangeNode,
     onChangeRenderType,
+    output,
     renderTypeList,
     selectedTypeIndex,
     t,
