@@ -257,38 +257,53 @@ const NodeCard = (props: Props) => {
     );
   }, [ConfirmDeleteModal, ConfirmSyncModal, EditIntroModal, EditTitleModal, moduleIsTool]);
 
-  return (
-    <Box
-      minW={minW}
-      maxW={maxW}
-      bg={'white'}
-      borderWidth={'1px'}
-      borderRadius={'md'}
-      boxShadow={'1'}
-      _hover={{
-        boxShadow: '4',
-        '& .controller-menu': {
-          display: 'flex'
-        }
-      }}
-      onMouseEnter={() => setHoverNodeId(nodeId)}
-      onMouseLeave={() => setHoverNodeId(undefined)}
-      {...(isError
-        ? {
-            borderColor: 'red.500',
-            onMouseDownCapture: () => onUpdateNodeError(nodeId, false)
+  const Render = useMemo(() => {
+    return (
+      <Box
+        minW={minW}
+        maxW={maxW}
+        bg={'white'}
+        borderWidth={'1px'}
+        borderRadius={'md'}
+        boxShadow={'1'}
+        _hover={{
+          boxShadow: '4',
+          '& .controller-menu': {
+            display: 'flex'
           }
-        : {
-            borderColor: selected ? 'primary.600' : 'borderColor.base'
-          })}
-    >
-      {Header}
-      {children}
-      {RenderModal}
-      <ConnectionSourceHandle nodeId={nodeId} />
-      <ConnectionTargetHandle nodeId={nodeId} />
-    </Box>
-  );
+        }}
+        onMouseEnter={() => setHoverNodeId(nodeId)}
+        onMouseLeave={() => setHoverNodeId(undefined)}
+        {...(isError
+          ? {
+              borderColor: 'red.500',
+              onMouseDownCapture: () => onUpdateNodeError(nodeId, false)
+            }
+          : {
+              borderColor: selected ? 'primary.600' : 'borderColor.base'
+            })}
+      >
+        {Header}
+        {children}
+        {RenderModal}
+        <ConnectionSourceHandle nodeId={nodeId} />
+        <ConnectionTargetHandle nodeId={nodeId} />
+      </Box>
+    );
+  }, [
+    Header,
+    RenderModal,
+    // children,
+    isError,
+    maxW,
+    minW,
+    nodeId,
+    onUpdateNodeError,
+    selected,
+    setHoverNodeId
+  ]);
+
+  return Render;
 };
 
 export default React.memo(NodeCard);
