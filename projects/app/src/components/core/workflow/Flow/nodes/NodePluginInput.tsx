@@ -77,6 +77,7 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               nodeId={nodeId}
               input={input}
               output={outputs.find((output) => output.key === input.key) as FlowNodeOutputItemType}
+              mode={mode}
             />
           </Box>
         ))}

@@ -19,10 +19,11 @@ const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 type Props = {
   nodeId: string;
   input: FlowNodeInputItemType;
-  output: FlowNodeOutputItemType;
+  output?: FlowNodeOutputItemType;
+  mode?: 'app' | 'plugin';
 };
 
-const InputLabel = ({ nodeId, input, output }: Props) => {
+const InputLabel = ({ nodeId, input, output, mode }: Props) => {
   const { t } = useTranslation();
   const { onChangeNode } = useFlowProviderStore();
   const {
@@ -69,7 +70,7 @@ const InputLabel = ({ nodeId, input, output }: Props) => {
           </MyTooltip>
         )}
       </Box>
-      {canEdit && (
+      {mode === 'plugin' && canEdit && (
         <>
           <MyIcon
             name={'common/settingLight'}
@@ -139,7 +140,7 @@ const InputLabel = ({ nodeId, input, output }: Props) => {
               min: data.min
             };
             const newOutput: FlowNodeOutputItemType = {
-              ...output,
+              ...(output as FlowNodeOutputItemType),
               valueType: data.valueType,
               key: data.key,
               label: data.label
