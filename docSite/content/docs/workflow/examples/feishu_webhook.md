@@ -308,7 +308,7 @@ weight: 404
         "key": "DYNAMIC_INPUT_KEY",
         "type": "target",
         "valueType": "any",
-        "label": "core.module.inputType.dynamicTargetInput",
+        "label": "core.workflow.inputType.dynamicTargetInput",
         "description": "core.module.input.description.dynamic input",
         "required": false,
         "showTargetInApp": false,

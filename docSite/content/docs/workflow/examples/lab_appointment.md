@@ -1020,7 +1020,7 @@ HTTP 模块允许你调用任意 GET/POST 类型的 HTTP 接口，从而实现�
         "key": "DYNAMIC_INPUT_KEY",
         "type": "target",
         "valueType": "any",
-        "label": "core.module.inputType.dynamicTargetInput",
+        "label": "core.workflow.inputType.dynamicTargetInput",
         "description": "core.module.input.description.dynamic input",
         "required": false,
         "showTargetInApp": false,

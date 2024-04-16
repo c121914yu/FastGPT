@@ -22,66 +22,97 @@ const NodeInputSelect = ({
   const renderType = renderTypeList[renderTypeIndex];
 
   const inputList = useRef([
-    { type: FlowNodeInputTypeEnum.reference, icon: 'more', title: 'reference', desc: 'xxxxx' },
-    { type: FlowNodeInputTypeEnum.input, icon: 'more', title: 'input', desc: 'xxxxx' },
-    { type: FlowNodeInputTypeEnum.numberInput, icon: 'more', title: 'numberInput', desc: 'xxxxx' },
-    { type: FlowNodeInputTypeEnum.select, icon: 'more', title: 'select', desc: 'xxxxx' },
-    { type: FlowNodeInputTypeEnum.slider, icon: 'more', title: 'slider', desc: 'xxxxx' },
-    { type: FlowNodeInputTypeEnum.switch, icon: 'more', title: 'switch', desc: 'xxxxx' },
-    { type: FlowNodeInputTypeEnum.textarea, icon: 'more', title: 'textarea', desc: 'xxxxx' },
-    { type: FlowNodeInputTypeEnum.JSONEditor, icon: 'more', title: 'JSONEditor', desc: 'xxxxx' },
+    {
+      type: FlowNodeInputTypeEnum.reference,
+      icon: 'more',
+      title: t('core.workflow.inputType.Reference')
+    },
+    {
+      type: FlowNodeInputTypeEnum.input,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual input')
+    },
+    {
+      type: FlowNodeInputTypeEnum.numberInput,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual input')
+    },
+    {
+      type: FlowNodeInputTypeEnum.select,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual select')
+    },
+    {
+      type: FlowNodeInputTypeEnum.slider,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual input')
+    },
+    {
+      type: FlowNodeInputTypeEnum.switch,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual select')
+    },
+    {
+      type: FlowNodeInputTypeEnum.textarea,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual input')
+    },
+    {
+      type: FlowNodeInputTypeEnum.JSONEditor,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual input')
+    },
     {
       type: FlowNodeInputTypeEnum.addInputParam,
       icon: 'more',
-      title: 'addInputParam',
-      desc: 'xxxxx'
+      title: t('core.workflow.inputType.dynamicTargetInput')
     },
-    { type: FlowNodeInputTypeEnum.selectApp, icon: 'more', title: 'selectApp', desc: 'xxxxx' },
+    {
+      type: FlowNodeInputTypeEnum.selectApp,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual select')
+    },
     {
       type: FlowNodeInputTypeEnum.selectLLMModel,
       icon: 'more',
-      title: 'selectLLMModel',
-      desc: 'xxxxx'
+      title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.settingLLMModel,
       icon: 'more',
-      title: 'settingLLMModel',
-      desc: 'xxxxx'
+      title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.selectDataset,
       icon: 'more',
-      title: 'selectDataset',
-      desc: 'xxxxx'
+      title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.selectDatasetParamsModal,
       icon: 'more',
-      title: 'selectDatasetParamsModal',
-      desc: 'xxxxx'
+      title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.settingDatasetQuotePrompt,
       icon: 'more',
-      title: 'settingDatasetQuotePrompt',
-      desc: 'xxxxx'
+      title: t('core.workflow.inputType.Manual input')
     },
-    { type: FlowNodeInputTypeEnum.hidden, icon: 'more', title: 'hidden', desc: 'xxxxx' },
-    { type: FlowNodeInputTypeEnum.custom, icon: 'more', title: 'custom', desc: 'xxxxx' }
+    {
+      type: FlowNodeInputTypeEnum.hidden,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual input')
+    },
+    {
+      type: FlowNodeInputTypeEnum.custom,
+      icon: 'more',
+      title: t('core.workflow.inputType.Manual input')
+    }
   ]);
 
   const renderList = useMemo(
     () =>
       inputList.current.map((input) => ({
-        label: (
-          <Box>
-            <Box fontWeight={'bold'}>{input.title}</Box>
-            <Box fontSize={'sm'} color={'gray.500'}>
-              {input.desc}
-            </Box>
-          </Box>
-        ),
+        label: input.title,
         icon: input.icon,
         renderType: input.type,
         isActive: renderType === input.type,
