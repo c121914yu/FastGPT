@@ -154,10 +154,6 @@ const FieldEditModal = ({
     return false;
   }, [inputType]);
 
-  const showNameInput = useMemo(() => {
-    return editField.name;
-  }, [editField.name]);
-
   const showKeyInput = useMemo(() => {
     if (inputType === FlowNodeInputTypeEnum.addInputParam) return false;
 
@@ -177,6 +173,9 @@ const FieldEditModal = ({
   const onSubmitSuccess = useCallback(
     (data: EditNodeFieldType) => {
       if (!data.key) return;
+
+      data.label = data.key;
+
       if (isCreate && keys.includes(data.key)) {
         return toast({
           status: 'warning',
@@ -189,6 +188,7 @@ const FieldEditModal = ({
           title: '数据类型不能为空'
         });
       }
+
       onSubmit({
         data,
         changeKey: !keys.includes(data.key)
@@ -236,11 +236,7 @@ const FieldEditModal = ({
                       setValue('inputType', type);
                       setValue('valueType', selectedItem?.valueType);
 
-                      if (type === FlowNodeInputTypeEnum.selectDataset) {
-                        setValue('label', selectedItem?.label);
-                      } else if (type === FlowNodeInputTypeEnum.addInputParam) {
-                        setValue('label', t('core.module.valueType.dynamicTargetInput'));
-                        setValue('key', DYNAMIC_INPUT_KEY);
+                      if (type === FlowNodeInputTypeEnum.addInputParam) {
                         setValue('required', false);
                       }
 
@@ -250,31 +246,15 @@ const FieldEditModal = ({
                 </Box>
               </Flex>
             )}
-            {showNameInput && (
+
+            {showKeyInput && (
               <Flex mb={5} alignItems={'center'}>
                 <Box flex={'0 0 70px'}>{t('core.module.Field Name')}</Box>
                 <Input
                   bg={'myGray.50'}
-                  placeholder="预约字段/sql语句……"
-                  {...register('label', { required: true })}
-                />
-              </Flex>
-            )}
-            {showKeyInput && (
-              <Flex mb={5} alignItems={'center'}>
-                <Box flex={'0 0 70px'}>{t('core.module.Field key')}</Box>
-                <Input
-                  bg={'myGray.50'}
                   placeholder="appointment/sql"
                   {...register('key', {
-                    required: true,
-                    onChange: (e) => {
-                      const value = e.target.value;
-                      // auto fill label
-                      if (!showNameInput) {
-                        setValue('label', value);
-                      }
-                    }
+                    required: true
                   })}
                 />
               </Flex>
@@ -313,14 +293,6 @@ const FieldEditModal = ({
                     onchange={(e: string) => {
                       const type = e as `${WorkflowIOValueTypeEnum}`;
                       setValue('valueType', type);
-
-                      if (
-                        type === WorkflowIOValueTypeEnum.chatHistory ||
-                        type === WorkflowIOValueTypeEnum.datasetQuote
-                      ) {
-                        const label = dataTypeSelectList.find((item) => item.value === type)?.label;
-                        setValue('label', label);
-                      }
 
                       setRefresh(!refresh);
                     }}

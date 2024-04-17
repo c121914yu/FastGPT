@@ -83,5 +83,13 @@ export const FlowValueTypeMap = {
     label: 'core.module.valueType.tools',
     value: WorkflowIOValueTypeEnum.tools,
     description: ''
+  },
+  [WorkflowIOValueTypeEnum.dynamic]: {
+    handlerStyle: {
+      borderColor: '#9CA2A8'
+    },
+    label: 'dynamic',
+    value: WorkflowIOValueTypeEnum.any,
+    description: ''
   }
 };
