@@ -1,4 +1,7 @@
-import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import {
+  DispatchNodeResponseKeyEnum,
+  SseResponseEventEnum
+} from '@fastgpt/global/core/workflow/runtime/constants';
 import { responseWrite } from '../../../../common/response';
 import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
@@ -16,6 +19,7 @@ export const dispatchAnswer = (props: Record<string, any>): AnswerResponse => {
     res,
     detail,
     stream,
+    node: { name },
     params: { text = '' }
   } = props as AnswerProps;
 
@@ -32,6 +36,9 @@ export const dispatchAnswer = (props: Record<string, any>): AnswerResponse => {
   }
 
   return {
-    [NodeOutputKeyEnum.answerText]: formatText
+    [NodeOutputKeyEnum.answerText]: formatText,
+    [DispatchNodeResponseKeyEnum.nodeResponse]: {
+      textOutput: formatText
+    }
   };
 };

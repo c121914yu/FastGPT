@@ -8,9 +8,16 @@ import { dispatchWorkFlow } from '@fastgpt/service/core/workflow/dispatch';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
 import { getUserChatInfoAndAuthTeamPoints } from '@/service/support/permission/auth/team';
 import { PostWorkflowDebugProps, PostWorkflowDebugResponse } from '@/global/core/workflow/api';
+import { authPluginCrud } from '@fastgpt/service/support/permission/auth/plugin';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { nodes = [], edges = [], variables = {}, appId } = req.body as PostWorkflowDebugProps;
+  const {
+    nodes = [],
+    edges = [],
+    variables = {},
+    appId,
+    pluginId
+  } = req.body as PostWorkflowDebugProps;
   try {
     await connectToDatabase();
     if (!nodes) {
@@ -24,12 +31,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     /* user auth */
-    const [_, { teamId, tmbId }] = await Promise.all([
-      authApp({ req, authToken: true, appId, per: 'r' }),
+    const [{ teamId, tmbId }] = await Promise.all([
       authCert({
         req,
         authToken: true
-      })
+      }),
+      appId && authApp({ req, authToken: true, appId, per: 'r' }),
+      pluginId && authPluginCrud({ req, authToken: true, pluginId, per: 'r' })
     ]);
 
     // auth balance

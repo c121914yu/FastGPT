@@ -25,7 +25,7 @@ export const WorkflowStart: FlowNodeTemplateType = {
       id: NodeOutputKeyEnum.userChatInput,
       key: NodeOutputKeyEnum.userChatInput,
       label: 'core.module.input.label.user question',
-      type: FlowNodeOutputTypeEnum.source,
+      type: FlowNodeOutputTypeEnum.static,
       valueType: WorkflowIOValueTypeEnum.string
     }
   ]

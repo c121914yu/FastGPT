@@ -162,7 +162,7 @@ export const useDebug = () => {
                         *
                       </Box>
                     )}
-                    {input.debugLabel || input.label}
+                    {t(input.debugLabel || input.label)}
                   </Box>
                   {(() => {
                     if (input.valueType === WorkflowIOValueTypeEnum.string) {
@@ -171,6 +171,7 @@ export const useDebug = () => {
                           {...register(input.key, {
                             required
                           })}
+                          placeholder={t(input.placeholder || '')}
                           bg={'myGray.50'}
                         />
                       );
@@ -204,7 +205,7 @@ export const useDebug = () => {
                     return (
                       <JsonEditor
                         bg={'myGray.50'}
-                        placeholder={input.placeholder}
+                        placeholder={t(input.placeholder || '')}
                         resize
                         value={getValues(input.key)}
                         onChange={(e) => {

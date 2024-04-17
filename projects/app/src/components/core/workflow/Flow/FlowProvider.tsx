@@ -212,13 +212,15 @@ export const FlowProvider = ({
   basicNodeTemplates = [],
   filterAppIds = [],
   children,
-  appId
+  appId,
+  pluginId
 }: {
   mode: useFlowProviderStoreType['mode'];
   basicNodeTemplates: FlowNodeTemplateType[];
   filterAppIds?: string[];
   children: React.ReactNode;
   appId?: string;
+  pluginId?: string;
 }) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
@@ -479,7 +481,7 @@ export const FlowProvider = ({
         .map((node) => {
           const status = checkNodeRunStatus({
             node,
-            runtimeEdges: workflowDebugData?.runtimeEdges || []
+            runtimeEdges: debugData?.runtimeEdges || []
           });
 
           return {
@@ -498,6 +500,7 @@ export const FlowProvider = ({
       // 3. Set entry node status to running
       entryNodes.forEach((node) => {
         if (runtimeNodeStatus[node.nodeId] !== 'wait') {
+          console.log(node.name);
           onChangeNode({
             nodeId: node.nodeId,
             type: 'attr',
@@ -514,15 +517,16 @@ export const FlowProvider = ({
             nodes: runtimeNodes,
             edges: debugData.runtimeEdges,
             variables: {},
-            appId: appId || ''
+            appId,
+            pluginId
           });
-
+        // console.log({ finishedEdges, finishedNodes, nextStepRunNodes, flowResponses });
         // 5. Store debug result
-        setWorkflowDebugData((state) => ({
+        const newStoreDebugData = {
           runtimeNodes: finishedNodes,
           // edges need to save status
           runtimeEdges: finishedEdges.map((edge) => {
-            const oldEdge = state?.runtimeEdges.find(
+            const oldEdge = debugData.runtimeEdges.find(
               (item) => item.source === edge.source && item.target === edge.target
             );
             const status =
@@ -535,7 +539,8 @@ export const FlowProvider = ({
             };
           }),
           nextRunNodes: nextStepRunNodes
-        }));
+        };
+        setWorkflowDebugData(newStoreDebugData);
 
         // 6. selected entry node and Update entry node debug result
         setNodes((state) =>
@@ -575,6 +580,11 @@ export const FlowProvider = ({
             };
           })
         );
+
+        // Check for an empty response
+        if (flowResponses.length === 0 && nextStepRunNodes.length > 0) {
+          onNextNodeDebug(newStoreDebugData);
+        }
       } catch (error) {
         entryNodes.forEach((node) => {
           onChangeNode({
@@ -591,7 +601,7 @@ export const FlowProvider = ({
         console.log(error);
       }
     },
-    [appId, onChangeNode, setNodes, workflowDebugData]
+    [appId, onChangeNode, pluginId, setNodes, workflowDebugData]
   );
   const onStopNodeDebug = useCallback(() => {
     setWorkflowDebugData(undefined);
