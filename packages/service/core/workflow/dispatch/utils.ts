@@ -103,6 +103,16 @@ export const valueTypeFormat = (value: any, type?: `${WorkflowIOValueTypeEnum}`)
   }
   if (type === 'number') return Number(value);
   if (type === 'boolean') return Boolean(value);
+  try {
+    if (type === WorkflowIOValueTypeEnum.datasetQuote && !Array.isArray(value)) {
+      return JSON.parse(value);
+    }
+    if (type === WorkflowIOValueTypeEnum.selectDataset && !Array.isArray(value)) {
+      return JSON.parse(value);
+    }
+  } catch (error) {
+    return value;
+  }
 
   return value;
 };

@@ -21,6 +21,11 @@ import { checkChatSupportSelectFileByModules } from '@/web/core/chat/utils';
 import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import {
+  getDefaultEntryNodeIds,
+  initWorkflowEdgeStatus,
+  storeNodes2RuntimeNodes
+} from '@fastgpt/global/core/workflow/runtime/utils';
 
 export type ChatTestComponentRef = {
   resetChatTest: () => void;
@@ -47,6 +52,7 @@ const ChatTest = (
 
   const startChat = useCallback(
     async ({ chatList, controller, generatingMessage, variables }: StartChatFnProps) => {
+      /* get histories */
       let historyMaxLen = 6;
       nodes.forEach((nodes) => {
         nodes.inputs.forEach((input) => {
@@ -67,11 +73,12 @@ const ChatTest = (
         data: {
           history,
           prompt: chatList[chatList.length - 2].value,
-          nodes,
-          edges,
+          nodes: storeNodes2RuntimeNodes(nodes, getDefaultEntryNodeIds(nodes)),
+          edges: initWorkflowEdgeStatus(edges),
           variables,
           appId: app._id,
-          appName: `调试-${app.name}`
+          appName: `调试-${app.name}`,
+          mode: 'test'
         },
         onMessage: generatingMessage,
         abortCtrl: controller
@@ -79,7 +86,7 @@ const ChatTest = (
 
       return { responseText, responseData };
     },
-    [app._id, app.name, nodes]
+    [app._id, app.name, edges, nodes]
   );
 
   useImperativeHandle(ref, () => ({

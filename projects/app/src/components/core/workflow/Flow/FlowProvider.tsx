@@ -32,7 +32,11 @@ import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { RuntimeEdgeItemType, StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
+import { defaultRunningStatus } from '../constants';
+import { postWorkflowDebug } from '@/web/core/workflow/api';
+import { getErrText } from '@fastgpt/global/common/error/utils';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
@@ -80,6 +84,15 @@ export type useFlowProviderStoreType = {
   hoverNodeId: string | undefined;
   setHoverNodeId: React.Dispatch<React.SetStateAction<string | undefined>>;
   onUpdateNodeError: (node: string, isError: Boolean) => void;
+  nodeDebugRun: ({
+    nodeId,
+    runtimeNodes,
+    runtimeEdges
+  }: {
+    nodeId: string;
+    runtimeNodes: RuntimeNodeItemType[];
+    runtimeEdges: RuntimeEdgeItemType[];
+  }) => Promise<void>;
 };
 
 const StateContext = createContext<useFlowProviderStoreType>({
@@ -160,7 +173,18 @@ const StateContext = createContext<useFlowProviderStoreType>({
   onUpdateNodeError: function (nodeId: string, isError: Boolean): void {
     throw new Error('Function not implemented.');
   },
-  nodeList: []
+  nodeList: [],
+  nodeDebugRun: function ({
+    nodeId,
+    runtimeNodes,
+    runtimeEdges
+  }: {
+    nodeId: string;
+    runtimeNodes: RuntimeNodeItemType[];
+    runtimeEdges: RuntimeEdgeItemType[];
+  }): Promise<void> {
+    throw new Error('Function not implemented.');
+  }
 });
 export const useFlowProviderStore = () => useContext(StateContext);
 
@@ -168,12 +192,14 @@ export const FlowProvider = ({
   mode,
   basicNodeTemplates = [],
   filterAppIds = [],
-  children
+  children,
+  appId
 }: {
   mode: useFlowProviderStoreType['mode'];
   basicNodeTemplates: FlowNodeTemplateType[];
   filterAppIds?: string[];
   children: React.ReactNode;
+  appId?: string;
 }) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
@@ -225,20 +251,23 @@ export const FlowProvider = ({
   );
 
   // node
-  const handleNodesChange = useCallback((changes: NodeChange[]) => {
-    for (const change of changes) {
-      if (change.type === 'remove') {
-        const node = nodes.find((n) => n.id === change.id);
-        if (node && node.data.forbidDelete) {
-          return toast({
-            status: 'warning',
-            title: t('core.workflow.Can not delete node')
-          });
+  const handleNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      for (const change of changes) {
+        if (change.type === 'remove') {
+          const node = nodes.find((n) => n.id === change.id);
+          if (node && node.data.forbidDelete) {
+            return toast({
+              status: 'warning',
+              title: t('core.workflow.Can not delete node')
+            });
+          }
         }
       }
-    }
-    onNodesChange(changes);
-  }, []);
+      onNodesChange(changes);
+    },
+    [nodes, onNodesChange, t, toast]
+  );
   const onDelNode = useCallback(
     (nodeId: string) => {
       setNodes((state) => state.filter((item) => item.id !== nodeId));
@@ -392,6 +421,66 @@ export const FlowProvider = ({
     },
     [setNodes]
   );
+  const nodeDebugRun = useCallback(
+    async ({
+      nodeId,
+      runtimeNodes,
+      runtimeEdges
+    }: {
+      nodeId: string;
+      runtimeNodes: RuntimeNodeItemType[];
+      runtimeEdges: RuntimeEdgeItemType[];
+    }) => {
+      // update debugResult
+      onChangeNode({
+        nodeId,
+        type: 'attr',
+        key: 'debugResult',
+        value: defaultRunningStatus
+      });
+
+      try {
+        // run check tests
+        const result = await postWorkflowDebug({
+          nodes: runtimeNodes,
+          edges: runtimeEdges,
+          variables: {},
+          appId: appId || ''
+        });
+        onChangeNode({
+          nodeId,
+          type: 'attr',
+          key: 'debugResult',
+          value: {
+            status: 'success',
+            response: result || {}
+          }
+        });
+        setNodes((state) =>
+          state.map((node) =>
+            node.data.nodeId === nodeId
+              ? {
+                  ...node,
+                  selected: true
+                }
+              : node
+          )
+        );
+      } catch (error) {
+        onChangeNode({
+          nodeId,
+          type: 'attr',
+          key: 'debugResult',
+          value: {
+            status: 'error',
+            message: getErrText(error)
+          }
+        });
+        console.log(error);
+      }
+    },
+    [appId, onChangeNode, setNodes]
+  );
 
   // connect
   const onConnectStart = useCallback((event: any, params: OnConnectStartParams) => {
@@ -498,6 +587,7 @@ export const FlowProvider = ({
     setHoverNodeId,
     onCopyNode,
     onUpdateNodeError,
+    nodeDebugRun,
 
     basicNodeTemplates,
     // connect

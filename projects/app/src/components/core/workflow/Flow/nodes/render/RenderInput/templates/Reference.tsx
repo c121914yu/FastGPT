@@ -1,14 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { RenderInputProps } from '../type';
-import {
-  Flex,
-  Button,
-  useDisclosure,
-  Box,
-  ButtonProps,
-  Image,
-  useOutsideClick
-} from '@chakra-ui/react';
+import { Flex, Button, useDisclosure, Box, ButtonProps, useOutsideClick } from '@chakra-ui/react';
 import { useFlowProviderStore } from '../../../../FlowProvider';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import MyIcon from '@fastgpt/web/components/common/Icon';

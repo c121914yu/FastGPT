@@ -177,6 +177,10 @@ export async function dispatchWorkFlow({
       }
     });
 
+    if (props.mode === 'debug') {
+      return Promise.resolve();
+    }
+
     return checkNodeCanRun(
       runtimeNodes.filter((node) => {
         return targetEdges.some((item) => item.target === node.nodeId);

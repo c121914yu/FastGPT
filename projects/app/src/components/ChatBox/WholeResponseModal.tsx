@@ -86,12 +86,14 @@ const WholeResponseModal = ({
 
 export default WholeResponseModal;
 
-const ResponseBox = React.memo(function ResponseBox({
+export const ResponseBox = React.memo(function ResponseBox({
   response,
-  showDetail
+  showDetail,
+  hideTabs = false
 }: {
   response: ChatHistoryItemResType[];
   showDetail: boolean;
+  hideTabs?: boolean;
 }) {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -125,9 +127,11 @@ const ResponseBox = React.memo(function ResponseBox({
 
   return (
     <>
-      <Box>
-        <Tabs list={list} activeId={currentTab} onChange={setCurrentTab} />
-      </Box>
+      {!hideTabs && (
+        <Box>
+          <Tabs list={list} activeId={currentTab} onChange={setCurrentTab} />
+        </Box>
+      )}
       <Box py={2} px={4} flex={'1 0 0'} overflow={'auto'}>
         <>
           <Row label={t('core.chat.response.module name')} value={t(activeModule.moduleName)} />

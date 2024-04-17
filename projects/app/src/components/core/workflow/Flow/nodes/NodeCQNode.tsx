@@ -15,6 +15,7 @@ import { useFlowProviderStore } from '../FlowProvider';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { SourceHandle } from './render/Handle';
 import IOTitle from '../components/IOTitle';
+import { getHandleId } from '@fastgpt/global/core/workflow/utils';
 
 const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
@@ -96,7 +97,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                   />
                   <SourceHandle
                     nodeId={nodeId}
-                    handleId={`${nodeId}-${item.key}`}
+                    handleId={getHandleId(nodeId, 'source', item.key)}
                     position={Position.Right}
                     translate={[20, 0]}
                   />

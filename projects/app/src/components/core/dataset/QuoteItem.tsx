@@ -199,7 +199,14 @@ const QuoteItem = ({
         </Box>
 
         {canViewSource && (
-          <Flex alignItems={'center'} mt={3} gap={4} color={'myGray.500'} fontSize={'xs'}>
+          <Flex
+            alignItems={'center'}
+            flexWrap={'wrap'}
+            mt={3}
+            gap={4}
+            color={'myGray.500'}
+            fontSize={'xs'}
+          >
             <MyTooltip label={t('core.dataset.Quote Length')}>
               <Flex alignItems={'center'}>
                 <MyIcon name="common/text/t" w={'14px'} mr={1} color={'myGray.500'} />

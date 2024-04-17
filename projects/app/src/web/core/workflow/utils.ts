@@ -49,14 +49,18 @@ export const storeNode2FlowNode = ({
     ...template,
     ...storeNode,
     avatar: template?.avatar,
-    inputs: storeNode.inputs.map((storeInput) => {
-      const templateInput =
-        template.inputs.find((item) => item.key === storeInput.key) || storeInput;
-      return {
-        ...templateInput,
-        ...storeInput
-      };
-    }),
+    inputs: storeNode.inputs
+      .map((storeInput) => {
+        const templateInput =
+          template.inputs.find((item) => item.key === storeInput.key) || storeInput;
+        return {
+          ...templateInput,
+          ...storeInput
+        };
+      })
+      .concat(
+        template.inputs.filter((item) => !storeNode.inputs.some((input) => input.key === item.key))
+      ),
     outputs: storeNode.outputs.map((storeOutput) => {
       const templateOutput =
         template.outputs.find((item) => item.key === storeOutput.key) || storeOutput;
@@ -139,6 +143,14 @@ export const checkWorkflowNodeAndConnection = ({
   for (const node of nodes) {
     const data = node.data;
     const inputs = data.inputs;
+
+    if (
+      data.flowNodeType === FlowNodeTypeEnum.pluginInput ||
+      data.flowNodeType === FlowNodeTypeEnum.pluginOutput ||
+      data.flowNodeType === FlowNodeTypeEnum.workflowStart
+    ) {
+      continue;
+    }
 
     if (
       inputs.some((input) => {

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Card, Flex, IconButton } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import Avatar from '@/components/Avatar';
 import type { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
@@ -17,7 +17,10 @@ import { LOGO_ICON } from '@fastgpt/global/common/system/constants';
 import { ToolTargetHandle } from './Handle/ToolHandle';
 import { useEditTextarea } from '@fastgpt/web/hooks/useEditTextarea';
 import { ConnectionSourceHandle, ConnectionTargetHandle } from './Handle/ConnectionHandle';
-import dynamic from 'next/dynamic';
+import { useDebug } from '../../hooks/useDebug';
+import { ResponseBox } from '@/components/ChatBox/WholeResponseModal';
+import { CloseIcon } from '@chakra-ui/icons';
+import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 
 type Props = FlowNodeItemType & {
   children?: React.ReactNode | React.ReactNode[] | string;
@@ -42,7 +45,8 @@ const NodeCard = (props: Props) => {
     selected,
     forbidMenu,
     isTool = false,
-    isError = false
+    isError = false,
+    debugResult
   } = props;
 
   const { nodes, setHoverNodeId, onUpdateNodeError } = useFlowProviderStore();
@@ -55,23 +59,39 @@ const NodeCard = (props: Props) => {
   /* Node header */
   const Header = useMemo(() => {
     return (
-      <Box className="custom-drag-handle" px={4} py={3} position={'relative'}>
-        {/* tool target handle */}
-        {showToolHandle && <ToolTargetHandle nodeId={nodeId} />}
-        {/* avatar and name */}
-        <Flex alignItems={'center'}>
-          <Avatar src={avatar} borderRadius={'0'} objectFit={'contain'} w={'28px'} h={'28px'} />
-          <Box ml={3} fontSize={'lg'} fontWeight={'medium'}>
-            {t(name)}
-          </Box>
-        </Flex>
-        {!forbidMenu && (
-          <MenuRender name={name} nodeId={nodeId} flowNodeType={flowNodeType} inputs={inputs} />
-        )}
-        <NodeIntro nodeId={nodeId} intro={intro} />
+      <Box position={'relative'}>
+        {/* debug */}
+        <NodeDebugResponse nodeId={nodeId} debugResult={debugResult} />
+        <Box className="custom-drag-handle" px={4} py={3}>
+          {/* tool target handle */}
+          {showToolHandle && <ToolTargetHandle nodeId={nodeId} />}
+
+          {/* avatar and name */}
+          <Flex alignItems={'center'}>
+            <Avatar src={avatar} borderRadius={'0'} objectFit={'contain'} w={'30px'} h={'30px'} />
+            <Box ml={3} fontSize={'lg'} fontWeight={'medium'}>
+              {t(name)}
+            </Box>
+          </Flex>
+          {!forbidMenu && (
+            <MenuRender name={name} nodeId={nodeId} flowNodeType={flowNodeType} inputs={inputs} />
+          )}
+          <NodeIntro nodeId={nodeId} intro={intro} />
+        </Box>
       </Box>
     );
-  }, [showToolHandle, nodeId, avatar, t, name, forbidMenu, flowNodeType, inputs, intro]);
+  }, [
+    nodeId,
+    debugResult,
+    showToolHandle,
+    avatar,
+    t,
+    name,
+    forbidMenu,
+    flowNodeType,
+    inputs,
+    intro
+  ]);
 
   const Render = useMemo(() => {
     return (
@@ -86,6 +106,9 @@ const NodeCard = (props: Props) => {
           boxShadow: '4',
           '& .controller-menu': {
             display: 'flex'
+          },
+          '& .controller-debug': {
+            display: 'block'
           }
         }}
         onMouseEnter={() => setHoverNodeId(nodeId)}
@@ -126,6 +149,8 @@ const MenuRender = React.memo(function MenuRender({
   const { t } = useTranslation();
   const { toast } = useToast();
   const { setLoading } = useSystemStore();
+  const { openDebugNode, DebugInputModal } = useDebug();
+
   const { openConfirm: onOpenConfirmSync, ConfirmModal: ConfirmSyncModal } = useConfirm({
     content: t('module.Confirm Sync Plugin')
   });
@@ -144,10 +169,10 @@ const MenuRender = React.memo(function MenuRender({
   const Render = useMemo(() => {
     const menuList = [
       {
-        icon: 'debug',
-        label: t('core.workflow.Run from here'),
+        icon: 'core/workflow/debug',
+        label: t('core.workflow.Debug'),
         variant: 'whiteBase',
-        onClick: () => onCopyNode(nodeId)
+        onClick: () => openDebugNode({ entryNodeId: nodeId })
       },
       ...(flowNodeType === FlowNodeTypeEnum.pluginModule
         ? [
@@ -238,7 +263,7 @@ const MenuRender = React.memo(function MenuRender({
               <Button
                 size={'xs'}
                 variant={item.variant}
-                leftIcon={<MyIcon name={item.icon as any} w={'12px'} />}
+                leftIcon={<MyIcon name={item.icon as any} w={'13px'} />}
                 onClick={item.onClick}
               >
                 {item.label}
@@ -249,11 +274,13 @@ const MenuRender = React.memo(function MenuRender({
         <EditTitleModal maxLength={20} />
         <ConfirmSyncModal />
         <ConfirmDeleteModal />
+        <DebugInputModal />
       </>
     );
   }, [
     ConfirmDeleteModal,
     ConfirmSyncModal,
+    DebugInputModal,
     EditTitleModal,
     flowNodeType,
     inputs,
@@ -266,6 +293,7 @@ const MenuRender = React.memo(function MenuRender({
     onOpenConfirmSync,
     onOpenCustomTitleModal,
     onResetNode,
+    openDebugNode,
     setLoading,
     t,
     toast
@@ -332,4 +360,79 @@ const NodeIntro = React.memo(function NodeIntro({
   }, [EditIntroModal, intro, moduleIsTool, nodeId, onChangeNode, onOpenIntroModal, t]);
 
   return Render;
+});
+
+const NodeDebugResponse = React.memo(function NodeDebugResponse({
+  nodeId,
+  debugResult
+}: {
+  nodeId: string;
+  debugResult: FlowNodeItemType['debugResult'];
+}) {
+  const { t } = useTranslation();
+  const { onChangeNode } = useFlowProviderStore();
+
+  const RenderStatus = useMemo(() => {
+    const map = {
+      running: {
+        bg: 'primary.200',
+        text: t('core.workflow.Running')
+      },
+      success: {
+        bg: 'green.50',
+        text: t('core.workflow.Success')
+      },
+      failed: {
+        bg: 'red.200',
+        text: t('core.workflow.Failed')
+      }
+    };
+
+    const statusData = map[debugResult?.status || 'running'];
+
+    const response = debugResult?.response;
+
+    return !!debugResult ? (
+      <>
+        <Flex px={4} bg={statusData.bg} borderTopRadius={'md'} py={2}>
+          <MyIcon name={'support/account/loginoutLight'} w={'14px'} mr={1} />
+          <Box color={'myGray.900'} fontWeight={'bold'}>
+            {statusData.text}
+          </Box>
+        </Flex>
+        {/* result */}
+        {response && (
+          <Card
+            className="nodrag"
+            position={'absolute'}
+            right={'-305px'}
+            top={0}
+            zIndex={10}
+            w={'300px'}
+            py={3}
+            border={'base'}
+          >
+            <Flex px={4} justifyContent={'space-between'} mb={1}>
+              <Box fontWeight={'bold'}>{t('core.workflow.Run result')}</Box>
+              <CloseIcon
+                onClick={() => {
+                  onChangeNode({
+                    nodeId,
+                    type: 'attr',
+                    key: 'debugResult',
+                    value: undefined
+                  });
+                }}
+              />
+            </Flex>
+            <Box h={'400px'} overflow={'auto'}>
+              <ResponseBox response={[response]} showDetail hideTabs />
+            </Box>
+          </Card>
+        )}
+      </>
+    ) : null;
+  }, [debugResult, nodeId, onChangeNode, t]);
+
+  return <>{RenderStatus}</>;
 });
