@@ -74,6 +74,9 @@ export const httpApiSchema2Plugins = async ({
   return jsonSchema.pathData.map((item) => {
     const pluginOutputId = getNanoid();
     const httpId = getNanoid();
+    const pluginInputId = getNanoid();
+    const inputIdMap = new Map();
+
     const pluginOutputKey = 'result';
 
     const properties = item.request?.content?.['application/json']?.schema?.properties;
@@ -85,10 +88,11 @@ export const httpApiSchema2Plugins = async ({
           key: param.name,
           valueType: WorkflowIOValueTypeEnum.string,
           label: param.name,
-          type: FlowNodeInputTypeEnum.target,
+          renderTypeList: [FlowNodeInputTypeEnum.reference],
           required: param.required,
           description: param.description,
-          edit: true,
+          toolDescription: param.description,
+          canEdit: true,
           editField: {
             key: true,
             name: true,
@@ -97,9 +101,7 @@ export const httpApiSchema2Plugins = async ({
             dataType: true,
             inputType: true,
             isToolInput: true
-          },
-          connected: true,
-          toolDescription: param.description
+          }
         };
       }) || []),
       ...(propsKeys?.map((key) => {
@@ -108,10 +110,11 @@ export const httpApiSchema2Plugins = async ({
           key,
           valueType: WorkflowIOValueTypeEnum.string,
           label: key,
-          type: FlowNodeInputTypeEnum.target,
+          renderTypeList: [FlowNodeInputTypeEnum.reference],
           required: false,
           description: prop.description,
-          edit: true,
+          toolDescription: prop.description,
+          canEdit: true,
           editField: {
             key: true,
             name: true,
@@ -120,42 +123,33 @@ export const httpApiSchema2Plugins = async ({
             dataType: true,
             inputType: true,
             isToolInput: true
-          },
-          connected: true,
-          toolDescription: prop.description
+          }
         };
       }) || [])
     ];
 
     const pluginOutputs: FlowNodeOutputItemType[] = [
       ...(item.params?.map((param: any) => {
+        const id = getNanoid();
+        inputIdMap.set(param.name, id);
         return {
+          id,
           key: param.name,
           valueType: WorkflowIOValueTypeEnum.string,
           label: param.name,
-          type: FlowNodeOutputTypeEnum.source,
-          edit: true,
-          targets: [
-            {
-              nodeId: httpId,
-              key: param.name
-            }
-          ]
+          type: FlowNodeOutputTypeEnum.source
         };
       }) || []),
       ...(propsKeys?.map((key) => {
+        const id = getNanoid();
+        inputIdMap.set(key, id);
         return {
+          id,
           key,
           valueType: WorkflowIOValueTypeEnum.string,
           label: key,
           type: FlowNodeOutputTypeEnum.source,
-          edit: true,
-          targets: [
-            {
-              nodeId: httpId,
-              key
-            }
-          ]
+          edit: true
         };
       }) || [])
     ];
@@ -166,32 +160,27 @@ export const httpApiSchema2Plugins = async ({
           key: param.name,
           valueType: WorkflowIOValueTypeEnum.string,
           label: param.name,
-          type: FlowNodeInputTypeEnum.target,
-          description: param.description,
-          edit: true,
+          renderTypeList: [FlowNodeInputTypeEnum.reference],
+          canEdit: true,
           editField: {
             key: true,
-            description: true,
-            dataType: true
+            valueType: true
           },
-          connected: true
+          value: [pluginInputId, inputIdMap.get(param.name)]
         };
       }) || []),
       ...(propsKeys?.map((key) => {
-        const prop = properties[key];
         return {
           key,
           valueType: WorkflowIOValueTypeEnum.string,
           label: key,
-          type: FlowNodeInputTypeEnum.target,
-          description: prop.description,
-          edit: true,
+          renderTypeList: [FlowNodeInputTypeEnum.reference],
+          canEdit: true,
           editField: {
             key: true,
-            description: true,
-            dataType: true
+            valueType: true
           },
-          connected: true
+          value: [pluginInputId, inputIdMap.get(key)]
         };
       }) || [])
     ];
@@ -260,7 +249,7 @@ export const httpApiSchema2Plugins = async ({
     /* Combine complete modules */
     const modules: StoreNodeItemType[] = [
       {
-        nodeId: getNanoid(),
+        nodeId: pluginInputId,
         name: PluginInputModule.name,
         intro: PluginInputModule.intro,
         avatar: PluginInputModule.avatar,
@@ -270,38 +259,8 @@ export const httpApiSchema2Plugins = async ({
           x: 616.4226348688949,
           y: -165.05298493910115
         },
-        inputs: [
-          {
-            key: 'pluginStart',
-            type: 'hidden',
-            valueType: 'boolean',
-            label: '插件开始运行',
-            description:
-              '插件开始运行时，会输出一个 True 的标识。有时候，插件不会有额外的的输入，为了顺利的进入下一个阶段，你可以将该值连接到下一个节点的触发器中。',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: true
-          },
-          ...pluginInputs
-        ],
-        outputs: [
-          {
-            key: 'pluginStart',
-            label: '插件开始运行',
-            type: 'source',
-            valueType: 'boolean',
-            targets:
-              pluginOutputs.length === 0
-                ? [
-                    {
-                      nodeId: httpId,
-                      key: 'switch'
-                    }
-                  ]
-                : []
-          },
-          ...pluginOutputs
-        ]
+        inputs: pluginInputs,
+        outputs: pluginOutputs
       },
       {
         nodeId: pluginOutputId,
@@ -319,29 +278,26 @@ export const httpApiSchema2Plugins = async ({
             key: pluginOutputKey,
             valueType: 'string',
             label: pluginOutputKey,
-            type: 'target',
-            required: true,
+            renderTypeList: [FlowNodeInputTypeEnum.reference],
+            required: false,
             description: '',
-            edit: true,
+            canEdit: true,
             editField: {
               key: true,
               name: true,
               description: true,
-              required: false,
-              dataType: true,
-              inputType: false
+              valueType: true
             },
-            connected: true
+            value: [httpId, 'httpRawResponse']
           }
         ],
         outputs: [
           {
+            id: pluginOutputId,
             key: pluginOutputKey,
             valueType: 'string',
             label: pluginOutputKey,
-            type: 'source',
-            edit: true,
-            targets: []
+            type: FlowNodeOutputTypeEnum.static
           }
         ]
       },
@@ -358,153 +314,94 @@ export const httpApiSchema2Plugins = async ({
         },
         inputs: [
           {
-            key: 'switch',
-            type: 'target',
-            label: 'core.module.input.label.switch',
-            description: 'core.module.input.description.Trigger',
-            valueType: 'any',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
+            key: 'DYNAMIC_INPUT_KEY',
+            renderTypeList: [FlowNodeInputTypeEnum.addInputParam],
+            valueType: FlowNodeOutputTypeEnum.dynamic,
+            label: '',
+            required: false,
+            description: '接收前方节点的输出值作为变量，这些变量可以被HTTP请求参数使用。',
+            editField: {
+              key: true,
+              valueType: true
+            }
           },
+          ...httpInputs,
           {
             key: 'system_httpMethod',
-            type: 'custom',
+            renderTypeList: [FlowNodeInputTypeEnum.custom],
             valueType: 'string',
             label: '',
             value: item.method.toUpperCase(),
-            required: true,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            required: true
           },
           {
             key: 'system_httpReqUrl',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             valueType: 'string',
             label: '',
             description: 'core.module.input.description.Http Request Url',
             placeholder: 'https://api.ai.com/getInventory',
             required: false,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: requestUrl,
-            connected: false
+            value: requestUrl
           },
           {
             key: 'system_httpHeader',
-            type: 'custom',
+            renderTypeList: [FlowNodeInputTypeEnum.custom],
             valueType: 'any',
             value: httpNodeHeaders,
             label: '',
             description: 'core.module.input.description.Http Request Header',
             placeholder: 'core.module.input.description.Http Request Header',
-            required: false,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            required: false
           },
           {
             key: 'system_httpParams',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             valueType: 'any',
             value: httpNodeParams,
             label: '',
-            required: false,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            required: false
           },
           {
             key: 'system_httpJsonBody',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             valueType: 'any',
             value: httpNodeBody,
             label: '',
-            required: false,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
-          },
-          {
-            key: 'DYNAMIC_INPUT_KEY',
-            type: 'target',
-            valueType: 'any',
-            label: 'core.workflow.inputType.dynamicTargetInput',
-            description: 'core.module.input.description.dynamic input',
-            required: false,
-            showTargetInApp: false,
-            showTargetInPlugin: true,
-            hideInApp: true,
-            connected: false
-          },
-          {
-            key: 'system_addInputParam',
-            type: 'addInputParam',
-            valueType: 'any',
-            label: '',
-            required: false,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            editField: {
-              key: true,
-              description: true,
-              dataType: true
-            },
-            defaultEditField: {
-              label: '',
-              key: '',
-              description: '',
-              inputType: 'target',
-              valueType: 'string'
-            },
-            connected: false
-          },
-          ...httpInputs
+            required: false
+          }
         ],
         outputs: [
           {
-            key: 'finish',
-            label: 'core.module.output.label.running done',
-            description: 'core.module.output.description.running done',
-            valueType: 'boolean',
-            type: 'source',
-            targets: []
-          },
-          {
+            id: 'httpRawResponse',
             key: 'httpRawResponse',
             label: '原始响应',
             description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',
             valueType: 'any',
-            type: 'source',
-            targets: [
-              {
-                nodeId: pluginOutputId,
-                key: pluginOutputKey
-              }
-            ]
+            type: FlowNodeOutputTypeEnum.static
           },
           {
+            id: 'userChatInput',
             key: 'system_addOutputParam',
-            type: 'addOutputParam',
             valueType: 'any',
-            label: '',
-            targets: [],
-            editField: {
-              key: true,
-              description: true,
-              dataType: true,
-              defaultValue: true
-            },
-            defaultEditField: {
-              label: '',
-              key: '',
-              description: '',
-              outputType: 'source',
-              valueType: 'string'
-            }
+            label: ''
           }
         ]
+      }
+    ];
+
+    const edges = [
+      {
+        source: pluginInputId,
+        target: httpId,
+        sourcePort: `${pluginInputId}-source-right`,
+        targetPort: `${httpId}-target-left`
+      },
+      {
+        source: httpId,
+        target: pluginOutputId,
+        sourcePort: `${httpId}-source-right`,
+        targetPort: `${pluginOutputId}-target-left`
       }
     ];
 
@@ -514,7 +411,8 @@ export const httpApiSchema2Plugins = async ({
       intro: item.description,
       parentId,
       type: PluginTypeEnum.http,
-      modules
+      modules,
+      edges
     };
   });
 };
