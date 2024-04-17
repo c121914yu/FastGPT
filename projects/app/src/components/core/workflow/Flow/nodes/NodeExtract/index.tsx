@@ -33,6 +33,7 @@ import {
   FlowNodeOutputItemType
 } from '@fastgpt/global/core/workflow/type/io.d';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
+import IOTitle from '../../components/IOTitle';
 
 const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
   const { inputs, outputs, nodeId } = data;
@@ -51,7 +52,9 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
       }) => (
         <Box>
           <Flex alignItems={'center'}>
-            <Box flex={'1 0 0'}>{t('core.module.extract.Target field')}</Box>
+            <Box flex={'1 0 0'} fontWeight={'medium'} color={'myGray.600'}>
+              {t('core.module.extract.Target field')}
+            </Box>
             <Button
               size={'sm'}
               variant={'whitePrimary'}
@@ -138,15 +141,15 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
     <NodeCard minW={'400px'} {...data}>
       {toolInputs.length > 0 && (
         <>
-          <Divider text={t('core.module.tool.Tool input')} />
           <Container>
+            <IOTitle text={t('core.module.tool.Tool input')} />
             <RenderToolInput nodeId={nodeId} inputs={toolInputs} />
           </Container>
         </>
       )}
       <>
-        <Divider text={t('common.Input')} />
         <Container>
+          <IOTitle text={t('common.Input')} />
           <RenderInput
             nodeId={nodeId}
             flowInputList={commonInputs}
@@ -155,8 +158,8 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
         </Container>
       </>
       <>
-        <Divider text={t('common.Output')} />
         <Container>
+          <IOTitle text={t('common.Output')} />
           <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
         </Container>
       </>

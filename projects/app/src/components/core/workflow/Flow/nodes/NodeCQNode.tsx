@@ -3,7 +3,6 @@ import { NodeProps, Position } from 'reactflow';
 import { Box, Button, Flex, Textarea } from '@chakra-ui/react';
 import NodeCard from './render/NodeCard';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import Divider from '../components/Divider';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
 import type { ClassifyQuestionAgentItemType } from '@fastgpt/global/core/workflow/type/index.d';
@@ -15,6 +14,7 @@ import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { useFlowProviderStore } from '../FlowProvider';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { SourceHandle } from './render/Handle';
+import IOTitle from '../components/IOTitle';
 
 const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
@@ -39,7 +39,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                       mt={1}
                       mr={2}
                       name={'minus'}
-                      w={'14px'}
+                      w={'12px'}
                       cursor={'pointer'}
                       color={'myGray.600'}
                       _hover={{ color: 'red.600' }}
@@ -62,13 +62,17 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                       }}
                     />
                   </MyTooltip>
-                  <Box flex={1}>分类{i + 1}</Box>
+                  <Box flex={1} color={'myGray.600'} fontWeight={'medium'}>
+                    分类{i + 1}
+                  </Box>
                 </Flex>
                 <Box position={'relative'}>
                   <Textarea
                     rows={2}
                     mt={1}
                     defaultValue={item.value}
+                    bg={'white'}
+                    fontSize={'sm'}
                     onChange={(e) => {
                       const newVal = agents.map((val) =>
                         val.key === item.key
@@ -100,6 +104,7 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               </Box>
             ))}
             <Button
+              fontSize={'sm'}
               onClick={() => {
                 const key = getNanoid();
 
@@ -126,8 +131,8 @@ const NodeCQNode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   return (
     <NodeCard minW={'400px'} selected={selected} {...data}>
-      <Divider text={t('common.Input')} />
       <Container>
+        <IOTitle text={t('common.Input')} />
         <RenderInput nodeId={nodeId} flowInputList={inputs} CustomComponent={CustomComponent} />
       </Container>
     </NodeCard>

@@ -48,7 +48,7 @@ const SettingLLMModel = ({ llmModelType = LLMModelTypeEnum.all, defaultData, onC
       <Button
         w={'100%'}
         justifyContent={'flex-start'}
-        variant={'whitePrimary'}
+        variant={'whiteFlow'}
         _active={{
           transform: 'none'
         }}

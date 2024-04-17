@@ -60,6 +60,7 @@ const TextareaRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
         placeholder={t(item.placeholder || '')}
         value={item.value}
         onChange={onChange}
+        isFlow={true}
       />
     );
   }, [item.label, item.maxLength, item.placeholder, item.value, onChange, t, variables]);

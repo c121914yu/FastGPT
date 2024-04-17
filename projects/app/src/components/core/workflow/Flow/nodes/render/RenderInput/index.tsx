@@ -6,7 +6,6 @@ import dynamic from 'next/dynamic';
 
 import InputLabel from './Label';
 import type { RenderInputProps } from './type';
-import { useFlowProviderStore } from '../../../FlowProvider';
 
 const RenderList: {
   types: `${FlowNodeInputTypeEnum}`[];
@@ -80,7 +79,7 @@ type Props = {
   CustomComponent?: Record<string, (e: FlowNodeInputItemType) => React.ReactNode>;
   mb?: number;
 };
-const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 6 }: Props) => {
+const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 3 }: Props) => {
   const copyInputs = useMemo(() => JSON.stringify(flowInputList), [flowInputList]);
   const filterInputs = useMemo(() => {
     const parseSortInputs = JSON.parse(copyInputs) as FlowNodeInputItemType[];
@@ -109,7 +108,7 @@ const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 6 }: Props) 
         <Box key={input.key} _notLast={{ mb }} position={'relative'}>
           {!!input.label && <InputLabel nodeId={nodeId} input={input} />}
           {!!RenderComponent && (
-            <Box mt={1} className={'nodrag'}>
+            <Box mt={2} className={'nodrag'}>
               {RenderComponent}
             </Box>
           )}

@@ -40,6 +40,7 @@ import HttpInput from '@fastgpt/web/components/common/Input/HttpInput';
 import dynamic from 'next/dynamic';
 import MySelect from '@fastgpt/web/components/common/MySelect';
 import RenderToolInput from '../render/RenderToolInput';
+import IOTitle from '../../components/IOTitle';
 const CurlImportModal = dynamic(() => import('./CurlImportModal'));
 
 export const HttpHeaders = [
@@ -184,7 +185,9 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
     return (
       <Box>
         <Box mb={2} display={'flex'} justifyContent={'space-between'}>
-          <Box>{t('core.module.Http request settings')}</Box>
+          <Box fontWeight={'medium'} color={'myGray.600'}>
+            {t('core.module.Http request settings')}
+          </Box>
           <Button variant={'link'} onClick={onOpenCurl}>
             {t('core.module.http.curl import')}
           </Button>
@@ -346,7 +349,7 @@ export function RenderHttpProps({
     const { params, headers, jsonBody, variables } = JSON.parse(stringifyVariables);
     return (
       <Box>
-        <Flex alignItems={'center'} mb={2}>
+        <Flex alignItems={'center'} mb={2} fontWeight={'medium'} color={'myGray.600'}>
           {t('core.module.Http request props')}
           <MyTooltip label={t('core.module.http.Props tip', { variable: variableText })}>
             <QuestionOutlineIcon ml={1} />
@@ -603,7 +606,7 @@ const RenderJson = ({
   return (
     <Box mt={1}>
       <JSONEditor
-        bg={'myGray.50'}
+        bg={'white'}
         defaultHeight={200}
         resize
         value={input.value}
@@ -659,15 +662,15 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
     <NodeCard minW={'350px'} selected={selected} {...data}>
       {hasToolNode && (
         <>
-          <Divider text={t('core.module.tool.Tool input')} />
           <Container>
+            <IOTitle text={t('core.module.tool.Tool input')} />
             <RenderToolInput nodeId={nodeId} inputs={toolInputs} canEdit />
           </Container>
         </>
       )}
       <>
-        <Divider text={t('common.Input')} />
         <Container>
+          <IOTitle text={t('common.Input')} />
           <RenderInput
             nodeId={nodeId}
             flowInputList={commonInputs}
@@ -676,8 +679,8 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         </Container>
       </>
       <>
-        <Divider text={t('common.Output')} />
         <Container>
+          <IOTitle text={t('common.Output')} />
           <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
         </Container>
       </>

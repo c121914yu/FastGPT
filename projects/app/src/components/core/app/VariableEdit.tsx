@@ -98,7 +98,7 @@ const VariableEdit = ({
     <Box>
       <Flex alignItems={'center'}>
         <MyIcon name={'core/app/simpleMode/variable'} w={'20px'} />
-        <Box ml={2} flex={1}>
+        <Box ml={2} flex={1} fontWeight={'medium'}>
           {t('core.module.Variable')}
           <MyTooltip label={t(variableTip)} forceShow>
             <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
@@ -110,7 +110,6 @@ const VariableEdit = ({
           iconSpacing={1}
           size={'sm'}
           mr={'-5px'}
-          fontSize={'md'}
           onClick={() => {
             resetEdit({ variable: addVariable() });
             onOpenEdit();

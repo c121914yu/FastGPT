@@ -55,9 +55,11 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   return (
     <NodeCard minW={'300px'} selected={selected} forbidMenu {...data}>
-      <Container mt={1} borderTop={'2px solid'} borderTopColor={'myGray.300'}>
+      <Container mt={1}>
         <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-          <Box position={'relative'}>{t('core.workflow.Custom inputs')}</Box>
+          <Box position={'relative'} fontWeight={'medium'}>
+            {t('core.workflow.Custom inputs')}
+          </Box>
           <Box flex={'1 0 0'} />
           <Button
             variant={'transparentBase'}
@@ -65,7 +67,6 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
             iconSpacing={1}
             size={'sm'}
             mr={'-5px'}
-            fontSize={'md'}
             onClick={() => setCreateField(defaultCreateField)}
           >
             {t('common.Add New')}

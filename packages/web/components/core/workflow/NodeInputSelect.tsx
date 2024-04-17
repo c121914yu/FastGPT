@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react';
 import MyMenu, { type Props as MyMenuProps } from '../../common/MyMenu';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, useTheme } from '@chakra-ui/react';
 import MyIcon from '../../common/Icon';
 import { useTranslation } from 'next-i18next';
 import { useConfirm } from '../../../hooks/useConfirm';
@@ -20,9 +20,15 @@ const NodeInputSelect = ({
     title: t('core.workflow.Change input type tip')
   });
   const renderType = renderTypeList[renderTypeIndex];
+  const theme = useTheme();
 
   const inputList = useRef([
-    { type: FlowNodeInputTypeEnum.reference, icon: 'more', title: 'reference', desc: 'xxxxx' },
+    {
+      type: FlowNodeInputTypeEnum.reference,
+      icon: 'core/workflow/grout',
+      title: 'reference',
+      desc: 'xxxxx'
+    },
     { type: FlowNodeInputTypeEnum.input, icon: 'more', title: 'input', desc: 'xxxxx' },
     { type: FlowNodeInputTypeEnum.numberInput, icon: 'more', title: 'numberInput', desc: 'xxxxx' },
     { type: FlowNodeInputTypeEnum.select, icon: 'more', title: 'select', desc: 'xxxxx' },
@@ -107,8 +113,10 @@ const NodeInputSelect = ({
           size={'xs'}
           leftIcon={<MyIcon name={renderTypeData.icon as any} w={'14px'} />}
           variant={'grayBase'}
+          border={theme.borders.base}
+          borderRadius={'xs'}
         >
-          <Box>{renderTypeData.title}</Box>
+          <Box fontWeight={'medium'}>{renderTypeData.title}</Box>
         </Button>
       }
       menuList={filterMenuList}

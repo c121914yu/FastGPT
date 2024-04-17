@@ -29,7 +29,8 @@ export default function Editor({
   onChange,
   onBlur,
   value,
-  placeholder = ''
+  placeholder = '',
+  isFlow
 }: {
   h?: number;
   maxLength?: number;
@@ -41,6 +42,7 @@ export default function Editor({
   onBlur?: (editor: LexicalEditor) => void;
   value?: string;
   placeholder?: string;
+  isFlow?: boolean;
 }) {
   const [key, setKey] = useState(getNanoid(6));
   const [_, startSts] = useTransition();
@@ -84,7 +86,11 @@ export default function Editor({
     <Box position={'relative'} width={'full'} h={`${height}px`} cursor={'text'}>
       <LexicalComposer initialConfig={initialConfig} key={key}>
         <PlainTextPlugin
-          contentEditable={<ContentEditable className={styles.contentEditable} />}
+          contentEditable={
+            <ContentEditable
+              className={isFlow ? styles.contentEditable_isFlow : styles.contentEditable}
+            />
+          }
           placeholder={
             <Box
               position={'absolute'}
@@ -99,7 +105,7 @@ export default function Editor({
             >
               <Box
                 color={'myGray.500'}
-                fontSize={'xs'}
+                fontSize={'sm'}
                 userSelect={'none'}
                 whiteSpace={'pre-wrap'}
                 wordBreak={'break-all'}

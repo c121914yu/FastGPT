@@ -9,7 +9,7 @@ const SwitchRender = ({ item, nodeId }: RenderInputProps) => {
   const Render = useMemo(() => {
     return (
       <Switch
-        size={'lg'}
+        size={'md'}
         isChecked={item.value}
         onChange={(e) => {
           onChangeNode({

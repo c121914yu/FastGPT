@@ -63,7 +63,7 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
   const RenderLabel = useMemo(() => {
     return (
       <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-        <Box position={'relative'}>
+        <Box position={'relative'} fontWeight={'medium'} color={'myGray.600'}>
           {t(label)}
           {description && (
             <MyTooltip label={t(description)} forceShow>
@@ -78,6 +78,7 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
               w={'14px'}
               cursor={'pointer'}
               ml={3}
+              color={'myGray.600'}
               _hover={{ color: 'primary.500' }}
               onClick={() =>
                 setEditField({
@@ -98,6 +99,7 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
               className="delete"
               name={'delete'}
               w={'14px'}
+              color={'myGray.600'}
               cursor={'pointer'}
               ml={2}
               _hover={{ color: 'red.500' }}
@@ -179,7 +181,7 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
           />
         )}
         {renderTypeList && renderTypeList.length > 1 && (
-          <Box ml={1}>
+          <Box ml={2}>
             <NodeInputSelect
               renderTypeList={renderTypeList}
               renderTypeIndex={selectedTypeIndex}
@@ -196,6 +198,9 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     input,
     key,
     label,
+    max,
+    maxLength,
+    min,
     mode,
     nodeId,
     onChangeNode,
@@ -204,6 +209,8 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     renderTypeList,
     selectedTypeIndex,
     t,
+    toolDescription,
+    value,
     valueType
   ]);
 
