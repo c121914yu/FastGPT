@@ -25,7 +25,17 @@ const NodeUserGuide = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   return (
     <>
-      <NodeCard minW={'300px'} selected={selected} forbidMenu {...data}>
+      <NodeCard
+        minW={'300px'}
+        selected={selected}
+        menuForbid={{
+          debug: true,
+          rename: true,
+          copy: true,
+          delete: true
+        }}
+        {...data}
+      >
         <Box
           px={4}
           mx={2}

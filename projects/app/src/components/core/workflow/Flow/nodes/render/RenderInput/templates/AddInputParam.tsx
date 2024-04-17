@@ -53,13 +53,18 @@ const AddInputParam = (props: RenderInputProps) => {
     return (
       <>
         <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-          <Box position={'relative'} fontWeight={'medium'} color={'myGray.600'}>
+          <Flex
+            alignItems={'center'}
+            position={'relative'}
+            fontWeight={'medium'}
+            color={'myGray.600'}
+          >
             {t('core.workflow.Custom variable')}
-            {item.description && <QuestionTip label={t(item.description)} />}
-          </Box>
+            {item.description && <QuestionTip ml={1} label={t(item.description)} />}
+          </Flex>
           <Box flex={'1 0 0'} />
           <Button
-            variant={'grayBase '}
+            variant={'whiteBase'}
             leftIcon={<SmallAddIcon />}
             iconSpacing={1}
             size={'sm'}

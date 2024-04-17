@@ -28,7 +28,7 @@ export const checkInputIsReference = (input: FlowNodeInputItemType) => {
   return false;
 };
 
-/* module  */
+/* node  */
 export const getGuideModule = (modules: StoreNodeItemType[]) =>
   modules.find((item) => item.flowNodeType === FlowNodeTypeEnum.systemConfig);
 

@@ -226,6 +226,7 @@ export const ResponseBox = React.memo(function ResponseBox({
 
         {/* classify question */}
         <>
+          <Row label={t('core.chat.response.module cq result')} value={activeModule?.cqResult} />
           <Row
             label={t('core.chat.response.module cq')}
             value={(() => {
@@ -233,7 +234,6 @@ export const ResponseBox = React.memo(function ResponseBox({
               return activeModule.cqList.map((item) => `* ${item.value}`).join('\n');
             })()}
           />
-          <Row label={t('core.chat.response.module cq result')} value={activeModule?.cqResult} />
         </>
 
         {/* extract */}

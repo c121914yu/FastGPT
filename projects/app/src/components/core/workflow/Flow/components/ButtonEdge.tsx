@@ -1,12 +1,12 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { BezierEdge, getBezierPath, EdgeLabelRenderer, EdgeProps } from 'reactflow';
 import { useFlowProviderStore } from '../FlowProvider';
 import { Flex } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeOutputKeyEnum, RuntimeEdgeStatusEnum } from '@fastgpt/global/core/workflow/constants';
 
 const ButtonEdge = (props: EdgeProps) => {
-  const { nodes, onDelConnect, connectingEdge } = useFlowProviderStore();
+  const { nodes, onDelConnect, workflowDebugData } = useFlowProviderStore();
   const {
     id,
     sourceX,
@@ -17,7 +17,9 @@ const ButtonEdge = (props: EdgeProps) => {
     targetPosition,
     selected,
     sourceHandleId,
-    style = {}
+    source,
+    target,
+    style
   } = props;
 
   const highlightEdge = useMemo(() => {
@@ -38,19 +40,67 @@ const ButtonEdge = (props: EdgeProps) => {
 
   const isToolEdge = sourceHandleId === NodeOutputKeyEnum.selectedTools;
 
+  const { newTargetX, newTargetY } = useMemo(() => {
+    if (targetPosition === 'left') {
+      return {
+        newTargetX: targetX - 3,
+        newTargetY: targetY
+      };
+    }
+    if (targetPosition === 'right') {
+      return {
+        newTargetX: targetX + 3,
+        newTargetY: targetY
+      };
+    }
+    if (targetPosition === 'bottom') {
+      return {
+        newTargetX: targetX,
+        newTargetY: targetY + 3
+      };
+    }
+    if (targetPosition === 'top') {
+      return {
+        newTargetX: targetX,
+        newTargetY: targetY - 3
+      };
+    }
+    return {
+      newTargetX: targetX,
+      newTargetY: targetY
+    };
+  }, [targetPosition, targetX, targetY]);
+
+  const edgeColor = useMemo(() => {
+    const targetEdge = workflowDebugData?.runtimeEdges.find(
+      (edge) => edge.source === source && edge.target === target
+    );
+    if (!targetEdge) {
+      if (highlightEdge) return '#3370ff';
+      return '#94B5FF';
+    }
+    // debug mode
+    const colorMap = {
+      [RuntimeEdgeStatusEnum.active]: '#39CC83',
+      [RuntimeEdgeStatusEnum.waiting]: '#5E8FFF',
+      [RuntimeEdgeStatusEnum.skipped]: '#8A95A7'
+    };
+    return colorMap[targetEdge.status];
+  }, [highlightEdge, source, target, workflowDebugData?.runtimeEdges]);
+
   const memoEdgeLabel = useMemo(() => {
     const arrowTransform = (() => {
       if (targetPosition === 'left') {
-        return `translate(-85%, -50%) translate(${targetX}px,${targetY}px) rotate(0deg)`;
+        return `translate(-85%, -47%) translate(${newTargetX}px,${newTargetY}px) rotate(0deg)`;
       }
       if (targetPosition === 'right') {
-        return `translate(0%, -60%) translate(${targetX}px,${targetY}px) rotate(-180deg)`;
+        return `translate(-10%, -50%) translate(${newTargetX}px,${newTargetY}px) rotate(-180deg)`;
       }
       if (targetPosition === 'bottom') {
-        return `translate(-55%, -20%) translate(${targetX}px,${targetY}px) rotate(-90deg)`;
+        return `translate(-50%, -20%) translate(${newTargetX}px,${newTargetY}px) rotate(-90deg)`;
       }
       if (targetPosition === 'top') {
-        return `translate(-50%, -90%) translate(${targetX}px,${targetY}px) rotate(90deg)`;
+        return `translate(-50%, -90%) translate(${newTargetX}px,${newTargetY}px) rotate(90deg)`;
       }
     })();
     return (
@@ -60,7 +110,7 @@ const ButtonEdge = (props: EdgeProps) => {
             alignItems={'center'}
             justifyContent={'center'}
             position={'absolute'}
-            transform={`translate(-50%, -50%) translate(${labelX}px,${labelY}px)`}
+            transform={`translate(-55%, -50%) translate(${labelX}px,${labelY}px)`}
             pointerEvents={'all'}
             w={'17px'}
             h={'17px'}
@@ -80,52 +130,84 @@ const ButtonEdge = (props: EdgeProps) => {
             position={'absolute'}
             transform={arrowTransform}
             pointerEvents={'all'}
-            w={'16px'}
-            h={'16px'}
-            bg={'white'}
+            w={'10px'}
+            h={'10px'}
+            // bg={'white'}
             zIndex={highlightEdge ? 1000 : 0}
           >
             <MyIcon
-              name={'common/rightArrowLight'}
+              name={'core/workflow/edgeArrow'}
               w={'100%'}
+              color={edgeColor}
               {...(highlightEdge
                 ? {
-                    color: 'primary.500',
                     fontWeight: 'bold'
                   }
-                : {
-                    color: 'primary.300'
-                  })}
+                : {})}
             ></MyIcon>
           </Flex>
         )}
       </EdgeLabelRenderer>
     );
   }, [
+    highlightEdge,
     labelX,
     labelY,
-    highlightEdge,
     isToolEdge,
+    edgeColor,
     targetPosition,
-    targetX,
-    targetY,
+    newTargetX,
+    newTargetY,
     onDelConnect,
     id
   ]);
 
   const memoBezierEdge = useMemo(() => {
-    const edgeStyle: React.CSSProperties = {
-      ...style,
-      ...(highlightEdge
-        ? {
-            strokeWidth: 4,
-            stroke: '#3370ff'
-          }
-        : { strokeWidth: 2, zIndex: 2, stroke: '#94B5FF' })
-    };
+    const targetEdge = workflowDebugData?.runtimeEdges.find(
+      (edge) => edge.source === source && edge.target === target
+    );
 
-    return <BezierEdge {...props} style={edgeStyle} />;
-  }, [style, highlightEdge, props]);
+    const edgeStyle: React.CSSProperties = (() => {
+      if (!targetEdge) {
+        return {
+          ...style,
+          ...(highlightEdge
+            ? {
+                strokeWidth: 5
+              }
+            : { strokeWidth: 3, zIndex: 2 })
+        };
+      }
+
+      return {
+        ...style,
+        strokeWidth: 3,
+        zIndex: 2
+      };
+    })();
+
+    return (
+      <BezierEdge
+        {...props}
+        targetX={newTargetX}
+        targetY={newTargetY}
+        style={{
+          ...edgeStyle,
+          stroke: edgeColor
+        }}
+      />
+    );
+  }, [
+    workflowDebugData?.runtimeEdges,
+    props,
+    newTargetX,
+    newTargetY,
+    edgeColor,
+    source,
+    target,
+    style,
+    highlightEdge
+  ]);
 
   return (
     <>

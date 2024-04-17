@@ -178,7 +178,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
         });
       }
     },
-    [inputs, nodeId, requestUrl, t, toast]
+    [inputs, nodeId, onChangeNode, requestUrl, t, toast]
   );
 
   const Render = useMemo(() => {
@@ -196,7 +196,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
           <MySelect
             h={'34px'}
             w={'88px'}
-            bg={'myGray.50'}
+            bg={'white'}
             width={'100%'}
             value={requestMethods?.value}
             list={[
@@ -237,6 +237,7 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
             flex={'1 0 0'}
             ml={2}
             h={'34px'}
+            bg={'white'}
             value={requestUrl?.value}
             placeholder={t('core.module.input.label.Http Request Url')}
             fontSize={'xs'}
@@ -345,7 +346,6 @@ export function RenderHttpProps({
   );
 
   const Render = useMemo(() => {
-    console.log(11111);
     const { params, headers, jsonBody, variables } = JSON.parse(stringifyVariables);
     return (
       <Box>
@@ -376,28 +376,30 @@ export function RenderHttpProps({
           activeId={selectedTab}
           onChange={(e) => setSelectedTab(e as any)}
         />
-        {params &&
-          headers &&
-          jsonBody &&
-          {
-            [TabEnum.params]: (
-              <RenderForm
-                nodeId={nodeId}
-                input={params}
-                variables={variables}
-                tabType={TabEnum.params}
-              />
-            ),
-            [TabEnum.body]: <RenderJson nodeId={nodeId} variables={variables} input={jsonBody} />,
-            [TabEnum.headers]: (
-              <RenderForm
-                nodeId={nodeId}
-                input={headers}
-                variables={variables}
-                tabType={TabEnum.headers}
-              />
-            )
-          }[selectedTab]}
+        <Box bg={'white'} borderRadius={'md'}>
+          {params &&
+            headers &&
+            jsonBody &&
+            {
+              [TabEnum.params]: (
+                <RenderForm
+                  nodeId={nodeId}
+                  input={params}
+                  variables={variables}
+                  tabType={TabEnum.params}
+                />
+              ),
+              [TabEnum.body]: <RenderJson nodeId={nodeId} variables={variables} input={jsonBody} />,
+              [TabEnum.headers]: (
+                <RenderForm
+                  nodeId={nodeId}
+                  input={headers}
+                  variables={variables}
+                  tabType={TabEnum.headers}
+                />
+              )
+            }[selectedTab]}
+        </Box>
       </Box>
     );
   }, [

@@ -29,14 +29,15 @@ import { customAlphabet } from 'nanoid';
 import { storeEdgesRenderEdge, storeNode2FlowNode } from '@/web/core/workflow/utils';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeOutputKeyEnum, RuntimeEdgeStatusEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { RuntimeEdgeItemType, StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
-import { defaultRunningStatus } from '../constants';
+import { defaultRunningStatus, defaultSkippedStatus } from '../constants';
 import { postWorkflowDebug } from '@/web/core/workflow/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';
+import { checkNodeRunStatus } from '@fastgpt/global/core/workflow/runtime/utils';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
@@ -56,6 +57,26 @@ export type useFlowProviderStoreType = {
   nodeList: FlowNodeItemType[];
   setNodes: Dispatch<SetStateAction<Node<FlowNodeItemType, string | undefined>[]>>;
   onNodesChange: OnChange<NodeChange>;
+  // debug
+  workflowDebugData:
+    | {
+        runtimeNodes: RuntimeNodeItemType[];
+        runtimeEdges: RuntimeEdgeItemType[];
+        nextRunNodes: RuntimeNodeItemType[];
+      }
+    | undefined;
+  onNextNodeDebug: () => Promise<void>;
+  onStartNodeDebug: ({
+    entryNodeId,
+    runtimeNodes,
+    runtimeEdges
+  }: {
+    entryNodeId: string;
+    runtimeNodes: RuntimeNodeItemType[];
+    runtimeEdges: RuntimeEdgeItemType[];
+  }) => Promise<void>;
+  onStopNodeDebug: () => void;
+
   edges: Edge<any>[];
   setEdges: Dispatch<SetStateAction<Edge<any>[]>>;
   onEdgesChange: OnChange<EdgeChange>;
@@ -84,15 +105,6 @@ export type useFlowProviderStoreType = {
   hoverNodeId: string | undefined;
   setHoverNodeId: React.Dispatch<React.SetStateAction<string | undefined>>;
   onUpdateNodeError: (node: string, isError: Boolean) => void;
-  nodeDebugRun: ({
-    nodeId,
-    runtimeNodes,
-    runtimeEdges
-  }: {
-    nodeId: string;
-    runtimeNodes: RuntimeNodeItemType[];
-    runtimeEdges: RuntimeEdgeItemType[];
-  }) => Promise<void>;
 };
 
 const StateContext = createContext<useFlowProviderStoreType>({
@@ -174,15 +186,22 @@ const StateContext = createContext<useFlowProviderStoreType>({
     throw new Error('Function not implemented.');
   },
   nodeList: [],
-  nodeDebugRun: function ({
-    nodeId,
+  workflowDebugData: undefined,
+  onNextNodeDebug: function (): Promise<void> {
+    throw new Error('Function not implemented.');
+  },
+  onStartNodeDebug: function ({
+    entryNodeId,
     runtimeNodes,
     runtimeEdges
   }: {
-    nodeId: string;
+    entryNodeId: string;
     runtimeNodes: RuntimeNodeItemType[];
     runtimeEdges: RuntimeEdgeItemType[];
   }): Promise<void> {
+    throw new Error('Function not implemented.');
+  },
+  onStopNodeDebug: function (): void {
     throw new Error('Function not implemented.');
   }
 });
@@ -421,65 +440,193 @@ export const FlowProvider = ({
     },
     [setNodes]
   );
-  const nodeDebugRun = useCallback(
-    async ({
-      nodeId,
-      runtimeNodes,
-      runtimeEdges
-    }: {
-      nodeId: string;
-      runtimeNodes: RuntimeNodeItemType[];
-      runtimeEdges: RuntimeEdgeItemType[];
-    }) => {
-      // update debugResult
-      onChangeNode({
-        nodeId,
-        type: 'attr',
-        key: 'debugResult',
-        value: defaultRunningStatus
+
+  /* Run workflow debug and get next runtime data */
+  const [workflowDebugData, setWorkflowDebugData] = useState<{
+    runtimeNodes: RuntimeNodeItemType[];
+    runtimeEdges: RuntimeEdgeItemType[];
+    nextRunNodes: RuntimeNodeItemType[];
+  }>();
+  const onNextNodeDebug = useCallback(
+    async (debugData = workflowDebugData) => {
+      if (!debugData) return;
+      // 1. Cancel node selected status and debugResult.showStatus
+      setNodes((state) =>
+        state.map((node) => ({
+          ...node,
+          selected: false,
+          data: {
+            ...node.data,
+            debugResult: node.data.debugResult
+              ? {
+                  ...node.data.debugResult,
+                  showResult: false,
+                  isExpired: true
+                }
+              : undefined
+          }
+        }))
+      );
+
+      // 2. Set isEntry field and get entryNodes
+      const runtimeNodes = debugData.runtimeNodes.map((item) => ({
+        ...item,
+        isEntry: debugData.nextRunNodes.some((node) => node.nodeId === item.nodeId)
+      }));
+      const entryNodes = runtimeNodes.filter((item) => item.isEntry);
+
+      const runtimeNodeStatus: Record<string, string> = entryNodes
+        .map((node) => {
+          const status = checkNodeRunStatus({
+            node,
+            runtimeEdges: workflowDebugData?.runtimeEdges || []
+          });
+
+          return {
+            nodeId: node.nodeId,
+            status
+          };
+        })
+        .reduce(
+          (acc, cur) => ({
+            ...acc,
+            [cur.nodeId]: cur.status
+          }),
+          {}
+        );
+
+      // 3. Set entry node status to running
+      entryNodes.forEach((node) => {
+        if (runtimeNodeStatus[node.nodeId] !== 'wait') {
+          onChangeNode({
+            nodeId: node.nodeId,
+            type: 'attr',
+            key: 'debugResult',
+            value: defaultRunningStatus
+          });
+        }
       });
 
       try {
-        // run check tests
-        const result = await postWorkflowDebug({
-          nodes: runtimeNodes,
-          edges: runtimeEdges,
-          variables: {},
-          appId: appId || ''
-        });
-        onChangeNode({
-          nodeId,
-          type: 'attr',
-          key: 'debugResult',
-          value: {
-            status: 'success',
-            response: result || {}
-          }
-        });
+        // 4. Run one step
+        const { finishedEdges, finishedNodes, nextStepRunNodes, flowResponses } =
+          await postWorkflowDebug({
+            nodes: runtimeNodes,
+            edges: debugData.runtimeEdges,
+            variables: {},
+            appId: appId || ''
+          });
+
+        // 5. Store debug result
+        setWorkflowDebugData((state) => ({
+          runtimeNodes: finishedNodes,
+          // edges need to save status
+          runtimeEdges: finishedEdges.map((edge) => {
+            const oldEdge = state?.runtimeEdges.find(
+              (item) => item.source === edge.source && item.target === edge.target
+            );
+            const status =
+              oldEdge?.status && oldEdge.status !== RuntimeEdgeStatusEnum.waiting
+                ? oldEdge.status
+                : edge.status;
+            return {
+              ...edge,
+              status
+            };
+          }),
+          nextRunNodes: nextStepRunNodes
+        }));
+
+        // 6. selected entry node and Update entry node debug result
         setNodes((state) =>
-          state.map((node) =>
-            node.data.nodeId === nodeId
-              ? {
-                  ...node,
-                  selected: true
+          state.map((node) => {
+            const isEntryNode = entryNodes.some((item) => item.nodeId === node.data.nodeId);
+
+            if (!isEntryNode || runtimeNodeStatus[node.data.nodeId] === 'wait') return node;
+
+            const result = flowResponses.find((item) => item.nodeId === node.data.nodeId);
+
+            if (runtimeNodeStatus[node.data.nodeId] === 'skip') {
+              return {
+                ...node,
+                selected: isEntryNode,
+                data: {
+                  ...node.data,
+                  debugResult: {
+                    status: 'skipped',
+                    showResult: true,
+                    isExpired: false
+                  }
                 }
-              : node
-          )
+              };
+            }
+            return {
+              ...node,
+              selected: isEntryNode,
+              data: {
+                ...node.data,
+                debugResult: {
+                  status: 'success',
+                  response: result,
+                  showResult: true,
+                  isExpired: false
+                }
+              }
+            };
+          })
         );
       } catch (error) {
-        onChangeNode({
-          nodeId,
-          type: 'attr',
-          key: 'debugResult',
-          value: {
-            status: 'error',
-            message: getErrText(error)
-          }
+        entryNodes.forEach((node) => {
+          onChangeNode({
+            nodeId: node.nodeId,
+            type: 'attr',
+            key: 'debugResult',
+            value: {
+              status: 'failed',
+              message: getErrText(error, 'Debug failed'),
+              showResult: true
+            }
+          });
         });
         console.log(error);
       }
     },
-    [appId, onChangeNode, setNodes]
+    [appId, onChangeNode, setNodes, workflowDebugData]
+  );
+  const onStopNodeDebug = useCallback(() => {
+    setWorkflowDebugData(undefined);
+    setNodes((state) =>
+      state.map((node) => ({
+        ...node,
+        selected: false,
+        data: {
+          ...node.data,
+          debugResult: undefined
+        }
+      }))
+    );
+  }, [setNodes]);
+  const onStartNodeDebug = useCallback(
+    async ({
+      entryNodeId,
+      runtimeNodes,
+      runtimeEdges
+    }: {
+      entryNodeId: string;
+      runtimeNodes: RuntimeNodeItemType[];
+      runtimeEdges: RuntimeEdgeItemType[];
+    }) => {
+      const data = {
+        runtimeNodes,
+        runtimeEdges,
+        nextRunNodes: runtimeNodes.filter((node) => node.nodeId === entryNodeId)
+      };
+      onStopNodeDebug();
+      setWorkflowDebugData(data);
+
+      onNextNodeDebug(data);
+    },
+    [onNextNodeDebug, onStopNodeDebug]
   );
 
   // connect
@@ -587,7 +734,10 @@ export const FlowProvider = ({
     setHoverNodeId,
     onCopyNode,
     onUpdateNodeError,
-    nodeDebugRun,
+    workflowDebugData,
+    onNextNodeDebug,
+    onStartNodeDebug,
+    onStopNodeDebug,
 
     basicNodeTemplates,
     // connect

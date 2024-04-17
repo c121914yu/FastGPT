@@ -39,7 +39,7 @@ export const useDebug = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
 
-  const { nodes, edges, setNodes, nodeDebugRun } = useFlowProviderStore();
+  const { nodes, edges, setNodes, onStartNodeDebug } = useFlowProviderStore();
 
   const [runtimeNodeId, setRuntimeNodeId] = useState<string>();
   const [runtimeNodes, setRuntimeNodes] = useState<RuntimeNodeItemType[]>();
@@ -125,18 +125,18 @@ export const useDebug = () => {
     };
 
     const onclickRun = (data: Record<string, any>) => {
-      // update runtime node input
-      const newRuntimeNode: RuntimeNodeItemType = {
-        ...runtimeNode,
-        inputs: runtimeNode.inputs.map((input) => ({
-          ...input,
-          value: data[input.key] ?? input.value
-        }))
-      };
-      nodeDebugRun({
-        nodeId: newRuntimeNode.nodeId,
+      onStartNodeDebug({
+        entryNodeId: runtimeNode.nodeId,
         runtimeNodes: runtimeNodes.map((node) =>
-          node.nodeId === newRuntimeNode.nodeId ? newRuntimeNode : node
+          node.nodeId === runtimeNode.nodeId
+            ? {
+                ...runtimeNode,
+                inputs: runtimeNode.inputs.map((input) => ({
+                  ...input,
+                  value: data[input.key] ?? input.value
+                }))
+              }
+            : node
         ),
         runtimeEdges: runtimeEdges
       });
@@ -223,7 +223,7 @@ export const useDebug = () => {
         </Flex>
       </MyRightDrawer>
     );
-  }, [nodeDebugRun, runtimeEdges, runtimeNodeId, runtimeNodes, t]);
+  }, [onStartNodeDebug, runtimeEdges, runtimeNodeId, runtimeNodes, t]);
 
   return {
     DebugInputModal,

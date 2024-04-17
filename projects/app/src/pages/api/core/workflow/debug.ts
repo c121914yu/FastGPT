@@ -7,7 +7,7 @@ import { authApp } from '@fastgpt/service/support/permission/auth/app';
 import { dispatchWorkFlow } from '@fastgpt/service/core/workflow/dispatch';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
 import { getUserChatInfoAndAuthTeamPoints } from '@/service/support/permission/auth/team';
-import { PostWorkflowDebugProps } from '@/global/core/workflow/api';
+import { PostWorkflowDebugProps, PostWorkflowDebugResponse } from '@/global/core/workflow/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { nodes = [], edges = [], variables = {}, appId } = req.body as PostWorkflowDebugProps;
@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { user } = await getUserChatInfoAndAuthTeamPoints(tmbId);
 
     /* start process */
-    const { flowResponses, flowUsages } = await dispatchWorkFlow({
+    const { flowUsages, flowResponses, debugResponse } = await dispatchWorkFlow({
       res,
       mode: 'debug',
       teamId,
@@ -65,8 +65,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       flowUsages
     });
 
-    jsonRes(res, {
-      data: flowResponses[0]
+    jsonRes<PostWorkflowDebugResponse>(res, {
+      data: {
+        ...debugResponse,
+        flowResponses
+      }
     });
   } catch (err: any) {
     jsonRes(res, {

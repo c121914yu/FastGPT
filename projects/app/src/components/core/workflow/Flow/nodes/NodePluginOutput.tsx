@@ -45,7 +45,17 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
   return (
-    <NodeCard minW={'300px'} selected={selected} forbidMenu {...data}>
+    <NodeCard
+      minW={'300px'}
+      selected={selected}
+      menuForbid={{
+        debug: true,
+        rename: true,
+        copy: true,
+        delete: true
+      }}
+      {...data}
+    >
       <Container mt={1}>
         <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
           <Box position={'relative'} fontWeight={'medium'}>

@@ -1056,6 +1056,7 @@
       "Can not delete node": "该节点不允许删除",
       "Change input type tip": "修改输入类型会清空已填写的值，请确认！",
       "Check Failed": "工作流校验失败，请检查节点或连线是否正常",
+      "Confirm stop debug": "确认终止调试？调试信息将会不保留。",
       "Custom inputs": "自定义输入",
       "Custom outputs": "自定义输出",
       "Custom variable": "自定义变量",
@@ -1064,11 +1065,20 @@
       "Debug Node": "Debug模式",
       "Failed": "运行失败",
       "Run from here": "从这里开始运行",
-      "Run result": "运行结果",
+      "Run result": "",
       "Running": "运行中",
+      "Skipped": "跳过运行",
+      "Stop debug": "停止调试",
       "Success": "运行成功",
       "chat": {
         "Quote prompt": "引用提示词"
+      },
+      "debug": {
+        "Done": "完成调试",
+        "Hide result": "隐藏结果",
+        "Not result": "无运行结果",
+        "Run result": "运行结果",
+        "Show result": "展示结果"
       },
       "inputType": {
         "JSON Editor": "JSON 输入框",
