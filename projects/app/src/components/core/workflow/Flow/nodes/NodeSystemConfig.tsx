@@ -26,7 +26,15 @@ const NodeUserGuide = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   return (
     <>
       <NodeCard minW={'300px'} selected={selected} forbidMenu {...data}>
-        <Container className="nodrag" borderTop={'2px solid'} borderTopColor={'myGray.200'}>
+        <Box
+          px={4}
+          mx={2}
+          mb={2}
+          py={'10px'}
+          position={'relative'}
+          borderRadius={'md'}
+          className="nodrag"
+        >
           <WelcomeText data={data} />
           <Box pt={4} pb={2}>
             <ChatStartVariable data={data} />
@@ -40,7 +48,7 @@ const NodeUserGuide = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
           <Box mt={3} pt={3} borderTop={theme.borders.base}>
             <QuestionGuide data={data} />
           </Box>
-        </Container>
+        </Box>
       </NodeCard>
     </>
   );
@@ -59,8 +67,8 @@ function WelcomeText({ data }: { data: FlowNodeItemType }) {
   return (
     <>
       <Flex mb={1} alignItems={'center'}>
-        <MyIcon name={'core/modules/welcomeText'} mr={2} w={'16px'} color={'#E74694'} />
-        <Box>{t('core.app.Welcome Text')}</Box>
+        <MyIcon name={'core/modules/welcomeText'} mr={2} w={'14px'} color={'#E74694'} />
+        <Box fontWeight={'medium'}>{t('core.app.Welcome Text')}</Box>
         <MyTooltip label={t(welcomeTextTip)} forceShow>
           <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
         </MyTooltip>
@@ -69,6 +77,7 @@ function WelcomeText({ data }: { data: FlowNodeItemType }) {
         <Textarea
           className="nodrag"
           rows={6}
+          fontSize={'12px'}
           resize={'both'}
           defaultValue={welcomeText.value}
           bg={'myWhite.500'}
@@ -146,7 +155,7 @@ function QuestionGuide({ data }: { data: FlowNodeItemType }) {
   return (
     <QGSwitch
       isChecked={questionGuide}
-      size={'lg'}
+      size={'md'}
       onChange={(e) => {
         const value = e.target.checked;
         onChangeNode({

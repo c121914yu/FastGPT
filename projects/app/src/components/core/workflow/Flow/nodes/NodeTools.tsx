@@ -8,6 +8,8 @@ import RenderInput from './render/RenderInput';
 import { useTranslation } from 'next-i18next';
 import { ToolSourceHandle } from './render/Handle/ToolHandle';
 import { Box } from '@chakra-ui/react';
+import IOTitle from '../components/IOTitle';
+import MyIcon from '@fastgpt/web/components/common/Icon';
 
 const NodeTools = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
@@ -15,15 +17,20 @@ const NodeTools = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   return (
     <NodeCard minW={'350px'} selected={selected} {...data}>
-      <Divider text={t('common.Input')} />
       <Container>
+        <IOTitle text={t('common.Input')} />
         <RenderInput nodeId={nodeId} flowInputList={inputs} />
       </Container>
 
       <Box position={'relative'}>
         <Box borderBottomLeftRadius={'md'} borderBottomRadius={'md'} overflow={'hidden'}>
-          <Divider showBorderBottom={false} text={t('core.module.template.Tool module')} />
+          <Divider
+            showBorderBottom={false}
+            icon={<MyIcon name="phoneTabbar/tool" w={'16px'} h={'16px'} />}
+            text={t('core.module.template.Tool module')}
+          />
         </Box>
+
         <ToolSourceHandle nodeId={nodeId} />
       </Box>
     </NodeCard>

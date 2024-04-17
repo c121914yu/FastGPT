@@ -11,6 +11,9 @@ const TextInput = ({ item, nodeId }: RenderInputProps) => {
       <Input
         placeholder={item.placeholder}
         defaultValue={item.value}
+        bg={'white'}
+        px={3}
+        borderRadius={'xs'}
         onBlur={(e) => {
           onChangeNode({
             nodeId,

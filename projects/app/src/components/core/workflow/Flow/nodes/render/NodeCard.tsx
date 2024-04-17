@@ -69,7 +69,7 @@ const NodeCard = (props: Props) => {
           {/* avatar and name */}
           <Flex alignItems={'center'}>
             <Avatar src={avatar} borderRadius={'0'} objectFit={'contain'} w={'30px'} h={'30px'} />
-            <Box ml={3} fontSize={'lg'}>
+            <Box ml={3} fontSize={'lg'} fontWeight={'medium'}>
               {t(name)}
             </Box>
           </Flex>
@@ -332,9 +332,12 @@ const NodeIntro = React.memo(function NodeIntro({
             {t(intro)}
           </Box>
           {moduleIsTool && (
-            <Button
-              size={'xs'}
-              variant={'whiteBase'}
+            <MyIcon
+              name={'edit'}
+              w={'12px'}
+              p={'2px'}
+              cursor={'pointer'}
+              _hover={{ color: 'primary.500' }}
               onClick={() => {
                 onOpenIntroModal({
                   defaultVal: intro,
@@ -348,9 +351,7 @@ const NodeIntro = React.memo(function NodeIntro({
                   }
                 });
               }}
-            >
-              {t('core.module.Edit intro')}
-            </Button>
+            />
           )}
         </Flex>
         <EditIntroModal maxLength={500} />

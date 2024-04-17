@@ -167,7 +167,7 @@ export const ReferSelector = ({ placeholder, value, list, onSelect, styles }: Se
     if (isOpen) {
       setSelectedItem(value);
     }
-  }, [isOpen]);
+  }, [isOpen, value]);
 
   return (
     <Box ref={ref} position={'relative'}>
@@ -175,7 +175,7 @@ export const ReferSelector = ({ placeholder, value, list, onSelect, styles }: Se
         justifyContent={'space-between'}
         width={'100%'}
         rightIcon={<ChevronDownIcon />}
-        variant={'whitePrimary'}
+        variant={'whiteFlow'}
         _active={{
           transform: 'none'
         }}

@@ -53,18 +53,17 @@ const AddInputParam = (props: RenderInputProps) => {
     return (
       <>
         <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-          <Box position={'relative'}>
+          <Box position={'relative'} fontWeight={'medium'} color={'myGray.600'}>
             {t('core.workflow.Custom variable')}
             {item.description && <QuestionTip label={t(item.description)} />}
           </Box>
           <Box flex={'1 0 0'} />
           <Button
-            variant={'transparentBase'}
+            variant={'grayBase '}
             leftIcon={<SmallAddIcon />}
             iconSpacing={1}
             size={'sm'}
             mr={'-5px'}
-            fontSize={'md'}
             onClick={() => setEditField({})}
           >
             {t('common.Add New')}

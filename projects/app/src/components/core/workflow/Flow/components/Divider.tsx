@@ -1,28 +1,32 @@
 import React from 'react';
 import { Box, useTheme } from '@chakra-ui/react';
-import { useTranslation } from 'next-i18next';
 
 const Divider = ({
   text,
-  showBorderBottom = true
+  showBorderBottom = true,
+  icon
 }: {
   text?: 'Input' | 'Output' | string;
   showBorderBottom?: boolean;
+  icon?: React.ReactNode;
 }) => {
   const theme = useTheme();
-  const { t } = useTranslation();
 
   const isDivider = !text;
 
   return (
     <Box
-      textAlign={'center'}
-      bg={'#f8f8f8'}
+      alignItems={'center'}
+      display={'flex'}
+      justifyContent={'center'}
+      bg={'myGray.25'}
       py={isDivider ? '0' : 2}
       borderTop={theme.borders.base}
       borderBottom={showBorderBottom ? theme.borders.base : 0}
-      fontSize={'lg'}
+      fontWeight={'medium'}
     >
+      {icon}
+      {icon && <Box w={1} />}
       {text}
     </Box>
   );

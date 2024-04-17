@@ -10,10 +10,6 @@ import {
   FlowNodeOutputTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
 import Container from '../components/Container';
-import MyIcon from '@fastgpt/web/components/common/Icon';
-import MyTooltip from '@/components/MyTooltip';
-import TargetHandle from './render/TargetHandle';
-import { useToast } from '@fastgpt/web/hooks/useToast';
 import { EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
 import {
   FlowNodeInputItemType,
@@ -50,9 +46,11 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   return (
     <NodeCard minW={'300px'} selected={selected} forbidMenu {...data}>
-      <Container mt={1} borderTop={'2px solid'} borderTopColor={'myGray.300'}>
+      <Container mt={1}>
         <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-          <Box position={'relative'}>{t('core.workflow.Custom outputs')}</Box>
+          <Box position={'relative'} fontWeight={'medium'}>
+            {t('core.workflow.Custom outputs')}
+          </Box>
           <Box flex={'1 0 0'} />
           <Button
             variant={'transparentBase'}
@@ -60,7 +58,6 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
             iconSpacing={1}
             size={'sm'}
             mr={'-5px'}
-            fontSize={'md'}
             onClick={() => setCreateField(defaultCreateField)}
           >
             {t('common.Add New')}

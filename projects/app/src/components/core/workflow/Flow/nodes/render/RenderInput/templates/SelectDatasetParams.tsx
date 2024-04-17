@@ -61,7 +61,7 @@ const SelectDatasetParam = ({ inputs = [], nodeId }: RenderInputProps) => {
     return (
       <>
         {/* label */}
-        <Flex alignItems={'center'} mb={3}>
+        <Flex alignItems={'center'} mb={3} fontWeight={'medium'} color={'myGray.600'}>
           {t('core.dataset.search.Params Setting')}
           <MyIcon
             name={'common/settingLight'}
