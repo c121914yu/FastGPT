@@ -6,9 +6,10 @@ export type UserChatInputProps = ModuleDispatchProps<{
 
 export const dispatchWorkflowStart = (props: Record<string, any>) => {
   const {
-    variables: { userChatInput }
+    variables: { userChatInput },
+    params: { userChatInput: query }
   } = props as UserChatInputProps;
   return {
-    userChatInput
+    userChatInput: query || userChatInput
   };
 };

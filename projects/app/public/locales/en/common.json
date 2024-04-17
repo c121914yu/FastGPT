@@ -1054,6 +1054,7 @@
       "Can not delete node": "Can not delete the node",
       "Change input type tip": "Changing the input type will empty the entered values, please confirm!",
       "Check Failed": "Workflow verification fails. Check whether the node or connection is normal",
+      "Confirm stop debug": "Do you want to terminate debugging? Debugging information is not retained.",
       "Custom inputs": "Inputs",
       "Custom outputs": "Outputs",
       "Custom variable": "Custom variable",
@@ -1064,9 +1065,18 @@
       "Run from here": "Run from here",
       "Run result": "Run result",
       "Running": "Running",
+      "Skipped": "Skipped",
+      "Stop debug": "Stop",
       "Success": "Running success",
       "chat": {
         "Quote prompt": "Quote prompt"
+      },
+      "debug": {
+        "Done": "Done",
+        "Hide result": "Hide result",
+        "Not result": "Not result",
+        "Run result": "",
+        "Show result": "Show result"
       },
       "inputType": {
         "JSON Editor": "JSON Editor",

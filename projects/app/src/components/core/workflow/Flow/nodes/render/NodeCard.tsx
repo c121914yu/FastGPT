@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Box, Button, Card, Flex, IconButton } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import Avatar from '@/components/Avatar';
@@ -19,15 +19,19 @@ import { useEditTextarea } from '@fastgpt/web/hooks/useEditTextarea';
 import { ConnectionSourceHandle, ConnectionTargetHandle } from './Handle/ConnectionHandle';
 import { useDebug } from '../../hooks/useDebug';
 import { ResponseBox } from '@/components/ChatBox/WholeResponseModal';
-import { CloseIcon } from '@chakra-ui/icons';
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import EmptyTip from '@/components/EmptyTip';
 
 type Props = FlowNodeItemType & {
   children?: React.ReactNode | React.ReactNode[] | string;
   minW?: string | number;
   maxW?: string | number;
-  forbidMenu?: boolean;
   selected?: boolean;
+  menuForbid?: {
+    debug?: boolean;
+    rename?: boolean;
+    copy?: boolean;
+    delete?: boolean;
+  };
 };
 
 const NodeCard = (props: Props) => {
@@ -43,7 +47,7 @@ const NodeCard = (props: Props) => {
     flowNodeType,
     inputs,
     selected,
-    forbidMenu,
+    menuForbid,
     isTool = false,
     isError = false,
     debugResult
@@ -73,9 +77,13 @@ const NodeCard = (props: Props) => {
               {t(name)}
             </Box>
           </Flex>
-          {!forbidMenu && (
-            <MenuRender name={name} nodeId={nodeId} flowNodeType={flowNodeType} inputs={inputs} />
-          )}
+          <MenuRender
+            name={name}
+            nodeId={nodeId}
+            flowNodeType={flowNodeType}
+            inputs={inputs}
+            menuForbid={menuForbid}
+          />
           <NodeIntro nodeId={nodeId} intro={intro} />
         </Box>
       </Box>
@@ -87,7 +95,7 @@ const NodeCard = (props: Props) => {
     avatar,
     t,
     name,
-    forbidMenu,
+    menuForbid,
     flowNodeType,
     inputs,
     intro
@@ -139,12 +147,14 @@ const MenuRender = React.memo(function MenuRender({
   name,
   nodeId,
   flowNodeType,
-  inputs
+  inputs,
+  menuForbid
 }: {
   name: string;
   nodeId: string;
   flowNodeType: Props['flowNodeType'];
   inputs: Props['inputs'];
+  menuForbid?: Props['menuForbid'];
 }) {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -168,42 +178,28 @@ const MenuRender = React.memo(function MenuRender({
 
   const Render = useMemo(() => {
     const menuList = [
-      {
-        icon: 'core/workflow/debug',
-        label: t('core.workflow.Debug'),
-        variant: 'whiteBase',
-        onClick: () => openDebugNode({ entryNodeId: nodeId })
-      },
+      ...(menuForbid?.debug
+        ? []
+        : [
+            {
+              icon: 'core/workflow/debug',
+              label: t('core.workflow.Debug'),
+              variant: 'whiteBase',
+              onClick: () => openDebugNode({ entryNodeId: nodeId })
+            }
+          ]),
       ...(flowNodeType === FlowNodeTypeEnum.pluginModule
         ? [
             {
-              icon: 'common/refreshLight',
-              label: t('plugin.Synchronous version'),
+              icon: 'core/workflow/debug',
+              label: t('core.workflow.Debug'),
               variant: 'whiteBase',
-              onClick: () => {
-                const pluginId = inputs.find(
-                  (item) => item.key === NodeInputKeyEnum.pluginId
-                )?.value;
-                if (!pluginId) return;
-                onOpenConfirmSync(async () => {
-                  try {
-                    setLoading(true);
-                    const pluginModule = await getPreviewPluginModule(pluginId);
-                    onResetNode({
-                      id: nodeId,
-                      module: pluginModule
-                    });
-                  } catch (e) {
-                    return toast({
-                      status: 'error',
-                      title: getErrText(e, t('plugin.Get Plugin Module Detail Failed'))
-                    });
-                  }
-                  setLoading(false);
-                })();
-              }
+              onClick: () => openDebugNode({ entryNodeId: nodeId })
             }
           ]
+        : []),
+      ...(menuForbid?.rename
+        ? []
         : [
             {
               icon: 'edit',
@@ -229,19 +225,28 @@ const MenuRender = React.memo(function MenuRender({
                 })
             }
           ]),
-      {
-        icon: 'copy',
-        label: t('common.Copy'),
-        variant: 'whiteBase',
-        onClick: () => onCopyNode(nodeId)
-      },
-      {
-        icon: 'delete',
-        label: t('common.Delete'),
-        variant: 'whiteDanger',
-        onClick: onOpenConfirmDeleteNode(() => onDelNode(nodeId))
-      }
+      ...(menuForbid?.copy
+        ? []
+        : [
+            {
+              icon: 'copy',
+              label: t('common.Copy'),
+              variant: 'whiteBase',
+              onClick: () => onCopyNode(nodeId)
+            }
+          ]),
+      ...(menuForbid?.delete
+        ? []
+        : [
+            {
+              icon: 'delete',
+              label: t('common.Delete'),
+              variant: 'whiteDanger',
+              onClick: onOpenConfirmDeleteNode(() => onDelNode(nodeId))
+            }
+          ])
     ];
+
     return (
       <>
         <Box
@@ -283,18 +288,18 @@ const MenuRender = React.memo(function MenuRender({
     DebugInputModal,
     EditTitleModal,
     flowNodeType,
-    inputs,
+    menuForbid?.copy,
+    menuForbid?.debug,
+    menuForbid?.delete,
+    menuForbid?.rename,
     name,
     nodeId,
     onChangeNode,
     onCopyNode,
     onDelNode,
     onOpenConfirmDeleteNode,
-    onOpenConfirmSync,
     onOpenCustomTitleModal,
-    onResetNode,
     openDebugNode,
-    setLoading,
     t,
     toast
   ]);
@@ -370,21 +375,33 @@ const NodeDebugResponse = React.memo(function NodeDebugResponse({
   debugResult: FlowNodeItemType['debugResult'];
 }) {
   const { t } = useTranslation();
-  const { onChangeNode } = useFlowProviderStore();
+  const { onChangeNode, onStopNodeDebug, onNextNodeDebug, workflowDebugData } =
+    useFlowProviderStore();
+  const { openConfirm, ConfirmModal } = useConfirm({
+    content: t('core.workflow.Confirm stop debug')
+  });
 
   const RenderStatus = useMemo(() => {
     const map = {
       running: {
-        bg: 'primary.200',
-        text: t('core.workflow.Running')
+        bg: 'primary.50',
+        text: t('core.workflow.Running'),
+        icon: 'core/workflow/running'
       },
       success: {
         bg: 'green.50',
-        text: t('core.workflow.Success')
+        text: t('core.workflow.Success'),
+        icon: 'core/workflow/runSuccess'
       },
       failed: {
-        bg: 'red.200',
-        text: t('core.workflow.Failed')
+        bg: 'red.50',
+        text: t('core.workflow.Failed'),
+        icon: 'core/workflow/runError'
+      },
+      skipped: {
+        bg: 'myGray.50',
+        text: t('core.workflow.Skipped'),
+        icon: 'core/workflow/runSkip'
       }
     };
 
@@ -392,47 +409,114 @@ const NodeDebugResponse = React.memo(function NodeDebugResponse({
 
     const response = debugResult?.response;
 
-    return !!debugResult ? (
+    const onStop = () => {
+      openConfirm(onStopNodeDebug)();
+    };
+
+    return !!debugResult && !!statusData ? (
       <>
-        <Flex px={4} bg={statusData.bg} borderTopRadius={'md'} py={2}>
-          <MyIcon name={'support/account/loginoutLight'} w={'14px'} mr={1} />
-          <Box color={'myGray.900'} fontWeight={'bold'}>
+        <Flex px={4} bg={statusData.bg} borderTopRadius={'md'} py={3}>
+          <MyIcon name={statusData.icon as any} w={'16px'} mr={2} />
+          <Box color={'myGray.900'} fontWeight={'bold'} flex={'1 0 0'}>
             {statusData.text}
           </Box>
+          {debugResult.status !== 'running' && (
+            <Box
+              color={'primary.700'}
+              cursor={'pointer'}
+              fontSize={'sm'}
+              onClick={() =>
+                onChangeNode({
+                  nodeId,
+                  type: 'attr',
+                  key: 'debugResult',
+                  value: {
+                    ...debugResult,
+                    showResult: !debugResult.showResult
+                  }
+                })
+              }
+            >
+              {debugResult.showResult
+                ? t('core.workflow.debug.Hide result')
+                : t('core.workflow.debug.Show result')}
+            </Box>
+          )}
         </Flex>
         {/* result */}
-        {response && (
+        {debugResult.showResult && (
           <Card
-            className="nodrag"
             position={'absolute'}
-            right={'-305px'}
+            right={'-430px'}
             top={0}
             zIndex={10}
-            w={'300px'}
-            py={3}
+            w={'420px'}
             border={'base'}
           >
-            <Flex px={4} justifyContent={'space-between'} mb={1}>
-              <Box fontWeight={'bold'}>{t('core.workflow.Run result')}</Box>
-              <CloseIcon
-                onClick={() => {
-                  onChangeNode({
-                    nodeId,
-                    type: 'attr',
-                    key: 'debugResult',
-                    value: undefined
-                  });
-                }}
-              />
+            {/* Status header */}
+            <Flex px={4} mb={1} py={3} alignItems={'center'} borderBottom={'base'}>
+              <MyIcon mr={1} name={'core/workflow/debugResult'} w={'20px'} color={'primary.600'} />
+              <Box fontWeight={'bold'} flex={'1'}>
+                {t('core.workflow.debug.Run result')}
+              </Box>
+              {workflowDebugData?.nextRunNodes.length !== 0 && (
+                <Button
+                  size={'sm'}
+                  leftIcon={<MyIcon name={'core/chat/stopSpeech'} w={'16px'} />}
+                  variant={'whiteDanger'}
+                  onClick={onStop}
+                >
+                  {t('core.workflow.Stop debug')}
+                </Button>
+              )}
+              {(debugResult.status === 'success' || debugResult.status === 'skipped') &&
+                !debugResult.isExpired &&
+                workflowDebugData?.nextRunNodes &&
+                workflowDebugData.nextRunNodes.length > 0 && (
+                  <Button
+                    ml={2}
+                    size={'sm'}
+                    leftIcon={<MyIcon name={'core/workflow/debugNext'} w={'16px'} />}
+                    variant={'primary'}
+                    onClick={() => onNextNodeDebug()}
+                  >
+                    {t('common.Next Step')}
+                  </Button>
+                )}
+              {workflowDebugData?.nextRunNodes && workflowDebugData?.nextRunNodes.length === 0 && (
+                <Button ml={2} size={'sm'} variant={'primary'} onClick={onStopNodeDebug}>
+                  {t('core.workflow.debug.Done')}
+                </Button>
+              )}
             </Flex>
-            <Box h={'400px'} overflow={'auto'}>
-              <ResponseBox response={[response]} showDetail hideTabs />
+            {/* Show result */}
+            <Box maxH={'100%'} overflow={'auto'}>
+              {!debugResult.message && !response && (
+                <EmptyTip text={t('core.workflow.debug.Not result')} pt={2} pb={5} />
+              )}
+              {debugResult.message && (
+                <Box color={'red.600'} px={3} py={4}>
+                  {debugResult.message}
+                </Box>
+              )}
+              {response && <ResponseBox response={[response]} showDetail hideTabs />}
             </Box>
           </Card>
         )}
+        <ConfirmModal />
       </>
     ) : null;
-  }, [debugResult, nodeId, onChangeNode, t]);
+  }, [
+    ConfirmModal,
+    debugResult,
+    nodeId,
+    onChangeNode,
+    onNextNodeDebug,
+    onStopNodeDebug,
+    openConfirm,
+    t,
+    workflowDebugData?.nextRunNodes
+  ]);
 
   return <>{RenderStatus}</>;
 });

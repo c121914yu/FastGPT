@@ -1,4 +1,5 @@
 import { ChatCompletionRequestMessageRoleEnum } from '../../ai/constants';
+import { NodeOutputKeyEnum } from '../constants';
 import { FlowNodeTypeEnum } from '../node/constant';
 import { StoreNodeItemType } from '../type';
 import { StoreEdgeItemType } from '../type/edge';
@@ -44,6 +45,91 @@ export const storeNodes2RuntimeNodes = (
       };
     }) || []
   );
+};
+
+export const filterWorkflowEdges = (edges: RuntimeEdgeItemType[]) => {
+  return edges.filter(
+    (edge) =>
+      edge.sourceHandle !== NodeOutputKeyEnum.selectedTools &&
+      edge.targetHandle !== NodeOutputKeyEnum.selectedTools
+  );
+};
+
+/* 
+  区分普通连线和递归连线
+  递归连线：可以通过往上查询 nodes，最终追溯到自身
+*/
+export const splitEdges2WorkflowEdges = ({
+  edges,
+  allEdges,
+  currentNode
+}: {
+  edges: RuntimeEdgeItemType[];
+  allEdges: RuntimeEdgeItemType[];
+  currentNode: RuntimeNodeItemType;
+}) => {
+  const commonEdges: RuntimeEdgeItemType[] = [];
+  const recursiveEdges: RuntimeEdgeItemType[] = [];
+
+  edges.forEach((edge) => {
+    const checkIsCurrentNode = (edge: RuntimeEdgeItemType): boolean => {
+      const sourceEdge = allEdges.find((item) => item.target === edge.source);
+      if (!sourceEdge) return false;
+      if (sourceEdge.source === currentNode.nodeId) return true;
+      return checkIsCurrentNode(sourceEdge);
+    };
+    if (checkIsCurrentNode(edge)) {
+      recursiveEdges.push(edge);
+    } else {
+      commonEdges.push(edge);
+    }
+  });
+
+  return { commonEdges, recursiveEdges };
+};
+
+/* 
+  1. 输入线分类：普通线和递归线（可以追溯到自身）
+  2. 起始线全部非 waiting 执行，或递归线全部非 waiting 执行
+*/
+export const checkNodeRunStatus = ({
+  node,
+  runtimeEdges
+}: {
+  node: RuntimeNodeItemType;
+  runtimeEdges: RuntimeEdgeItemType[];
+}) => {
+  const workflowEdges = filterWorkflowEdges(runtimeEdges).filter(
+    (item) => item.target === node.nodeId
+  );
+
+  if (workflowEdges.length === 0) {
+    return 'run';
+  }
+
+  const { commonEdges, recursiveEdges } = splitEdges2WorkflowEdges({
+    edges: workflowEdges,
+    allEdges: runtimeEdges,
+    currentNode: node
+  });
+
+  // check skip
+  if (commonEdges.every((item) => item.status === 'skipped')) {
+    return 'skip';
+  }
+  if (recursiveEdges.length > 0 && recursiveEdges.every((item) => item.status === 'skipped')) {
+    return 'skip';
+  }
+
+  // check active
+  if (commonEdges.every((item) => item.status !== 'waiting')) {
+    return 'run';
+  }
+  if (recursiveEdges.length > 0 && recursiveEdges.every((item) => item.status !== 'waiting')) {
+    return 'run';
+  }
+
+  return 'wait';
 };
 
 export const getReferenceVariableValue = ({

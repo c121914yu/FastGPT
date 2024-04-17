@@ -25,6 +25,7 @@ import {
 } from '@fastgpt/global/core/ai/type';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
+import { getHandleId } from '@fastgpt/global/core/workflow/utils';
 
 type Props = ModuleDispatchProps<{
   [NodeInputKeyEnum.aiModel]: string;
@@ -73,7 +74,7 @@ export const dispatchClassifyQuestion = async (props: Props): Promise<CQResponse
     [NodeOutputKeyEnum.cqResult]: result.value,
     [DispatchNodeResponseKeyEnum.skipHandleId]: agents
       .filter((item) => item.key !== arg?.type)
-      .map((item) => `${nodeId}-${item.key}`),
+      .map((item) => getHandleId(nodeId, 'source', item.key)),
     [DispatchNodeResponseKeyEnum.nodeResponse]: {
       totalPoints: user.openaiAccount?.key ? 0 : totalPoints,
       model: modelName,

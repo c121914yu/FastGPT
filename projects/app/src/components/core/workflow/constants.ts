@@ -13,5 +13,11 @@ export const defaultEdgeOptions: DefaultEdgeOptions = {
 
 export const defaultRunningStatus: FlowNodeItemType['debugResult'] = {
   status: 'running',
-  message: ''
+  message: '',
+  showResult: false
+};
+export const defaultSkippedStatus: FlowNodeItemType['debugResult'] = {
+  status: 'skipped',
+  message: '',
+  showResult: false
 };

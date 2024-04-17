@@ -79,7 +79,7 @@ type Props = {
   CustomComponent?: Record<string, (e: FlowNodeInputItemType) => React.ReactNode>;
   mb?: number;
 };
-const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 3 }: Props) => {
+const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 5 }: Props) => {
   const copyInputs = useMemo(() => JSON.stringify(flowInputList), [flowInputList]);
   const filterInputs = useMemo(() => {
     const parseSortInputs = JSON.parse(copyInputs) as FlowNodeInputItemType[];

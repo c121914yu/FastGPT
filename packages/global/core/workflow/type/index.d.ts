@@ -67,9 +67,11 @@ export type FlowNodeItemType = FlowNodeTemplateType & {
   nodeId: string;
   isError?: boolean;
   debugResult?: {
-    status: 'running' | 'success' | 'failed';
+    status: 'running' | 'success' | 'skipped' | 'failed';
     message?: string;
+    showResult?: boolean; // show and hide result modal
     response?: ChatHistoryItemResType;
+    isExpired?: boolean;
   };
 };
 export type nodeTemplateListType = {
