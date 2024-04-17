@@ -33,7 +33,7 @@ const Render = ({ pluginId }: Props) => {
       }
     }
   );
-  // console.log(pluginDetail);
+
   useEffect(() => {
     initData(
       JSON.parse(

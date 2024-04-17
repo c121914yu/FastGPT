@@ -28,7 +28,7 @@ export const HttpModule468: FlowNodeTemplateType = {
   inputs: [
     {
       ...Input_Template_DynamicInput,
-      description: '接收前方节点的输出值作为变量，这些变量可以被HTTP请求参数使用。',
+      description: 'core.module.input.description.HTTP Dynamic Input',
       editField: {
         key: true,
         valueType: true

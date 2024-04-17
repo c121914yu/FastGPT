@@ -150,7 +150,7 @@ const HttpPluginEditModal = ({
     [setValue, t, toast]
   );
 
-  const { mutate: onclickDelPlugin, isLoading: isDeleting } = useRequest({
+  const { mutate: onClickDelPlugin, isLoading: isDeleting } = useRequest({
     mutationFn: async () => {
       if (!defaultPlugin.id) return;
 
@@ -512,7 +512,7 @@ const HttpPluginEditModal = ({
               isLoading={isDeleting}
               onClick={(e) => {
                 e.stopPropagation();
-                openConfirm(onclickDelPlugin)();
+                openConfirm(onClickDelPlugin)();
               }}
             />
           )}
