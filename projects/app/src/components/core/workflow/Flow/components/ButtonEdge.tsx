@@ -130,8 +130,8 @@ const ButtonEdge = (props: EdgeProps) => {
             position={'absolute'}
             transform={arrowTransform}
             pointerEvents={'all'}
-            w={'10px'}
-            h={'10px'}
+            w={highlightEdge ? '14px' : '10px'}
+            h={highlightEdge ? '14px' : '10px'}
             // bg={'white'}
             zIndex={highlightEdge ? 1000 : 0}
           >

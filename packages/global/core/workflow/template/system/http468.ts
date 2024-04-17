@@ -79,6 +79,7 @@ export const HttpModule468: FlowNodeTemplateType = {
     }
   ],
   outputs: [
+    Output_Template_AddOutput,
     {
       id: NodeOutputKeyEnum.httpRawResponse,
       key: NodeOutputKeyEnum.httpRawResponse,
@@ -86,9 +87,6 @@ export const HttpModule468: FlowNodeTemplateType = {
       description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',
       valueType: WorkflowIOValueTypeEnum.any,
       type: FlowNodeOutputTypeEnum.static
-    },
-    {
-      ...Output_Template_AddOutput
     }
   ]
 };
