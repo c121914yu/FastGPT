@@ -30,6 +30,8 @@ const OutputLabel = ({
         justifyContent={'right'}
         alignItems={'center'}
         position={'relative'}
+        fontWeight={'medium'}
+        color={'myGray.600'}
       >
         {description && (
           <MyTooltip label={t(description)} forceShow>

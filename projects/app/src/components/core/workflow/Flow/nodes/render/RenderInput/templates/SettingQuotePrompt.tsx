@@ -152,7 +152,9 @@ const SettingQuotePrompt = (props: RenderInputProps) => {
     return (
       <>
         <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-          <Box position={'relative'}>{t('core.workflow.chat.Quote prompt')}</Box>
+          <Box position={'relative'} color={'myGray.600'} fontWeight={'medium'}>
+            {t('core.workflow.chat.Quote prompt')}
+          </Box>
           <MyTooltip label={t('core.module.Setting quote prompt')}>
             <MyIcon
               ml={1}

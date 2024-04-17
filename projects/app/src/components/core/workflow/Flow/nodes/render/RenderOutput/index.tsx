@@ -45,7 +45,7 @@ const RenderToolOutput = ({
 
           return (
             output.type !== FlowNodeOutputTypeEnum.hidden && (
-              <Box key={output.key} _notLast={{ mb: 7 }} position={'relative'}>
+              <Box key={output.key} _notLast={{ mb: 4 }} position={'relative'}>
                 {output.label && (
                   <OutputLabel
                     nodeId={nodeId}

@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react';
 import MyMenu, { type Props as MyMenuProps } from '../../common/MyMenu';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, useTheme } from '@chakra-ui/react';
 import MyIcon from '../../common/Icon';
 import { useTranslation } from 'next-i18next';
 import { useConfirm } from '../../../hooks/useConfirm';
@@ -20,11 +20,12 @@ const NodeInputSelect = ({
     title: t('core.workflow.Change input type tip')
   });
   const renderType = renderTypeList[renderTypeIndex];
+  const theme = useTheme();
 
   const inputList = useRef([
     {
       type: FlowNodeInputTypeEnum.reference,
-      icon: 'more',
+      icon: 'core/workflow/grout',
       title: t('core.workflow.inputType.Reference')
     },
     {
@@ -138,8 +139,10 @@ const NodeInputSelect = ({
           size={'xs'}
           leftIcon={<MyIcon name={renderTypeData.icon as any} w={'14px'} />}
           variant={'grayBase'}
+          border={theme.borders.base}
+          borderRadius={'xs'}
         >
-          <Box>{renderTypeData.title}</Box>
+          <Box fontWeight={'medium'}>{renderTypeData.title}</Box>
         </Button>
       }
       menuList={filterMenuList}

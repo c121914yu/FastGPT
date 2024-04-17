@@ -115,6 +115,7 @@ export const iconPaths = {
   'core/modules/variable': () => import('./icons/core/modules/variable.svg'),
   'core/modules/welcomeText': () => import('./icons/core/modules/welcomeText.svg'),
   'core/workflow/closeEdge': () => import('./icons/core/workflow/closeEdge.svg'),
+  'core/workflow/grout': () => import('./icons/core/workflow/grout.svg'),
   'core/workflow/debug': () => import('./icons/core/workflow/debug.svg'),
   'core/workflow/debugBlue': () => import('./icons/core/workflow/debugBlue.svg'),
   date: () => import('./icons/date.svg'),

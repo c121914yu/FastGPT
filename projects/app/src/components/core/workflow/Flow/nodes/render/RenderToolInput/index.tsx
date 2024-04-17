@@ -39,7 +39,9 @@ const RenderToolInput = ({
     <>
       {canEdit && (
         <Flex mb={2} alignItems={'center'}>
-          <Box flex={'1 0 0'}>{t('common.Field')}</Box>
+          <Box flex={'1 0 0'} fontWeight={'medium'} color={'myGray.600'}>
+            {t('common.Field')}
+          </Box>
           <Button
             variant={'unstyled'}
             leftIcon={<MyIcon name={'common/addLight'} w={'14px'} />}

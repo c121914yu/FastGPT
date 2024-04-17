@@ -21,7 +21,6 @@ import {
   FlowNodeOutputTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import Divider from '../components/Divider';
 import RenderToolInput from './render/RenderToolInput';
 import RenderInput from './render/RenderInput';
 import RenderOutput from './render/RenderOutput';
@@ -32,6 +31,7 @@ import {
   FlowNodeOutputItemType
 } from '@fastgpt/global/core/workflow/type/io';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
+import IOTitle from '../components/IOTitle';
 
 const LafAccountModal = dynamic(() => import('@/components/support/laf/LafAccountModal'));
 
@@ -300,21 +300,21 @@ const RenderIO = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
     <>
       {hasToolNode && (
         <>
-          <Divider text={t('core.module.tool.Tool input')} />
           <Container>
+            <IOTitle text={t('core.module.tool.Tool input')} />
             <RenderToolInput nodeId={nodeId} inputs={toolInputs} canEdit />
           </Container>
         </>
       )}
       <>
-        <Divider text={t('common.Input')} />
         <Container>
+          <IOTitle text={t('common.Input')} />
           <RenderInput nodeId={nodeId} flowInputList={commonInputs} />
         </Container>
       </>
       <>
-        <Divider text={t('common.Output')} />
         <Container>
+          <IOTitle text={t('common.Output')} />
           <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
         </Container>
       </>

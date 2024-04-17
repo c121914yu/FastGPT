@@ -55,7 +55,8 @@ const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const Render = useMemo(() => {
     return (
       <JSONEditor
-        bg={'myGray.50'}
+        bg={'white'}
+        borderRadius={'xs'}
         placeholder={item.placeholder}
         resize
         value={value}
