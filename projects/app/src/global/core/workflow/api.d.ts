@@ -6,7 +6,8 @@ export type PostWorkflowDebugProps = {
   nodes: RuntimeNodeItemType[];
   edges: RuntimeEdgeItemType[];
   variables: Record<string, any>;
-  appId: string;
+  appId?: string;
+  pluginId?: string;
 };
 
 export type PostWorkflowDebugResponse = {

@@ -342,7 +342,7 @@ export async function dispatchWorkFlow({
   const pluginOutputModule = runtimeNodes.find(
     (item) => item.flowNodeType === FlowNodeTypeEnum.pluginOutput
   );
-  if (pluginOutputModule) {
+  if (pluginOutputModule && props.mode !== 'debug') {
     await nodeRunWithActive(pluginOutputModule);
   }
 

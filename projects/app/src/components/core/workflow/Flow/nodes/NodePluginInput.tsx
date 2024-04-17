@@ -71,7 +71,7 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
           </Box>
           <Box flex={'1 0 0'} />
           <Button
-            variant={'transparentBase'}
+            variant={'whitePrimary'}
             leftIcon={<SmallAddIcon />}
             iconSpacing={1}
             size={'sm'}

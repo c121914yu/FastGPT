@@ -15,7 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const { id, modules, edges, ...props } = body;
 
-    const { teamId, tmbId } = await authPluginCrud({ req, authToken: true, id, per: 'owner' });
+    const { teamId, tmbId } = await authPluginCrud({
+      req,
+      authToken: true,
+      pluginId: id,
+      per: 'owner'
+    });
 
     const updateData = {
       name: props.name,
