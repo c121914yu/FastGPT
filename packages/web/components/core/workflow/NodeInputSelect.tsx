@@ -1,6 +1,9 @@
 import React, { useMemo, useRef } from 'react';
 import MyMenu, { type Props as MyMenuProps } from '../../common/MyMenu';
-import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import {
+  FlowNodeInputMap,
+  FlowNodeInputTypeEnum
+} from '@fastgpt/global/core/workflow/node/constant';
 import { Box, Button, Flex, useTheme } from '@chakra-ui/react';
 import MyIcon from '../../common/Icon';
 import { useTranslation } from 'next-i18next';
@@ -25,87 +28,90 @@ const NodeInputSelect = ({
   const inputList = useRef([
     {
       type: FlowNodeInputTypeEnum.reference,
-      icon: 'core/workflow/grout',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.reference].icon,
       title: t('core.workflow.inputType.Reference')
     },
     {
       type: FlowNodeInputTypeEnum.input,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.input].icon,
       title: t('core.workflow.inputType.Manual input')
     },
     {
       type: FlowNodeInputTypeEnum.numberInput,
-      icon: 'more',
-      title: t('core.workflow.inputType.Manual input')
-    },
-    {
-      type: FlowNodeInputTypeEnum.select,
-      icon: 'more',
-      title: t('core.workflow.inputType.Manual select')
-    },
-    {
-      type: FlowNodeInputTypeEnum.slider,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.numberInput].icon,
+
       title: t('core.workflow.inputType.Manual input')
     },
     {
       type: FlowNodeInputTypeEnum.switch,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.switch].icon,
+
       title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.textarea,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.textarea].icon,
+
       title: t('core.workflow.inputType.Manual input')
     },
     {
       type: FlowNodeInputTypeEnum.JSONEditor,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.JSONEditor].icon,
+
       title: t('core.workflow.inputType.Manual input')
     },
     {
       type: FlowNodeInputTypeEnum.addInputParam,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.addInputParam].icon,
+
       title: t('core.workflow.inputType.dynamicTargetInput')
     },
     {
       type: FlowNodeInputTypeEnum.selectApp,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.selectApp].icon,
+
       title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.selectLLMModel,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.selectLLMModel].icon,
+
       title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.settingLLMModel,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.settingLLMModel].icon,
+
       title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.selectDataset,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.selectDataset].icon,
+
       title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.selectDatasetParamsModal,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.selectDatasetParamsModal].icon,
+
       title: t('core.workflow.inputType.Manual select')
     },
     {
       type: FlowNodeInputTypeEnum.settingDatasetQuotePrompt,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.settingDatasetQuotePrompt].icon,
+
       title: t('core.workflow.inputType.Manual input')
     },
     {
       type: FlowNodeInputTypeEnum.hidden,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.hidden].icon,
+
       title: t('core.workflow.inputType.Manual input')
     },
     {
       type: FlowNodeInputTypeEnum.custom,
-      icon: 'more',
+      icon: FlowNodeInputMap[FlowNodeInputTypeEnum.custom].icon,
+
       title: t('core.workflow.inputType.Manual input')
     }
   ]);
@@ -117,7 +123,10 @@ const NodeInputSelect = ({
         icon: input.icon,
         renderType: input.type,
         isActive: renderType === input.type,
-        onClick: () => onChange(input.type)
+        onClick: () => {
+          if (renderType === input.type) return;
+          onChange(input.type);
+        }
       })),
     [renderType]
   );

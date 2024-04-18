@@ -12,7 +12,10 @@ import { putUpdatePlugin } from '@/web/core/plugin/api';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MyMenu from '@fastgpt/web/components/common/MyMenu';
-import { useFlowProviderStore } from '@/components/core/workflow/Flow/FlowProvider';
+import {
+  getWorkflowStore,
+  useFlowProviderStore
+} from '@/components/core/workflow/Flow/FlowProvider';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { checkWorkflowNodeAndConnection } from '@/web/core/workflow/utils';
 
@@ -25,11 +28,11 @@ const Header = ({ plugin, onClose }: Props) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { copyData } = useCopyData();
-  const { nodes, edges, onUpdateNodeError } = useFlowProviderStore();
+  const { edges, onUpdateNodeError } = useFlowProviderStore();
   const { isOpen: isOpenImport, onOpen: onOpenImport, onClose: onCloseImport } = useDisclosure();
-  const [previewModules, setPreviewModules] = React.useState<StoreNodeItemType[]>();
 
   const flowData2StoreDataAndCheck = useCallback(async () => {
+    const { nodes } = await getWorkflowStore();
     const checkResults = checkWorkflowNodeAndConnection({ nodes, edges });
     if (!checkResults) {
       const storeNodes = flowNode2StoreNodes({ nodes, edges });
@@ -42,7 +45,7 @@ const Header = ({ plugin, onClose }: Props) => {
         title: t('core.workflow.Check Failed')
       });
     }
-  }, [edges, nodes, onUpdateNodeError, t, toast]);
+  }, [edges, onUpdateNodeError, t, toast]);
 
   const { mutate: onclickSave, isLoading } = useRequest({
     mutationFn: ({ nodes, edges }: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => {

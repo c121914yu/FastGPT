@@ -2,8 +2,6 @@ export enum FlowNodeInputTypeEnum { // render ui
   reference = 'reference', // reference to other node output
   input = 'input', // one line input
   numberInput = 'numberInput',
-  select = 'select',
-  slider = 'slider',
   switch = 'switch', // true/false
 
   // editor
@@ -27,6 +25,53 @@ export enum FlowNodeInputTypeEnum { // render ui
   hidden = 'hidden',
   custom = 'custom'
 }
+export const FlowNodeInputMap = {
+  [FlowNodeInputTypeEnum.reference]: {
+    icon: 'core/workflow/inputType/reference'
+  },
+  [FlowNodeInputTypeEnum.input]: {
+    icon: 'core/workflow/inputType/input'
+  },
+  [FlowNodeInputTypeEnum.numberInput]: {
+    icon: 'core/workflow/inputType/numberInput'
+  },
+  [FlowNodeInputTypeEnum.switch]: {
+    icon: 'core/workflow/inputType/switch'
+  },
+  [FlowNodeInputTypeEnum.textarea]: {
+    icon: 'core/workflow/inputType/textarea'
+  },
+  [FlowNodeInputTypeEnum.JSONEditor]: {
+    icon: 'core/workflow/inputType/jsonEditor'
+  },
+  [FlowNodeInputTypeEnum.addInputParam]: {
+    icon: 'core/workflow/inputType/dynamic'
+  },
+  [FlowNodeInputTypeEnum.selectApp]: {
+    icon: 'core/workflow/inputType/selectApp'
+  },
+  [FlowNodeInputTypeEnum.selectLLMModel]: {
+    icon: 'core/workflow/inputType/selectLLM'
+  },
+  [FlowNodeInputTypeEnum.settingLLMModel]: {
+    icon: 'core/workflow/inputType/selectLLM'
+  },
+  [FlowNodeInputTypeEnum.selectDataset]: {
+    icon: 'core/workflow/inputType/selectDataset'
+  },
+  [FlowNodeInputTypeEnum.selectDatasetParamsModal]: {
+    icon: 'core/workflow/inputType/selectDataset'
+  },
+  [FlowNodeInputTypeEnum.settingDatasetQuotePrompt]: {
+    icon: 'core/workflow/inputType/selectDataset'
+  },
+  [FlowNodeInputTypeEnum.hidden]: {
+    icon: 'core/workflow/inputType/input'
+  },
+  [FlowNodeInputTypeEnum.custom]: {
+    icon: 'core/workflow/inputType/input'
+  }
+};
 
 export enum FlowNodeOutputTypeEnum {
   hidden = 'hidden',

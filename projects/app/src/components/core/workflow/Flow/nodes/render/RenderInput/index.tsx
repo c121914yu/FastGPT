@@ -32,14 +32,6 @@ const RenderList: {
     Component: dynamic(() => import('./templates/Textarea'))
   },
   {
-    types: [FlowNodeInputTypeEnum.select],
-    Component: dynamic(() => import('./templates/Select'))
-  },
-  {
-    types: [FlowNodeInputTypeEnum.slider],
-    Component: dynamic(() => import('./templates/Slider'))
-  },
-  {
     types: [FlowNodeInputTypeEnum.selectApp],
     Component: dynamic(() => import('./templates/SelectApp'))
   },
