@@ -47,18 +47,8 @@ export const SystemConfigNode: FlowNodeTemplateType = {
     {
       key: NodeInputKeyEnum.whisper,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
-      valueType: ModuleIOValueTypeEnum.any,
-      label: '',
-      showTargetInApp: false,
-      showTargetInPlugin: false
-    },
-    {
-      key: ModuleInputKeyEnum.whisper,
-      type: FlowNodeInputTypeEnum.hidden,
-      valueType: ModuleIOValueTypeEnum.any,
-      label: '',
-      showTargetInApp: false,
-      showTargetInPlugin: false
+      valueType: WorkflowIOValueTypeEnum.any,
+      label: ''
     }
   ],
   outputs: []
