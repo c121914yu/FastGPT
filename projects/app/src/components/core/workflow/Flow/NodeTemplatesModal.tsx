@@ -267,7 +267,7 @@ const RenderList = React.memo(function RenderList({
   const { x, y, zoom } = useViewport();
   const { setLoading } = useSystemStore();
   const { toast } = useToast();
-  const { reactFlowWrapper, nodes, setNodes } = useFlowProviderStore();
+  const { reactFlowWrapper, setNodes } = useFlowProviderStore();
 
   const formatTemplates = useMemo<nodeTemplateListType>(() => {
     const copy: nodeTemplateListType = JSON.parse(JSON.stringify(moduleTemplatesList));
@@ -309,8 +309,8 @@ const RenderList = React.memo(function RenderList({
       const mouseX = (position.x - reactFlowBounds.left - x) / zoom - 100;
       const mouseY = (position.y - reactFlowBounds.top - y) / zoom;
 
-      setNodes(
-        nodes.concat(
+      setNodes((state) =>
+        state.concat(
           nodeTemplate2FlowNode({
             template: templateNode,
             position: { x: mouseX, y: mouseY - 20 }
@@ -318,79 +318,83 @@ const RenderList = React.memo(function RenderList({
         )
       );
     },
-    [nodes, reactFlowWrapper, setLoading, setNodes, t, toast, x, y, zoom]
+    [reactFlowWrapper, setLoading, setNodes, t, toast, x, y, zoom]
   );
 
-  return templates.length === 0 ? (
-    <EmptyTip text={t('app.module.No Modules')} />
-  ) : (
-    <Box flex={'1 0 0'} overflow={'overlay'} px={'20px'}>
-      <Box mx={'auto'}>
-        {formatTemplates.map((item, i) => (
-          <Box key={item.type}>
-            {item.label && (
-              <Flex>
-                <Box fontWeight={'bold'} flex={1}>
-                  {t(item.label)}
-                </Box>
-              </Flex>
-            )}
-
-            <>
-              {item.list.map((template) => (
-                <Flex
-                  key={template.id}
-                  alignItems={'center'}
-                  p={5}
-                  cursor={'pointer'}
-                  _hover={{ bg: 'myWhite.600' }}
-                  borderRadius={'sm'}
-                  draggable={template.pluginType !== PluginTypeEnum.folder}
-                  onDragEnd={(e) => {
-                    if (e.clientX < sliderWidth) return;
-                    onAddNode({
-                      template,
-                      position: { x: e.clientX, y: e.clientY }
-                    });
-                  }}
-                  onClick={(e) => {
-                    if (template.pluginType === PluginTypeEnum.folder) {
-                      return setCurrentParent({
-                        parentId: template.id,
-                        parentName: template.name
-                      });
-                    }
-                    if (isPc) {
-                      return onAddNode({
-                        template,
-                        position: { x: sliderWidth * 1.5, y: 200 }
-                      });
-                    }
-                    onAddNode({
-                      template: template,
-                      position: { x: e.clientX, y: e.clientY }
-                    });
-                    onClose();
-                  }}
-                >
-                  <Avatar
-                    src={template.avatar}
-                    w={'34px'}
-                    objectFit={'contain'}
-                    borderRadius={'0'}
-                  />
-                  <Box ml={5} flex={'1 0 0'}>
-                    <Box color={'black'}>{t(template.name)}</Box>
-                    <Box className="textEllipsis3" color={'myGray.500'} fontSize={'sm'}>
-                      {t(template.intro)}
-                    </Box>
+  const Render = useMemo(() => {
+    return templates.length === 0 ? (
+      <EmptyTip text={t('app.module.No Modules')} />
+    ) : (
+      <Box flex={'1 0 0'} overflow={'overlay'} px={'20px'}>
+        <Box mx={'auto'}>
+          {formatTemplates.map((item, i) => (
+            <Box key={item.type}>
+              {item.label && (
+                <Flex>
+                  <Box fontWeight={'bold'} flex={1}>
+                    {t(item.label)}
                   </Box>
                 </Flex>
-              ))}
-            </>
-          </Box>
-        ))}
+              )}
+
+              <>
+                {item.list.map((template) => (
+                  <Flex
+                    key={template.id}
+                    alignItems={'center'}
+                    p={5}
+                    cursor={'pointer'}
+                    _hover={{ bg: 'myWhite.600' }}
+                    borderRadius={'sm'}
+                    draggable={template.pluginType !== PluginTypeEnum.folder}
+                    onDragEnd={(e) => {
+                      if (e.clientX < sliderWidth) return;
+                      onAddNode({
+                        template,
+                        position: { x: e.clientX, y: e.clientY }
+                      });
+                    }}
+                    onClick={(e) => {
+                      if (template.pluginType === PluginTypeEnum.folder) {
+                        return setCurrentParent({
+                          parentId: template.id,
+                          parentName: template.name
+                        });
+                      }
+                      if (isPc) {
+                        return onAddNode({
+                          template,
+                          position: { x: sliderWidth * 1.5, y: 200 }
+                        });
+                      }
+                      onAddNode({
+                        template: template,
+                        position: { x: e.clientX, y: e.clientY }
+                      });
+                      onClose();
+                    }}
+                  >
+                    <Avatar
+                      src={template.avatar}
+                      w={'34px'}
+                      objectFit={'contain'}
+                      borderRadius={'0'}
+                    />
+                    <Box ml={5} flex={'1 0 0'}>
+                      <Box color={'black'}>{t(template.name)}</Box>
+                      <Box className="textEllipsis3" color={'myGray.500'} fontSize={'sm'}>
+                        {t(template.intro)}
+                      </Box>
+                    </Box>
+                  </Flex>
+                ))}
+              </>
+            </Box>
+          ))}
+        </Box>
       </Box>
-    </Box>
-  );
+    );
+  }, [formatTemplates, isPc, onAddNode, onClose, setCurrentParent, t, templates.length]);
+
+  return Render;
 });

@@ -22,7 +22,8 @@ import React, {
   createContext,
   useRef,
   useMemo,
-  useState
+  useState,
+  useEffect
 } from 'react';
 import { customAlphabet } from 'nanoid';
 import { storeEdgesRenderEdge, storeNode2FlowNode } from '@/web/core/workflow/utils';
@@ -37,6 +38,7 @@ import { defaultRunningStatus } from '../constants';
 import { postWorkflowDebug } from '@/web/core/workflow/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { checkNodeRunStatus } from '@fastgpt/global/core/workflow/runtime/utils';
+import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
@@ -621,6 +623,17 @@ export const FlowProvider = ({
     [setEdges, setNodes, onFixView]
   );
 
+  useEffect(() => {
+    eventBus.on(EventNameEnum.requestWorkflowStore, () => {
+      eventBus.emit(EventNameEnum.receiveWorkflowStore, {
+        nodes
+      });
+    });
+    return () => {
+      eventBus.off(EventNameEnum.requestWorkflowStore);
+    };
+  }, [nodes]);
+
   const value = {
     reactFlowWrapper,
     mode,
@@ -658,3 +671,15 @@ export const FlowProvider = ({
 };
 
 export default React.memo(FlowProvider);
+
+type GetWorkflowStoreResponse = {
+  nodes: Node<FlowNodeItemType>[];
+};
+export const getWorkflowStore = () =>
+  new Promise<GetWorkflowStoreResponse>((resolve) => {
+    eventBus.on(EventNameEnum.receiveWorkflowStore, (data: GetWorkflowStoreResponse) => {
+      resolve(data);
+      eventBus.off(EventNameEnum.receiveWorkflowStore);
+    });
+    eventBus.emit(EventNameEnum.requestWorkflowStore);
+  });

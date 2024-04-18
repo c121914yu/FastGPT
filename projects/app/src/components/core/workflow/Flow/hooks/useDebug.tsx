@@ -1,17 +1,13 @@
-import {
-  getDefaultEntryNodeIds,
-  storeNodes2RuntimeNodes
-} from '@fastgpt/global/core/workflow/runtime/utils';
-import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
+import { storeNodes2RuntimeNodes } from '@fastgpt/global/core/workflow/runtime/utils';
+import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type';
 import { RuntimeEdgeItemType, StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { useCallback, useState } from 'react';
-import { useFlowProviderStore } from '../FlowProvider';
+import { getWorkflowStore, useFlowProviderStore } from '../FlowProvider';
 import { checkWorkflowNodeAndConnection } from '@/web/core/workflow/utils';
 import { useTranslation } from 'next-i18next';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { flowNode2StoreNodes } from '../../utils';
 import { RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
-import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 
 import dynamic from 'next/dynamic';
 import {
@@ -39,13 +35,15 @@ export const useDebug = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
 
-  const { nodes, edges, setNodes, onStartNodeDebug } = useFlowProviderStore();
+  const { edges, setNodes, onStartNodeDebug } = useFlowProviderStore();
 
   const [runtimeNodeId, setRuntimeNodeId] = useState<string>();
   const [runtimeNodes, setRuntimeNodes] = useState<RuntimeNodeItemType[]>();
   const [runtimeEdges, setRuntimeEdges] = useState<RuntimeEdgeItemType[]>();
 
   const flowData2StoreDataAndCheck = useCallback(async () => {
+    const { nodes } = await getWorkflowStore();
+
     const checkResults = checkWorkflowNodeAndConnection({ nodes, edges });
     if (!checkResults) {
       const storeNodes = flowNode2StoreNodes({ nodes, edges });
@@ -58,7 +56,7 @@ export const useDebug = () => {
       });
       return Promise.reject();
     }
-  }, [edges, nodes, t, toast]);
+  }, [edges, t, toast]);
 
   const openDebugNode = useCallback(
     async ({ entryNodeId }: { entryNodeId: string }) => {

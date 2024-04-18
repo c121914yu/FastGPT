@@ -275,7 +275,7 @@ export function RenderHttpProps({
 }) {
   const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState(TabEnum.params);
-  const { nodes } = useFlowProviderStore();
+  const { nodeList } = useFlowProviderStore();
 
   const requestMethods = inputs.find((item) => item.key === NodeInputKeyEnum.httpMethod)?.value;
   const params = inputs.find((item) => item.key === NodeInputKeyEnum.httpParams);
@@ -288,7 +288,7 @@ export function RenderHttpProps({
   // get variable
   const variables = useMemo(() => {
     const globalVariables = formatEditorVariablePickerIcon(
-      splitGuideModule(getGuideModule(nodes.map((node) => node.data)))?.variableModules || []
+      splitGuideModule(getGuideModule(nodeList))?.variableModules || []
     );
     const systemVariables = [
       {
@@ -326,7 +326,7 @@ export function RenderHttpProps({
     );
 
     return [...moduleVariables, ...globalVariables, ...systemVariables];
-  }, [inputs, nodes, t]);
+  }, [inputs, nodeList, t]);
 
   const variableText = useMemo(() => {
     return variables

@@ -64,7 +64,6 @@ const NodeCard = (props: Props) => {
 
   /* Node header */
   const Header = useMemo(() => {
-    console.log(11111111);
     return (
       <Box position={'relative'}>
         {/* debug */}
@@ -105,7 +104,6 @@ const NodeCard = (props: Props) => {
   ]);
 
   const Render = useMemo(() => {
-    console.log(222222222);
     return (
       <Box
         minW={minW}
@@ -182,9 +180,9 @@ const MenuRender = React.memo(function MenuRender({
 
   const onCopyNode = useCallback(
     (nodeId: string) => {
-      setNodes((nodes) => {
-        const node = nodes.find((node) => node.id === nodeId);
-        if (!node) return nodes;
+      setNodes((state) => {
+        const node = state.find((node) => node.id === nodeId);
+        if (!node) return state;
         const template = {
           avatar: node.data.avatar,
           name: node.data.name,
@@ -194,7 +192,7 @@ const MenuRender = React.memo(function MenuRender({
           outputs: node.data.outputs,
           showStatus: node.data.showStatus
         };
-        return nodes.concat(
+        return state.concat(
           storeNode2FlowNode({
             item: {
               name: template.name,
