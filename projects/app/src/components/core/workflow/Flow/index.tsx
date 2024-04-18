@@ -205,7 +205,7 @@ const Flow = ({ Header, ...data }: { Header: React.ReactNode }) => {
   return (
     <Box h={'100%'} position={'fixed'} zIndex={999} top={0} left={0} right={0} bottom={0}>
       <ReactFlowProvider>
-        <Flex h={'100%'} flexDirection={'column'} bg={'#fff'}>
+        <Flex h={'100%'} flexDirection={'column'} bg={'myGray.50'}>
           {Header}
           {memoRenderContainer}
         </Flex>

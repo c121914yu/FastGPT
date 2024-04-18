@@ -20,8 +20,7 @@ const DatasetSelectModal = dynamic(() => import('@/components/core/app/DatasetSe
 const SelectDatasetRender = ({ inputs = [], item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { llmModelList } = useSystemStore();
-  const { nodes, onChangeNode } = useFlowProviderStore();
+  const { onChangeNode } = useFlowProviderStore();
   const [data, setData] = useState({
     searchMode: DatasetSearchModeEnum.embedding,
     limit: 5,
@@ -40,23 +39,6 @@ const SelectDatasetRender = ({ inputs = [], item, nodeId }: RenderInputProps) =>
     const value = item.value as SelectedDatasetType;
     return allDatasets.filter((dataset) => value?.find((item) => item.datasetId === dataset._id));
   }, [allDatasets, item.value]);
-
-  const tokenLimit = useMemo(() => {
-    let maxTokens = 3000;
-
-    nodes.forEach((item) => {
-      if (item.type === FlowNodeTypeEnum.chatNode) {
-        const model =
-          item.data.inputs.find((item) => item.key === NodeInputKeyEnum.aiModel)?.value || '';
-        const quoteMaxToken =
-          llmModelList.find((item) => item.model === model)?.quoteMaxToken || 3000;
-
-        maxTokens = Math.max(maxTokens, quoteMaxToken);
-      }
-    });
-
-    return maxTokens;
-  }, [llmModelList, nodes]);
 
   useQuery(['loadAllDatasets'], loadAllDatasets);
 

@@ -143,9 +143,9 @@ const MyTargetHandle = React.memo(function MyTargetHandle({
   highlightStyle: Record<string, any>;
   connectedStyle: Record<string, any>;
 }) {
-  const { nodes, edges, connectingEdge } = useFlowProviderStore();
+  const { nodeList, edges, connectingEdge } = useFlowProviderStore();
 
-  const node = useMemo(() => nodes.find((node) => node.data.nodeId === nodeId), [nodes, nodeId]);
+  const node = useMemo(() => nodeList.find((node) => node.nodeId === nodeId), [nodeList, nodeId]);
   const connected = edges.some((edge) => edge.targetHandle === handleId);
 
   const translateStr = useMemo(() => {

@@ -10,13 +10,12 @@ import {
 } from '@fastgpt/global/core/workflow/utils';
 
 const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
-  const { t } = useTranslation();
-  const { nodes, onChangeNode } = useFlowProviderStore();
+  const { nodeList, onChangeNode } = useFlowProviderStore();
 
   // get variable
   const variables = useMemo(() => {
     const globalVariables = formatEditorVariablePickerIcon(
-      splitGuideModule(getGuideModule(nodes.map((node) => node.data)))?.variableModules || []
+      splitGuideModule(getGuideModule(nodeList))?.variableModules || []
     );
     const moduleVariables = formatEditorVariablePickerIcon(
       inputs
@@ -28,7 +27,7 @@ const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
     );
 
     return [...globalVariables, ...moduleVariables];
-  }, [inputs, nodes]);
+  }, [inputs, nodeList]);
 
   const update = useCallback(
     (value: string) => {

@@ -12,7 +12,7 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import SearchParamsTip from '@/components/core/dataset/SearchParamsTip';
 
 const SelectDatasetParam = ({ inputs = [], nodeId }: RenderInputProps) => {
-  const { nodes, onChangeNode } = useFlowProviderStore();
+  const { nodeList, onChangeNode } = useFlowProviderStore();
   const { t } = useTranslation();
   const { llmModelList } = useSystemStore();
 
@@ -29,10 +29,10 @@ const SelectDatasetParam = ({ inputs = [], nodeId }: RenderInputProps) => {
   const tokenLimit = useMemo(() => {
     let maxTokens = 3000;
 
-    nodes.forEach((item) => {
-      if (item.type === FlowNodeTypeEnum.chatNode) {
+    nodeList.forEach((item) => {
+      if (item.flowNodeType === FlowNodeTypeEnum.chatNode) {
         const model =
-          item.data.inputs.find((item) => item.key === NodeInputKeyEnum.aiModel)?.value || '';
+          item.inputs.find((item) => item.key === NodeInputKeyEnum.aiModel)?.value || '';
         const quoteMaxToken =
           llmModelList.find((item) => item.model === model)?.quoteMaxToken || 3000;
 
@@ -41,7 +41,7 @@ const SelectDatasetParam = ({ inputs = [], nodeId }: RenderInputProps) => {
     });
 
     return maxTokens;
-  }, [llmModelList, nodes]);
+  }, [llmModelList, nodeList]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

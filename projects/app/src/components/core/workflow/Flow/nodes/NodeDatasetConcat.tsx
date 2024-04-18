@@ -22,7 +22,7 @@ import IOTitle from '../components/IOTitle';
 const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { llmModelList } = useSystemStore();
-  const { nodes, onChangeNode } = useFlowProviderStore();
+  const { nodeList, onChangeNode } = useFlowProviderStore();
   const { nodeId, inputs, outputs } = data;
 
   const quotes = useMemo(
@@ -33,10 +33,10 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const tokenLimit = useMemo(() => {
     let maxTokens = 3000;
 
-    nodes.forEach((item) => {
-      if (item.type === FlowNodeTypeEnum.chatNode) {
+    nodeList.forEach((item) => {
+      if (item.flowNodeType === FlowNodeTypeEnum.chatNode) {
         const model =
-          item.data.inputs.find((item) => item.key === NodeInputKeyEnum.aiModel)?.value || '';
+          item.inputs.find((item) => item.key === NodeInputKeyEnum.aiModel)?.value || '';
         const quoteMaxToken =
           llmModelList.find((item) => item.model === model)?.quoteMaxToken || 3000;
 
@@ -45,7 +45,7 @@ const NodeDatasetConcat = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
     });
 
     return maxTokens;
-  }, [llmModelList, nodes]);
+  }, [llmModelList, nodeList]);
 
   const RenderQuoteList = useMemo(() => {
     return (

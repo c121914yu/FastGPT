@@ -6,9 +6,9 @@ import { getHandleId } from '@fastgpt/global/core/workflow/utils';
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
-  const { nodes, edges, connectingEdge } = useFlowProviderStore();
+  const { nodeList, edges, connectingEdge } = useFlowProviderStore();
 
-  const node = useMemo(() => nodes.find((node) => node.data.nodeId === nodeId), [nodes, nodeId]);
+  const node = useMemo(() => nodeList.find((node) => node.nodeId === nodeId), [nodeList, nodeId]);
 
   /* not node/not connecting node, hidden */
   const showSourceHandle = useMemo(() => {
@@ -23,7 +23,7 @@ export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
       (edge) => edge.targetHandle === getHandleId(nodeId, 'target', Position.Right)
     );
 
-    if (!node || !node.data?.sourceHandle?.right || rightTargetConnected) return null;
+    if (!node || !node?.sourceHandle?.right || rightTargetConnected) return null;
 
     return (
       <SourceHandle
@@ -38,7 +38,7 @@ export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
     const leftTargetConnected = edges.some(
       (edge) => edge.targetHandle === getHandleId(nodeId, 'target', Position.Left)
     );
-    if (!node || !node.data?.sourceHandle?.left || leftTargetConnected) return null;
+    if (!node || !node?.sourceHandle?.left || leftTargetConnected) return null;
 
     const handleId = getHandleId(nodeId, 'source', Position.Left);
 
@@ -63,7 +63,7 @@ export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
     const topTargetConnected = edges.some(
       (edge) => edge.targetHandle === getHandleId(nodeId, 'target', Position.Top)
     );
-    if (!node || !node.data?.sourceHandle?.top || topTargetConnected) return null;
+    if (!node || !node?.sourceHandle?.top || topTargetConnected) return null;
 
     return (
       <SourceHandle
@@ -79,7 +79,7 @@ export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
     const targetConnected = edges.some(
       (edge) => edge.targetHandle === getHandleId(nodeId, 'target', Position.Bottom)
     );
-    if (!node || !node.data?.sourceHandle?.bottom || targetConnected) return null;
+    if (!node || !node?.sourceHandle?.bottom || targetConnected) return null;
 
     return (
       <SourceHandle
@@ -102,9 +102,9 @@ export const ConnectionSourceHandle = ({ nodeId }: { nodeId: string }) => {
 };
 
 export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
-  const { nodes, connectingEdge } = useFlowProviderStore();
+  const { nodeList, connectingEdge } = useFlowProviderStore();
 
-  const node = useMemo(() => nodes.find((node) => node.data.nodeId === nodeId), [nodes, nodeId]);
+  const node = useMemo(() => nodeList.find((node) => node.nodeId === nodeId), [nodeList, nodeId]);
 
   const showHandle = useMemo(() => {
     if (!node) return false;
@@ -113,7 +113,7 @@ export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
   }, [connectingEdge, node, nodeId]);
 
   const LeftHandle = useMemo(() => {
-    if (!node || !node.data?.targetHandle?.left) return null;
+    if (!node || !node?.targetHandle?.left) return null;
 
     const handleId = getHandleId(nodeId, 'target', Position.Left);
 
@@ -127,7 +127,7 @@ export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
     );
   }, [node, nodeId]);
   const rightHandle = useMemo(() => {
-    if (!node || !node.data?.targetHandle?.right) return null;
+    if (!node || !node?.targetHandle?.right) return null;
 
     const handleId = getHandleId(nodeId, 'target', Position.Right);
 
@@ -141,7 +141,7 @@ export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
     );
   }, [node, nodeId]);
   const topHandle = useMemo(() => {
-    if (!node || !node.data?.targetHandle?.top) return null;
+    if (!node || !node?.targetHandle?.top) return null;
 
     const handleId = getHandleId(nodeId, 'target', Position.Top);
 
@@ -155,7 +155,7 @@ export const ConnectionTargetHandle = ({ nodeId }: { nodeId: string }) => {
     );
   }, [node, nodeId]);
   const bottomHandle = useMemo(() => {
-    if (!node || !node.data?.targetHandle?.bottom) return null;
+    if (!node || !node?.targetHandle?.bottom) return null;
 
     const handleId = getHandleId(nodeId, 'target', Position.Bottom);
 
