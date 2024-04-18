@@ -42,7 +42,6 @@ const phoneUnShowLayoutRoute: Record<string, boolean> = {
 
 const Layout = ({ children }: { children: JSX.Element }) => {
   const router = useRouter();
-  const { colorMode, setColorMode } = useColorMode();
   const { Loading } = useLoading();
   const { loading, setScreenWidth, isPc, feConfigs, isNotSufficientModal } = useSystemStore();
   const { userInfo } = useUserStore();
@@ -52,12 +51,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
     [router.pathname, router.query]
   );
 
-  useEffect(() => {
-    if (colorMode === 'dark' && router.pathname !== '/chat') {
-      setColorMode('light');
-    }
-  }, [colorMode, router.pathname, setColorMode]);
-
+  // listen screen width
   useEffect(() => {
     const resize = throttle(() => {
       setScreenWidth(document.documentElement.clientWidth);

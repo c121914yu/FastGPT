@@ -66,10 +66,10 @@ export const FlowNodeInputMap = {
     icon: 'core/workflow/inputType/selectDataset'
   },
   [FlowNodeInputTypeEnum.hidden]: {
-    icon: 'core/workflow/inputType/input'
+    icon: 'core/workflow/inputType/select'
   },
   [FlowNodeInputTypeEnum.custom]: {
-    icon: 'core/workflow/inputType/input'
+    icon: 'core/workflow/inputType/select'
   }
 };
 
