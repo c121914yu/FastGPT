@@ -660,6 +660,12 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
     [inputs, nodeId]
   );
 
+  console.log(
+    '%cprojects/app/src/components/core/workflow/Flow/nodes/NodeHttp/index.tsx:663 outputs',
+    'color: #007acc;',
+    outputs
+  );
+
   return (
     <NodeCard minW={'350px'} selected={selected} {...data}>
       {hasToolNode && (

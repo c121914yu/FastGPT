@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import type { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/type/io.d';
-import { Box } from '@chakra-ui/react';
+import { Box, Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import OutputLabel from './Label';
 import { RenderOutputProps } from './type';
 import dynamic from 'next/dynamic';
+import { useTranslation } from 'next-i18next';
 
 const RenderList: {
   types: `${FlowNodeOutputTypeEnum}`[];
@@ -30,6 +31,8 @@ const RenderToolOutput = ({
     return parseOutputs;
   }, [outputString]);
 
+  const { t } = useTranslation();
+
   const Render = useMemo(() => {
     return (
       <>
@@ -46,6 +49,69 @@ const RenderToolOutput = ({
           return (
             output.type !== FlowNodeOutputTypeEnum.hidden && (
               <Box key={output.key} _notLast={{ mb: 5 }} position={'relative'}>
+                <TableContainer>
+                  <Table bg={'white'}>
+                    <Thead>
+                      <Tr bg={'myGray.50'}>
+                        <Th w={'18px !important'} p={0} />
+                        <Th>{t('core.module.variable.variable name')}</Th>
+                        <Th>{t('core.workflow.Value type')}</Th>
+                        <Th></Th>
+                      </Tr>
+                    </Thead>
+                    {/* <Tbody>
+                {inputs.map((item) => (
+                  <Tr key={item.key}>
+                    <Td textAlign={'center'} p={0} pl={3}>
+                      <MyIcon name={'chatSend'} w={'14px'} color={'myGray.500'} />
+                    </Td>
+                    <Td>{item.label}</Td>
+                    <Td>{item.valueType ? t(FlowValueTypeMap[item.valueType]?.label) : '-'}</Td>
+                    <Td>
+                      <MyIcon
+                        mr={3}
+                        name={'common/settingLight'}
+                        w={'16px'}
+                        cursor={'pointer'}
+                        onClick={() => {
+                          setEditField({
+                            ...item,
+                            inputType: item.renderTypeList[0],
+                            valueType: item.valueType,
+                            key: item.key,
+                            label: item.label,
+                            description: item.description,
+                            isToolInput: !!item.toolDescription
+                          });
+                        }}
+                      />
+                      <MyIcon
+                        className="delete"
+                        name={'delete'}
+                        w={'16px'}
+                        color={'myGray.600'}
+                        cursor={'pointer'}
+                        ml={2}
+                        _hover={{ color: 'red.500' }}
+                        onClick={() => {
+                          onChangeNode({
+                            nodeId,
+                            type: 'delInput',
+                            key: item.key
+                          });
+                          onChangeNode({
+                            nodeId,
+                            type: 'delOutput',
+                            key: item.key
+                          });
+                        }}
+                      />{' '}
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody> */}
+                  </Table>
+                </TableContainer>
                 {output.label && (
                   <OutputLabel
                     nodeId={nodeId}

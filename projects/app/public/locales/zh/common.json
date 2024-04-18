@@ -850,6 +850,8 @@
       "Max Value": "最大值",
       "Min Value": "最小值",
       "Model List": "模型列表",
+      "No Config Tips": "无可配置项",
+      "Output Type": "输出类型",
       "Plugin output must connect": "自定义输出必须全部连接",
       "Plugin tool Description": "工具参数需要描述",
       "QueryExtension": {

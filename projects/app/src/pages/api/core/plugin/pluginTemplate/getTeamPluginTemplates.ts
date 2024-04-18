@@ -47,7 +47,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       intro: plugin.intro,
       showStatus: false,
       inputs: [],
-      outputs: []
+      outputs: [],
+      module: plugin.modules
     }));
 
     jsonRes<FlowNodeTemplateType[]>(res, {

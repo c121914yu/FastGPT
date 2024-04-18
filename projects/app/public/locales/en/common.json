@@ -848,6 +848,8 @@
       "Max Value": "Max Value",
       "Min Value": "",
       "Model List": "Model list",
+      "No Config Tips": "no configuration",
+      "Output Type": "Output Type",
       "Plugin output must connect": "Custom outputs must all be connected",
       "Plugin tool Description": "",
       "QueryExtension": {

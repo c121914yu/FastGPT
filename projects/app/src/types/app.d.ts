@@ -31,6 +31,7 @@ export type AppItemType = {
   id: string;
   name: string;
   modules: StoreNodeItemType[];
+  edges: StoreEdgeItemType[];
 };
 
 export type AppLogsListItemType = {

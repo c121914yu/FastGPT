@@ -210,6 +210,11 @@ const RenderList = React.memo(function RenderList({
     <MyBox>
       {templates.map((item, i) => {
         const selected = !!selectedTools.find((tool) => tool.id === item.id);
+        console.log(
+          '%cprojects/app/src/pages/app/detail/components/SimpleEdit/ToolSelectModal.tsx:213 item',
+          'color: #007acc;',
+          item
+        );
         return (
           <Flex
             key={item.id}

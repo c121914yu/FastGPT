@@ -27,18 +27,17 @@ const OutputLabel = ({
       <Flex
         className="nodrag"
         cursor={'default'}
-        justifyContent={'right'}
         alignItems={'center'}
         position={'relative'}
         fontWeight={'medium'}
         color={'myGray.600'}
       >
+        <Box position={'relative'}>{t(label)}</Box>
         {description && (
           <MyTooltip label={t(description)} forceShow>
             <QuestionOutlineIcon display={['none', 'inline']} mr={1} />
           </MyTooltip>
         )}
-        <Box position={'relative'}>{t(label)}</Box>
         {item.type === FlowNodeOutputTypeEnum.source && (
           <SourceHandle
             nodeId={nodeId}

@@ -60,6 +60,7 @@ const EditForm = ({
   const router = useRouter();
   const { t } = useTranslation();
   const { appDetail, updateAppDetail } = useAppStore();
+
   const { loadAllDatasets, allDatasets } = useDatasetStore();
   const { isPc, llmModelList } = useSystemStore();
   const [refresh, setRefresh] = useState(false);
@@ -115,10 +116,11 @@ const EditForm = ({
   /* on save app */
   const { mutate: onSubmitSave, isLoading: isSaving } = useRequest({
     mutationFn: async (data: AppSimpleEditFormType) => {
-      const modules = await postForm2Modules(data);
+      const { modules, edges } = await postForm2Modules(data);
 
       await updateAppDetail(appDetail._id, {
         modules,
+        edges,
         type: AppTypeEnum.simple,
         permission: undefined
       });
