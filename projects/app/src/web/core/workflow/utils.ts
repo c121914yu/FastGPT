@@ -13,6 +13,8 @@ import {
 import { EmptyNode } from '@fastgpt/global/core/workflow/template/system/emptyNode';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
+import { systemConfigNode2VariableNode } from './adapt';
+import { VARIABLE_NODE_ID } from './constants';
 
 export const nodeTemplate2FlowNode = ({
   template,
@@ -125,7 +127,7 @@ export const computedNodeInputReference = ({
   );
 
   if (systemConfigNode) {
-    sourceNodes.push(systemConfigNode);
+    sourceNodes.unshift(systemConfigNode2VariableNode(systemConfigNode));
   }
 
   return sourceNodes;
@@ -158,11 +160,19 @@ export const checkWorkflowNodeAndConnection = ({
           if (Array.isArray(input.value) && input.value.length === 0) return true;
           if (input.value === undefined) return true;
         }
+
+        // check reference invalid
         const renderType = input.renderTypeList[input.selectedTypeIndex || 0];
         if (renderType === FlowNodeInputTypeEnum.reference && input.required) {
           if (!input.value || !Array.isArray(input.value) || input.value.length !== 2) {
             return true;
           }
+
+          // variable key not need to check
+          if (input.value[0] === VARIABLE_NODE_ID) {
+            return false;
+          }
+
           // Can not find key
           const sourceNode = nodes.find((item) => item.data.nodeId === input.value[0]);
           if (!sourceNode) {

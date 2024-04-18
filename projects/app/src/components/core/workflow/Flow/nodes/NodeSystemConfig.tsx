@@ -133,17 +133,6 @@ function ChatStartVariable({ data }: { data: FlowNodeItemType }) {
           value
         }
       });
-      onChangeNode({
-        nodeId,
-        type: 'attr',
-        key: 'outputs',
-        value: value.map((item) => ({
-          id: item.key,
-          key: item.key,
-          valueType: WorkflowIOValueTypeEnum.string,
-          label: item.label
-        }))
-      });
     },
     [inputs, nodeId, onChangeNode]
   );

@@ -63,7 +63,8 @@ const callbackMap: Record<`${FlowNodeTypeEnum}`, Function> = {
 
   // none
   [FlowNodeTypeEnum.systemConfig]: dispatchSystemConfig,
-  [FlowNodeTypeEnum.emptyNode]: () => Promise.resolve()
+  [FlowNodeTypeEnum.emptyNode]: () => Promise.resolve(),
+  [FlowNodeTypeEnum.globalVariable]: () => Promise.resolve()
 };
 
 /* running */
@@ -242,7 +243,8 @@ export async function dispatchWorkFlow({
       // replace reference variables
       value = getReferenceVariableValue({
         value: input.value,
-        nodes: runtimeNodes
+        nodes: runtimeNodes,
+        variables
       });
       // console.log(JSON.stringify(input, null, 2), '=====================');
 

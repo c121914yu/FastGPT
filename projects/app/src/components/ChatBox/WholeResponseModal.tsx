@@ -34,12 +34,13 @@ function Row({
         {t(label)}:
       </Box>
       <Box
-        borderRadius={'md'}
+        borderRadius={'sm'}
         fontSize={'sm'}
+        bg={'myGray.50'}
         {...(isCodeBlock
           ? { transform: 'translateY(-3px)' }
           : value
-            ? { px: 3, py: 1, border: theme.borders.base }
+            ? { px: 3, py: 2, border: theme.borders.base }
             : {})}
       >
         {value && <Markdown source={strValue} />}

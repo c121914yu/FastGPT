@@ -66,15 +66,18 @@ export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
   const valueTypeMap = FlowValueTypeMap[WorkflowIOValueTypeEnum.tools];
 
   /* onConnect edge, delete tool input and switch */
-  const onConnect = useCallback((e: Connection) => {
-    setEdges((edges) =>
-      edges.filter((edge) => {
-        if (edge.target !== e.target) return true;
-        if (edge.targetHandle === NodeOutputKeyEnum.selectedTools) return true;
-        return false;
-      })
-    );
-  }, []);
+  const onConnect = useCallback(
+    (e: Connection) => {
+      setEdges((edges) =>
+        edges.filter((edge) => {
+          if (edge.target !== e.target) return true;
+          if (edge.targetHandle === NodeOutputKeyEnum.selectedTools) return true;
+          return false;
+        })
+      );
+    },
+    [setEdges]
+  );
 
   return (
     <MyTooltip

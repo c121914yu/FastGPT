@@ -8,7 +8,10 @@ import ReactFlow, {
   NodeProps,
   ReactFlowProvider,
   useReactFlow,
-  OnInit
+  OnInit,
+  NodeChange,
+  OnConnectStartParams,
+  addEdge
 } from 'reactflow';
 import { Box, Flex, IconButton, useDisclosure } from '@chakra-ui/react';
 import { SmallCloseIcon } from '@chakra-ui/icons';
@@ -31,6 +34,7 @@ import { connectionLineStyle, defaultEdgeOptions } from '../constants';
 const NodeSimple = dynamic(() => import('./nodes/NodeSimple'));
 const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
   [FlowNodeTypeEnum.emptyNode]: NodeSimple,
+  [FlowNodeTypeEnum.globalVariable]: NodeSimple,
   [FlowNodeTypeEnum.systemConfig]: dynamic(() => import('./nodes/NodeSystemConfig')),
   [FlowNodeTypeEnum.workflowStart]: dynamic(() => import('./nodes/NodeWorkflowStart')),
   [FlowNodeTypeEnum.chatNode]: NodeSimple,
@@ -64,12 +68,53 @@ const Container = React.memo(function Container() {
     nodes,
     onNodesChange,
     edges,
+    setEdges,
     onEdgesChange,
-    onConnectStart,
-    onConnectEnd,
-    onConnect
+    setConnectingEdge
   } = useFlowProviderStore();
 
+  const handleNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      for (const change of changes) {
+        if (change.type === 'remove') {
+          const node = nodes.find((n) => n.id === change.id);
+          if (node && node.data.forbidDelete) {
+            return toast({
+              status: 'warning',
+              title: t('core.workflow.Can not delete node')
+            });
+          }
+        }
+      }
+      onNodesChange(changes);
+    },
+    [nodes, onNodesChange, t, toast]
+  );
+
+  /* connect */
+  const onConnectStart = useCallback(
+    (event: any, params: OnConnectStartParams) => {
+      setConnectingEdge(params);
+    },
+    [setConnectingEdge]
+  );
+  const onConnectEnd = useCallback(() => {
+    setConnectingEdge(undefined);
+  }, [setConnectingEdge]);
+  const onConnect = useCallback(
+    ({ connect }: { connect: Connection }) => {
+      setEdges((state) =>
+        addEdge(
+          {
+            ...connect,
+            type: EDGE_TYPE
+          },
+          state
+        )
+      );
+    },
+    [setEdges]
+  );
   const customOnConnect = useCallback(
     (connect: Connection) => {
       if (!connect.sourceHandle || !connect.targetHandle) {
@@ -101,7 +146,7 @@ const Container = React.memo(function Container() {
       connectionLineStyle={connectionLineStyle}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      onNodesChange={onNodesChange}
+      onNodesChange={handleNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={customOnConnect}
       onConnectStart={onConnectStart}

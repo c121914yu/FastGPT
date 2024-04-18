@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Box, Button, Card, Flex, IconButton } from '@chakra-ui/react';
+import { Box, Button, Card, Flex } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import Avatar from '@/components/Avatar';
 import type { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
@@ -8,10 +8,7 @@ import { useEditTitle } from '@/web/common/hooks/useEditTitle';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useFlowProviderStore } from '../../FlowProvider';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { getPreviewPluginModule } from '@/web/core/plugin/api';
-import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { LOGO_ICON } from '@fastgpt/global/common/system/constants';
 import { ToolTargetHandle } from './Handle/ToolHandle';
@@ -20,6 +17,11 @@ import { ConnectionSourceHandle, ConnectionTargetHandle } from './Handle/Connect
 import { useDebug } from '../../hooks/useDebug';
 import { ResponseBox } from '@/components/ChatBox/WholeResponseModal';
 import EmptyTip from '@/components/EmptyTip';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { getPreviewPluginModule } from '@/web/core/plugin/api';
+import { getErrText } from '@fastgpt/global/common/error/utils';
+import { storeNode2FlowNode } from '@/web/core/workflow/utils';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 type Props = FlowNodeItemType & {
   children?: React.ReactNode | React.ReactNode[] | string;
@@ -53,15 +55,16 @@ const NodeCard = (props: Props) => {
     debugResult
   } = props;
 
-  const { nodes, setHoverNodeId, onUpdateNodeError } = useFlowProviderStore();
+  const { nodeList, setHoverNodeId, onUpdateNodeError } = useFlowProviderStore();
 
   const showToolHandle = useMemo(
-    () => isTool && !!nodes.find((item) => item.data?.flowNodeType === FlowNodeTypeEnum.tools),
-    [isTool, nodes]
+    () => isTool && !!nodeList.find((item) => item?.flowNodeType === FlowNodeTypeEnum.tools),
+    [isTool, nodeList]
   );
 
   /* Node header */
   const Header = useMemo(() => {
+    console.log(11111111);
     return (
       <Box position={'relative'}>
         {/* debug */}
@@ -102,6 +105,7 @@ const NodeCard = (props: Props) => {
   ]);
 
   const Render = useMemo(() => {
+    console.log(222222222);
     return (
       <Box
         minW={minW}
@@ -136,7 +140,7 @@ const NodeCard = (props: Props) => {
         <ConnectionTargetHandle nodeId={nodeId} />
       </Box>
     );
-  }, [Header, children, isError, maxW, minW, nodeId, onUpdateNodeError, selected, setHoverNodeId]);
+  }, [Header, isError, maxW, minW, nodeId, onUpdateNodeError, selected, setHoverNodeId]);
 
   return Render;
 };
@@ -174,7 +178,47 @@ const MenuRender = React.memo(function MenuRender({
     type: 'delete'
   });
 
-  const { onDelNode, onCopyNode, onResetNode, onChangeNode } = useFlowProviderStore();
+  const { setNodes, setEdges, onResetNode, onChangeNode } = useFlowProviderStore();
+
+  const onCopyNode = useCallback(
+    (nodeId: string) => {
+      setNodes((nodes) => {
+        const node = nodes.find((node) => node.id === nodeId);
+        if (!node) return nodes;
+        const template = {
+          avatar: node.data.avatar,
+          name: node.data.name,
+          intro: node.data.intro,
+          flowNodeType: node.data.flowNodeType,
+          inputs: node.data.inputs,
+          outputs: node.data.outputs,
+          showStatus: node.data.showStatus
+        };
+        return nodes.concat(
+          storeNode2FlowNode({
+            item: {
+              name: template.name,
+              intro: template.intro,
+              nodeId: getNanoid(),
+              position: { x: node.position.x + 200, y: node.position.y + 50 },
+              flowNodeType: template.flowNodeType,
+              showStatus: template.showStatus,
+              inputs: template.inputs,
+              outputs: template.outputs
+            }
+          })
+        );
+      });
+    },
+    [setNodes]
+  );
+  const onDelNode = useCallback(
+    (nodeId: string) => {
+      setNodes((state) => state.filter((item) => item.id !== nodeId));
+      setEdges((state) => state.filter((edge) => edge.source !== nodeId && edge.target !== nodeId));
+    },
+    [setEdges, setNodes]
+  );
 
   const Render = useMemo(() => {
     const menuList = [
@@ -191,10 +235,31 @@ const MenuRender = React.memo(function MenuRender({
       ...(flowNodeType === FlowNodeTypeEnum.pluginModule
         ? [
             {
-              icon: 'core/workflow/debug',
-              label: t('core.workflow.Debug'),
+              icon: 'common/refreshLight',
+              label: t('plugin.Synchronous version'),
               variant: 'whiteBase',
-              onClick: () => openDebugNode({ entryNodeId: nodeId })
+              onClick: () => {
+                const pluginId = inputs.find(
+                  (item) => item.key === NodeInputKeyEnum.pluginId
+                )?.value;
+                if (!pluginId) return;
+                onOpenConfirmSync(async () => {
+                  try {
+                    setLoading(true);
+                    const pluginModule = await getPreviewPluginModule(pluginId);
+                    onResetNode({
+                      id: nodeId,
+                      module: pluginModule
+                    });
+                  } catch (e) {
+                    return toast({
+                      status: 'error',
+                      title: getErrText(e, t('plugin.Get Plugin Module Detail Failed'))
+                    });
+                  }
+                  setLoading(false);
+                })();
+              }
             }
           ]
         : []),
@@ -288,6 +353,7 @@ const MenuRender = React.memo(function MenuRender({
     DebugInputModal,
     EditTitleModal,
     flowNodeType,
+    inputs,
     menuForbid?.copy,
     menuForbid?.debug,
     menuForbid?.delete,
@@ -298,8 +364,11 @@ const MenuRender = React.memo(function MenuRender({
     onCopyNode,
     onDelNode,
     onOpenConfirmDeleteNode,
+    onOpenConfirmSync,
     onOpenCustomTitleModal,
+    onResetNode,
     openDebugNode,
+    setLoading,
     t,
     toast
   ]);
