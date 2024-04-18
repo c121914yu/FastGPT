@@ -6,7 +6,6 @@ import {
   useNodesState,
   useEdgesState,
   Connection,
-  addEdge,
   OnConnectStartParams
 } from 'reactflow';
 import type {
@@ -34,7 +33,7 @@ import { useTranslation } from 'next-i18next';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { RuntimeEdgeItemType, StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
-import { defaultRunningStatus, defaultSkippedStatus } from '../constants';
+import { defaultRunningStatus } from '../constants';
 import { postWorkflowDebug } from '@/web/core/workflow/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { checkNodeRunStatus } from '@fastgpt/global/core/workflow/runtime/utils';
@@ -46,8 +45,7 @@ type OnChange<ChangesType> = (changes: ChangesType[]) => void;
 export type useFlowProviderStoreType = {
   // connect
   connectingEdge: OnConnectStartParams | undefined;
-  onConnectStart: (event: any, params: OnConnectStartParams) => void;
-  onConnectEnd: (event: any) => void;
+  setConnectingEdge: React.Dispatch<React.SetStateAction<OnConnectStartParams | undefined>>;
   // nodes
   basicNodeTemplates: FlowNodeTemplateType[];
   reactFlowWrapper: null | React.RefObject<HTMLDivElement>;
@@ -81,17 +79,13 @@ export type useFlowProviderStoreType = {
   setEdges: Dispatch<SetStateAction<Edge<any>[]>>;
   onEdgesChange: OnChange<EdgeChange>;
   onFixView: () => void;
-  onDelNode: (nodeId: string) => void;
   onChangeNode: (e: FlowNodeChangeProps) => void;
-  onCopyNode: (nodeId: string) => void;
   onResetNode: (e: { id: string; module: FlowNodeTemplateType }) => void;
   onDelEdge: (e: {
     nodeId: string;
     sourceHandle?: string | undefined;
     targetHandle?: string | undefined;
   }) => void;
-  onDelConnect: (id: string) => void;
-  onConnect: ({ connect }: { connect: Connection }) => any;
   initData: (e: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => void;
   splitToolInputs: (
     inputs: FlowNodeInputItemType[],
@@ -130,13 +124,7 @@ const StateContext = createContext<useFlowProviderStoreType>({
   onFixView: function (): void {
     return;
   },
-  onDelNode: function (nodeId: string): void {
-    return;
-  },
   onChangeNode: function (e: FlowNodeChangeProps): void {
-    return;
-  },
-  onCopyNode: function (nodeId: string): void {
     return;
   },
   onDelEdge: function (e: {
@@ -146,13 +134,6 @@ const StateContext = createContext<useFlowProviderStoreType>({
   }): void {
     return;
   },
-  onDelConnect: function (id: string): void {
-    return;
-  },
-  onConnect: function ({ connect }: { connect: Connection }) {
-    return;
-  },
-
   onResetNode: function (e): void {
     throw new Error('Function not implemented.');
   },
@@ -167,12 +148,6 @@ const StateContext = createContext<useFlowProviderStoreType>({
     throw new Error('Function not implemented.');
   },
   hasToolNode: false,
-  onConnectStart: function (event: any, params: OnConnectStartParams): void {
-    throw new Error('Function not implemented.');
-  },
-  onConnectEnd: function (event: any): void {
-    throw new Error('Function not implemented.');
-  },
   connectingEdge: undefined,
   basicNodeTemplates: [],
   initData: function (e: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }): void {
@@ -203,6 +178,11 @@ const StateContext = createContext<useFlowProviderStoreType>({
   },
   onStopNodeDebug: function (): void {
     throw new Error('Function not implemented.');
+  },
+  setConnectingEdge: function (
+    value: React.SetStateAction<OnConnectStartParams | undefined>
+  ): void {
+    throw new Error('Function not implemented.');
   }
 });
 export const useFlowProviderStore = () => useContext(StateContext);
@@ -223,7 +203,6 @@ export const FlowProvider = ({
   pluginId?: string;
 }) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
   const { toast } = useToast();
   const [nodes = [], setNodes, onNodesChange] = useNodesState<FlowNodeItemType>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -248,6 +227,7 @@ export const FlowProvider = ({
     }, 100);
   }, []);
 
+  /* edge */
   const onDelEdge = useCallback(
     ({
       nodeId,
@@ -271,32 +251,34 @@ export const FlowProvider = ({
     [setEdges]
   );
 
-  // node
-  const handleNodesChange = useCallback(
-    (changes: NodeChange[]) => {
-      for (const change of changes) {
-        if (change.type === 'remove') {
-          const node = nodes.find((n) => n.id === change.id);
-          if (node && node.data.forbidDelete) {
-            return toast({
-              status: 'warning',
-              title: t('core.workflow.Can not delete node')
+  /* node */
+  // reset a node data. delete edge and replace it
+  const onResetNode = useCallback(
+    ({ id, module }: { id: string; module: FlowNodeTemplateType }) => {
+      setNodes((state) =>
+        state.map((node) => {
+          if (node.id === id) {
+            // delete edge
+            node.data.inputs.forEach((item) => {
+              onDelEdge({ nodeId: id, targetHandle: item.key });
             });
+            node.data.outputs.forEach((item) => {
+              onDelEdge({ nodeId: id, sourceHandle: item.key });
+            });
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                ...module
+              }
+            };
           }
-        }
-      }
-      onNodesChange(changes);
+          return node;
+        })
+      );
     },
-    [nodes, onNodesChange, t, toast]
+    [onDelEdge, setNodes]
   );
-  const onDelNode = useCallback(
-    (nodeId: string) => {
-      setNodes((state) => state.filter((item) => item.id !== nodeId));
-      setEdges((state) => state.filter((edge) => edge.source !== nodeId && edge.target !== nodeId));
-    },
-    [setEdges, setNodes]
-  );
-  /* change */
   const onChangeNode = useCallback(
     (props: FlowNodeChangeProps) => {
       const { nodeId, type } = props;
@@ -395,38 +377,6 @@ export const FlowProvider = ({
       );
     },
     [onDelEdge, setNodes, toast]
-  );
-  const onCopyNode = useCallback(
-    (nodeId: string) => {
-      setNodes((nodes) => {
-        const node = nodes.find((node) => node.id === nodeId);
-        if (!node) return nodes;
-        const template = {
-          avatar: node.data.avatar,
-          name: node.data.name,
-          intro: node.data.intro,
-          flowNodeType: node.data.flowNodeType,
-          inputs: node.data.inputs,
-          outputs: node.data.outputs,
-          showStatus: node.data.showStatus
-        };
-        return nodes.concat(
-          storeNode2FlowNode({
-            item: {
-              name: template.name,
-              intro: template.intro,
-              nodeId: nanoid(),
-              position: { x: node.position.x + 200, y: node.position.y + 50 },
-              flowNodeType: template.flowNodeType,
-              showStatus: template.showStatus,
-              inputs: template.inputs,
-              outputs: template.outputs
-            }
-          })
-        );
-      });
-    },
-    [setNodes]
   );
   const onUpdateNodeError = useCallback(
     (nodeId: string, isError: Boolean) => {
@@ -639,34 +589,6 @@ export const FlowProvider = ({
     [onNextNodeDebug, onStopNodeDebug]
   );
 
-  // connect
-  const onConnectStart = useCallback((event: any, params: OnConnectStartParams) => {
-    setConnectingEdge(params);
-  }, []);
-  const onConnectEnd = useCallback(() => {
-    setConnectingEdge(undefined);
-  }, []);
-  const onConnect = useCallback(
-    ({ connect }: { connect: Connection }) => {
-      setEdges((state) =>
-        addEdge(
-          {
-            ...connect,
-            type: EDGE_TYPE
-          },
-          state
-        )
-      );
-    },
-    [setEdges]
-  );
-  const onDelConnect = useCallback(
-    (id: string) => {
-      setEdges((state) => state.filter((item) => item.id !== id));
-    },
-    [setEdges]
-  );
-
   /* If the module is connected by a tool, the tool input and the normal input are separated */
   const splitToolInputs = useCallback(
     (inputs: FlowNodeInputItemType[], nodeId: string) => {
@@ -686,34 +608,6 @@ export const FlowProvider = ({
     [edges]
   );
 
-  // reset a node data. delete edge and replace it
-  const onResetNode = useCallback(
-    ({ id, module }: { id: string; module: FlowNodeTemplateType }) => {
-      setNodes((state) =>
-        state.map((node) => {
-          if (node.id === id) {
-            // delete edge
-            node.data.inputs.forEach((item) => {
-              onDelEdge({ nodeId: id, targetHandle: item.key });
-            });
-            node.data.outputs.forEach((item) => {
-              onDelEdge({ nodeId: id, sourceHandle: item.key });
-            });
-            return {
-              ...node,
-              data: {
-                ...node.data,
-                ...module
-              }
-            };
-          }
-          return node;
-        })
-      );
-    },
-    [onDelEdge, setNodes]
-  );
-
   const initData = useCallback(
     (e: { nodes: StoreNodeItemType[]; edges: StoreEdgeItemType[] }) => {
       setNodes(e.nodes?.map((item) => storeNode2FlowNode({ item })));
@@ -722,7 +616,7 @@ export const FlowProvider = ({
 
       setTimeout(() => {
         onFixView();
-      }, 1000);
+      }, 100);
     },
     [setEdges, setNodes, onFixView]
   );
@@ -738,11 +632,9 @@ export const FlowProvider = ({
     nodes,
     nodeList,
     setNodes,
-    onDelNode,
-    onNodesChange: handleNodesChange,
+    onNodesChange,
     hoverNodeId,
     setHoverNodeId,
-    onCopyNode,
     onUpdateNodeError,
     workflowDebugData,
     onNextNodeDebug,
@@ -752,14 +644,11 @@ export const FlowProvider = ({
     basicNodeTemplates,
     // connect
     connectingEdge,
-    onConnectStart,
-    onConnectEnd,
+    setConnectingEdge,
     onFixView,
     onChangeNode,
     onResetNode,
     onDelEdge,
-    onDelConnect,
-    onConnect,
     initData,
     splitToolInputs,
     hasToolNode

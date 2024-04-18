@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { BezierEdge, getBezierPath, EdgeLabelRenderer, EdgeProps } from 'reactflow';
 import { useFlowProviderStore } from '../FlowProvider';
 import { Flex } from '@chakra-ui/react';
@@ -6,7 +6,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import { NodeOutputKeyEnum, RuntimeEdgeStatusEnum } from '@fastgpt/global/core/workflow/constants';
 
 const ButtonEdge = (props: EdgeProps) => {
-  const { nodes, onDelConnect, workflowDebugData } = useFlowProviderStore();
+  const { nodes, setEdges, workflowDebugData } = useFlowProviderStore();
   const {
     id,
     sourceX,
@@ -21,6 +21,13 @@ const ButtonEdge = (props: EdgeProps) => {
     target,
     style
   } = props;
+
+  const onDelConnect = useCallback(
+    (id: string) => {
+      setEdges((state) => state.filter((item) => item.id !== id));
+    },
+    [setEdges]
+  );
 
   const highlightEdge = useMemo(() => {
     const connectNode = nodes.find((node) => {

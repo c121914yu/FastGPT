@@ -38,6 +38,7 @@ export enum FlowNodeOutputTypeEnum {
 export enum FlowNodeTypeEnum {
   emptyNode = 'emptyNode',
   systemConfig = 'userGuide',
+  globalVariable = 'globalVariable',
   workflowStart = 'workflowStart',
   chatNode = 'chatNode',
 

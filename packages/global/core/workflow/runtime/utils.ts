@@ -4,6 +4,7 @@ import { FlowNodeTypeEnum } from '../node/constant';
 import { StoreNodeItemType } from '../type';
 import { StoreEdgeItemType } from '../type/edge';
 import { RuntimeEdgeItemType, RuntimeNodeItemType } from './type';
+import { VARIABLE_NODE_ID } from '../../../../../projects/app/src/web/core/workflow/constants/index';
 
 export const initWorkflowEdgeStatus = (edges: StoreEdgeItemType[]): RuntimeEdgeItemType[] => {
   return (
@@ -134,10 +135,12 @@ export const checkNodeRunStatus = ({
 
 export const getReferenceVariableValue = ({
   value,
-  nodes
+  nodes,
+  variables
 }: {
   value: [string, string];
   nodes: RuntimeNodeItemType[];
+  variables: Record<string, any>;
 }) => {
   if (
     !Array.isArray(value) ||
@@ -149,6 +152,11 @@ export const getReferenceVariableValue = ({
   }
   const sourceNodeId = value[0];
   const outputId = value[1];
+
+  if (sourceNodeId === VARIABLE_NODE_ID && outputId) {
+    return variables[outputId];
+  }
+
   const node = nodes.find((node) => node.nodeId === sourceNodeId);
 
   if (!node) {
