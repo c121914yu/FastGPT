@@ -36,9 +36,9 @@ const FeedbackModal = ({
         appId,
         chatId,
         chatItemId,
-        shareId,
         teamId,
         teamToken,
+        shareId,
         outLinkUid,
         userBadFeedback: val
       });

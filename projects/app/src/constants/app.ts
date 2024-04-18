@@ -1,5 +1,8 @@
 import { AppDetailType } from '@fastgpt/global/core/app/type.d';
-import type { OutLinkEditType } from '@fastgpt/global/support/outLink/type.d';
+import type {
+  OutLinkEditType,
+  OutLinkConfigEditType
+} from '@fastgpt/global/support/outLink/type.d';
 
 export const defaultApp: AppDetailType = {
   _id: '',
@@ -27,6 +30,34 @@ export const defaultOutLinkForm: OutLinkEditType = {
   }
 };
 
+export const defaultWecomOutLinkForm: OutLinkConfigEditType = {
+  name: '',
+  wecomConfig: {
+    ReplyLimit: false,
+    defaultResponse: '',
+    immediateResponse: false,
+    WXWORK_TOKEN: '',
+    WXWORK_AESKEY: '',
+    WXWORK_SECRET: '',
+    WXWORD_ID: ''
+  },
+  limit: {
+    QPM: 100,
+    maxUsagePoints: -1
+  }
+};
+
+export const defaultFeishuOutLinkForm: OutLinkConfigEditType = {
+  name: '',
+  limit: {
+    QPM: 100,
+    maxUsagePoints: -1
+  },
+  feiShuConfig: {
+    appId: '',
+    appSecret: ''
+  }
+};
 export enum TTSTypeEnum {
   none = 'none',
   web = 'web',
