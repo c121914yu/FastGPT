@@ -309,13 +309,20 @@ const RenderList = React.memo(function RenderList({
       const mouseX = (position.x - reactFlowBounds.left - x) / zoom - 100;
       const mouseY = (position.y - reactFlowBounds.top - y) / zoom;
 
+      const node = nodeTemplate2FlowNode({
+        template: templateNode,
+        position: { x: mouseX, y: mouseY - 20 },
+        selected: true
+      });
+
       setNodes((state) =>
-        state.concat(
-          nodeTemplate2FlowNode({
-            template: templateNode,
-            position: { x: mouseX, y: mouseY - 20 }
-          })
-        )
+        state
+          .map((node) => ({
+            ...node,
+            selected: false
+          }))
+          // @ts-ignore
+          .concat(node)
       );
     },
     [reactFlowWrapper, setLoading, setNodes, t, toast, x, y, zoom]

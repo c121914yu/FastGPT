@@ -35,7 +35,7 @@ export const useDebug = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
 
-  const { edges, setNodes, onStartNodeDebug } = useFlowProviderStore();
+  const { edges, setNodes, onStartNodeDebug, onUpdateNodeError } = useFlowProviderStore();
 
   const [runtimeNodeId, setRuntimeNodeId] = useState<string>();
   const [runtimeNodes, setRuntimeNodes] = useState<RuntimeNodeItemType[]>();
@@ -50,13 +50,15 @@ export const useDebug = () => {
 
       return JSON.stringify(storeNodes);
     } else {
+      checkResults.forEach((nodeId) => onUpdateNodeError(nodeId, true));
+
       toast({
         status: 'warning',
         title: t('core.workflow.Check Failed')
       });
       return Promise.reject();
     }
-  }, [edges, t, toast]);
+  }, [edges, onUpdateNodeError, t, toast]);
 
   const openDebugNode = useCallback(
     async ({ entryNodeId }: { entryNodeId: string }) => {

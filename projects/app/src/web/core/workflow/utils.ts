@@ -18,10 +18,12 @@ import { VARIABLE_NODE_ID } from './constants';
 
 export const nodeTemplate2FlowNode = ({
   template,
-  position
+  position,
+  selected
 }: {
   template: FlowNodeTemplateType;
   position: XYPosition;
+  selected?: boolean;
 }): Node<FlowNodeItemType> => {
   // replace item data
   const moduleItem: FlowNodeItemType = {
@@ -33,7 +35,8 @@ export const nodeTemplate2FlowNode = ({
     id: moduleItem.nodeId,
     type: moduleItem.flowNodeType,
     data: moduleItem,
-    position: position
+    position: position,
+    selected
   };
 };
 export const storeNode2FlowNode = ({
