@@ -147,6 +147,7 @@ export const checkWorkflowNodeAndConnection = ({
     const inputs = data.inputs;
 
     if (
+      data.flowNodeType === FlowNodeTypeEnum.systemConfig ||
       data.flowNodeType === FlowNodeTypeEnum.pluginInput ||
       data.flowNodeType === FlowNodeTypeEnum.pluginOutput ||
       data.flowNodeType === FlowNodeTypeEnum.workflowStart
@@ -154,6 +155,7 @@ export const checkWorkflowNodeAndConnection = ({
       continue;
     }
 
+    // check node input
     if (
       inputs.some((input) => {
         if (input.required) {
@@ -186,6 +188,14 @@ export const checkWorkflowNodeAndConnection = ({
         return false;
       })
     ) {
+      return [data.nodeId];
+    }
+
+    // check empty node(not edge)
+    const hasEdge = edges.some(
+      (edge) => edge.source === data.nodeId || edge.target === data.nodeId
+    );
+    if (!hasEdge) {
       return [data.nodeId];
     }
   }

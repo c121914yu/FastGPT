@@ -55,12 +55,14 @@ const NodeCard = (props: Props) => {
     debugResult
   } = props;
 
-  const { nodeList, setHoverNodeId, onUpdateNodeError } = useFlowProviderStore();
+  const { nodes, nodeList, setHoverNodeId, onUpdateNodeError } = useFlowProviderStore();
 
   const showToolHandle = useMemo(
     () => isTool && !!nodeList.find((item) => item?.flowNodeType === FlowNodeTypeEnum.tools),
     [isTool, nodeList]
   );
+
+  const hasSelectedNode = useMemo(() => nodes.some((node) => node.selected), [nodes]);
 
   /* Node header */
   const Header = useMemo(() => {
@@ -121,7 +123,10 @@ const NodeCard = (props: Props) => {
             display: 'block'
           }
         }}
-        onMouseEnter={() => setHoverNodeId(nodeId)}
+        onMouseEnter={() => {
+          if (hasSelectedNode) return;
+          setHoverNodeId(nodeId);
+        }}
         onMouseLeave={() => setHoverNodeId(undefined)}
         {...(isError
           ? {

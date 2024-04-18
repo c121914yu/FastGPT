@@ -11,7 +11,8 @@ import ReactFlow, {
   OnInit,
   NodeChange,
   OnConnectStartParams,
-  addEdge
+  addEdge,
+  EdgeChange
 } from 'reactflow';
 import { Box, Flex, IconButton, useDisclosure } from '@chakra-ui/react';
 import { SmallCloseIcon } from '@chakra-ui/icons';
@@ -30,6 +31,7 @@ import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
 import { connectionLineStyle, defaultEdgeOptions } from '../constants';
+import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 
 const NodeSimple = dynamic(() => import('./nodes/NodeSimple'));
 const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
@@ -62,6 +64,10 @@ const edgeTypes = {
 const Container = React.memo(function Container() {
   const { toast } = useToast();
   const { t } = useTranslation();
+  const { openConfirm: onOpenConfirmDeleteNode, ConfirmModal: ConfirmDeleteModal } = useConfirm({
+    content: t('core.module.Confirm Delete Node'),
+    type: 'delete'
+  });
 
   const {
     reactFlowWrapper,
@@ -83,12 +89,26 @@ const Container = React.memo(function Container() {
               status: 'warning',
               title: t('core.workflow.Can not delete node')
             });
+          } else {
+            return onOpenConfirmDeleteNode(() => {
+              onNodesChange(changes);
+              setEdges((state) =>
+                state.filter((edge) => edge.source !== change.id && edge.target !== change.id)
+              );
+            })();
           }
         }
       }
+
       onNodesChange(changes);
     },
-    [nodes, onNodesChange, t, toast]
+    [nodes, onNodesChange, onOpenConfirmDeleteNode, setEdges, t, toast]
+  );
+  const handleEdgeChange = useCallback(
+    (changes: EdgeChange[]) => {
+      onEdgesChange(changes.filter((change) => change.type !== 'remove'));
+    },
+    [onEdgesChange]
   );
 
   /* connect */
@@ -134,26 +154,29 @@ const Container = React.memo(function Container() {
   );
 
   return (
-    <ReactFlow
-      ref={reactFlowWrapper}
-      fitView
-      nodes={nodes}
-      edges={edges}
-      minZoom={0.1}
-      maxZoom={1.5}
-      defaultEdgeOptions={defaultEdgeOptions}
-      elevateEdgesOnSelect
-      connectionLineStyle={connectionLineStyle}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      onNodesChange={handleNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={customOnConnect}
-      onConnectStart={onConnectStart}
-      onConnectEnd={onConnectEnd}
-    >
-      <FlowController />
-    </ReactFlow>
+    <>
+      <ReactFlow
+        ref={reactFlowWrapper}
+        fitView
+        nodes={nodes}
+        edges={edges}
+        minZoom={0.1}
+        maxZoom={1.5}
+        defaultEdgeOptions={defaultEdgeOptions}
+        elevateEdgesOnSelect
+        connectionLineStyle={connectionLineStyle}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onNodesChange={handleNodesChange}
+        onEdgesChange={handleEdgeChange}
+        onConnect={customOnConnect}
+        onConnectStart={onConnectStart}
+        onConnectEnd={onConnectEnd}
+      >
+        <FlowController />
+      </ReactFlow>
+      <ConfirmDeleteModal />
+    </>
   );
 });
 

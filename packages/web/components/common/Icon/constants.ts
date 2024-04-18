@@ -115,12 +115,28 @@ export const iconPaths = {
   'core/modules/variable': () => import('./icons/core/modules/variable.svg'),
   'core/modules/welcomeText': () => import('./icons/core/modules/welcomeText.svg'),
   'core/workflow/closeEdge': () => import('./icons/core/workflow/closeEdge.svg'),
-  'core/workflow/grout': () => import('./icons/core/workflow/grout.svg'),
   'core/workflow/debug': () => import('./icons/core/workflow/debug.svg'),
   'core/workflow/debugBlue': () => import('./icons/core/workflow/debugBlue.svg'),
   'core/workflow/debugNext': () => import('./icons/core/workflow/debugNext.svg'),
   'core/workflow/debugResult': () => import('./icons/core/workflow/debugResult.svg'),
   'core/workflow/edgeArrow': () => import('./icons/core/workflow/edgeArrow.svg'),
+  'core/workflow/grout': () => import('./icons/core/workflow/grout.svg'),
+  'core/workflow/inputType/dynamic': () => import('./icons/core/workflow/inputType/dynamic.svg'),
+  'core/workflow/inputType/input': () => import('./icons/core/workflow/inputType/input.svg'),
+  'core/workflow/inputType/jsonEditor': () =>
+    import('./icons/core/workflow/inputType/jsonEditor.svg'),
+  'core/workflow/inputType/numberInput': () =>
+    import('./icons/core/workflow/inputType/numberInput.svg'),
+  'core/workflow/inputType/reference': () =>
+    import('./icons/core/workflow/inputType/reference.svg'),
+  'core/workflow/inputType/selectApp': () =>
+    import('./icons/core/workflow/inputType/selectApp.svg'),
+  'core/workflow/inputType/selectDataset': () =>
+    import('./icons/core/workflow/inputType/selectDataset.svg'),
+  'core/workflow/inputType/selectLLM': () =>
+    import('./icons/core/workflow/inputType/selectLLM.svg'),
+  'core/workflow/inputType/switch': () => import('./icons/core/workflow/inputType/switch.svg'),
+  'core/workflow/inputType/textarea': () => import('./icons/core/workflow/inputType/textarea.svg'),
   'core/workflow/runError': () => import('./icons/core/workflow/runError.svg'),
   'core/workflow/runSkip': () => import('./icons/core/workflow/runSkip.svg'),
   'core/workflow/runSuccess': () => import('./icons/core/workflow/runSuccess.svg'),
