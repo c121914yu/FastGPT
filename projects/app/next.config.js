@@ -35,6 +35,9 @@ const nextConfig = {
           test: /\.svg$/i,
           issuer: /\.[jt]sx?$/,
           use: ['@svgr/webpack']
+        }, {
+          test: /\.node$/,
+          use: [{ loader: 'nextjs-node-loader'}],
         }
       ]),
       exprContextCritical: false,

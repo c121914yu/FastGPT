@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, useTheme } from '@chakra-ui/react';
 
-import { OutLinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
+import { OutlinkType } from '@fastgpt/global/support/outLink/constant';
 import dynamic from 'next/dynamic';
 
 import MyRadio from '@/components/common/MyRadio';
@@ -13,7 +13,7 @@ const OutLink = ({ appId }: { appId: string }) => {
   const { t } = useTranslation();
   const theme = useTheme();
 
-  const [linkType, setLinkType] = useState<`${OutLinkTypeEnum}`>(OutLinkTypeEnum.share);
+  const [linkType, setLinkType] = useState<OutlinkType>(OutlinkType.share);
 
   return (
     <Box pt={[1, 5]}>
@@ -29,13 +29,25 @@ const OutLink = ({ appId }: { appId: string }) => {
               icon: '/imgs/modal/shareFill.svg',
               title: t('core.app.Share link'),
               desc: t('core.app.Share link desc'),
-              value: OutLinkTypeEnum.share
+              value: OutlinkType.share
             },
             {
               icon: 'support/outlink/apikeyFill',
               title: t('core.app.Api request'),
               desc: t('core.app.Api request desc'),
-              value: OutLinkTypeEnum.apikey
+              value: OutlinkType.apikey
+            },
+            // {
+            //   icon: 'core/chat/chatFill',
+            //   title: t('core.app.Wecom Kf'),
+            //   desc: t('core.app.Wecom Kf Desc'),
+            //   value: OutLinkTypeEnum.wecom
+            // },
+            {
+              icon: 'feishu',
+              title: t('core.app.FeiShu Bot'),
+              desc: t('core.app.FeiShu Bot Desc'),
+              value: OutlinkType.feishu
             }
             // {
             //   icon: 'support/outlink/iframeLight',
@@ -45,12 +57,14 @@ const OutLink = ({ appId }: { appId: string }) => {
             // }
           ]}
           value={linkType}
-          onChange={(e) => setLinkType(e as `${OutLinkTypeEnum}`)}
+          onChange={(e) => setLinkType(e as OutlinkType)}
         />
       </Box>
 
-      {linkType === OutLinkTypeEnum.share && <Share appId={appId} />}
-      {linkType === OutLinkTypeEnum.apikey && <API appId={appId} />}
+      {linkType === OutlinkType.share && <Share appId={appId} type={OutlinkType.share} />}
+      {linkType === OutlinkType.apikey && <API appId={appId} />}
+      {/* {linkType === OutLinkTypeEnum.wecom && <Share appId={appId} type="wecom" />} // TODO: Not impelement */}
+      {linkType === OutlinkType.feishu && <FeiShu appId={appId} />}
     </Box>
   );
 };

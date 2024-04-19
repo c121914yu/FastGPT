@@ -30,10 +30,14 @@ import {
 import { formatTimeToChatTime } from '@/utils/tools';
 import { useCopyData } from '@/web/common/hooks/useCopyData';
 import { useForm } from 'react-hook-form';
-import { defaultOutLinkForm } from '@/constants/app';
-import type { OutLinkEditType, OutLinkSchema } from '@fastgpt/global/support/outLink/type.d';
-import { useRequest } from '@fastgpt/web/hooks/useRequest';
-import { OutLinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
+import { defaultOutLinkForm, defaultWecomOutLinkForm } from '@/constants/app';
+import type {
+  OutLinkEditType,
+  OutLinkConfigEditType,
+  OutLinkSchema
+} from '@fastgpt/global/support/outLink/type.d';
+import { useRequest } from '@/web/common/hooks/useRequest';
+import { OutlinkType } from '@fastgpt/global/support/outLink/constant';
 import { useTranslation } from 'next-i18next';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -47,7 +51,11 @@ import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 
 const SelectUsingWayModal = dynamic(() => import('./SelectUsingWayModal'));
 
+<<<<<<< HEAD
 const Share = ({ appId }: { appId: string }) => {
+=======
+const Share = ({ appId, type = OutlinkType.share }: { appId: string; type: OutlinkType }) => {
+>>>>>>> 5e09bb80 (feat: feishu app release)
   const { t } = useTranslation();
   const { Loading, setIsLoading } = useLoading();
   const { feConfigs } = useSystemStore();
@@ -81,9 +89,9 @@ const Share = ({ appId }: { appId: string }) => {
           size={['sm', 'md']}
           {...(shareChatList.length >= 10
             ? {
-                isDisabled: true,
-                title: t('core.app.share.Amount limit tip')
-              }
+              isDisabled: true,
+              title: t('core.app.share.Amount limit tip')
+            }
             : {})}
           onClick={() => setEditLinkData(defaultOutLinkForm)}
         >
@@ -115,11 +123,10 @@ const Share = ({ appId }: { appId: string }) => {
                 <Td>
                   {Math.round(item.usagePoints)}
                   {feConfigs?.isPlus
-                    ? `${
-                        item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
-                          ? ` / ${item.limit.maxUsagePoints}`
-                          : ` / ${t('common.Unlimited')}`
-                      }`
+                    ? `${item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
+                      ? ` / ${item.limit.maxUsagePoints}`
+                      : ` / ${t('common.Unlimited')}`
+                    }`
                     : ''}
                 </Td>
                 <Td>{item.responseDetail ? '✔' : '✖'}</Td>
@@ -242,7 +249,7 @@ function EditLinkModal({
   onEdit
 }: {
   appId: string;
-  type: `${OutLinkTypeEnum}`;
+  type: `${OutlinkType}`;
   defaultData: OutLinkEditType;
   onClose: () => void;
   onCreate: (id: string) => void;
