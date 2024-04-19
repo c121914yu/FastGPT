@@ -16,6 +16,11 @@ const nextConfig = {
           fs: false
         }
       };
+    } else {
+      if (!config.externals) {
+        config.externals = [];
+      }
+      config.externals.push('isolated-vm');
     }
     Object.assign(config.resolve.alias, {
       '@mongodb-js/zstd': false,
