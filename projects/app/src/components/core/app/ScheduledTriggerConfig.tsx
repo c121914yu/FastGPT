@@ -240,10 +240,10 @@ const ScheduledTriggerConfig = ({
       <>
         <Flex alignItems={'center'}>
           <MyIcon name={'core/app/schedulePlan'} w={'20px'} />
-          <Box ml={2} flex={1} fontWeight={'medium'}>
+          <Flex alignItems={'center'} ml={2} flex={1}>
             {t('core.app.Interval timer run')}
-            <QuestionTip label={t('core.app.Interval timer tip')} />
-          </Box>
+            <QuestionTip ml={1} label={t('core.app.Interval timer tip')} />
+          </Flex>
           <MyTooltip label={t('core.app.Config schedule plan')}>
             <Button
               variant={'transparentBase'}
