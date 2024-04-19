@@ -86,7 +86,7 @@ export const httpApiSchema2Plugins = async ({
       ...(item.params?.map((param: any) => {
         return {
           key: param.name,
-          valueType: WorkflowIOValueTypeEnum.string,
+          valueType: param.schema.type,
           label: param.name,
           renderTypeList: [FlowNodeInputTypeEnum.reference],
           required: param.required,
@@ -108,7 +108,7 @@ export const httpApiSchema2Plugins = async ({
         const prop = properties[key];
         return {
           key,
-          valueType: WorkflowIOValueTypeEnum.string,
+          valueType: prop.type,
           label: key,
           renderTypeList: [FlowNodeInputTypeEnum.reference],
           required: false,
@@ -135,7 +135,7 @@ export const httpApiSchema2Plugins = async ({
         return {
           id,
           key: param.name,
-          valueType: WorkflowIOValueTypeEnum.string,
+          valueType: param.schema.type,
           label: param.name,
           type: FlowNodeOutputTypeEnum.source
         };
@@ -146,7 +146,7 @@ export const httpApiSchema2Plugins = async ({
         return {
           id,
           key,
-          valueType: WorkflowIOValueTypeEnum.string,
+          valueType: properties[key].type,
           label: key,
           type: FlowNodeOutputTypeEnum.source,
           edit: true
@@ -158,7 +158,7 @@ export const httpApiSchema2Plugins = async ({
       ...(item.params?.map((param: any) => {
         return {
           key: param.name,
-          valueType: WorkflowIOValueTypeEnum.string,
+          valueType: param.schema.type,
           label: param.name,
           renderTypeList: [FlowNodeInputTypeEnum.reference],
           canEdit: true,
@@ -172,7 +172,7 @@ export const httpApiSchema2Plugins = async ({
       ...(propsKeys?.map((key) => {
         return {
           key,
-          valueType: WorkflowIOValueTypeEnum.string,
+          valueType: properties[key].type,
           label: key,
           renderTypeList: [FlowNodeInputTypeEnum.reference],
           canEdit: true,

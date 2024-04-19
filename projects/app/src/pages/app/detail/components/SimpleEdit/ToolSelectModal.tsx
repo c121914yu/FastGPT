@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useTranslation } from 'next-i18next';
@@ -11,6 +11,13 @@ import {
   InputLeftElement,
   ModalBody,
   ModalFooter,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Switch,
+  Textarea,
   useDisclosure
 } from '@chakra-ui/react';
 import RowTabs from '@fastgpt/web/components/common/Tabs/RowTabs';
@@ -25,14 +32,12 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import { AddIcon } from '@chakra-ui/icons';
 import { getPreviewPluginModule } from '@/web/core/plugin/api';
 import MyBox from '@/components/common/MyBox';
-import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import ParentPaths from '@/components/common/ParentPaths';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import { debounce } from 'lodash';
-import { RenderList as InputRenderList } from '@/components/core/workflow/Flow/nodes/render/RenderInput';
-import InputLabel from '@/components/core/workflow/Flow/nodes/render/RenderInput/Label';
-import { getNanoid } from '@fastgpt/global/common/string/tools';
+import { useForm } from 'react-hook-form';
+import JsonEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
 
 type Props = {
   selectedTools: FlowNodeTemplateType[];
@@ -218,6 +223,18 @@ const RenderList = React.memo(function RenderList({
     errorToast: t('core.module.templates.Load plugin error')
   });
 
+  const { register, getValues, setValue, handleSubmit, reset } = useForm<Record<string, any>>({
+    defaultValues: currentTool?.inputs.reduce((acc, input) => {
+      //@ts-ignore
+      acc[input.key] = undefined;
+      return acc;
+    }, {})
+  });
+
+  useEffect(() => {
+    reset();
+  }, [currentTool, reset]);
+
   return templates.length === 0 && !isLoadingData ? (
     <EmptyTip text={t('core.app.ToolCall.No plugin')} />
   ) : (
@@ -291,24 +308,66 @@ const RenderList = React.memo(function RenderList({
           <ModalBody>
             {currentTool &&
               currentTool.inputs.map((input, index) => {
-                const nodeId = getNanoid();
                 const renderType = input.renderTypeList?.[input.selectedTypeIndex || 0];
+                const required = input.required || false;
 
-                const Component = InputRenderList.find((item) =>
-                  item.types.includes(renderType)
-                )?.Component;
-
-                if (!Component) return null;
+                if (renderType === 'reference') return null;
 
                 return (
-                  <Box key={input.key} _notLast={{ mb: 4 }} position={'relative'}>
-                    <InputLabel input={input} nodeId={nodeId} />
-                    <Component
-                      key={index}
-                      inputs={currentTool.inputs}
-                      item={input}
-                      nodeId={nodeId}
-                    />
+                  <Box key={input.key} _notLast={{ mb: 4 }} px={1}>
+                    <Box display={'inline-block'} position={'relative'} mb={1}>
+                      {t(input.debugLabel || input.label)}
+                    </Box>
+                    {(() => {
+                      if (input.valueType === WorkflowIOValueTypeEnum.string) {
+                        return (
+                          <Textarea
+                            {...register(input.key, {
+                              required
+                            })}
+                            placeholder={t(input.placeholder || '')}
+                            bg={'myGray.50'}
+                          />
+                        );
+                      }
+                      if (input.valueType === WorkflowIOValueTypeEnum.number) {
+                        return (
+                          <NumberInput
+                            step={input.step}
+                            min={input.min}
+                            max={input.max}
+                            bg={'myGray.50'}
+                          >
+                            <NumberInputField
+                              {...register(input.key, {
+                                required: input.required,
+                                min: input.min,
+                                max: input.max,
+                                valueAsNumber: true
+                              })}
+                            />
+                            <NumberInputStepper>
+                              <NumberIncrementStepper />
+                              <NumberDecrementStepper />
+                            </NumberInputStepper>
+                          </NumberInput>
+                        );
+                      }
+                      if (input.valueType === WorkflowIOValueTypeEnum.boolean) {
+                        return <Switch size={'lg'} {...register(input.key, { required })} />;
+                      }
+                      return (
+                        <JsonEditor
+                          bg={'myGray.50'}
+                          placeholder={t(input.placeholder || '')}
+                          resize
+                          value={getValues(input.key)}
+                          onChange={(e) => {
+                            setValue(input.key, e);
+                          }}
+                        />
+                      );
+                    })()}
                   </Box>
                 );
               })}
@@ -317,7 +376,20 @@ const RenderList = React.memo(function RenderList({
             <Button onClick={onParamsModalClose} variant={'whiteBase'}>
               {t('common.Cancel')}
             </Button>
-            <Button variant={'primary'} onClick={onParamsModalClose}>
+            <Button
+              variant={'primary'}
+              onClick={handleSubmit((data) => {
+                currentTool &&
+                  onAddTool({
+                    ...currentTool,
+                    inputs: currentTool.inputs.map((input) => ({
+                      ...input,
+                      value: data[input.key]
+                    }))
+                  });
+                onParamsModalClose();
+              })}
+            >
               {t('common.Confirm')}
             </Button>
           </ModalFooter>

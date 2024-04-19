@@ -32,6 +32,7 @@ import {
 } from '@fastgpt/global/core/workflow/type/io';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import IOTitle from '../components/IOTitle';
+import { RenderHttpOutput } from './NodeHttp';
 
 const LafAccountModal = dynamic(() => import('@/components/support/laf/LafAccountModal'));
 
@@ -315,7 +316,7 @@ const RenderIO = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
       <>
         <Container>
           <IOTitle text={t('common.Output')} />
-          <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
+          <RenderHttpOutput nodeId={nodeId} outputs={outputs} />
         </Container>
       </>
     </>
