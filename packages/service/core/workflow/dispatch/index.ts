@@ -83,7 +83,7 @@ export async function dispatchWorkFlow({
   runtimeEdges: RuntimeEdgeItemType[];
 }): Promise<DispatchFlowResponse> {
   // set sse response headers
-  if (stream) {
+  if (stream && res) {
     res.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('X-Accel-Buffering', 'no');
@@ -255,9 +255,9 @@ export async function dispatchWorkFlow({
     return params;
   }
   async function nodeRunWithActive(node: RuntimeNodeItemType) {
-    if (res.closed || props.maxRunTimes <= 0) return [];
+    if (res?.closed || props.maxRunTimes <= 0) return [];
     // push run status messages
-    if (stream && detail && node.showStatus) {
+    if (res && stream && detail && node.showStatus) {
       responseStatus({
         res,
         name: node.name,

@@ -19,6 +19,7 @@ import { ChatNodeUsageType } from '../../../support/wallet/bill/type';
 import { RuntimeNodeItemType } from '../runtime/type';
 import { PluginTypeEnum } from '../../plugin/constants';
 import { RuntimeEdgeItemType, StoreEdgeItemType } from './edge';
+import { NextApiResponse } from 'next';
 
 export type FlowNodeCommonType = {
   flowNodeType: `${FlowNodeTypeEnum}`; // render node card
@@ -127,7 +128,7 @@ export type ContextExtractAgentItemType = {
 /* -------------- running module -------------- */
 
 export type ChatDispatchProps = {
-  res: NextApiResponse;
+  res?: NextApiResponse;
   mode: 'test' | 'chat' | 'debug';
   teamId: string;
   tmbId: string;

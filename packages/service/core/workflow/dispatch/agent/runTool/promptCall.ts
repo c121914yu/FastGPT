@@ -106,7 +106,7 @@ export const runToolWithPromptCall = async (
   );
 
   const answer = await (async () => {
-    if (stream) {
+    if (res && stream) {
       const { answer } = await streamResponse({
         res,
         detail,

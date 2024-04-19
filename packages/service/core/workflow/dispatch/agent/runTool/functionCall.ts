@@ -99,7 +99,7 @@ export const runToolWithFunctionCall = async (
   );
 
   const { answer, functionCalls } = await (async () => {
-    if (stream) {
+    if (res && stream) {
       return streamResponse({
         res,
         detail,
@@ -201,7 +201,7 @@ export const runToolWithFunctionCall = async (
   const flatToolsResponseData = toolsRunResponse.map((item) => item.toolRunResponse).flat();
 
   const functionCall = functionCalls[0];
-  if (functionCall && !res.closed) {
+  if (functionCall && !res?.closed) {
     // Run the tool, combine its results, and perform another round of AI calls
     const assistantToolMsgParams: ChatCompletionAssistantMessageParam = {
       role: ChatCompletionRequestMessageRoleEnum.Assistant,

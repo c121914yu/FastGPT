@@ -53,7 +53,7 @@ export const dispatchAppRequest = async (props: Props): Promise<Response> => {
     return Promise.reject('App not found');
   }
 
-  if (stream) {
+  if (res && stream) {
     responseWrite({
       res,
       event: detail ? SseResponseEventEnum.answer : undefined,
@@ -72,7 +72,8 @@ export const dispatchAppRequest = async (props: Props): Promise<Response> => {
     runtimeEdges: initWorkflowEdgeStatus(appData.edges),
     histories: chatHistories,
     inputFiles,
-    startParams: {
+    variables: {
+      ...props.variables,
       userChatInput
     }
   });
