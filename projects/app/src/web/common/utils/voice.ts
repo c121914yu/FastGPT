@@ -111,6 +111,13 @@ export const useAudioPlay = (props?: OutLinkChatAuthProps & { ttsConfig?: AppTTS
       };
       const readAudioStream = (stream: ReadableStream<Uint8Array>) => {
         if (!audio) return;
+        if (!MediaSource) {
+          toast({
+            status: 'error',
+            title: t('core.chat.Audio Not Support')
+          });
+          return;
+        }
 
         // Create media source and play audio
         const ms = new MediaSource();
@@ -200,6 +207,12 @@ export const useAudioPlay = (props?: OutLinkChatAuthProps & { ttsConfig?: AppTTS
   /* Segmented voice playback */
   const startSegmentedAudio = useCallback(async () => {
     if (!audio) return;
+    if (!MediaSource) {
+      return toast({
+        status: 'error',
+        title: t('core.chat.Audio Not Support')
+      });
+    }
     cancelAudio();
 
     /* reset all source */
@@ -231,7 +244,7 @@ export const useAudioPlay = (props?: OutLinkChatAuthProps & { ttsConfig?: AppTTS
     });
     const sourceBuffer = ms.addSourceBuffer(contentType);
     segmentedSourceBuffer.current = sourceBuffer;
-  }, [audio, cancelAudio]);
+  }, [audio, cancelAudio, t, toast]);
   const finishSegmentedAudio = useCallback(() => {
     appendAudioPromise.current = appendAudioPromise.current.finally(() => {
       if (segmentedMediaSource.current?.readyState === 'open') {

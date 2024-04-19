@@ -108,6 +108,9 @@
     "Load Failed": "Load Failed",
     "Loading": "Loading",
     "More settings": "More settings",
+    "MultipleSelect": {
+      "No data": "No data"
+    },
     "Name": "Name",
     "Name Can": "Name Can't Be Empty",
     "Name is empty": "Name is empty",
@@ -278,6 +281,9 @@
       "Chat Variable": "",
       "Config whisper": "Config whisper",
       "External using": "External use",
+      "Interval timer config": "Interval timer config",
+      "Interval timer run": "Timed execution",
+      "Interval timer tip": "Applications can be executed periodically",
       "Make a brief introduction of your app": "Make a brief introduction of your app",
       "Max histories": "Dialog round",
       "Max tokens": "Max tokens",
@@ -359,6 +365,15 @@
         "Show History": "Show History",
         "Web Link": "Web Link"
       },
+      "schedule": {
+        "Default prompt": "Default prompt",
+        "Default prompt placeholder": "Default problem when executing the application",
+        "Every day": "Every {{hour}} hour",
+        "Every month": "{{day}} {{hour}}:00 Every month",
+        "Every week": "Every week {{day}} {{hour}}:00",
+        "Interval": "Per {{interval}} hour",
+        "Open schedule": "Enable schedule"
+      },
       "setting": "App Setting",
       "share": {
         "Amount limit tip": "A maximum of 10 groups can be created",
@@ -416,6 +431,7 @@
     },
     "chat": {
       "Admin Mark Content": "Corrected response",
+      "Audio Not Support": "The device does not support voice play",
       "Audio Speech Error": "Audio Speech Error",
       "Cancel Speak": "Cancel speak",
       "Canceled Speak": "Voice input has been cancelled",

@@ -7,7 +7,12 @@ import {
 } from './constants';
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from './type/io.d';
 import { StoreNodeItemType } from './type';
-import type { VariableItemType, AppTTSConfigType, AppWhisperConfigType } from '../app/type';
+import type {
+  VariableItemType,
+  AppTTSConfigType,
+  AppWhisperConfigType,
+  AppScheduledTriggerConfigType
+} from '../app/type';
 import { EditorVariablePickerType } from '../../../web/components/common/Textarea/PromptEditor/type';
 import { defaultWhisperConfig } from '../app/constants';
 
@@ -51,12 +56,17 @@ export const splitGuideModule = (guideModules?: StoreNodeItemType) => {
     guideModules?.inputs?.find((item) => item.key === NodeInputKeyEnum.whisper)?.value ||
     defaultWhisperConfig;
 
+  const scheduledTriggerConfig: AppScheduledTriggerConfigType | null =
+    guideModules?.inputs?.find((item) => item.key === NodeInputKeyEnum.intervalTimer)?.value ??
+    null;
+
   return {
     welcomeText,
     variableModules,
     questionGuide,
     ttsConfig,
-    whisperConfig
+    whisperConfig,
+    scheduledTriggerConfig
   };
 };
 

@@ -11,7 +11,7 @@ import PageContainer from '@/components/PageContainer';
 import Avatar from '@/components/Avatar';
 import EditModal, { defaultForm } from './component/EditModal';
 import { getPluginPaths, getUserPlugins } from '@/web/core/plugin/api';
-import EmptyTip from '@/components/EmptyTip';
+import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import MyMenu from '@fastgpt/web/components/common/MyMenu';
 import HttpPluginEditModal, { defaultHttpPlugin } from './component/HttpPluginEditModal';
