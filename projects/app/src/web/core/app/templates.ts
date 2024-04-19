@@ -1,5 +1,10 @@
 import { AppItemType } from '@/types/app';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import {
+  FlowNodeInputTypeEnum,
+  FlowNodeTypeEnum
+} from '@fastgpt/global/core/workflow/node/constant';
 import { Dataset_SEARCH_DESC } from '@fastgpt/global/core/workflow/template/system/datasetSearch';
 
 // template
@@ -16,60 +21,50 @@ export const appTemplates: (AppItemType & {
     type: AppTypeEnum.simple,
     modules: [
       {
-        moduleId: 'userGuide',
+        nodeId: 'userGuide',
         name: 'core.module.template.App system setting',
+        intro: 'core.app.tip.userGuideTip',
         avatar: '/imgs/workflow/userGuide.png',
-        flowNodeType: 'userGuide',
+        flowNodeType: FlowNodeTypeEnum.systemConfig,
         position: {
           x: 454.98510354678695,
           y: 721.4016845336229
         },
         inputs: [
           {
-            key: 'welcomeText',
-            type: 'hidden',
-            valueType: 'string',
-            label: '',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            key: NodeInputKeyEnum.welcomeText,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: 'core.app.Welcome Text'
           },
           {
-            key: 'variables',
-            type: 'hidden',
-            valueType: 'any',
-            label: '',
-            value: [],
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            key: NodeInputKeyEnum.variables,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: 'core.app.Chat Variable'
           },
           {
-            key: 'questionGuide',
-            valueType: 'boolean',
-            type: 'switch',
-            label: '',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            key: NodeInputKeyEnum.questionGuide,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: 'core.app.Question Guide'
           },
           {
-            key: 'tts',
-            type: 'hidden',
-            valueType: 'any',
-            label: '',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            key: NodeInputKeyEnum.tts,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: ''
+          },
+          {
+            key: NodeInputKeyEnum.whisper,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: ''
           }
         ],
         outputs: []
       },
       {
-        moduleId: 'userChatInput',
-        name: 'core.module.template.Chat entrance',
+        nodeId: 'userChatInput',
+        intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
+        name: '对话入口',
         avatar: '/imgs/workflow/userChatInput.png',
-        flowNodeType: 'questionInput',
+        flowNodeType: 'workflowStart',
         position: {
           x: 464.32198615344566,
           y: 1602.2698463081606
@@ -77,32 +72,25 @@ export const appTemplates: (AppItemType & {
         inputs: [
           {
             key: 'userChatInput',
-            type: 'systemInput',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             valueType: 'string',
-            label: 'core.module.input.label.user question',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            label: 'core.module.input.label.user question'
           }
         ],
         outputs: [
           {
+            id: 'userChatInput',
             key: 'userChatInput',
             label: 'core.module.input.label.user question',
             type: 'source',
-            valueType: 'string',
-            targets: [
-              {
-                moduleId: 'chatModule',
-                key: 'userChatInput'
-              }
-            ]
+            valueType: 'string'
           }
         ]
       },
       {
-        moduleId: 'chatModule',
+        nodeId: 'chatModule',
         name: 'AI 对话',
+        intro: 'AI 大模型对话',
         avatar: '/imgs/workflow/AI.png',
         flowNodeType: 'chatNode',
         showStatus: true,
@@ -112,28 +100,19 @@ export const appTemplates: (AppItemType & {
         },
         inputs: [
           {
-            key: 'switch',
-            type: 'target',
-            label: 'core.module.input.label.switch',
-            valueType: 'any',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
             key: 'model',
-            type: 'selectLLMModel',
+            renderTypeList: [
+              FlowNodeInputTypeEnum.settingLLMModel,
+              FlowNodeInputTypeEnum.reference
+            ],
             label: 'core.module.input.label.aiModel',
             required: true,
             valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: 'gpt-3.5-turbo',
-            connected: false
+            value: 'gpt-3.5-turbo'
           },
           {
             key: 'temperature',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '温度',
             value: 0,
             valueType: 'number',
@@ -149,14 +128,11 @@ export const appTemplates: (AppItemType & {
                 label: '发散',
                 value: 10
               }
-            ],
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            ]
           },
           {
             key: 'maxToken',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '回复上限',
             value: 8000,
             valueType: 'number',
@@ -172,122 +148,80 @@ export const appTemplates: (AppItemType & {
                 label: '4000',
                 value: 4000
               }
-            ],
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            ]
           },
           {
             key: 'isResponseAnswerText',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '返回AI内容',
             value: true,
-            valueType: 'boolean',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'boolean'
           },
           {
             key: 'quoteTemplate',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '引用内容模板',
-            valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'string'
           },
           {
             key: 'quotePrompt',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '引用内容提示词',
-            valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
-          },
-          {
-            key: 'aiSettings',
-            type: 'aiSettings',
-            label: '',
-            valueType: 'any',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'string'
           },
           {
             key: 'systemPrompt',
-            type: 'textarea',
+            renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
             label: 'core.ai.Prompt',
             max: 300,
             valueType: 'string',
-            description:
-              '模型固定的引导词，通过调整该内容，可以引导模型聊天方向。该内容会被固定在上下文的开头。可使用变量，例如 {{language}}',
-            placeholder:
-              '模型固定的引导词，通过调整该内容，可以引导模型聊天方向。该内容会被固定在上下文的开头。可使用变量，例如 {{language}}',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
+            description: 'core.app.tip.chatNodeSystemPromptTip',
+            placeholder: 'core.app.tip.chatNodeSystemPromptTip'
           },
           {
             key: 'history',
-            type: 'numberInput',
+            renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
             label: 'core.module.input.label.chat history',
             required: true,
             min: 0,
             max: 30,
             valueType: 'chatHistory',
-            value: 6,
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
-            key: 'quoteQA',
-            type: 'target',
-            label: '引用内容',
-            description: "对象数组格式，结构：\n [{q:'问题',a:'回答'}]",
-            valueType: 'datasetQuote',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
+            value: 6
           },
           {
             key: 'userChatInput',
-            type: 'target',
+            renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
             label: 'core.module.input.label.user question',
             required: true,
-            valueType: 'string',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: true
+            valueType: 'string'
           }
         ],
         outputs: [
           {
-            key: 'answerText',
-            label: 'AI回复',
-            description: '将在 stream 回复完毕后触发',
-            valueType: 'string',
-            type: 'source',
-            targets: []
-          },
-          {
-            key: 'finish',
-            label: 'core.module.output.label.running done',
-            description: 'core.module.output.description.running done',
-            valueType: 'boolean',
-            type: 'source',
-            targets: []
-          },
-          {
+            id: 'history',
             key: 'history',
             label: '新的上下文',
             description: '将本次回复内容拼接上历史记录，作为新的上下文返回',
             valueType: 'chatHistory',
-            type: 'source',
-            targets: []
+            type: 'source'
+          },
+          {
+            id: 'answerText',
+            key: 'answerText',
+            label: 'AI回复',
+            description: '将在 stream 回复完毕后触发',
+            valueType: 'string',
+            type: 'source'
           }
         ]
+      }
+    ],
+    edges: [
+      {
+        source: 'userChatInput',
+        target: 'chatModule',
+        sourcePort: `userChatInput-source-right`,
+        targetPort: `chatModule-target-left`
       }
     ]
   },
@@ -299,33 +233,29 @@ export const appTemplates: (AppItemType & {
     type: AppTypeEnum.simple,
     modules: [
       {
-        moduleId: 'userGuide',
+        nodeId: 'userGuide',
         name: 'core.module.template.App system setting',
+        intro: 'core.app.tip.userGuideTip',
         avatar: '/imgs/workflow/userGuide.png',
-        flowNodeType: 'userGuide',
+        flowNodeType: FlowNodeTypeEnum.systemConfig,
         position: {
           x: 447.98520778293346,
           y: 721.4016845336229
         },
         inputs: [
           {
-            key: 'welcomeText',
-            type: 'hidden',
-            valueType: 'string',
-            label: '',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: '你好，我可以为你翻译各种语言，请告诉我你需要翻译成什么语言？',
-            connected: false
+            key: NodeInputKeyEnum.welcomeText,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: 'core.app.Welcome Text',
+            value: '你好，我可以为你翻译各种语言，请告诉我你需要翻译成什么语言？'
           },
           {
-            key: 'variables',
-            type: 'hidden',
-            valueType: 'any',
-            label: '',
+            key: NodeInputKeyEnum.variables,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: 'core.app.Chat Variable',
             value: [
               {
-                id: '35c640eb-cf22-431f-bb57-3fc21643880e',
+                id: 'ptoh7l',
                 key: 'language',
                 label: '目标语言',
                 type: 'input',
@@ -338,7 +268,7 @@ export const appTemplates: (AppItemType & {
                 ]
               },
               {
-                id: '2011ff08-91aa-4f60-ae69-f311ab4797b3',
+                id: 'w30w6h',
                 key: 'language2',
                 label: '下拉框测试',
                 type: 'select',
@@ -353,38 +283,46 @@ export const appTemplates: (AppItemType & {
                   }
                 ]
               }
-            ],
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            ]
           },
           {
-            key: 'questionGuide',
-            valueType: 'boolean',
-            type: 'switch',
-            label: '',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: false,
-            connected: false
+            key: NodeInputKeyEnum.questionGuide,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: 'core.app.Question Guide',
+            value: false
           },
           {
-            key: 'tts',
-            type: 'hidden',
-            valueType: 'any',
-            label: '',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            key: NodeInputKeyEnum.tts,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: ''
+          },
+          {
+            key: NodeInputKeyEnum.whisper,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: ''
           }
         ],
-        outputs: []
+        outputs: [
+          {
+            id: 'language',
+            key: 'language',
+            valueType: 'string',
+            label: '目标语言'
+          },
+          {
+            id: 'language2',
+            key: 'language2',
+            valueType: 'string',
+            label: '下拉框测试'
+          }
+        ]
       },
       {
-        moduleId: 'userChatInput',
-        name: 'core.module.template.Chat entrance',
+        nodeId: 'userChatInput',
+        intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
+        name: '对话入口',
         avatar: '/imgs/workflow/userChatInput.png',
-        flowNodeType: 'questionInput',
+        flowNodeType: 'workflowStart',
         position: {
           x: 464.32198615344566,
           y: 1602.2698463081606
@@ -392,32 +330,27 @@ export const appTemplates: (AppItemType & {
         inputs: [
           {
             key: 'userChatInput',
-            type: 'systemInput',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             valueType: 'string',
             label: 'core.module.input.label.user question',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            required: true,
+            toolDescription: '用户问题'
           }
         ],
         outputs: [
           {
+            id: 'userChatInput',
             key: 'userChatInput',
             label: 'core.module.input.label.user question',
             type: 'source',
-            valueType: 'string',
-            targets: [
-              {
-                moduleId: 'chatModule',
-                key: 'userChatInput'
-              }
-            ]
+            valueType: 'string'
           }
         ]
       },
       {
-        moduleId: 'chatModule',
+        nodeId: 'chatModule',
         name: 'AI 对话',
+        intro: 'AI 大模型对话',
         avatar: '/imgs/workflow/AI.png',
         flowNodeType: 'chatNode',
         showStatus: true,
@@ -427,28 +360,19 @@ export const appTemplates: (AppItemType & {
         },
         inputs: [
           {
-            key: 'switch',
-            type: 'target',
-            label: 'core.module.input.label.switch',
-            valueType: 'any',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
             key: 'model',
-            type: 'selectLLMModel',
+            renderTypeList: [
+              FlowNodeInputTypeEnum.settingLLMModel,
+              FlowNodeInputTypeEnum.reference
+            ],
             label: 'core.module.input.label.aiModel',
             required: true,
             valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: 'gpt-3.5-turbo',
-            connected: false
+            value: 'gpt-3.5-turbo'
           },
           {
             key: 'temperature',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '温度',
             value: 0,
             valueType: 'number',
@@ -464,14 +388,11 @@ export const appTemplates: (AppItemType & {
                 label: '发散',
                 value: 10
               }
-            ],
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            ]
           },
           {
             key: 'maxToken',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '回复上限',
             value: 8000,
             valueType: 'number',
@@ -487,123 +408,91 @@ export const appTemplates: (AppItemType & {
                 label: '4000',
                 value: 4000
               }
-            ],
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            ]
           },
           {
             key: 'isResponseAnswerText',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '返回AI内容',
             value: true,
-            valueType: 'boolean',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'boolean'
           },
           {
             key: 'quoteTemplate',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '引用内容模板',
-            valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'string'
           },
           {
             key: 'quotePrompt',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '引用内容提示词',
-            valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
-          },
-          {
-            key: 'aiSettings',
-            type: 'aiSettings',
-            label: '',
-            valueType: 'any',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'string'
           },
           {
             key: 'systemPrompt',
-            type: 'textarea',
+            renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
             label: 'core.ai.Prompt',
             max: 300,
             valueType: 'string',
-            description:
-              '模型固定的引导词，通过调整该内容，可以引导模型聊天方向。该内容会被固定在上下文的开头。可使用变量，例如 {{language}}',
-            placeholder:
-              '模型固定的引导词，通过调整该内容，可以引导模型聊天方向。该内容会被固定在上下文的开头。可使用变量，例如 {{language}}',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            value: '请直接将我的问题翻译成{{language}}，不需要回答问题。',
-            connected: false
+            description: 'core.app.tip.chatNodeSystemPromptTip',
+            placeholder: 'core.app.tip.chatNodeSystemPromptTip',
+            value: '请直接将我的问题翻译成{{language}}，不需要回答问题。'
           },
           {
             key: 'history',
-            type: 'numberInput',
+            renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
             label: 'core.module.input.label.chat history',
             required: true,
             min: 0,
             max: 30,
             valueType: 'chatHistory',
-            value: 6,
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
-            key: 'quoteQA',
-            type: 'target',
-            label: '引用内容',
-            description: "对象数组格式，结构：\n [{q:'问题',a:'回答'}]",
-            valueType: 'datasetQuote',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
+            value: 6
           },
           {
             key: 'userChatInput',
-            type: 'target',
+            renderTypeList: ['reference', 'textarea'],
+            valueType: 'string',
             label: 'core.module.input.label.user question',
             required: true,
-            valueType: 'string',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: true
+            toolDescription: '用户问题',
+            value: ['userChatInput', 'userChatInput']
+          },
+          {
+            key: 'quoteQA',
+            renderTypeList: ['settingDatasetQuotePrompt'],
+            label: '',
+            debugLabel: '知识库引用',
+            description: '',
+            valueType: 'datasetQuote'
           }
         ],
         outputs: [
           {
-            key: 'answerText',
-            label: 'AI回复',
-            description: '将在 stream 回复完毕后触发',
-            valueType: 'string',
-            type: 'source',
-            targets: []
-          },
-          {
-            key: 'finish',
-            label: 'core.module.output.label.running done',
-            description: 'core.module.output.description.running done',
-            valueType: 'boolean',
-            type: 'source',
-            targets: []
-          },
-          {
+            id: 'history',
             key: 'history',
-            label: '新的上下文',
-            description: '将本次回复内容拼接上历史记录，作为新的上下文返回',
+            label: 'core.module.output.label.New context',
+            description: 'core.module.output.description.New context',
             valueType: 'chatHistory',
-            type: 'source',
-            targets: []
+            type: 'source'
+          },
+          {
+            id: 'answerText',
+            key: 'answerText',
+            label: 'core.module.output.label.Ai response content',
+            description: 'core.module.output.description.Ai response content',
+            valueType: 'string',
+            type: 'source'
           }
         ]
+      }
+    ],
+    edges: [
+      {
+        source: 'userChatInput',
+        target: 'chatModule',
+        sourcePort: `userChatInput-source-right`,
+        targetPort: `chatModule-target-left`
       }
     ]
   },
@@ -615,7 +504,7 @@ export const appTemplates: (AppItemType & {
     type: AppTypeEnum.advanced,
     modules: [
       {
-        moduleId: 'userGuide',
+        nodeId: 'userGuide',
         name: 'core.module.template.App system setting',
         intro: 'core.app.tip.userGuideTip',
         avatar: '/imgs/workflow/userGuide.png',
@@ -626,56 +515,42 @@ export const appTemplates: (AppItemType & {
         },
         inputs: [
           {
-            key: 'welcomeText',
-            type: 'hidden',
-            valueType: 'string',
+            key: NodeInputKeyEnum.welcomeText,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: 'core.app.Welcome Text',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: '你好，我是知识库助手，请不要忘记选择知识库噢~\n[你是谁]\n[如何使用]',
-            connected: false
+            value: '你好，我是知识库助手，请不要忘记选择知识库噢~\n[你是谁]\n[如何使用]'
           },
           {
-            key: 'variables',
-            type: 'hidden',
-            valueType: 'any',
-            label: 'core.module.Variable',
-            value: [],
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            key: NodeInputKeyEnum.variables,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: 'core.app.Chat Variable',
+            value: []
           },
           {
-            key: 'questionGuide',
-            valueType: 'boolean',
-            type: 'switch',
-            label: '',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: false,
-            connected: false
+            key: NodeInputKeyEnum.questionGuide,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: 'core.app.Question Guide',
+            value: false
           },
           {
-            key: 'tts',
-            type: 'hidden',
-            valueType: 'any',
-            label: '',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: {
-              type: 'web'
-            },
-            connected: false
+            key: NodeInputKeyEnum.tts,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: ''
+          },
+          {
+            key: NodeInputKeyEnum.whisper,
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: ''
           }
         ],
         outputs: []
       },
       {
-        moduleId: 'userChatInput',
-        name: 'core.module.template.Chat entrance',
+        nodeId: 'userChatInput',
+        name: '对话入口',
         intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
         avatar: '/imgs/workflow/userChatInput.svg',
-        flowNodeType: 'questionInput',
+        flowNodeType: 'workflowStart',
         position: {
           x: 324.81436595478294,
           y: 1527.0012457753612
@@ -683,199 +558,25 @@ export const appTemplates: (AppItemType & {
         inputs: [
           {
             key: 'userChatInput',
-            type: 'systemInput',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             valueType: 'string',
+            required: true,
             label: 'core.module.input.label.user question',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            toolDescription: '用户问题'
           }
         ],
         outputs: [
           {
+            id: 'userChatInput',
             key: 'userChatInput',
             label: 'core.module.input.label.user question',
             type: 'source',
-            valueType: 'string',
-            targets: [
-              {
-                moduleId: '0voh5n',
-                key: 'userChatInput'
-              }
-            ]
+            valueType: 'string'
           }
         ]
       },
       {
-        moduleId: '63toub',
-        name: 'AI 对话',
-        intro: 'AI 大模型对话',
-        avatar: '/imgs/workflow/AI.png',
-        flowNodeType: 'chatNode',
-        showStatus: true,
-        position: {
-          x: 1962.4010270586014,
-          y: 1026.9105717680477
-        },
-        inputs: [
-          {
-            key: 'switch',
-            type: 'target',
-            label: 'core.module.input.label.switch',
-            description: 'core.module.input.description.Trigger',
-            valueType: 'any',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
-            key: 'model',
-            type: 'settingLLMModel',
-            label: 'core.module.input.label.aiModel',
-            required: true,
-            valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: 'gpt-3.5-turbo',
-            connected: false
-          },
-          {
-            key: 'temperature',
-            type: 'hidden',
-            label: '',
-            value: 0,
-            valueType: 'number',
-            min: 0,
-            max: 10,
-            step: 1,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
-          },
-          {
-            key: 'maxToken',
-            type: 'hidden',
-            label: '',
-            value: 2000,
-            valueType: 'number',
-            min: 100,
-            max: 4000,
-            step: 50,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
-          },
-          {
-            key: 'isResponseAnswerText',
-            type: 'hidden',
-            label: '',
-            value: true,
-            valueType: 'boolean',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
-          },
-          {
-            key: 'quoteTemplate',
-            type: 'hidden',
-            label: '',
-            valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
-          },
-          {
-            key: 'quotePrompt',
-            type: 'hidden',
-            label: '',
-            valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
-          },
-          {
-            key: 'systemPrompt',
-            type: 'textarea',
-            max: 3000,
-            valueType: 'string',
-            label: 'core.ai.Prompt',
-            description: 'core.app.tip.chatNodeSystemPromptTip',
-            placeholder: 'core.app.tip.chatNodeSystemPromptTip',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
-            key: 'history',
-            type: 'numberInput',
-            label: 'core.module.input.label.chat history',
-            required: true,
-            min: 0,
-            max: 30,
-            valueType: 'chatHistory',
-            value: 6,
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
-            key: 'userChatInput',
-            type: 'custom',
-            label: '',
-            required: true,
-            valueType: 'string',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            toolDescription: '用户问题',
-            connected: true
-          },
-          {
-            key: 'quoteQA',
-            type: 'settingDatasetQuotePrompt',
-            label: '知识库引用',
-            description: 'core.module.Dataset quote.Input description',
-            valueType: 'datasetQuote',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: true
-          }
-        ],
-        outputs: [
-          {
-            key: 'userChatInput',
-            label: 'core.module.input.label.user question',
-            type: 'hidden',
-            valueType: 'string',
-            targets: []
-          },
-          {
-            key: 'history',
-            label: 'core.module.output.label.New context',
-            description: 'core.module.output.description.New context',
-            valueType: 'chatHistory',
-            type: 'source',
-            targets: []
-          },
-          {
-            key: 'answerText',
-            label: 'core.module.output.label.Ai response content',
-            description: 'core.module.output.description.Ai response content',
-            valueType: 'string',
-            type: 'source',
-            targets: []
-          },
-          {
-            key: 'finish',
-            label: 'core.module.output.label.running done',
-            description: 'core.module.output.description.running done',
-            valueType: 'boolean',
-            type: 'source',
-            targets: []
-          }
-        ]
-      },
-      {
-        moduleId: '0voh5n',
+        nodeId: 'datasetSearchNode',
         name: '知识库搜索',
         intro: Dataset_SEARCH_DESC,
         avatar: '/imgs/workflow/db.png',
@@ -887,156 +588,237 @@ export const appTemplates: (AppItemType & {
         },
         inputs: [
           {
-            key: 'switch',
-            type: 'target',
-            label: 'core.module.input.label.switch',
-            description: 'core.module.input.description.Trigger',
-            valueType: 'any',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
             key: 'datasets',
-            type: 'selectDataset',
+            renderTypeList: [FlowNodeInputTypeEnum.selectDataset, FlowNodeInputTypeEnum.reference],
             label: 'core.module.input.label.Select dataset',
             value: [],
             valueType: 'selectDataset',
             list: [],
-            required: true,
-            showTargetInApp: false,
-            showTargetInPlugin: true,
-            connected: false
+            required: true
           },
           {
             key: 'similarity',
-            type: 'selectDatasetParamsModal',
+            renderTypeList: [FlowNodeInputTypeEnum.selectDatasetParamsModal],
             label: '',
             value: 0.4,
-            valueType: 'number',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'number'
           },
           {
             key: 'limit',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '',
             value: 1500,
-            valueType: 'number',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'number'
           },
           {
             key: 'searchMode',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '',
             valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: 'embedding',
-            connected: false
+            value: 'embedding'
           },
           {
             key: 'usingReRank',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '',
             valueType: 'boolean',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: false,
-            connected: false
+            value: false
           },
           {
             key: 'datasetSearchUsingExtensionQuery',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '',
             valueType: 'boolean',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: true,
-            connected: false
+            value: true
           },
           {
             key: 'datasetSearchExtensionModel',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '',
-            valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            valueType: 'string'
           },
           {
             key: 'datasetSearchExtensionBg',
-            type: 'hidden',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             label: '',
             valueType: 'string',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: '',
-            connected: false
+            value: ''
           },
           {
             key: 'userChatInput',
-            type: 'custom',
-            label: '',
+            renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
+            label: '用户问题',
             required: true,
             valueType: 'string',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
             toolDescription: '需要检索的内容',
-            connected: true
+            value: ['userChatInput', 'userChatInput']
           }
         ],
         outputs: [
           {
-            key: 'userChatInput',
-            label: 'core.module.input.label.user question',
-            type: 'hidden',
-            valueType: 'string',
-            targets: [
-              {
-                moduleId: '63toub',
-                key: 'userChatInput'
-              }
-            ]
-          },
-          {
+            id: 'isEmpty',
             key: 'isEmpty',
             label: 'core.module.output.label.Search result empty',
             type: 'source',
-            valueType: 'boolean',
-            targets: []
+            valueType: 'boolean'
           },
           {
+            id: 'unEmpty',
             key: 'unEmpty',
             label: 'core.module.output.label.Search result not empty',
             type: 'source',
-            valueType: 'boolean',
-            targets: []
+            valueType: 'boolean'
           },
           {
+            id: 'quoteQA',
             key: 'quoteQA',
             label: 'core.module.Dataset quote.label',
             type: 'source',
-            valueType: 'datasetQuote',
-            targets: [
+            valueType: 'datasetQuote'
+          }
+        ]
+      },
+      {
+        nodeId: 'chatModule',
+        name: 'AI 对话',
+        intro: 'AI 大模型对话',
+        avatar: '/imgs/workflow/AI.png',
+        flowNodeType: 'chatNode',
+        showStatus: true,
+        position: {
+          x: 1962.4010270586014,
+          y: 1026.9105717680477
+        },
+        inputs: [
+          {
+            key: 'model',
+            renderTypeList: [
+              FlowNodeInputTypeEnum.settingLLMModel,
+              FlowNodeInputTypeEnum.reference
+            ],
+            label: 'core.module.input.label.aiModel',
+            required: true,
+            valueType: 'string',
+            value: 'gpt-3.5-turbo'
+          },
+          {
+            key: 'temperature',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: '温度',
+            value: 0,
+            valueType: 'number',
+            min: 0,
+            max: 10,
+            step: 1,
+            markList: [
               {
-                moduleId: '63toub',
-                key: 'quoteQA'
+                label: '严谨',
+                value: 0
+              },
+              {
+                label: '发散',
+                value: 10
               }
             ]
           },
           {
-            key: 'finish',
-            label: 'core.module.output.label.running done',
-            description: 'core.module.output.description.running done',
-            valueType: 'boolean',
-            type: 'source',
-            targets: []
+            key: 'maxToken',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: '回复上限',
+            value: 2000,
+            valueType: 'number',
+            min: 100,
+            max: 4000,
+            step: 50
+          },
+          {
+            key: 'isResponseAnswerText',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: '返回AI内容',
+            value: true,
+            valueType: 'boolean'
+          },
+          {
+            key: 'quoteTemplate',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: '引用内容模板',
+            valueType: 'string'
+          },
+          {
+            key: 'quotePrompt',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
+            label: '引用内容提示词',
+            valueType: 'string'
+          },
+          {
+            key: 'systemPrompt',
+            renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
+            label: 'core.ai.Prompt',
+            max: 300,
+            valueType: 'string',
+            description: 'core.app.tip.chatNodeSystemPromptTip',
+            placeholder: 'core.app.tip.chatNodeSystemPromptTip'
+          },
+          {
+            key: 'history',
+            renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
+            label: 'core.module.input.label.chat history',
+            required: true,
+            min: 0,
+            max: 30,
+            valueType: 'chatHistory',
+            value: 6
+          },
+          {
+            key: 'userChatInput',
+            renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
+            label: 'core.module.input.label.user question',
+            required: true,
+            valueType: 'string',
+            toolDescription: '用户问题',
+            value: ['userChatInput', 'userChatInput']
+          },
+          {
+            key: 'quoteQA',
+            renderTypeList: ['settingDatasetQuotePrompt'],
+            label: '',
+            debugLabel: '知识库引用',
+            description: '',
+            valueType: 'datasetQuote'
+          }
+        ],
+        outputs: [
+          {
+            id: 'history',
+            key: 'history',
+            label: 'core.module.output.label.New context',
+            description: 'core.module.output.description.New context',
+            valueType: 'chatHistory',
+            type: 'static'
+          },
+          {
+            id: 'answerText',
+            key: 'answerText',
+            label: 'core.module.output.label.Ai response content',
+            description: 'core.module.output.description.Ai response content',
+            valueType: 'string',
+            type: 'static'
           }
         ]
+      }
+    ],
+    edges: [
+      {
+        source: 'userChatInput',
+        target: 'datasetSearchNode',
+        sourcePort: `userChatInput-source-right`,
+        targetPort: `datasetSearchNode-target-left`
+      },
+      {
+        source: 'datasetSearchNode',
+        target: 'chatModule',
+        sourcePort: `datasetSearchNode-source-right`,
+        targetPort: `chatModule-target-left`
       }
     ]
   },
@@ -1048,9 +830,11 @@ export const appTemplates: (AppItemType & {
     type: AppTypeEnum.advanced,
     modules: [
       {
-        moduleId: '7z5g5h',
-        name: 'core.module.template.Chat entrance',
-        flowNodeType: 'questionInput',
+        nodeId: 'userChatInput',
+        intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
+        name: '对话入口',
+        avatar: '/imgs/workflow/userChatInput.png',
+        flowNodeType: 'workflowStart',
         position: {
           x: -269.50851681351924,
           y: 1657.6123698022448
@@ -1058,31 +842,23 @@ export const appTemplates: (AppItemType & {
         inputs: [
           {
             key: 'userChatInput',
-            type: 'systemInput',
+            renderTypeList: [FlowNodeInputTypeEnum.hidden],
             valueType: 'string',
-            label: 'core.module.input.label.user question',
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            label: 'core.module.input.label.user question'
           }
         ],
         outputs: [
           {
+            id: 'userChatInput',
             key: 'userChatInput',
             label: 'core.module.input.label.user question',
             type: 'source',
-            valueType: 'string',
-            targets: [
-              {
-                moduleId: 'remuj3',
-                key: 'userChatInput'
-              }
-            ]
+            valueType: 'string'
           }
         ]
       },
       {
-        moduleId: 'remuj3',
+        nodeId: 'classifyQuestion',
         name: '问题分类',
         flowNodeType: 'classifyQuestion',
         showStatus: true,
@@ -1092,25 +868,15 @@ export const appTemplates: (AppItemType & {
         },
         inputs: [
           {
-            key: 'switch',
-            type: 'target',
-            label: 'core.module.input.label.switch',
-            description: 'core.module.input.description.Trigger',
-            valueType: 'any',
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
-          },
-          {
             key: 'model',
-            type: 'selectLLMModel',
-            valueType: 'string',
-            label: 'core.module.input.label.Classify model',
+            renderTypeList: [
+              FlowNodeInputTypeEnum.settingLLMModel,
+              FlowNodeInputTypeEnum.reference
+            ],
+            label: 'core.module.input.label.aiModel',
             required: true,
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            value: 'gpt-3.5-turbo',
-            connected: false
+            valueType: 'string',
+            value: 'gpt-3.5-turbo'
           },
           {
             key: 'systemPrompt',
@@ -1126,16 +892,13 @@ export const appTemplates: (AppItemType & {
           },
           {
             key: 'history',
-            type: 'numberInput',
+            renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
             label: 'core.module.input.label.chat history',
             required: true,
             min: 0,
             max: 30,
             valueType: 'chatHistory',
-            value: 6,
-            showTargetInApp: true,
-            showTargetInPlugin: true,
-            connected: false
+            value: 6
           },
           {
             key: 'userChatInput',
@@ -1149,7 +912,7 @@ export const appTemplates: (AppItemType & {
           },
           {
             key: 'agents',
-            type: 'custom',
+            renderTypeList: [FlowNodeInputTypeEnum.custom],
             valueType: 'any',
             label: '',
             value: [
@@ -1165,10 +928,7 @@ export const appTemplates: (AppItemType & {
                 value: '其他问题',
                 key: 'oy1c'
               }
-            ],
-            showTargetInApp: false,
-            showTargetInPlugin: false,
-            connected: false
+            ]
           }
         ],
         outputs: [

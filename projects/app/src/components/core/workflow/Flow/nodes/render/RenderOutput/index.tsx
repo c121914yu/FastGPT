@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import type { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/type/io.d';
-import { Box } from '@chakra-ui/react';
+import { Box, Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import OutputLabel from './Label';
 import { RenderOutputProps } from './type';
 import dynamic from 'next/dynamic';
+import { useTranslation } from 'next-i18next';
 
 const RenderList: {
   types: `${FlowNodeOutputTypeEnum}`[];
@@ -29,6 +30,8 @@ const RenderToolOutput = ({
     const parseOutputs = JSON.parse(outputString) as FlowNodeOutputItemType[];
     return parseOutputs;
   }, [outputString]);
+
+  const { t } = useTranslation();
 
   const Render = useMemo(() => {
     return (

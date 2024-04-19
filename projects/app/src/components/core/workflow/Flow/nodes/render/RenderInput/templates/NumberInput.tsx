@@ -30,7 +30,7 @@ const NumberInputRender = ({ item, nodeId }: RenderInputProps) => {
           });
         }}
       >
-        <NumberInputField bg={'white'} px={3} borderRadius={'xs'} />
+        <NumberInputField bg={'white'} px={3} borderRadius={'sm'} />
         <NumberInputStepper>
           <NumberIncrementStepper />
           <NumberDecrementStepper />

@@ -13,7 +13,7 @@ const TextInput = ({ item, nodeId }: RenderInputProps) => {
         defaultValue={item.value}
         bg={'white'}
         px={3}
-        borderRadius={'xs'}
+        borderRadius={'sm'}
         onBlur={(e) => {
           onChangeNode({
             nodeId,

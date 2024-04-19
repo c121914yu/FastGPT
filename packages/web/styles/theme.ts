@@ -189,7 +189,7 @@ const Button = defineStyleConfig({
       bg: 'white',
       px: '12px',
       py: '0',
-      borderRadius: '4px',
+      borderRadius: '6px',
       transition: 'background 0.1s',
       _hover: {
         color: 'primary.600',
