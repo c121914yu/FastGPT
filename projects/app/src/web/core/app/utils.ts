@@ -607,6 +607,7 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
     tools = tools.concat(
       formData.selectedTools.map((tool, i) => ({
         nodeId: getNanoid(6),
+        id: tool.id,
         name: tool.name,
         intro: tool.intro,
         avatar: tool.avatar,
