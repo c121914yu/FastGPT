@@ -239,12 +239,12 @@ const ScheduledTriggerConfig = ({
     return (
       <>
         <Flex alignItems={'center'}>
-          <MyIcon name={'core/app/simpleMode/variable'} w={'20px'} />
+          <MyIcon name={'core/app/schedulePlan'} w={'20px'} />
           <Box ml={2} flex={1} fontWeight={'medium'}>
             {t('core.app.Interval timer run')}
             <QuestionTip label={t('core.app.Interval timer tip')} />
           </Box>
-          <MyTooltip label={t('core.app.Select TTS')}>
+          <MyTooltip label={t('core.app.Config schedule plan')}>
             <Button
               variant={'transparentBase'}
               iconSpacing={1}
@@ -260,7 +260,7 @@ const ScheduledTriggerConfig = ({
         <MyModal
           isOpen={isOpen}
           onClose={onClose}
-          iconSrc={'core/app/simpleMode/variable'}
+          iconSrc={'core/app/schedulePlan'}
           title={t('core.app.Interval timer config')}
           overflow={'unset'}
         >

@@ -64,6 +64,7 @@ export const iconPaths = {
   'core/app/logsLight': () => import('./icons/core/app/logsLight.svg'),
   'core/app/markLight': () => import('./icons/core/app/markLight.svg'),
   'core/app/questionGuide': () => import('./icons/core/app/questionGuide.svg'),
+  'core/app/schedulePlan': () => import('./icons/core/app/schedulePlan.svg'),
   'core/app/simpleMode/ai': () => import('./icons/core/app/simpleMode/ai.svg'),
   'core/app/simpleMode/chat': () => import('./icons/core/app/simpleMode/chat.svg'),
   'core/app/simpleMode/dataset': () => import('./icons/core/app/simpleMode/dataset.svg'),
@@ -129,6 +130,7 @@ export const iconPaths = {
     import('./icons/core/workflow/inputType/numberInput.svg'),
   'core/workflow/inputType/reference': () =>
     import('./icons/core/workflow/inputType/reference.svg'),
+  'core/workflow/inputType/select': () => import('./icons/core/workflow/inputType/select.svg'),
   'core/workflow/inputType/selectApp': () =>
     import('./icons/core/workflow/inputType/selectApp.svg'),
   'core/workflow/inputType/selectDataset': () =>
