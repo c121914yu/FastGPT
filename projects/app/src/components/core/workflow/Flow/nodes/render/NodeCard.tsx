@@ -16,7 +16,7 @@ import { useEditTextarea } from '@fastgpt/web/hooks/useEditTextarea';
 import { ConnectionSourceHandle, ConnectionTargetHandle } from './Handle/ConnectionHandle';
 import { useDebug } from '../../hooks/useDebug';
 import { ResponseBox } from '@/components/ChatBox/WholeResponseModal';
-import EmptyTip from '@/components/EmptyTip';
+import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { getPreviewPluginModule } from '@/web/core/plugin/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';

@@ -4,6 +4,7 @@
   "dependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
     "axios": "^1.5.1",
+    "cron-parser": "^4.9.0",
     "dayjs": "^1.11.7",
     "encoding": "^0.1.13",
     "js-tiktoken": "^1.0.7",

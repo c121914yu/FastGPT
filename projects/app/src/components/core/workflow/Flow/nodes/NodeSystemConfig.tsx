@@ -3,14 +3,9 @@ import { NodeProps } from 'reactflow';
 import { Box, Flex, Textarea, useTheme } from '@chakra-ui/react';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { welcomeTextTip } from '@fastgpt/global/core/workflow/template/tip';
 
-import VariableEdit from '../../../app/VariableEdit';
-import MyIcon from '@fastgpt/web/components/common/Icon';
-import MyTooltip from '@/components/MyTooltip';
-import Container from '../components/Container';
-import NodeCard from './render/NodeCard';
 import type { VariableItemType } from '@fastgpt/global/core/app/type.d';
 import QGSwitch from '@/components/core/app/QGSwitch';
 import TTSSelect from '@/components/core/app/TTSSelect';
@@ -19,6 +14,11 @@ import { splitGuideModule } from '@fastgpt/global/core/workflow/utils';
 import { useTranslation } from 'next-i18next';
 import { TTSTypeEnum } from '@/constants/app';
 import { useFlowProviderStore } from '../FlowProvider';
+import VariableEdit from '../../../app/VariableEdit';
+import MyIcon from '@fastgpt/web/components/common/Icon';
+import MyTooltip from '@/components/MyTooltip';
+import NodeCard from './render/NodeCard';
+import ScheduledTriggerConfig from '@/components/core/app/ScheduledTriggerConfig';
 
 const NodeUserGuide = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const theme = useTheme();
@@ -49,6 +49,9 @@ const NodeUserGuide = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
           </Box>
           <Box mt={3} pt={3} borderTop={theme.borders.base}>
             <QuestionGuide data={data} />
+          </Box>
+          <Box mt={3} pt={3} borderTop={theme.borders.base}>
+            <ScheduledTrigger data={data} />
           </Box>
         </Box>
       </NodeCard>
@@ -202,6 +205,29 @@ function WhisperGuide({ data }: { data: FlowNodeItemType }) {
           type: 'updateInput',
           value: {
             ...inputs.find((item) => item.key === NodeInputKeyEnum.whisper),
+            value: e
+          }
+        });
+      }}
+    />
+  );
+}
+
+function ScheduledTrigger({ data }: { data: FlowNodeItemType }) {
+  const { inputs, nodeId } = data;
+  const { onChangeNode } = useFlowProviderStore();
+  const { scheduledTriggerConfig } = splitGuideModule({ inputs } as StoreNodeItemType);
+
+  return (
+    <ScheduledTriggerConfig
+      value={scheduledTriggerConfig}
+      onChange={(e) => {
+        onChangeNode({
+          nodeId,
+          key: NodeInputKeyEnum.intervalTimer,
+          type: 'updateInput',
+          value: {
+            ...inputs.find((item) => item.key === NodeInputKeyEnum.intervalTimer),
             value: e
           }
         });

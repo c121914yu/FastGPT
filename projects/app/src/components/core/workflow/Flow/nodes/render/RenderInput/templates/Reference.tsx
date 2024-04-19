@@ -7,7 +7,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import { computedNodeInputReference } from '@/web/core/workflow/utils';
 import { useTranslation } from 'next-i18next';
 import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
-import EmptyTip from '@/components/EmptyTip';
+import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import type { ReferenceValueProps } from '@fastgpt/global/core/workflow/type/io';
 import Avatar from '@/components/Avatar';
 

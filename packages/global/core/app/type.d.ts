@@ -7,9 +7,9 @@ import { SelectedDatasetType } from '../workflow/api';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 import { TeamTagSchema as TeamTagsSchemaType } from '@fastgpt/global/support/user/team/type.d';
 import { StoreEdgeItemType } from 'core/workflow/type/edge';
+
 export interface AppSchema {
   _id: string;
-  userId: string;
   teamId: string;
   tmbId: string;
   name: string;
@@ -20,6 +20,11 @@ export interface AppSchema {
   updateTime: number;
   modules: StoreNodeItemType[];
   edges: StoreEdgeItemType[];
+
+  // App system config
+  scheduledTriggerConfig?: AppScheduledTriggerConfigType | null;
+  scheduledTriggerNextTime?: Date;
+
   permission: `${PermissionTypeEnum}`;
   inited?: boolean;
   teamTags: string[];
@@ -115,4 +120,10 @@ export type AppWhisperConfigType = {
   open: boolean;
   autoSend: boolean;
   autoTTSResponse: boolean;
+};
+// interval timer
+export type AppScheduledTriggerConfigType = {
+  cronString: string;
+  timezone: string;
+  defaultPrompt: string;
 };

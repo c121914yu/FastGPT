@@ -9,7 +9,12 @@ import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/cons
 import { dispatchWorkFlow } from '@fastgpt/service/core/workflow/dispatch';
 import type { ChatCompletionCreateParams } from '@fastgpt/global/core/ai/type.d';
 import type { ChatCompletionMessageParam } from '@fastgpt/global/core/ai/type.d';
-import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
+import {
+  getDefaultEntryNodeIds,
+  initWorkflowEdgeStatus,
+  storeNodes2RuntimeNodes,
+  textAdaptGptResponse
+} from '@fastgpt/global/core/workflow/runtime/utils';
 import { GPTMessages2Chats, chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 import { getChatItems } from '@fastgpt/service/core/chat/controller';
 import { saveChat } from '@/service/utils/chat/saveChat';
@@ -32,7 +37,6 @@ import { AuthOutLinkChatProps } from '@fastgpt/global/support/outLink/api';
 import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
 import { ChatErrEnum } from '@fastgpt/global/common/error/code/chat';
 import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
-import { setWorkflowDefaultEntries } from '@fastgpt/global/core/workflow/runtime/utils';
 import { UserChatItemType } from '@fastgpt/global/core/chat/type';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 
@@ -176,13 +180,14 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       appId: String(app._id),
       chatId,
       responseChatItemId,
-      modules: setWorkflowDefaultEntries(app.modules),
-      variables,
-      inputFiles: files,
-      histories: concatHistories,
-      startParams: {
+      runtimeNodes: storeNodes2RuntimeNodes(app.modules, getDefaultEntryNodeIds(app.modules)),
+      runtimeEdges: initWorkflowEdgeStatus(app.edges),
+      variables: {
+        ...variables,
         userChatInput: text
       },
+      inputFiles: files,
+      histories: concatHistories,
       stream,
       detail,
       maxRunTimes: 200
@@ -191,27 +196,29 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
     // save chat
     if (chatId) {
       const isOwnerUse = !shareId && !spaceTeamId && String(tmbId) === String(app.tmbId);
+      const source = (() => {
+        if (shareId) {
+          return ChatSourceEnum.share;
+        }
+        if (authType === 'apikey') {
+          return ChatSourceEnum.api;
+        }
+        if (spaceTeamId) {
+          return ChatSourceEnum.team;
+        }
+        return ChatSourceEnum.online;
+      })();
+
       await saveChat({
         chatId,
         appId: app._id,
         teamId,
         tmbId: tmbId,
         variables,
-        updateUseTime: isOwnerUse, // owner update use time
+        isUpdateUseTime: isOwnerUse && source === ChatSourceEnum.online, // owner update use time
         shareId,
         outLinkUid: outLinkUserId,
-        source: (() => {
-          if (shareId) {
-            return ChatSourceEnum.share;
-          }
-          if (authType === 'apikey') {
-            return ChatSourceEnum.api;
-          }
-          if (spaceTeamId) {
-            return ChatSourceEnum.team;
-          }
-          return ChatSourceEnum.online;
-        })(),
+        source,
         content: [
           question,
           {

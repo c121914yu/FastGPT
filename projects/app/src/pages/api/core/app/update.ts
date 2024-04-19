@@ -7,13 +7,23 @@ import { authApp } from '@fastgpt/service/support/permission/auth/app';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { getLLMModel } from '@fastgpt/service/core/ai/model';
+import { getGuideModule, splitGuideModule } from '@fastgpt/global/core/workflow/utils';
+import { getNextTimeByCronStringAndTimezone } from '@fastgpt/global/common/string/time';
 
 /* 获取我的模型 */
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
     await connectToDatabase();
-    const { name, avatar, type, intro, modules, edges, permission, teamTags } =
-      req.body as AppUpdateParams;
+    const {
+      name,
+      avatar,
+      type,
+      intro,
+      modules: nodes,
+      edges,
+      permission,
+      teamTags
+    } = req.body as AppUpdateParams;
     const { appId } = req.query as { appId: string };
 
     if (!appId) {
@@ -23,12 +33,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // 凭证校验
     await authApp({ req, authToken: true, appId, per: permission ? 'owner' : 'w' });
 
-    // check modules
+    // format nodes data
     // 1. dataset search limit, less than model quoteMaxToken
-    if (modules) {
+    if (nodes) {
       let maxTokens = 3000;
 
-      modules.forEach((item) => {
+      nodes.forEach((item) => {
         if (
           item.flowNodeType === FlowNodeTypeEnum.chatNode ||
           item.flowNodeType === FlowNodeTypeEnum.tools
@@ -42,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
       });
 
-      modules.forEach((item) => {
+      nodes.forEach((item) => {
         if (item.flowNodeType === FlowNodeTypeEnum.datasetSearchNode) {
           item.inputs.forEach((input) => {
             if (input.key === NodeInputKeyEnum.datasetMaxTokens) {
@@ -55,6 +65,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
       });
     }
+    // 2. get schedule plan
+    const { scheduledTriggerConfig } = splitGuideModule(getGuideModule(nodes || []));
 
     // 更新模型
     await MongoApp.updateOne(
@@ -68,12 +80,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         intro,
         permission,
         teamTags: teamTags,
-        ...(modules && {
-          modules
+        ...(nodes && {
+          modules: nodes
         }),
         ...(edges && {
           edges
-        })
+        }),
+        scheduledTriggerConfig,
+        scheduledTriggerNextTime: scheduledTriggerConfig
+          ? getNextTimeByCronStringAndTimezone(scheduledTriggerConfig)
+          : null
       }
     );
 

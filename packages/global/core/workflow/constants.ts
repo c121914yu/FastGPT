@@ -32,14 +32,18 @@ export enum WorkflowIOValueTypeEnum {
 export enum NodeInputKeyEnum {
   // old
   welcomeText = 'welcomeText',
-  variables = 'variables',
   switch = 'switch', // a trigger switch
   history = 'history',
   userChatInput = 'userChatInput',
+  answerText = 'text',
+
+  // system config
   questionGuide = 'questionGuide',
   tts = 'tts',
   whisper = 'whisper',
-  answerText = 'text',
+  variables = 'variables',
+  intervalTimer = 'intervalTimer',
+
   agents = 'agents', // cq agent key
 
   // latest

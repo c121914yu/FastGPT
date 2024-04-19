@@ -108,6 +108,9 @@
     "Load Failed": "加载失败",
     "Loading": "加载中...",
     "More settings": "更多设置",
+    "MultipleSelect": {
+      "No data": "没有可选值"
+    },
     "Name": "名称",
     "Name Can": "名称不能为空",
     "Name is empty": "名称不能为空",
@@ -278,6 +281,9 @@
       "Chat Variable": "对话框变量",
       "Config whisper": "配置语音输入",
       "External using": "外部使用途径",
+      "Interval timer config": "定时执行配置",
+      "Interval timer run": "定时执行",
+      "Interval timer tip": "可定时执行应用",
       "Make a brief introduction of your app": "给你的 AI 应用一个介绍",
       "Max histories": "聊天记录数量",
       "Max tokens": "回复上限",
@@ -359,6 +365,15 @@
         "Show History": "展示历史对话",
         "Web Link": "网络链接"
       },
+      "schedule": {
+        "Default prompt": "默认问题",
+        "Default prompt placeholder": "执行应用时的默认问题",
+        "Every day": "每天{{hour}}:00",
+        "Every month": "每月{{day}}号{{hour}}:00",
+        "Every week": "每周{{day}} {{hour}}:00",
+        "Interval": "每{{interval}}小时",
+        "Open schedule": "定时执行"
+      },
       "setting": "应用信息设置",
       "share": {
         "Amount limit tip": "最多创建10组",
@@ -416,6 +431,7 @@
     },
     "chat": {
       "Admin Mark Content": "纠正后的回复",
+      "Audio Not Support": "设备不支持语音播放",
       "Audio Speech Error": "语音播报异常",
       "Cancel Speak": "取消语音输入",
       "Canceled Speak": "语音输入已取消",
