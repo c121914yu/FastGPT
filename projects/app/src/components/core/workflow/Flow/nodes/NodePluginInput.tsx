@@ -21,7 +21,6 @@ import {
   FlowNodeOutputItemType
 } from '@fastgpt/global/core/workflow/type/io.d';
 import Container from '../components/Container';
-import Label from './render/RenderInput/Label';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 import type {
@@ -68,7 +67,6 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const [editField, setEditField] = useState<EditNodeFieldType>();
 
   const Render = useMemo(() => {
-    console.log(111111);
     return (
       <NodeCard
         minW={'300px'}
@@ -175,16 +173,6 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               </Table>
             </TableContainer>
           </Box>
-          {/* {inputs.map((input) => (
-        <Box key={input.key} mt={3}>
-          <Label
-            nodeId={nodeId}
-            input={input}
-            output={outputs.find((output) => output.key === input.key) as FlowNodeOutputItemType}
-            mode={mode}
-          />
-        </Box>
-      ))} */}
         </Container>
         {!!createField && (
           <FieldEditModal

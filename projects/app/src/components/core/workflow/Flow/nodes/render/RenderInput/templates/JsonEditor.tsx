@@ -54,7 +54,7 @@ const JsonEditor = ({ inputs = [], item, nodeId }: RenderInputProps) => {
     return (
       <JSONEditor
         bg={'white'}
-        borderRadius={'xs'}
+        borderRadius={'sm'}
         placeholder={item.placeholder}
         resize
         value={value}

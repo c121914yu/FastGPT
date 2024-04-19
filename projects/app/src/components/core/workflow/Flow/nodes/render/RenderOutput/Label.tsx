@@ -1,7 +1,7 @@
 import { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, useTheme } from '@chakra-ui/react';
 import MyTooltip from '@/components/MyTooltip';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
@@ -20,25 +20,36 @@ const OutputLabel = ({
   outputs: FlowNodeOutputItemType[];
 }) => {
   const { t } = useTranslation();
-  const { label = '', description } = item;
+  const { label = '', description, valueType } = item;
+  const theme = useTheme();
 
   const Render = useMemo(() => {
     return (
       <Flex
         className="nodrag"
         cursor={'default'}
-        justifyContent={'right'}
         alignItems={'center'}
         position={'relative'}
         fontWeight={'medium'}
         color={'myGray.600'}
       >
+        <Box position={'relative'}>{t(label)}</Box>
         {description && (
           <MyTooltip label={t(description)} forceShow>
             <QuestionOutlineIcon display={['none', 'inline']} mr={1} />
           </MyTooltip>
         )}
-        <Box position={'relative'}>{t(label)}</Box>
+        <Box
+          bg={'myGray.100'}
+          color={'myGray.500'}
+          border={theme.borders.sm}
+          borderRadius={'xs'}
+          ml={2}
+          px={1}
+          py={0.5}
+        >
+          {valueType}
+        </Box>
         {item.type === FlowNodeOutputTypeEnum.source && (
           <SourceHandle
             nodeId={nodeId}
@@ -49,7 +60,7 @@ const OutputLabel = ({
         )}
       </Flex>
     );
-  }, [description, item.key, item.type, label, nodeId, t]);
+  }, [description, item.key, item.type, label, nodeId, t, theme.borders.sm, valueType]);
 
   return Render;
 };

@@ -8,7 +8,8 @@ import {
   Switch,
   Input,
   Textarea,
-  Stack
+  Stack,
+  Center
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import MyModal from '@fastgpt/web/components/common/MyModal';
@@ -160,6 +161,14 @@ const FieldEditModal = ({
     return editField.key;
   }, [editField.key, inputType]);
 
+  const showInputTypeSelect = useMemo(() => {
+    return editField.inputType;
+  }, [editField.inputType]);
+
+  const showOutputTypeSelect = useMemo(() => {
+    return editField.valueType;
+  }, [editField.valueType]);
+
   const showDescriptionInput = useMemo(() => {
     return editField.description;
   }, [editField.description]);
@@ -220,9 +229,9 @@ const FieldEditModal = ({
       maxW={'1000px'}
     >
       <ModalBody overflow={'visible'}>
-        <Flex>
-          <Stack mr={8} w={'300px'}>
-            {editField.inputType && (
+        <Flex gap={8}>
+          <Stack w={!showInputTypeSelect ? 'full' : '300px'}>
+            {showInputTypeSelect && (
               <Flex alignItems={'center'} mb={5}>
                 <Box flex={'0 0 70px'}>{t('core.module.Input Type')}</Box>
                 <Box flex={1}>
@@ -235,6 +244,7 @@ const FieldEditModal = ({
                       const selectedItem = inputTypeList.find((item) => item.value === type);
                       setValue('inputType', type);
                       setValue('valueType', selectedItem?.valueType);
+                      setValue('isToolInput', false);
 
                       if (type === FlowNodeInputTypeEnum.addInputParam) {
                         setValue('required', false);
@@ -246,7 +256,24 @@ const FieldEditModal = ({
                 </Box>
               </Flex>
             )}
+            {showOutputTypeSelect && (
+              <Flex mb={5} alignItems={'center'}>
+                <Box flex={'0 0 70px'}>{t('core.module.Output Type')}</Box>
+                <Box flex={1}>
+                  <MySelect
+                    w={'full'}
+                    list={dataTypeSelectList}
+                    value={getValues('valueType')}
+                    onchange={(e: string) => {
+                      const type = e as `${WorkflowIOValueTypeEnum}`;
+                      setValue('valueType', type);
 
+                      setRefresh(!refresh);
+                    }}
+                  />
+                </Box>
+              </Flex>
+            )}
             {showKeyInput && (
               <Flex mb={5} alignItems={'center'}>
                 <Box flex={'0 0 70px'}>{t('core.module.Field Name')}</Box>
@@ -275,87 +302,103 @@ const FieldEditModal = ({
               </Box>
             )}
           </Stack>
-          <Stack w={'300px'}>
-            {showToolInput && (
-              <Flex alignItems={'center'} mb={5}>
-                <Box flex={'0 0 70px'}>工具参数</Box>
-                <Switch {...register('isToolInput')} />
-              </Flex>
-            )}
-            {showDataTypeSelect && (
-              <Flex mb={5} alignItems={'center'}>
-                <Box flex={'0 0 70px'}>{t('core.module.Data Type')}</Box>
-                <Box flex={1}>
-                  <MySelect
-                    w={'full'}
-                    list={dataTypeSelectList}
-                    value={getValues('valueType')}
-                    onchange={(e: string) => {
-                      const type = e as `${WorkflowIOValueTypeEnum}`;
-                      setValue('valueType', type);
+          {!showInputTypeSelect ? null : showToolInput ||
+            showDataTypeSelect ||
+            showDefaultValue ||
+            showMaxLenInput ||
+            showMinMaxInput ? (
+            <Stack w={'300px'}>
+              {showToolInput && (
+                <Flex alignItems={'center'} mb={5}>
+                  <Box flex={'0 0 70px'}>工具参数</Box>
+                  <Switch {...register('isToolInput')} />
+                </Flex>
+              )}
+              {showDataTypeSelect && (
+                <Flex mb={5} alignItems={'center'}>
+                  <Box flex={'0 0 70px'}>{t('core.module.Data Type')}</Box>
+                  <Box flex={1}>
+                    <MySelect
+                      w={'full'}
+                      list={dataTypeSelectList}
+                      value={getValues('valueType')}
+                      onchange={(e: string) => {
+                        const type = e as `${WorkflowIOValueTypeEnum}`;
+                        setValue('valueType', type);
 
-                      setRefresh(!refresh);
-                    }}
-                  />
-                </Box>
-              </Flex>
-            )}
-            {showDefaultValue && (
-              <Flex mb={5} alignItems={'center'}>
-                <Box flex={'0 0 70px'}>{t('core.module.Default Value')}</Box>
-                {inputType === FlowNodeInputTypeEnum.numberInput && (
+                        setRefresh(!refresh);
+                      }}
+                    />
+                  </Box>
+                </Flex>
+              )}
+              {showDefaultValue && (
+                <Flex mb={5} alignItems={'center'}>
+                  <Box flex={'0 0 70px'}>{t('core.module.Default Value')}</Box>
+                  {inputType === FlowNodeInputTypeEnum.numberInput && (
+                    <Input
+                      bg={'myGray.50'}
+                      max={max}
+                      min={min}
+                      type={'number'}
+                      {...register('defaultValue')}
+                    />
+                  )}
+                  {inputType === FlowNodeInputTypeEnum.input && (
+                    <Input bg={'myGray.50'} maxLength={maxLength} {...register('defaultValue')} />
+                  )}
+                  {inputType === FlowNodeInputTypeEnum.textarea && (
+                    <Textarea
+                      bg={'myGray.50'}
+                      maxLength={maxLength}
+                      {...register('defaultValue')}
+                    />
+                  )}
+                  {inputType === FlowNodeInputTypeEnum.JSONEditor && (
+                    <JsonEditor
+                      resize
+                      w={'full'}
+                      onChange={(e) => {
+                        setValue('defaultValue', e);
+                      }}
+                      defaultValue={getValues('defaultValue')}
+                    />
+                  )}
+                  {inputType === FlowNodeInputTypeEnum.switch && (
+                    <Switch {...register('defaultValue')} />
+                  )}
+                </Flex>
+              )}
+              {showMaxLenInput && (
+                <Flex mb={5} alignItems={'center'}>
+                  <Box flex={'0 0 70px'}>{t('core.module.Max Length')}</Box>
                   <Input
                     bg={'myGray.50'}
-                    max={max}
-                    min={min}
-                    type={'number'}
-                    {...register('defaultValue')}
+                    placeholder={t('core.module.Max Length placeholder')}
+                    {...register('maxLength')}
                   />
-                )}
-                {inputType === FlowNodeInputTypeEnum.input && (
-                  <Input bg={'myGray.50'} maxLength={maxLength} {...register('defaultValue')} />
-                )}
-                {inputType === FlowNodeInputTypeEnum.textarea && (
-                  <Textarea bg={'myGray.50'} maxLength={maxLength} {...register('defaultValue')} />
-                )}
-                {inputType === FlowNodeInputTypeEnum.JSONEditor && (
-                  <JsonEditor
-                    resize
-                    w={'full'}
-                    onChange={(e) => {
-                      setValue('defaultValue', e);
-                    }}
-                    defaultValue={getValues('defaultValue')}
-                  />
-                )}
-                {inputType === FlowNodeInputTypeEnum.switch && (
-                  <Switch {...register('defaultValue')} />
-                )}
-              </Flex>
-            )}
-            {showMaxLenInput && (
-              <Flex mb={5} alignItems={'center'}>
-                <Box flex={'0 0 70px'}>{t('core.module.Max Length')}</Box>
-                <Input
-                  bg={'myGray.50'}
-                  placeholder={t('core.module.Max Length placeholder')}
-                  {...register('maxLength')}
-                />
-              </Flex>
-            )}
-            {showMinMaxInput && (
-              <Box>
-                <Flex mb={5} alignItems={'center'}>
-                  <Box flex={'0 0 70px'}>{t('core.module.Max Value')}</Box>
-                  <Input bg={'myGray.50'} type={'number'} {...register('max')} />
                 </Flex>
-                <Flex mb={5} alignItems={'center'}>
-                  <Box flex={'0 0 70px'}>{t('core.module.Min Value')}</Box>
-                  <Input bg={'myGray.50'} type={'number'} {...register('min')} />
-                </Flex>
-              </Box>
-            )}
-          </Stack>
+              )}
+              {showMinMaxInput && (
+                <Box>
+                  <Flex mb={5} alignItems={'center'}>
+                    <Box flex={'0 0 70px'}>{t('core.module.Max Value')}</Box>
+                    <Input bg={'myGray.50'} type={'number'} {...register('max')} />
+                  </Flex>
+                  <Flex mb={5} alignItems={'center'}>
+                    <Box flex={'0 0 70px'}>{t('core.module.Min Value')}</Box>
+                    <Input bg={'myGray.50'} type={'number'} {...register('min')} />
+                  </Flex>
+                </Box>
+              )}
+            </Stack>
+          ) : (
+            <Stack w={'300px'}>
+              <Center w={'full'} h={'full'}>
+                <Box color={'myGray.600'}>{t('core.module.No Config Tips')}</Box>
+              </Center>
+            </Stack>
+          )}
         </Flex>
       </ModalBody>
 
