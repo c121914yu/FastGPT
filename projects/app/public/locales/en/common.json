@@ -306,6 +306,7 @@
       "Tool call tip": "The AI model automatically selects one or more tools to use. If this feature is enabled, the knowledge base call is also called as a tool. Please try to choose the AI model that supports \"function call\", the effect is better.",
       "ToolCall": {
         "No plugin": "No plugins",
+        "Parameter setting": "",
         "Setting tool": "Setting tool",
         "System": "System",
         "Team": "Team",

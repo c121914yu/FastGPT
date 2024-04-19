@@ -21,7 +21,6 @@ import {
   FlowNodeOutputItemType
 } from '@fastgpt/global/core/workflow/type/io.d';
 import Container from '../components/Container';
-import Label from './render/RenderInput/Label';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 import type {

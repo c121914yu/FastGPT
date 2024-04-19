@@ -9,7 +9,9 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  ModalBody
+  ModalBody,
+  ModalFooter,
+  useDisclosure
 } from '@chakra-ui/react';
 import RowTabs from '@fastgpt/web/components/common/Tabs/RowTabs';
 import { useWorkflowStore } from '@/web/core/workflow/store/workflow';
@@ -28,6 +30,9 @@ import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import ParentPaths from '@/components/common/ParentPaths';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import { debounce } from 'lodash';
+import { RenderList as InputRenderList } from '@/components/core/workflow/Flow/nodes/render/RenderInput';
+import InputLabel from '@/components/core/workflow/Flow/nodes/render/RenderInput/Label';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 type Props = {
   selectedTools: FlowNodeTemplateType[];
@@ -172,6 +177,13 @@ const RenderList = React.memo(function RenderList({
 }) {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const [currentTool, setCurrentTool] = useState<FlowNodeTemplateType>();
+
+  const {
+    onOpen: onParamsModalOpen,
+    isOpen: isParamsModalOpen,
+    onClose: onParamsModalClose
+  } = useDisclosure();
 
   const { mutate: onClickAdd, isLoading } = useRequest({
     mutationFn: async (template: FlowNodeTemplateType) => {
@@ -190,10 +202,12 @@ const RenderList = React.memo(function RenderList({
         }
 
         if (!input.toolDescription) {
-          return toast({
-            status: 'warning',
-            title: t('core.app.ToolCall.This plugin cannot be called as a tool')
-          });
+          res && setCurrentTool(res);
+          return onParamsModalOpen();
+          // return toast({
+          //   status: 'warning',
+          //   title: t('core.app.ToolCall.This plugin cannot be called as a tool')
+          // });
         }
       }
       return res;
@@ -210,11 +224,6 @@ const RenderList = React.memo(function RenderList({
     <MyBox>
       {templates.map((item, i) => {
         const selected = !!selectedTools.find((tool) => tool.id === item.id);
-        console.log(
-          '%cprojects/app/src/pages/app/detail/components/SimpleEdit/ToolSelectModal.tsx:213 item',
-          'color: #007acc;',
-          item
-        );
         return (
           <Flex
             key={item.id}
@@ -271,6 +280,49 @@ const RenderList = React.memo(function RenderList({
           </Flex>
         );
       })}
+      {isParamsModalOpen && (
+        <MyModal
+          isOpen
+          title={t('core.app.ToolCall.Parameter setting')}
+          iconSrc="core/app/toolCall"
+          onClose={onParamsModalClose}
+          overflow={'auto'}
+        >
+          <ModalBody>
+            {currentTool &&
+              currentTool.inputs.map((input, index) => {
+                const nodeId = getNanoid();
+                const renderType = input.renderTypeList?.[input.selectedTypeIndex || 0];
+
+                const Component = InputRenderList.find((item) =>
+                  item.types.includes(renderType)
+                )?.Component;
+
+                if (!Component) return null;
+
+                return (
+                  <Box key={input.key} _notLast={{ mb: 4 }} position={'relative'}>
+                    <InputLabel input={input} nodeId={nodeId} />
+                    <Component
+                      key={index}
+                      inputs={currentTool.inputs}
+                      item={input}
+                      nodeId={nodeId}
+                    />
+                  </Box>
+                );
+              })}
+          </ModalBody>
+          <ModalFooter gap={6}>
+            <Button onClick={onParamsModalClose} variant={'whiteBase'}>
+              {t('common.Cancel')}
+            </Button>
+            <Button variant={'primary'} onClick={onParamsModalClose}>
+              {t('common.Confirm')}
+            </Button>
+          </ModalFooter>
+        </MyModal>
+      )}
     </MyBox>
   );
 });

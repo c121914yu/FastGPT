@@ -20,15 +20,18 @@ import {
   Button,
   useDisclosure
 } from '@chakra-ui/react';
-import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { useFlowProviderStore } from '../../FlowProvider';
 import { useTranslation } from 'next-i18next';
 import Tabs from '@/components/Tabs';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
+import {
+  FlowNodeInputItemType,
+  FlowNodeOutputItemType
+} from '@fastgpt/global/core/workflow/type/io.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
-import { QuestionOutlineIcon } from '@chakra-ui/icons';
+import { QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
 import JSONEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
 import {
   formatEditorVariablePickerIcon,
@@ -41,6 +44,10 @@ import dynamic from 'next/dynamic';
 import MySelect from '@fastgpt/web/components/common/MySelect';
 import RenderToolInput from '../render/RenderToolInput';
 import IOTitle from '../../components/IOTitle';
+import { EditNodeFieldType, EditOutputFieldMapType } from '@fastgpt/global/core/workflow/node/type';
+import FieldEditModal from '../render/FieldEditModal';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
+import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 const CurlImportModal = dynamic(() => import('./CurlImportModal'));
 
 export const HttpHeaders = [
@@ -650,6 +657,21 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { splitToolInputs, hasToolNode } = useFlowProviderStore();
   const { toolInputs, commonInputs } = splitToolInputs(inputs, nodeId);
 
+  const [createField, setCreateField] = useState<EditNodeFieldType>();
+  const [editField, setEditField] = useState<EditNodeFieldType>();
+  const defaultEditField = {
+    key: '',
+    label: '',
+    valueType: WorkflowIOValueTypeEnum.string,
+    description: ''
+  };
+  const createEditField: EditOutputFieldMapType = {
+    key: true,
+    valueType: true,
+    description: true
+  };
+  const { onChangeNode } = useFlowProviderStore();
+
   const CustomComponents = useMemo(
     () => ({
       [NodeInputKeyEnum.httpMethod]: () => (
@@ -658,12 +680,6 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
       [NodeInputKeyEnum.httpHeaders]: () => <RenderHttpProps nodeId={nodeId} inputs={inputs} />
     }),
     [inputs, nodeId]
-  );
-
-  console.log(
-    '%cprojects/app/src/components/core/workflow/Flow/nodes/NodeHttp/index.tsx:663 outputs',
-    'color: #007acc;',
-    outputs
   );
 
   return (
@@ -689,7 +705,150 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
       <>
         <Container>
           <IOTitle text={t('common.Output')} />
-          <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
+          <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
+            <Box position={'relative'} fontWeight={'medium'}>
+              {t('core.workflow.Custom outputs')}
+            </Box>
+            <Box flex={'1 0 0'} />
+            <Button
+              variant={'whitePrimary'}
+              leftIcon={<SmallAddIcon />}
+              iconSpacing={1}
+              size={'sm'}
+              mr={'-5px'}
+              onClick={() => setCreateField(defaultEditField)}
+            >
+              {t('common.Add New')}
+            </Button>
+          </Flex>
+          <Box
+            mt={2}
+            borderRadius={'md'}
+            overflow={'hidden'}
+            borderWidth={'1px'}
+            borderBottom="none"
+          >
+            <TableContainer>
+              <Table bg={'white'}>
+                <Thead>
+                  <Tr bg={'myGray.50'}>
+                    <Th w={'18px !important'} p={0} />
+                    <Th>{t('core.module.variable.variable name')}</Th>
+                    <Th>{t('core.workflow.Value type')}</Th>
+                    <Th></Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {outputs
+                    .filter((item) => item.label)
+                    .map((item) => (
+                      <Tr key={item.key}>
+                        <Td textAlign={'center'} p={0} pl={3}>
+                          <MyIcon name={'chatSend'} w={'14px'} color={'myGray.500'} />
+                        </Td>
+                        <Td>{item.label}</Td>
+                        <Td>{item.valueType ? t(FlowValueTypeMap[item.valueType]?.label) : '-'}</Td>
+                        <Td>
+                          <MyIcon
+                            mr={3}
+                            name={'common/settingLight'}
+                            w={'16px'}
+                            cursor={'pointer'}
+                            onClick={() => {
+                              setEditField({
+                                ...item,
+                                valueType: item.valueType,
+                                key: item.key,
+                                description: item.description
+                              });
+                            }}
+                          />
+                          <MyIcon
+                            className="delete"
+                            name={'delete'}
+                            w={'16px'}
+                            color={'myGray.600'}
+                            cursor={'pointer'}
+                            ml={2}
+                            _hover={{ color: 'red.500' }}
+                            onClick={() => {
+                              onChangeNode({
+                                nodeId,
+                                type: 'delOutput',
+                                key: item.key
+                              });
+                            }}
+                          />{' '}
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </Box>
+          {!!createField && (
+            <FieldEditModal
+              editField={createEditField}
+              defaultField={createField}
+              keys={outputs.map((output) => output.key)}
+              onClose={() => setCreateField(undefined)}
+              onSubmit={({ data }) => {
+                if (!data.key) {
+                  return;
+                }
+
+                const newOutput: FlowNodeOutputItemType = {
+                  id: getNanoid(),
+                  key: data.key,
+                  valueType: data.valueType,
+                  label: data.key
+                };
+                onChangeNode({
+                  nodeId,
+                  type: 'addOutput',
+                  value: newOutput
+                });
+                setCreateField(undefined);
+              }}
+            />
+          )}
+          {!!editField?.key && (
+            <FieldEditModal
+              editField={createEditField}
+              defaultField={editField}
+              keys={outputs.map((output) => output.key).filter((key) => key !== editField.key)}
+              onClose={() => setEditField(undefined)}
+              onSubmit={({ data, changeKey }) => {
+                const output = outputs.find((output) => output.key === editField.key);
+                if (!data.key || !editField.key) return;
+
+                const newOutput: FlowNodeOutputItemType = {
+                  ...(output as FlowNodeOutputItemType),
+                  valueType: data.valueType,
+                  key: data.key,
+                  label: data.label,
+                  description: data.description
+                };
+
+                if (changeKey) {
+                  onChangeNode({
+                    nodeId,
+                    type: 'replaceOutput',
+                    key: editField.key,
+                    value: newOutput
+                  });
+                } else {
+                  onChangeNode({
+                    nodeId,
+                    type: 'updateOutput',
+                    key: newOutput.key,
+                    value: newOutput
+                  });
+                }
+                setEditField(undefined);
+              }}
+            />
+          )}
         </Container>
       </>
     </NodeCard>

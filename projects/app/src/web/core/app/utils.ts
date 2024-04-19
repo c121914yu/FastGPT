@@ -491,184 +491,184 @@ export async function postForm2Modules(data: AppSimpleEditFormType) {
       }
     ];
   }
-  // function toolTemplates(formData: AppSimpleEditFormType): StoreNodeItemType[] {
-  //   let tools: StoreNodeItemType[] =
-  //     formData.dataset.datasets.length > 0
-  //       ? [
-  //           {
-  //             nodeId: getNanoid(6),
-  //             name: DatasetSearchModule.name,
-  //             intro: DatasetSearchModule.intro,
-  //             avatar: DatasetSearchModule.avatar,
-  //             flowNodeType: DatasetSearchModule.flowNodeType,
-  //             showStatus: DatasetSearchModule.showStatus,
-  //             position: {
-  //               x: 1000,
-  //               y: 2143
-  //             },
-  //             inputs: [
-  //               {
-  //                 key: 'switch',
-  //                 type: 'target',
-  //                 label: 'core.module.input.label.switch',
-  //                 description: 'core.module.input.description.Trigger',
-  //                 valueType: 'any',
-  //                 showTargetInApp: true,
-  //                 showTargetInPlugin: true,
-  //                 connected: false
-  //               },
-  //               {
-  //                 key: 'datasets',
-  //                 type: 'selectDataset',
-  //                 label: '关联的知识库',
-  //                 value: formData.dataset.datasets,
-  //                 valueType: 'selectDataset',
-  //                 required: true,
-  //                 showTargetInApp: false,
-  //                 showTargetInPlugin: true,
-  //                 connected: false
-  //               },
-  //               {
-  //                 key: 'similarity',
-  //                 type: 'selectDatasetParamsModal',
-  //                 label: '',
-  //                 value: formData.dataset.similarity,
-  //                 valueType: 'number',
-  //                 showTargetInApp: false,
-  //                 showTargetInPlugin: false,
-  //                 connected: false
-  //               },
-  //               {
-  //                 key: 'limit',
-  //                 type: 'hidden',
-  //                 label: '',
-  //                 value: formData.dataset.limit,
-  //                 valueType: 'number',
-  //                 showTargetInApp: false,
-  //                 showTargetInPlugin: false,
-  //                 connected: false
-  //               },
-  //               {
-  //                 key: 'searchMode',
-  //                 type: 'hidden',
-  //                 label: '',
-  //                 valueType: 'string',
-  //                 showTargetInApp: false,
-  //                 showTargetInPlugin: false,
-  //                 value: formData.dataset.searchMode,
-  //                 connected: false
-  //               },
-  //               {
-  //                 key: 'usingReRank',
-  //                 type: 'hidden',
-  //                 label: '',
-  //                 valueType: 'boolean',
-  //                 showTargetInApp: false,
-  //                 showTargetInPlugin: false,
-  //                 value: formData.dataset.usingReRank,
-  //                 connected: false
-  //               },
-  //               {
-  //                 key: 'datasetSearchUsingExtensionQuery',
-  //                 type: 'hidden',
-  //                 label: '',
-  //                 valueType: 'boolean',
-  //                 showTargetInApp: false,
-  //                 showTargetInPlugin: false,
-  //                 value: formData.dataset.datasetSearchUsingExtensionQuery,
-  //                 connected: false
-  //               },
-  //               {
-  //                 key: 'datasetSearchExtensionModel',
-  //                 type: 'hidden',
-  //                 label: '',
-  //                 valueType: 'string',
-  //                 showTargetInApp: false,
-  //                 showTargetInPlugin: false,
-  //                 connected: false,
-  //                 value: formData.dataset.datasetSearchExtensionModel
-  //               },
-  //               {
-  //                 key: 'datasetSearchExtensionBg',
-  //                 type: 'hidden',
-  //                 label: '',
-  //                 valueType: 'string',
-  //                 showTargetInApp: false,
-  //                 showTargetInPlugin: false,
-  //                 value: formData.dataset.datasetSearchExtensionBg,
-  //                 connected: false
-  //               },
-  //               {
-  //                 key: 'userChatInput',
-  //                 type: 'custom',
-  //                 label: '',
-  //                 required: true,
-  //                 valueType: 'string',
-  //                 showTargetInApp: true,
-  //                 showTargetInPlugin: true,
-  //                 toolDescription: '需要检索的内容',
-  //                 connected: false
-  //               }
-  //             ],
-  //             outputs: [
-  //               {
-  //                 key: 'userChatInput',
-  //                 label: 'core.module.input.label.user question',
-  //                 type: 'hidden',
-  //                 valueType: 'string',
-  //                 targets: []
-  //               },
-  //               {
-  //                 key: 'isEmpty',
-  //                 label: 'core.module.output.label.Search result empty',
-  //                 type: 'source',
-  //                 valueType: 'boolean',
-  //                 targets: []
-  //               },
-  //               {
-  //                 key: 'unEmpty',
-  //                 label: 'core.module.output.label.Search result not empty',
-  //                 type: 'source',
-  //                 valueType: 'boolean',
-  //                 targets: []
-  //               },
-  //               {
-  //                 key: 'quoteQA',
-  //                 label: 'core.module.Dataset quote.label',
-  //                 type: 'source',
-  //                 valueType: 'datasetQuote',
-  //                 targets: []
-  //               }
-  //             ]
-  //           }
-  //         ]
-  //       : [];
+  function toolTemplates(formData: AppSimpleEditFormType): StoreNodeItemType[] {
+    let tools: StoreNodeItemType[] =
+      formData.dataset.datasets.length > 0
+        ? [
+            {
+              nodeId: getNanoid(6),
+              name: DatasetSearchModule.name,
+              intro: DatasetSearchModule.intro,
+              avatar: DatasetSearchModule.avatar,
+              flowNodeType: DatasetSearchModule.flowNodeType,
+              showStatus: DatasetSearchModule.showStatus,
+              position: {
+                x: 1000,
+                y: 2143
+              },
+              inputs: [
+                {
+                  key: 'switch',
+                  type: 'target',
+                  label: 'core.module.input.label.switch',
+                  description: 'core.module.input.description.Trigger',
+                  valueType: 'any',
+                  showTargetInApp: true,
+                  showTargetInPlugin: true,
+                  connected: false
+                },
+                {
+                  key: 'datasets',
+                  type: 'selectDataset',
+                  label: '关联的知识库',
+                  value: formData.dataset.datasets,
+                  valueType: 'selectDataset',
+                  required: true,
+                  showTargetInApp: false,
+                  showTargetInPlugin: true,
+                  connected: false
+                },
+                {
+                  key: 'similarity',
+                  type: 'selectDatasetParamsModal',
+                  label: '',
+                  value: formData.dataset.similarity,
+                  valueType: 'number',
+                  showTargetInApp: false,
+                  showTargetInPlugin: false,
+                  connected: false
+                },
+                {
+                  key: 'limit',
+                  type: 'hidden',
+                  label: '',
+                  value: formData.dataset.limit,
+                  valueType: 'number',
+                  showTargetInApp: false,
+                  showTargetInPlugin: false,
+                  connected: false
+                },
+                {
+                  key: 'searchMode',
+                  type: 'hidden',
+                  label: '',
+                  valueType: 'string',
+                  showTargetInApp: false,
+                  showTargetInPlugin: false,
+                  value: formData.dataset.searchMode,
+                  connected: false
+                },
+                {
+                  key: 'usingReRank',
+                  type: 'hidden',
+                  label: '',
+                  valueType: 'boolean',
+                  showTargetInApp: false,
+                  showTargetInPlugin: false,
+                  value: formData.dataset.usingReRank,
+                  connected: false
+                },
+                {
+                  key: 'datasetSearchUsingExtensionQuery',
+                  type: 'hidden',
+                  label: '',
+                  valueType: 'boolean',
+                  showTargetInApp: false,
+                  showTargetInPlugin: false,
+                  value: formData.dataset.datasetSearchUsingExtensionQuery,
+                  connected: false
+                },
+                {
+                  key: 'datasetSearchExtensionModel',
+                  type: 'hidden',
+                  label: '',
+                  valueType: 'string',
+                  showTargetInApp: false,
+                  showTargetInPlugin: false,
+                  connected: false,
+                  value: formData.dataset.datasetSearchExtensionModel
+                },
+                {
+                  key: 'datasetSearchExtensionBg',
+                  type: 'hidden',
+                  label: '',
+                  valueType: 'string',
+                  showTargetInApp: false,
+                  showTargetInPlugin: false,
+                  value: formData.dataset.datasetSearchExtensionBg,
+                  connected: false
+                },
+                {
+                  key: 'userChatInput',
+                  type: 'custom',
+                  label: '',
+                  required: true,
+                  valueType: 'string',
+                  showTargetInApp: true,
+                  showTargetInPlugin: true,
+                  toolDescription: '需要检索的内容',
+                  connected: false
+                }
+              ],
+              outputs: [
+                {
+                  key: 'userChatInput',
+                  label: 'core.module.input.label.user question',
+                  type: 'hidden',
+                  valueType: 'string',
+                  targets: []
+                },
+                {
+                  key: 'isEmpty',
+                  label: 'core.module.output.label.Search result empty',
+                  type: 'source',
+                  valueType: 'boolean',
+                  targets: []
+                },
+                {
+                  key: 'unEmpty',
+                  label: 'core.module.output.label.Search result not empty',
+                  type: 'source',
+                  valueType: 'boolean',
+                  targets: []
+                },
+                {
+                  key: 'quoteQA',
+                  label: 'core.module.Dataset quote.label',
+                  type: 'source',
+                  valueType: 'datasetQuote',
+                  targets: []
+                }
+              ]
+            }
+          ]
+        : [];
 
-  //   tools = tools.concat(
-  //     formData.selectedTools.map((tool, i) => ({
-  //       nodeId: getNanoid(6),
-  //       name: tool.name,
-  //       intro: tool.intro,
-  //       avatar: tool.avatar,
-  //       flowNodeType: tool.flowNodeType,
-  //       showStatus: tool.showStatus,
-  //       position: {
-  //         x: 1000 + (300 * i + 1),
-  //         y: 2143
-  //       },
-  //       inputs: tool.inputs,
-  //       outputs: tool.outputs
-  //     }))
-  //   );
-  //   // const modules: StoreNodeItemType[] = [
-  //   //   ...tools
-  //   // ];
+    tools = tools.concat(
+      formData.selectedTools.map((tool, i) => ({
+        nodeId: getNanoid(6),
+        name: tool.name,
+        intro: tool.intro,
+        avatar: tool.avatar,
+        flowNodeType: tool.flowNodeType,
+        showStatus: tool.showStatus,
+        position: {
+          x: 1000 + (300 * i + 1),
+          y: 2143
+        },
+        inputs: tool.inputs,
+        outputs: tool.outputs
+      }))
+    );
+    // const modules: StoreNodeItemType[] = [
+    //   ...tools
+    // ];
 
-  //   return tools;
-  // }
+    return tools;
+  }
 
   const modules = (() => {
-    // if (data.selectedTools.length > 0) return toolTemplates(data);
+    if (data.selectedTools.length > 0) return toolTemplates(data);
     if (data.dataset.datasets.length > 0) return datasetTemplate(data);
     return simpleChatTemplate(data);
   })();

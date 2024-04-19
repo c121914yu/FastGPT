@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import InputLabel from './Label';
 import type { RenderInputProps } from './type';
 
-const RenderList: {
+export const RenderList: {
   types: `${FlowNodeInputTypeEnum}`[];
   Component: React.ComponentType<RenderInputProps>;
 }[] = [

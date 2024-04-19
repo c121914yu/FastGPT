@@ -306,6 +306,7 @@
       "Tool call tip": "通过AI模型自动选择一个或多个工具进行使用。如果启动该功能，知识库调用也会被当做一个工具调用。请尽量选择支持“函数调用”的AI模型，效果更好。",
       "ToolCall": {
         "No plugin": "没有可用的插件",
+        "Parameter setting": "输入参数",
         "Setting tool": "配置工具",
         "System": "系统",
         "Team": "团队",
