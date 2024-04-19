@@ -25,7 +25,7 @@ export const dispatchAnswer = (props: Record<string, any>): AnswerResponse => {
 
   const formatText = typeof text === 'string' ? text : JSON.stringify(text, null, 2);
 
-  if (stream) {
+  if (res && stream) {
     responseWrite({
       res,
       event: detail ? SseResponseEventEnum.fastAnswer : undefined,

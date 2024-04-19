@@ -181,7 +181,7 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
   );
 
   const { answerText } = await (async () => {
-    if (stream) {
+    if (res && stream) {
       // sse response
       const { answer } = await streamResponse({
         res,

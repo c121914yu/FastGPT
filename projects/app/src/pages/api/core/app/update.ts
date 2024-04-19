@@ -9,6 +9,7 @@ import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { getLLMModel } from '@fastgpt/service/core/ai/model';
 import { getGuideModule, splitGuideModule } from '@fastgpt/global/core/workflow/utils';
 import { getNextTimeByCronStringAndTimezone } from '@fastgpt/global/common/string/time';
+import { getScheduleTriggerApp } from '@/service/core/app/utils';
 
 /* 获取我的模型 */
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
@@ -92,6 +93,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           : null
       }
     );
+
+    getScheduleTriggerApp();
 
     jsonRes(res);
   } catch (err) {
