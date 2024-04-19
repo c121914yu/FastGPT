@@ -36,7 +36,7 @@ const NodeUserGuide = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         }}
         {...data}
       >
-        <Box px={4} mb={2} py={'10px'} position={'relative'} borderRadius={'md'} className="nodrag">
+        <Box px={4} py={'10px'} position={'relative'} borderRadius={'md'} className="nodrag">
           <WelcomeText data={data} />
           <Box pt={4} pb={2}>
             <ChatStartVariable data={data} />
