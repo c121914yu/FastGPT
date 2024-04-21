@@ -108,7 +108,7 @@
     "Load Failed": "Load Failed",
     "Loading": "Loading",
     "More settings": "More settings",
-    "MultipleSelect": {
+    "MultipleRowSelect": {
       "No data": "No data"
     },
     "Name": "Name",
@@ -885,7 +885,8 @@
       "Variable import": "Variable import",
       "edit": {
         "Field Already Exist": "Key already exist",
-        "Field Edit": "Field Edit"
+        "Field Edit": "Field Edit",
+        "Field Name Cannot Be Empty": "Field Name Cannot Be Empty"
       },
       "extract": {
         "Add field": "Add",
@@ -1105,6 +1106,11 @@
         "Manual input": "",
         "Manual select": "Select",
         "Reference": "Reference",
+        "Required": "Required",
+        "Select edit field": "Editable field",
+        "Select input default value": "Default value",
+        "Select input type": "Configurable input types",
+        "Select input type placeholder": "Please select a configurable input type",
         "chat history": "History",
         "dynamicTargetInput": "dynamic Target Input",
         "input": "Input",

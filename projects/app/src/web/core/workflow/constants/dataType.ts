@@ -88,7 +88,7 @@ export const FlowValueTypeMap = {
     handlerStyle: {
       borderColor: '#9CA2A8'
     },
-    label: 'dynamic',
+    label: '动态数据',
     value: WorkflowIOValueTypeEnum.any,
     description: ''
   }

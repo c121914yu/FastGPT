@@ -1,11 +1,10 @@
 import { MongoPlugin } from './schema';
 import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type/index.d';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { plugin2ModuleIO } from '@fastgpt/global/core/workflow/utils';
+import { pluginData2FlowNodeIO } from '@fastgpt/global/core/workflow/utils';
 import { PluginSourceEnum } from '@fastgpt/global/core/plugin/constants';
 import type { PluginRuntimeType, PluginTemplateType } from '@fastgpt/global/core/plugin/type.d';
 import { FlowNodeTemplateTypeEnum } from '@fastgpt/global/core/workflow/constants';
-import type { PluginItemSchema } from '@fastgpt/global/core/plugin/type.d';
 import { getHandleConfig } from '../../../global/core/workflow/template/utils';
 
 /* 
@@ -73,7 +72,7 @@ export async function getPluginPreviewNode({ id }: { id: string }): Promise<Flow
     isTool: plugin.isTool,
     sourceHandle: getHandleConfig(false, true, false, false),
     targetHandle: getHandleConfig(false, false, false, true),
-    ...plugin2ModuleIO(plugin.id, plugin.nodes)
+    ...pluginData2FlowNodeIO(plugin.nodes)
   };
 }
 

@@ -171,12 +171,7 @@ const RenderOutput = ({
         {renderOutputs.map((output) => {
           return output.label ? (
             <Box key={output.key} _notLast={{ mb: 5 }} position={'relative'}>
-              <OutputLabel
-                nodeId={nodeId}
-                outputKey={output.key}
-                outputs={copyOutputs}
-                {...output}
-              />
+              <OutputLabel nodeId={nodeId} outputs={copyOutputs} output={output} />
             </Box>
           ) : null;
         })}

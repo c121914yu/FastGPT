@@ -147,6 +147,7 @@ const MyTargetHandle = React.memo(function MyTargetHandle({
 
   const node = useMemo(() => nodeList.find((node) => node.nodeId === nodeId), [nodeList, nodeId]);
   const connected = edges.some((edge) => edge.targetHandle === handleId);
+  const connectedEdges = edges.filter((edge) => edge.target === nodeId);
 
   const translateStr = useMemo(() => {
     if (!translate) return '';
@@ -189,11 +190,29 @@ const MyTargetHandle = React.memo(function MyTargetHandle({
     return;
   }, [connected, connectingEdge, connectedStyle, highlightStyle, transform]);
 
+  const showHandle = useMemo(() => {
+    if (!node) return false;
+    // check tool connected
+    if (
+      edges.some(
+        (edge) => edge.target === nodeId && edge.targetHandle === NodeOutputKeyEnum.selectedTools
+      )
+    ) {
+      return false;
+    }
+    if (connectingEdge?.handleId && !connectingEdge.handleId?.includes('source')) return false;
+    // Same source node
+
+    if (connectedEdges.some((item) => item.sourceHandle === connectingEdge?.handleId)) return false;
+
+    return true;
+  }, [connectedEdges, connectingEdge?.handleId, edges, node, nodeId]);
+
   const RenderHandle = useMemo(() => {
     return (
       <Handle
         style={
-          !!styles
+          !!styles && showHandle
             ? styles
             : {
                 visibility: 'hidden',
@@ -206,19 +225,9 @@ const MyTargetHandle = React.memo(function MyTargetHandle({
         isConnectableStart={false}
       ></Handle>
     );
-  }, [styles, transform, handleId, position]);
+  }, [styles, showHandle, transform, handleId, position]);
 
-  // check tool connected
-  if (
-    edges.some(
-      (edge) => edge.target === nodeId && edge.targetHandle === NodeOutputKeyEnum.selectedTools
-    )
-  ) {
-    return null;
-  }
-  if (!node) return null;
-  if (connectingEdge?.handleId && !connectingEdge.handleId?.includes('source')) return null;
-  return <>{RenderHandle}</>;
+  return RenderHandle;
 });
 
 export const TargetHandle = (props: Props) => {

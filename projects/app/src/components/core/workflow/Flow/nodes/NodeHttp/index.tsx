@@ -646,8 +646,8 @@ const RenderPropsItem = ({ text, num }: { text: string; num: number }) => {
 const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { nodeId, inputs, outputs } = data;
-  const { splitToolInputs, hasToolNode } = useFlowProviderStore();
-  const { toolInputs, commonInputs } = splitToolInputs(inputs, nodeId);
+  const { splitToolInputs } = useFlowProviderStore();
+  const { toolInputs, commonInputs, isTool } = splitToolInputs(inputs, nodeId);
 
   const CustomComponents = useMemo(
     () => ({
@@ -661,7 +661,7 @@ const NodeHttp = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   return (
     <NodeCard minW={'350px'} selected={selected} {...data}>
-      {hasToolNode && (
+      {isTool && (
         <>
           <Container>
             <IOTitle text={t('core.module.tool.Tool input')} />

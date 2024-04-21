@@ -22,7 +22,6 @@ const OutputLabel = ({
 }) => {
   const { t } = useTranslation();
   const { label = '', description, valueType } = item;
-  const theme = useTheme();
 
   const valueTypeLabel = useMemo(
     () => (valueType ? t(FlowValueTypeMap[valueType]?.label) : '-'),
@@ -48,11 +47,12 @@ const OutputLabel = ({
         <Box
           bg={'myGray.100'}
           color={'myGray.500'}
-          border={theme.borders.sm}
-          borderRadius={'xs'}
+          border={'base'}
+          borderRadius={'sm'}
           ml={2}
           px={1}
           py={0.5}
+          fontSize={'11px'}
         >
           {valueTypeLabel}
         </Box>
@@ -60,13 +60,13 @@ const OutputLabel = ({
           <SourceHandle
             nodeId={nodeId}
             handleId={getHandleId(nodeId, 'source', item.key)}
-            translate={[20, 0]}
+            translate={[26, 0]}
             position={Position.Right}
           />
         )}
       </Flex>
     );
-  }, [description, item.key, item.type, label, nodeId, t, theme.borders.sm, valueTypeLabel]);
+  }, [description, item.key, item.type, label, nodeId, t, valueTypeLabel]);
 
   return Render;
 };

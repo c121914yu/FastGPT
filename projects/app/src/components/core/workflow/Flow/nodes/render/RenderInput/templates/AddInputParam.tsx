@@ -28,6 +28,7 @@ const AddInputParam = (props: RenderInputProps) => {
   const onAddField = useCallback(
     ({ data }: { data: EditNodeFieldType }) => {
       if (!data.key) return;
+
       const newInput: FlowNodeInputItemType = {
         key: data.key,
         valueType: data.valueType,
@@ -69,7 +70,7 @@ const AddInputParam = (props: RenderInputProps) => {
             iconSpacing={1}
             size={'sm'}
             mr={'-5px'}
-            onClick={() => setEditField({})}
+            onClick={() => setEditField(item.dynamicParamDefaultValue ?? {})}
           >
             {t('common.Add New')}
           </Button>
@@ -91,7 +92,17 @@ const AddInputParam = (props: RenderInputProps) => {
         )}
       </>
     );
-  }, [editField, inputValue, item.description, item.editField, mode, onAddField, props, t]);
+  }, [
+    editField,
+    inputValue,
+    item.description,
+    item.dynamicParamDefaultValue,
+    item.editField,
+    mode,
+    onAddField,
+    props,
+    t
+  ]);
 
   return Render;
 };

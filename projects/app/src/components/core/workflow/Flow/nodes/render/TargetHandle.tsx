@@ -8,7 +8,7 @@ import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants
 
 interface Props extends BoxProps {
   handleKey: string;
-  valueType?: `${WorkflowIOValueTypeEnum}`;
+  valueType?: WorkflowIOValueTypeEnum;
 }
 
 const TargetHandle = ({ handleKey, valueType, ...props }: Props) => {

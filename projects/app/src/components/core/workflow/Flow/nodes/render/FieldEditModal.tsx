@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import {
   Box,
   Button,
@@ -8,8 +8,7 @@ import {
   Switch,
   Input,
   Textarea,
-  Stack,
-  Center
+  Stack
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import MyModal from '@fastgpt/web/components/common/MyModal';
@@ -26,7 +25,11 @@ import {
   DYNAMIC_INPUT_KEY,
   WorkflowIOValueTypeEnum
 } from '@fastgpt/global/core/workflow/constants';
-import JsonEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
+
+import dynamic from 'next/dynamic';
+
+const JsonEditor = dynamic(() => import('@fastgpt/web/components/common/Textarea/JsonEditor'));
+const EmptyTip = dynamic(() => import('@fastgpt/web/components/common/EmptyTip'));
 
 const defaultValue: EditNodeFieldType = {
   inputType: FlowNodeInputTypeEnum.reference,
@@ -36,9 +39,15 @@ const defaultValue: EditNodeFieldType = {
   description: '',
   isToolInput: false,
   defaultValue: '',
-  maxLength: 0,
-  max: 0,
-  min: 0
+  maxLength: undefined,
+  max: undefined,
+  min: undefined,
+  editField: {},
+  dynamicParamDefaultValue: {
+    inputType: FlowNodeInputTypeEnum.reference,
+    valueType: WorkflowIOValueTypeEnum.string,
+    required: true
+  }
 };
 
 const FieldEditModal = ({
@@ -59,64 +68,89 @@ const FieldEditModal = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const showDynamicInputSelect =
-    !keys.includes(DYNAMIC_INPUT_KEY) || defaultField.key === DYNAMIC_INPUT_KEY;
+    !keys.includes(FlowNodeInputTypeEnum.addInputParam) ||
+    defaultField.key === FlowNodeInputTypeEnum.addInputParam;
 
-  const inputTypeList = [
-    {
-      label: t('core.workflow.inputType.Reference'),
-      value: FlowNodeInputTypeEnum.reference,
-      valueType: WorkflowIOValueTypeEnum.string
-    },
-    {
-      label: t('core.workflow.inputType.input'),
-      value: FlowNodeInputTypeEnum.input,
-      valueType: WorkflowIOValueTypeEnum.string
-    },
-    {
-      label: t('core.workflow.inputType.textarea'),
-      value: FlowNodeInputTypeEnum.textarea,
-      valueType: WorkflowIOValueTypeEnum.string
-    },
-    {
-      label: t('core.workflow.inputType.JSON Editor'),
-      value: FlowNodeInputTypeEnum.JSONEditor,
-      valueType: WorkflowIOValueTypeEnum.string
-    },
-    {
-      label: t('core.workflow.inputType.number input'),
-      value: FlowNodeInputTypeEnum.numberInput,
-      valueType: WorkflowIOValueTypeEnum.number
-    },
-    {
-      label: t('core.workflow.inputType.switch'),
-      value: FlowNodeInputTypeEnum.switch,
-      valueType: WorkflowIOValueTypeEnum.boolean
-    },
-    {
-      label: t('core.workflow.inputType.selectApp'),
-      value: FlowNodeInputTypeEnum.selectApp,
-      valueType: WorkflowIOValueTypeEnum.selectApp
-    },
-    {
-      label: t('core.workflow.inputType.selectLLMModel'),
-      value: FlowNodeInputTypeEnum.selectLLMModel,
-      valueType: WorkflowIOValueTypeEnum.string
-    },
-    {
-      label: t('core.workflow.inputType.selectDataset'),
-      value: FlowNodeInputTypeEnum.selectDataset,
-      valueType: WorkflowIOValueTypeEnum.selectDataset
-    },
-    ...(showDynamicInputSelect
-      ? [
-          {
-            label: t('core.workflow.inputType.dynamicTargetInput'),
-            value: FlowNodeInputTypeEnum.addInputParam,
-            valueType: WorkflowIOValueTypeEnum.any
-          }
-        ]
-      : [])
-  ];
+  const inputTypeList = useMemo(
+    () => [
+      {
+        label: t('core.workflow.inputType.Reference'),
+        value: FlowNodeInputTypeEnum.reference,
+        defaultValue: {}
+      },
+      {
+        label: t('core.workflow.inputType.input'),
+        value: FlowNodeInputTypeEnum.input,
+        defaultValue: {
+          valueType: WorkflowIOValueTypeEnum.string
+        }
+      },
+      {
+        label: t('core.workflow.inputType.textarea'),
+        value: FlowNodeInputTypeEnum.textarea,
+        defaultValue: {
+          valueType: WorkflowIOValueTypeEnum.string
+        }
+      },
+      {
+        label: t('core.workflow.inputType.JSON Editor'),
+        value: FlowNodeInputTypeEnum.JSONEditor,
+        defaultValue: {
+          valueType: WorkflowIOValueTypeEnum.string
+        }
+      },
+      {
+        label: t('core.workflow.inputType.number input'),
+        value: FlowNodeInputTypeEnum.numberInput,
+        defaultValue: {
+          valueType: WorkflowIOValueTypeEnum.number
+        }
+      },
+      {
+        label: t('core.workflow.inputType.switch'),
+        value: FlowNodeInputTypeEnum.switch,
+        defaultValue: {
+          valueType: WorkflowIOValueTypeEnum.boolean
+        }
+      },
+      {
+        label: t('core.workflow.inputType.selectApp'),
+        value: FlowNodeInputTypeEnum.selectApp,
+        defaultValue: {
+          valueType: WorkflowIOValueTypeEnum.selectApp
+        }
+      },
+      {
+        label: t('core.workflow.inputType.selectLLMModel'),
+        value: FlowNodeInputTypeEnum.selectLLMModel,
+        defaultValue: {
+          valueType: WorkflowIOValueTypeEnum.string
+        }
+      },
+      {
+        label: t('core.workflow.inputType.selectDataset'),
+        value: FlowNodeInputTypeEnum.selectDataset,
+        defaultValue: {
+          valueType: WorkflowIOValueTypeEnum.selectDataset
+        }
+      },
+      ...(showDynamicInputSelect
+        ? [
+            {
+              label: t('core.workflow.inputType.dynamicTargetInput'),
+              value: FlowNodeInputTypeEnum.addInputParam,
+              defaultValue: {
+                label: '',
+                valueType: WorkflowIOValueTypeEnum.dynamic,
+                key: FlowNodeInputTypeEnum.addInputParam,
+                required: false
+              }
+            }
+          ]
+        : [])
+    ],
+    [showDynamicInputSelect, t]
+  );
 
   const dataTypeSelectList = Object.values(FlowValueTypeMap)
     .slice(0, -2)
@@ -133,23 +167,39 @@ const FieldEditModal = ({
     }
   });
   const inputType = watch('inputType');
+  const valueType = watch('valueType');
+
   const isToolInput = watch('isToolInput');
   const maxLength = watch('maxLength');
   const max = watch('max');
   const min = watch('min');
-  const [refresh, setRefresh] = useState(false);
+  const defaultInputValueType = watch('dynamicParamDefaultValue.valueType');
 
-  const showToolInput = useMemo(() => {
-    return editField.isToolInput && inputType === FlowNodeInputTypeEnum.reference;
-  }, [editField.isToolInput, inputType]);
+  const showKeyInput = useMemo(() => {
+    if (inputType === FlowNodeInputTypeEnum.addInputParam) return false;
 
-  const showDataTypeSelect = useMemo(() => {
+    return editField.key;
+  }, [editField.key, inputType]);
+
+  const showInputTypeSelect = useMemo(() => {
+    return editField.inputType;
+  }, [editField.inputType]);
+
+  const showDescriptionInput = useMemo(() => {
+    return editField.description;
+  }, [editField.description]);
+
+  const showValueTypeSelect = useMemo(() => {
     if (!editField.valueType) return false;
-    if (inputType === undefined) return true;
-    if (inputType === FlowNodeInputTypeEnum.reference) return true;
+    if (inputType !== FlowNodeInputTypeEnum.reference) return false;
 
-    return false;
+    return true;
   }, [editField.valueType, inputType]);
+
+  // input type config
+  const showToolInput = useMemo(() => {
+    return inputType === FlowNodeInputTypeEnum.reference;
+  }, [inputType]);
 
   const showDefaultValue = useMemo(() => {
     if (inputType === FlowNodeInputTypeEnum.input) return true;
@@ -168,36 +218,34 @@ const FieldEditModal = ({
     return false;
   }, [inputType]);
 
-  const showKeyInput = useMemo(() => {
-    if (inputType === FlowNodeInputTypeEnum.addInputParam) return false;
+  const showMinMaxInput = useMemo(
+    () => inputType === FlowNodeInputTypeEnum.numberInput,
+    [inputType]
+  );
 
-    return editField.key;
-  }, [editField.key, inputType]);
-
-  const showInputTypeSelect = useMemo(() => {
-    return editField.inputType;
-  }, [editField.inputType]);
-
-  const showOutputTypeSelect = useMemo(() => {
-    return editField.valueType;
-  }, [editField.valueType]);
-
-  const showDescriptionInput = useMemo(() => {
-    return editField.description;
-  }, [editField.description]);
-
-  const showMinMaxInput = useMemo(() => {
-    if (inputType === FlowNodeInputTypeEnum.numberInput) return true;
-
-    return false;
+  const showDynamicInput = useMemo(() => {
+    return inputType === FlowNodeInputTypeEnum.addInputParam;
   }, [inputType]);
 
   const onSubmitSuccess = useCallback(
     (data: EditNodeFieldType) => {
-      if (!data.key) return;
+      data.key = data?.key?.trim();
+      // add default value
+      const inputTypeConfig = inputTypeList.find((item) => item.value === data.inputType);
+      if (inputTypeConfig?.defaultValue) {
+        data.label = data.key;
+        for (const key in inputTypeConfig.defaultValue) {
+          // @ts-ignore
+          data[key] = inputTypeConfig.defaultValue[key];
+        }
+      }
 
-      data.label = data.key;
-      data.key = data.key.trim();
+      if (!data.key) {
+        return toast({
+          status: 'warning',
+          title: t('core.module.edit.Field Name Cannot Be Empty')
+        });
+      }
 
       // create check key
       if (!defaultField.key && keys.includes(data.key)) {
@@ -213,7 +261,7 @@ const FieldEditModal = ({
           title: t('core.module.edit.Field Already Exist')
         });
       }
-      if (showDataTypeSelect && !data.valueType) {
+      if (showValueTypeSelect && !data.valueType) {
         return toast({
           status: 'warning',
           title: '数据类型不能为空'
@@ -225,10 +273,11 @@ const FieldEditModal = ({
         changeKey: !keys.includes(data.key)
       });
     },
-    [defaultField.key, keys, onSubmit, showDataTypeSelect, t, toast]
+    [defaultField.key, keys, onSubmit, showValueTypeSelect, t, toast]
   );
   const onSubmitError = useCallback(
     (e: Object) => {
+      console.log(e);
       for (const item of Object.values(e)) {
         if (item.message) {
           toast({
@@ -248,56 +297,47 @@ const FieldEditModal = ({
       iconSrc="/imgs/workflow/extract.png"
       title={t('core.module.edit.Field Edit')}
       onClose={onClose}
-      maxW={'1000px'}
+      maxW={['90vw', showInputTypeSelect ? '800px' : '400px']}
+      w={'100%'}
+      overflow={'unset'}
     >
       <ModalBody overflow={'visible'}>
-        <Flex gap={8}>
-          <Stack w={!showInputTypeSelect ? 'full' : '300px'}>
+        <Flex gap={8} flexDirection={['column', 'row']}>
+          <Stack flex={1} gap={5}>
             {showInputTypeSelect && (
-              <Flex alignItems={'center'} mb={5}>
+              <Flex alignItems={'center'}>
                 <Box flex={'0 0 70px'}>{t('core.module.Input Type')}</Box>
                 <Box flex={1}>
                   <MySelect
-                    w={'full'}
                     list={inputTypeList}
-                    value={getValues('inputType')}
+                    value={inputType}
                     onchange={(e: string) => {
                       const type = e as FlowNodeInputTypeEnum;
-                      const selectedItem = inputTypeList.find((item) => item.value === type);
+
                       setValue('inputType', type);
-                      setValue('valueType', selectedItem?.valueType);
-                      setValue('isToolInput', false);
-
-                      if (type === FlowNodeInputTypeEnum.addInputParam) {
-                        setValue('required', false);
-                      }
-
-                      setRefresh(!refresh);
                     }}
                   />
                 </Box>
               </Flex>
             )}
-            {showOutputTypeSelect && (
-              <Flex mb={5} alignItems={'center'}>
-                <Box flex={'0 0 70px'}>{t('core.module.Output Type')}</Box>
+            {showValueTypeSelect && !showInputTypeSelect && (
+              <Flex alignItems={'center'}>
+                <Box flex={'0 0 70px'}>{t('core.module.Data Type')}</Box>
                 <Box flex={1}>
                   <MySelect
                     w={'full'}
                     list={dataTypeSelectList}
-                    value={getValues('valueType')}
+                    value={valueType}
                     onchange={(e: string) => {
-                      const type = e as `${WorkflowIOValueTypeEnum}`;
+                      const type = e as WorkflowIOValueTypeEnum;
                       setValue('valueType', type);
-
-                      setRefresh(!refresh);
                     }}
                   />
                 </Box>
               </Flex>
             )}
             {showKeyInput && (
-              <Flex mb={5} alignItems={'center'}>
+              <Flex alignItems={'center'}>
                 <Box flex={'0 0 70px'}>{t('core.module.Field Name')}</Box>
                 <Input
                   bg={'myGray.50'}
@@ -309,7 +349,7 @@ const FieldEditModal = ({
               </Flex>
             )}
             {showDescriptionInput && (
-              <Box mb={5} alignItems={'flex-start'}>
+              <Box alignItems={'flex-start'}>
                 <Box flex={'0 0 70px'} mb={'1px'}>
                   {t('core.module.Field Description')}
                 </Box>
@@ -324,38 +364,33 @@ const FieldEditModal = ({
               </Box>
             )}
           </Stack>
-          {!showInputTypeSelect ? null : showToolInput ||
-            showDataTypeSelect ||
-            showDefaultValue ||
-            showMaxLenInput ||
-            showMinMaxInput ? (
-            <Stack w={'300px'}>
+          {/* input type config */}
+          {showInputTypeSelect && (
+            <Stack flex={1} gap={5}>
               {showToolInput && (
-                <Flex alignItems={'center'} mb={5}>
+                <Flex alignItems={'center'}>
                   <Box flex={'0 0 70px'}>工具参数</Box>
                   <Switch {...register('isToolInput')} />
                 </Flex>
               )}
-              {showDataTypeSelect && (
-                <Flex mb={5} alignItems={'center'}>
+              {showValueTypeSelect && (
+                <Flex alignItems={'center'}>
                   <Box flex={'0 0 70px'}>{t('core.module.Data Type')}</Box>
                   <Box flex={1}>
                     <MySelect
                       w={'full'}
                       list={dataTypeSelectList}
-                      value={getValues('valueType')}
+                      value={valueType}
                       onchange={(e: string) => {
-                        const type = e as `${WorkflowIOValueTypeEnum}`;
+                        const type = e as WorkflowIOValueTypeEnum;
                         setValue('valueType', type);
-
-                        setRefresh(!refresh);
                       }}
                     />
                   </Box>
                 </Flex>
               )}
               {showDefaultValue && (
-                <Flex mb={5} alignItems={'center'}>
+                <Flex alignItems={'center'}>
                   <Box flex={'0 0 70px'}>{t('core.module.Default Value')}</Box>
                   {inputType === FlowNodeInputTypeEnum.numberInput && (
                     <Input
@@ -383,7 +418,7 @@ const FieldEditModal = ({
                       onChange={(e) => {
                         setValue('defaultValue', e);
                       }}
-                      defaultValue={getValues('defaultValue')}
+                      defaultValue={String(getValues('defaultValue'))}
                     />
                   )}
                   {inputType === FlowNodeInputTypeEnum.switch && (
@@ -392,7 +427,7 @@ const FieldEditModal = ({
                 </Flex>
               )}
               {showMaxLenInput && (
-                <Flex mb={5} alignItems={'center'}>
+                <Flex alignItems={'center'}>
                   <Box flex={'0 0 70px'}>{t('core.module.Max Length')}</Box>
                   <Input
                     bg={'myGray.50'}
@@ -402,23 +437,54 @@ const FieldEditModal = ({
                 </Flex>
               )}
               {showMinMaxInput && (
-                <Box>
-                  <Flex mb={5} alignItems={'center'}>
+                <>
+                  <Flex alignItems={'center'}>
                     <Box flex={'0 0 70px'}>{t('core.module.Max Value')}</Box>
                     <Input bg={'myGray.50'} type={'number'} {...register('max')} />
                   </Flex>
-                  <Flex mb={5} alignItems={'center'}>
+                  <Flex alignItems={'center'}>
                     <Box flex={'0 0 70px'}>{t('core.module.Min Value')}</Box>
                     <Input bg={'myGray.50'} type={'number'} {...register('min')} />
                   </Flex>
-                </Box>
+                </>
               )}
-            </Stack>
-          ) : (
-            <Stack w={'300px'}>
-              <Center w={'full'} h={'full'}>
-                <Box color={'myGray.600'}>{t('core.module.No Config Tips')}</Box>
-              </Center>
+              {showDynamicInput && (
+                <Stack gap={5}>
+                  <Flex alignItems={'center'}>
+                    <Box flex={'0 0 70px'}>{t('core.module.Input Type')}</Box>
+                    <Box flex={1} fontWeight={'bold'}>
+                      {t('core.workflow.inputType.Reference')}
+                    </Box>
+                  </Flex>
+                  <Flex alignItems={'center'}>
+                    <Box flex={'0 0 70px'}>{t('core.module.Data Type')}</Box>
+                    <Box flex={1}>
+                      <MySelect
+                        list={dataTypeSelectList}
+                        value={defaultInputValueType}
+                        onchange={(e) => {
+                          setValue(
+                            'dynamicParamDefaultValue.valueType',
+                            e as WorkflowIOValueTypeEnum
+                          );
+                        }}
+                      />
+                    </Box>
+                  </Flex>
+                  <Flex alignItems={'center'}>
+                    <Box flex={'0 0 70px'}>{t('core.workflow.inputType.Required')}</Box>
+                    <Box flex={1}>
+                      <Switch {...register('dynamicParamDefaultValue.required')} />
+                    </Box>
+                  </Flex>
+                </Stack>
+              )}
+              {!showToolInput &&
+                !showValueTypeSelect &&
+                !showDefaultValue &&
+                !showMaxLenInput &&
+                !showMinMaxInput &&
+                !showDynamicInput && <EmptyTip text={t('core.module.No Config Tips')} />}
             </Stack>
           )}
         </Flex>

@@ -108,7 +108,7 @@
     "Load Failed": "加载失败",
     "Loading": "加载中...",
     "More settings": "更多设置",
-    "MultipleSelect": {
+    "MultipleRowSelect": {
       "No data": "没有可选值"
     },
     "Name": "名称",
@@ -887,7 +887,8 @@
       "Variable import": "外部参数输入",
       "edit": {
         "Field Already Exist": "key 重复",
-        "Field Edit": "字段编辑"
+        "Field Edit": "字段编辑",
+        "Field Name Cannot Be Empty": "字段名不能为空"
       },
       "extract": {
         "Add field": "新增字段",
@@ -1107,6 +1108,11 @@
         "Manual input": "手动输入",
         "Manual select": "手动选择",
         "Reference": "变量引用",
+        "Required": "必填",
+        "Select edit field": "可编辑内容",
+        "Select input default value": "默认值",
+        "Select input type": "可配置的输入类型",
+        "Select input type placeholder": "请选择可配置的输入类型",
         "chat history": "历史记录",
         "dynamicTargetInput": "动态外部数据",
         "input": "单行输入框",

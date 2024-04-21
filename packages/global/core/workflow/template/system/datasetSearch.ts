@@ -21,7 +21,7 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.datasetSearchNode,
   templateType: FlowNodeTemplateTypeEnum.functionCall,
   flowNodeType: FlowNodeTypeEnum.datasetSearchNode,
-  sourceHandle: getHandleConfig(true, true, true, true),
+  sourceHandle: getHandleConfig(false, false, false, false),
   targetHandle: getHandleConfig(true, true, true, true),
   avatar: '/imgs/workflow/db.png',
   name: '知识库搜索',
@@ -97,14 +97,14 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
       id: NodeOutputKeyEnum.datasetIsEmpty,
       key: NodeOutputKeyEnum.datasetIsEmpty,
       label: 'core.module.output.label.Search result empty',
-      type: FlowNodeOutputTypeEnum.static,
+      type: FlowNodeOutputTypeEnum.source,
       valueType: WorkflowIOValueTypeEnum.boolean
     },
     {
       id: NodeOutputKeyEnum.datasetUnEmpty,
       key: NodeOutputKeyEnum.datasetUnEmpty,
       label: 'core.module.output.label.Search result not empty',
-      type: FlowNodeOutputTypeEnum.static,
+      type: FlowNodeOutputTypeEnum.source,
       valueType: WorkflowIOValueTypeEnum.boolean
     },
     {

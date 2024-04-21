@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
 import dynamic from 'next/dynamic';
-import Tag from '../Tag';
+import FillTag from '@fastgpt/web/components/common/Tag/Fill';
 import MyTooltip from '../MyTooltip';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { getSourceNameIcon } from '@fastgpt/global/core/dataset/utils';
@@ -153,49 +153,54 @@ const ResponseTags = ({
         <Flex alignItems={'center'} mt={3} flexWrap={'wrap'}>
           {quoteList.length > 0 && (
             <MyTooltip label="查看引用">
-              <Tag
+              <FillTag
                 colorSchema="blue"
                 cursor={'pointer'}
                 {...TagStyles}
                 onClick={() => setQuoteModalData({ rawSearch: quoteList })}
               >
                 {quoteList.length}条引用
-              </Tag>
+              </FillTag>
             </MyTooltip>
           )}
           {llmModuleAccount === 1 && (
             <>
               {historyPreview.length > 0 && (
                 <MyTooltip label={'点击查看上下文预览'}>
-                  <Tag
+                  <FillTag
                     colorSchema="green"
                     cursor={'pointer'}
                     {...TagStyles}
                     onClick={() => setContextModalData(historyPreview)}
                   >
                     {historyPreview.length}条上下文
-                  </Tag>
+                  </FillTag>
                 </MyTooltip>
               )}
             </>
           )}
           {llmModuleAccount > 1 && (
-            <Tag colorSchema="blue" {...TagStyles}>
+            <FillTag colorSchema="blue" {...TagStyles}>
               多组 AI 对话
-            </Tag>
+            </FillTag>
           )}
 
           {isPc && runningTime > 0 && (
             <MyTooltip label={'模块运行时间和'}>
-              <Tag colorSchema="purple" cursor={'default'} {...TagStyles}>
+              <FillTag colorSchema="purple" cursor={'default'} {...TagStyles}>
                 {runningTime}s
-              </Tag>
+              </FillTag>
             </MyTooltip>
           )}
           <MyTooltip label={t('core.chat.response.Read complete response tips')}>
-            <Tag colorSchema="gray" cursor={'pointer'} {...TagStyles} onClick={onOpenWholeModal}>
+            <FillTag
+              colorSchema="gray"
+              cursor={'pointer'}
+              {...TagStyles}
+              onClick={onOpenWholeModal}
+            >
               {t('core.chat.response.Read complete response')}
-            </Tag>
+            </FillTag>
           </MyTooltip>
         </Flex>
       )}

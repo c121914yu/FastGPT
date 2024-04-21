@@ -293,12 +293,12 @@ const ConfigLaf = () => {
 const RenderIO = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { nodeId, inputs, outputs } = data;
-  const { splitToolInputs, hasToolNode } = useFlowProviderStore();
-  const { commonInputs, toolInputs } = splitToolInputs(inputs, nodeId);
+  const { splitToolInputs } = useFlowProviderStore();
+  const { commonInputs, toolInputs, isTool } = splitToolInputs(inputs, nodeId);
 
   return (
     <>
-      {hasToolNode && (
+      {isTool && (
         <>
           <Container>
             <IOTitle text={t('core.module.tool.Tool input')} />

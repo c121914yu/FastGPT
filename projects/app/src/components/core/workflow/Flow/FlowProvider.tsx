@@ -385,6 +385,7 @@ export const FlowProvider = ({
       setNodes((nodes) => {
         return nodes.map((item) => {
           if (item.data?.nodeId === nodeId) {
+            item.selected = true;
             //@ts-ignore
             item.data.isError = isError;
           }

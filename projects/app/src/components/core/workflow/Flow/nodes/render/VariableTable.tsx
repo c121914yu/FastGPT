@@ -79,7 +79,7 @@ const VariableTable = ({
                   <Td>
                     <Flex alignItems={'center'}>
                       {!!item.icon && <MyIcon name={item.icon as any} w={'14px'} mr={1} />}
-                      {item.label}
+                      {item.label || item.key}
                     </Flex>
                   </Td>
                   <Td>{item.type}</Td>
@@ -117,6 +117,7 @@ const VariableTable = ({
           keys={keys}
           onClose={onCloseFieldEdit}
           onSubmit={(e) => {
+            console.log(e);
             if (!!createField && onCreate) {
               onCreate(e);
             } else if (!!editField && onEdit) {
