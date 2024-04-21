@@ -123,10 +123,7 @@ const NodeCard = (props: Props) => {
             display: 'block'
           }
         }}
-        onMouseEnter={() => {
-          if (hasSelectedNode) return;
-          setHoverNodeId(nodeId);
-        }}
+        onMouseEnter={() => setHoverNodeId(nodeId)}
         onMouseLeave={() => setHoverNodeId(undefined)}
         {...(isError
           ? {
@@ -143,7 +140,7 @@ const NodeCard = (props: Props) => {
         <ConnectionTargetHandle nodeId={nodeId} />
       </Box>
     );
-  }, [Header, isError, maxW, minW, nodeId, onUpdateNodeError, selected, setHoverNodeId]);
+  }, [Header, children, isError, maxW, minW, nodeId, onUpdateNodeError, selected, setHoverNodeId]);
 
   return Render;
 };

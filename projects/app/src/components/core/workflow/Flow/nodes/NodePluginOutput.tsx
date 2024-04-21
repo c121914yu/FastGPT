@@ -67,7 +67,6 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
             leftIcon={<SmallAddIcon />}
             iconSpacing={1}
             size={'sm'}
-            mr={'-5px'}
             onClick={() => setCreateField(defaultCreateField)}
           >
             {t('common.Add New')}

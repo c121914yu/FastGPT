@@ -15,6 +15,7 @@ import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { systemConfigNode2VariableNode } from './adapt';
 import { VARIABLE_NODE_ID } from './constants';
+import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 export const nodeTemplate2FlowNode = ({
   template,
@@ -148,6 +149,10 @@ export const checkWorkflowNodeAndConnection = ({
   for (const node of nodes) {
     const data = node.data;
     const inputs = data.inputs;
+    const isToolNode = edges.some(
+      (edge) =>
+        edge.targetHandle === NodeOutputKeyEnum.selectedTools && edge.target === node.data.nodeId
+    );
 
     if (
       data.flowNodeType === FlowNodeTypeEnum.systemConfig ||
@@ -161,6 +166,11 @@ export const checkWorkflowNodeAndConnection = ({
     // check node input
     if (
       inputs.some((input) => {
+        // check is tool input
+        if (isToolNode && input.toolDescription) {
+          return false;
+        }
+
         if (input.required) {
           if (Array.isArray(input.value) && input.value.length === 0) return true;
           if (input.value === undefined) return true;

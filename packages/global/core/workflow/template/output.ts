@@ -4,9 +4,14 @@ import { FlowNodeOutputTypeEnum } from '../node/constant';
 import { WorkflowIOValueTypeEnum } from '../constants';
 
 export const Output_Template_AddOutput: FlowNodeOutputItemType = {
-  id: NodeOutputKeyEnum.userChatInput,
+  id: NodeOutputKeyEnum.addOutputParam,
   key: NodeOutputKeyEnum.addOutputParam,
   type: FlowNodeOutputTypeEnum.dynamic,
-  valueType: WorkflowIOValueTypeEnum.any,
-  label: ''
+  valueType: WorkflowIOValueTypeEnum.dynamic,
+  label: '',
+
+  editField: {
+    key: true,
+    valueType: true
+  }
 };
