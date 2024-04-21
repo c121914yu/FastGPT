@@ -24,7 +24,7 @@ type Props = {
   mode?: 'app' | 'plugin';
 };
 
-const InputLabel = ({ nodeId, input, output, mode }: Props) => {
+const InputLabel = ({ nodeId, input, output }: Props) => {
   const { t } = useTranslation();
   const { onChangeNode } = useFlowProviderStore();
   const {
