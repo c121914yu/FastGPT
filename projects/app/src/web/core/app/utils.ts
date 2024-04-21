@@ -5,763 +5,742 @@ import {
   FlowNodeTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
 import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import {
-  DatasetSearchModule,
-  Dataset_SEARCH_DESC
-} from '@fastgpt/global/core/workflow/template/system/datasetSearch';
-import { getNanoid } from '@fastgpt/global/common/string/tools';
-import { ToolModule } from '@fastgpt/global/core/workflow/template/system/tools';
 
-export async function postForm2Modules(data: AppSimpleEditFormType) {
-  function userGuideTemplate(formData: AppSimpleEditFormType): StoreNodeItemType[] {
-    return [
-      {
-        nodeId: 'userGuide',
-        name: '系统配置',
-        intro: '可以配置应用的系统参数',
-        flowNodeType: FlowNodeTypeEnum.systemConfig,
-        position: {
-          x: 447.98520778293346,
-          y: 721.4016845336229
-        },
-        inputs: [
-          {
-            key: NodeInputKeyEnum.welcomeText,
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: 'core.app.Welcome Text',
-            value: formData.userGuide.welcomeText
-          },
-          {
-            key: NodeInputKeyEnum.variables,
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: 'core.app.Chat Variable',
-            value: formData.userGuide.variables
-          },
-          {
-            key: NodeInputKeyEnum.questionGuide,
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: 'core.app.Question Guide',
-            value: formData.userGuide.questionGuide
-          },
-          {
-            key: NodeInputKeyEnum.tts,
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            value: formData.userGuide.tts
-          },
-          {
-            key: NodeInputKeyEnum.whisper,
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            value: formData.userGuide.whisper
-          }
-        ],
-        outputs: []
-      }
-    ];
-  }
-  function simpleChatTemplate(formData: AppSimpleEditFormType): StoreNodeItemType[] {
-    return [
-      {
-        nodeId: 'userChatInput',
-        intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
-        name: 'core.module.template.Chat entrance',
-        avatar: '/imgs/workflow/userChatInput.png',
-        flowNodeType: 'workflowStart',
-        position: {
-          x: 464.32198615344566,
-          y: 1602.2698463081606
-        },
-        inputs: [
-          {
-            key: 'userChatInput',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            valueType: 'string',
-            label: 'core.module.input.label.user question'
-          }
-        ],
-        outputs: [
-          {
-            id: 'userChatInput',
-            key: 'userChatInput',
-            label: 'core.module.input.label.user question',
-            type: 'source',
-            valueType: 'string'
-          }
-        ]
+import { getNanoid } from '@fastgpt/global/common/string/tools';
+import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+
+type WorkflowType = {
+  nodes: StoreNodeItemType[];
+  edges: StoreEdgeItemType[];
+};
+export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
+  function systemConfigTemplate(formData: AppSimpleEditFormType): StoreNodeItemType {
+    return {
+      nodeId: 'userGuide',
+      name: '系统配置',
+      intro: '可以配置应用的系统参数',
+      flowNodeType: FlowNodeTypeEnum.systemConfig,
+      position: {
+        x: 531.2422736065552,
+        y: -486.7611729549753
       },
-      {
-        nodeId: 'chatModule',
-        name: 'AI 对话',
-        intro: 'AI 大模型对话',
-        avatar: '/imgs/workflow/AI.png',
-        flowNodeType: 'chatNode',
-        showStatus: true,
-        position: {
-          x: 981.9682828103937,
-          y: 890.014595014464
+      inputs: [
+        {
+          key: NodeInputKeyEnum.welcomeText,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: 'core.app.Welcome Text',
+          value: formData.userGuide.welcomeText
         },
-        inputs: [
-          {
-            key: 'model',
-            renderTypeList: [
-              FlowNodeInputTypeEnum.settingLLMModel,
-              FlowNodeInputTypeEnum.reference
-            ],
-            label: 'core.module.input.label.aiModel',
-            required: true,
-            valueType: 'string',
-            value: formData.aiSettings.model
-          },
-          {
-            key: 'temperature',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '温度',
-            value: formData.aiSettings.temperature,
-            valueType: 'number',
-            min: 0,
-            max: 10,
-            step: 1,
-            markList: [
-              {
-                label: '严谨',
-                value: 0
-              },
-              {
-                label: '发散',
-                value: 10
-              }
-            ]
-          },
-          {
-            key: 'maxToken',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '回复上限',
-            value: formData.aiSettings.maxToken,
-            valueType: 'number',
-            min: 100,
-            max: 4000,
-            step: 50,
-            markList: [
-              {
-                label: '100',
-                value: 100
-              },
-              {
-                label: '4000',
-                value: 4000
-              }
-            ]
-          },
-          {
-            key: 'isResponseAnswerText',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '返回AI内容',
-            value: true,
-            valueType: 'boolean'
-          },
-          {
-            key: 'quoteTemplate',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '引用内容模板',
-            valueType: 'string',
-            value: ''
-          },
-          {
-            key: 'quotePrompt',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '引用内容提示词',
-            valueType: 'string',
-            value: ''
-          },
-          {
-            key: 'systemPrompt',
-            renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
-            label: 'core.ai.Prompt',
-            max: 300,
-            valueType: 'string',
-            description: 'core.app.tip.chatNodeSystemPromptTip',
-            placeholder: 'core.app.tip.chatNodeSystemPromptTip',
-            value: formData.aiSettings.systemPrompt
-          },
-          {
-            key: 'history',
-            renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
-            label: 'core.module.input.label.chat history',
-            required: true,
-            min: 0,
-            max: 30,
-            valueType: 'chatHistory',
-            value: formData.aiSettings.maxHistories
-          },
-          {
-            key: 'userChatInput',
-            renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
-            label: 'core.module.input.label.user question',
-            required: true,
-            valueType: 'string'
-          }
-        ],
-        outputs: [
-          {
-            id: 'history',
-            key: 'history',
-            label: '新的上下文',
-            description: '将本次回复内容拼接上历史记录，作为新的上下文返回',
-            valueType: 'chatHistory',
-            type: 'source'
-          },
-          {
-            id: 'answerText',
-            key: 'answerText',
-            label: 'AI回复',
-            description: '将在 stream 回复完毕后触发',
-            valueType: 'string',
-            type: 'source'
-          }
-        ]
-      }
-    ];
+        {
+          key: NodeInputKeyEnum.variables,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: 'core.app.Chat Variable',
+          value: formData.userGuide.variables
+        },
+        {
+          key: NodeInputKeyEnum.questionGuide,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: 'core.app.Question Guide',
+          value: formData.userGuide.questionGuide
+        },
+        {
+          key: NodeInputKeyEnum.tts,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: '',
+          value: formData.userGuide.tts
+        },
+        {
+          key: NodeInputKeyEnum.whisper,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: '',
+          value: formData.userGuide.whisper
+        },
+        {
+          key: NodeInputKeyEnum.scheduleTrigger,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: '',
+          value: formData.userGuide.scheduleTrigger
+        }
+      ],
+      outputs: []
+    };
   }
-  function datasetTemplate(formData: AppSimpleEditFormType): StoreNodeItemType[] {
-    return [
-      {
-        nodeId: 'userChatInput',
-        name: 'core.module.template.Chat entrance',
-        intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
-        flowNodeType: 'workflowStart',
-        position: {
-          x: 324.81436595478294,
-          y: 1527.0012457753612
-        },
-        inputs: [
-          {
-            key: 'userChatInput',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            valueType: 'string',
-            label: 'core.module.input.label.user question'
-          }
-        ],
-        outputs: [
-          {
-            id: 'userChatInput',
-            key: 'userChatInput',
-            label: 'core.module.input.label.user question',
-            type: 'source',
-            valueType: 'string'
-          }
-        ]
+  function workflowStartTemplate(): StoreNodeItemType {
+    return {
+      nodeId: '448745',
+      name: '流程开始',
+      intro: '',
+      avatar: '/imgs/workflow/userChatInput.svg',
+      flowNodeType: 'workflowStart',
+      position: {
+        x: 558.4082376415505,
+        y: 123.72387429194112
       },
-      {
-        nodeId: 'chatModule',
-        name: 'AI 对话',
-        intro: 'AI 大模型对话',
-        avatar: '/imgs/workflow/AI.png',
-        flowNodeType: 'chatNode',
-        showStatus: true,
-        position: {
-          x: 1962.4010270586014,
-          y: 1026.9105717680477
-        },
-        inputs: [
-          {
-            key: 'model',
-            renderTypeList: [
-              FlowNodeInputTypeEnum.settingLLMModel,
-              FlowNodeInputTypeEnum.reference
-            ],
-            label: 'core.module.input.label.aiModel',
-            required: true,
-            valueType: 'string',
-            value: formData.aiSettings.model
-          },
-          {
-            key: 'temperature',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '温度',
-            value: formData.aiSettings.temperature,
-            valueType: 'number',
-            min: 0,
-            max: 10,
-            step: 1,
-            markList: [
-              {
-                label: '严谨',
-                value: 0
-              },
-              {
-                label: '发散',
-                value: 10
-              }
-            ]
-          },
-          {
-            key: 'maxToken',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '回复上限',
-            value: formData.aiSettings.maxToken,
-            valueType: 'number',
-            min: 100,
-            max: 4000,
-            step: 50,
-            markList: [
-              {
-                label: '100',
-                value: 100
-              },
-              {
-                label: '4000',
-                value: 4000
-              }
-            ]
-          },
-          {
-            key: 'isResponseAnswerText',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '返回AI内容',
-            value: true,
-            valueType: 'boolean'
-          },
-          {
-            key: 'quoteTemplate',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '引用内容模板',
-            valueType: 'string',
-            value: ''
-          },
-          {
-            key: 'quotePrompt',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '引用内容提示词',
-            valueType: 'string',
-            value: ''
-          },
-          {
-            key: 'systemPrompt',
-            renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
-            label: 'core.ai.Prompt',
-            max: 300,
-            valueType: 'string',
-            description: 'core.app.tip.chatNodeSystemPromptTip',
-            placeholder: 'core.app.tip.chatNodeSystemPromptTip',
-            value: formData.aiSettings.systemPrompt
-          },
-          {
-            key: 'history',
-            renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
-            label: 'core.module.input.label.chat history',
-            required: true,
-            min: 0,
-            max: 30,
-            valueType: 'chatHistory',
-            value: formData.aiSettings.maxHistories
-          },
-          {
-            key: 'userChatInput',
-            renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
-            label: 'core.module.input.label.user question',
-            required: true,
-            valueType: 'string'
-          }
-        ],
-        outputs: [
-          {
-            id: 'history',
-            key: 'history',
-            label: '新的上下文',
-            description: '将本次回复内容拼接上历史记录，作为新的上下文返回',
-            valueType: 'chatHistory',
-            type: 'source'
-          },
-          {
-            id: 'answerText',
-            key: 'answerText',
-            label: 'AI回复',
-            description: '将在 stream 回复完毕后触发',
-            valueType: 'string',
-            type: 'source'
-          }
-        ]
-      },
-      {
-        nodeId: 'datasetSearch',
-        name: '知识库搜索',
-        intro: Dataset_SEARCH_DESC,
-        avatar: '/imgs/workflow/db.png',
-        flowNodeType: 'datasetSearchNode',
-        showStatus: true,
-        position: {
-          x: 1098.245668870126,
-          y: 1166.7285333032098
-        },
-        inputs: [
-          {
-            key: 'datasets',
-            renderTypeList: [FlowNodeInputTypeEnum.selectDataset, FlowNodeInputTypeEnum.reference],
-            label: 'core.module.input.label.Select dataset',
-            value: formData.dataset.datasets,
-            valueType: 'selectDataset',
-            list: [],
-            required: true
-          },
-          {
-            key: 'similarity',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            value: formData.dataset.similarity,
-            valueType: 'number'
-          },
-          {
-            key: 'limit',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            value: formData.dataset.limit,
-            valueType: 'number'
-          },
-          {
-            key: 'searchMode',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            valueType: 'string',
-            value: formData.dataset.searchMode
-          },
-          {
-            key: 'usingReRank',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            valueType: 'boolean',
-            value: formData.dataset.usingReRank
-          },
-          {
-            key: 'datasetSearchUsingExtensionQuery',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            valueType: 'boolean',
-            value: formData.dataset.datasetSearchUsingExtensionQuery
-          },
-          {
-            key: 'datasetSearchExtensionModel',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            valueType: 'string',
-            value: formData.dataset.datasetSearchExtensionModel
-          },
-          {
-            key: 'datasetSearchExtensionBg',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '',
-            valueType: 'string',
-            value: formData.dataset.datasetSearchExtensionBg
-          },
-          {
-            key: 'userChatInput',
-            renderTypeList: [FlowNodeInputTypeEnum.custom],
-            label: '',
-            required: true,
-            valueType: 'string',
-            toolDescription: '需要检索的内容'
-          }
-        ],
-        outputs: [
-          {
-            id: 'isEmpty',
-            key: 'isEmpty',
-            label: 'core.module.output.label.Search result empty',
-            type: 'static',
-            valueType: 'boolean'
-          },
-          {
-            id: 'unEmpty',
-            key: 'unEmpty',
-            label: 'core.module.output.label.Search result not empty',
-            type: 'static',
-            valueType: 'boolean'
-          },
-          {
-            id: 'quoteQA',
-            key: 'quoteQA',
-            label: 'core.module.Dataset quote.label',
-            type: 'static',
-            valueType: 'datasetQuote'
-          }
-        ]
-      }
-    ];
+      inputs: [
+        {
+          key: 'userChatInput',
+          renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
+          valueType: 'string',
+          label: '用户问题',
+          required: true,
+          toolDescription: '用户问题'
+        }
+      ],
+      outputs: [
+        {
+          id: 'userChatInput',
+          key: 'userChatInput',
+          label: 'core.module.input.label.user question',
+          valueType: 'string',
+          type: 'static'
+        }
+      ]
+    };
   }
-  function toolTemplates(formData: AppSimpleEditFormType): {
-    modules: StoreNodeItemType[];
-    tools: StoreNodeItemType[];
-  } {
-    let tools: StoreNodeItemType[] =
-      formData.dataset.datasets.length > 0
-        ? [
+
+  function simpleChatTemplate(formData: AppSimpleEditFormType): WorkflowType {
+    return {
+      nodes: [
+        {
+          nodeId: '7BdojPlukIQw',
+          name: 'AI 对话',
+          intro: 'AI 大模型对话',
+          avatar: '/imgs/workflow/AI.png',
+          flowNodeType: 'chatNode',
+          showStatus: true,
+          position: {
+            x: 1106.3238387960757,
+            y: -350.6030674683474
+          },
+          inputs: [
             {
-              nodeId: 'datasetSearch',
-              name: DatasetSearchModule.name,
-              intro: DatasetSearchModule.intro,
-              avatar: DatasetSearchModule.avatar,
-              flowNodeType: DatasetSearchModule.flowNodeType,
-              showStatus: DatasetSearchModule.showStatus,
-              position: {
-                x: 1000,
-                y: 2143
-              },
-              inputs: [
-                {
-                  key: 'datasets',
-                  renderTypeList: [
-                    FlowNodeInputTypeEnum.selectDataset,
-                    FlowNodeInputTypeEnum.reference
-                  ],
-                  label: 'core.module.input.label.Select dataset',
-                  value: formData.dataset.datasets,
-                  valueType: 'selectDataset',
-                  list: [],
-                  required: true
-                },
-                {
-                  key: 'similarity',
-                  renderTypeList: [FlowNodeInputTypeEnum.hidden],
-                  label: '',
-                  value: formData.dataset.similarity,
-                  valueType: 'number'
-                },
-                {
-                  key: 'limit',
-                  renderTypeList: [FlowNodeInputTypeEnum.hidden],
-                  label: '',
-                  value: formData.dataset.limit,
-                  valueType: 'number'
-                },
-                {
-                  key: 'searchMode',
-                  renderTypeList: [FlowNodeInputTypeEnum.hidden],
-                  label: '',
-                  valueType: 'string',
-                  value: formData.dataset.searchMode
-                },
-                {
-                  key: 'usingReRank',
-                  renderTypeList: [FlowNodeInputTypeEnum.hidden],
-                  label: '',
-                  valueType: 'boolean',
-                  value: formData.dataset.usingReRank
-                },
-                {
-                  key: 'datasetSearchUsingExtensionQuery',
-                  renderTypeList: [FlowNodeInputTypeEnum.hidden],
-                  label: '',
-                  valueType: 'boolean',
-                  value: formData.dataset.datasetSearchUsingExtensionQuery
-                },
-                {
-                  key: 'datasetSearchExtensionModel',
-                  renderTypeList: [FlowNodeInputTypeEnum.hidden],
-                  label: '',
-                  valueType: 'string',
-                  value: formData.dataset.datasetSearchExtensionModel
-                },
-                {
-                  key: 'datasetSearchExtensionBg',
-                  renderTypeList: [FlowNodeInputTypeEnum.hidden],
-                  label: '',
-                  valueType: 'string',
-                  value: formData.dataset.datasetSearchExtensionBg
-                },
-                {
-                  key: 'userChatInput',
-                  renderTypeList: [FlowNodeInputTypeEnum.custom],
-                  label: '',
-                  required: true,
-                  valueType: 'string',
-                  toolDescription: '需要检索的内容'
-                }
+              key: 'model',
+              renderTypeList: [
+                FlowNodeInputTypeEnum.settingLLMModel,
+                FlowNodeInputTypeEnum.reference
               ],
-              outputs: [
-                {
-                  id: 'isEmpty',
-                  key: 'isEmpty',
-                  label: 'core.module.output.label.Search result empty',
-                  type: 'static',
-                  valueType: 'boolean'
-                },
-                {
-                  id: 'unEmpty',
-                  key: 'unEmpty',
-                  label: 'core.module.output.label.Search result not empty',
-                  type: 'static',
-                  valueType: 'boolean'
-                },
-                {
-                  id: 'quoteQA',
-                  key: 'quoteQA',
-                  label: 'core.module.Dataset quote.label',
-                  type: 'static',
-                  valueType: 'datasetQuote'
-                }
-              ]
+              label: 'core.module.input.label.aiModel',
+              valueType: 'string',
+              value: formData.aiSettings.model
+            },
+            {
+              key: 'temperature',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: formData.aiSettings.temperature,
+              valueType: 'number',
+              min: 0,
+              max: 10,
+              step: 1
+            },
+            {
+              key: 'maxToken',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: formData.aiSettings.maxToken,
+              valueType: 'number',
+              min: 100,
+              max: 4000,
+              step: 50
+            },
+            {
+              key: 'isResponseAnswerText',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: true,
+              valueType: 'boolean'
+            },
+            {
+              key: 'quoteTemplate',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'string'
+            },
+            {
+              key: 'quotePrompt',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'string'
+            },
+            {
+              key: 'systemPrompt',
+              renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
+              max: 3000,
+              valueType: 'string',
+              label: 'core.ai.Prompt',
+              description: 'core.app.tip.chatNodeSystemPromptTip',
+              placeholder: 'core.app.tip.chatNodeSystemPromptTip',
+              value: formData.aiSettings.systemPrompt
+            },
+            {
+              key: 'history',
+              renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
+              valueType: 'chatHistory',
+              label: 'core.module.input.label.chat history',
+              required: true,
+              min: 0,
+              max: 30,
+              value: formData.aiSettings.maxHistories
+            },
+            {
+              key: 'userChatInput',
+              renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
+              valueType: 'string',
+              label: '用户问题',
+              required: true,
+              toolDescription: '用户问题',
+              value: ['448745', 'userChatInput']
+            },
+            {
+              key: 'quoteQA',
+              renderTypeList: [FlowNodeInputTypeEnum.settingDatasetQuotePrompt],
+              label: '',
+              debugLabel: '知识库引用',
+              description: '',
+              valueType: 'datasetQuote'
+            }
+          ],
+          outputs: [
+            {
+              id: 'history',
+              key: 'history',
+              label: 'core.module.output.label.New context',
+              description: 'core.module.output.description.New context',
+              valueType: 'chatHistory',
+              type: 'static'
+            },
+            {
+              id: 'answerText',
+              key: 'answerText',
+              label: 'core.module.output.label.Ai response content',
+              description: 'core.module.output.description.Ai response content',
+              valueType: 'string',
+              type: 'static'
             }
           ]
-        : [];
-
-    tools = tools.concat(
-      formData.selectedTools.map((tool, i) => ({
-        nodeId: getNanoid(6),
-        id: tool.id,
-        name: tool.name,
-        intro: tool.intro,
-        avatar: tool.avatar,
-        flowNodeType: tool.flowNodeType,
-        showStatus: tool.showStatus,
-        position: {
-          x: 1000 + (300 * i + 1),
-          y: 2143
+        }
+      ],
+      edges: [
+        {
+          source: '448745',
+          target: '7BdojPlukIQw',
+          sourceHandle: '448745-source-right',
+          targetHandle: '7BdojPlukIQw-target-left'
+        }
+      ]
+    };
+  }
+  function datasetTemplate(formData: AppSimpleEditFormType): WorkflowType {
+    return {
+      nodes: [
+        {
+          nodeId: '7BdojPlukIQw',
+          name: 'AI 对话',
+          intro: 'AI 大模型对话',
+          avatar: '/imgs/workflow/AI.png',
+          flowNodeType: 'chatNode',
+          showStatus: true,
+          position: {
+            x: 1638.509551404687,
+            y: -341.0428450861567
+          },
+          inputs: [
+            {
+              key: 'model',
+              renderTypeList: [
+                FlowNodeInputTypeEnum.settingLLMModel,
+                FlowNodeInputTypeEnum.reference
+              ],
+              label: 'core.module.input.label.aiModel',
+              valueType: 'string',
+              value: formData.aiSettings.model
+            },
+            {
+              key: 'temperature',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: formData.aiSettings.temperature,
+              valueType: 'number',
+              min: 0,
+              max: 10,
+              step: 1
+            },
+            {
+              key: 'maxToken',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: formData.aiSettings.maxToken,
+              valueType: 'number',
+              min: 100,
+              max: 4000,
+              step: 50
+            },
+            {
+              key: 'isResponseAnswerText',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: true,
+              valueType: 'boolean'
+            },
+            {
+              key: 'quoteTemplate',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'string'
+            },
+            {
+              key: 'quotePrompt',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'string'
+            },
+            {
+              key: 'systemPrompt',
+              renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
+              max: 3000,
+              valueType: 'string',
+              label: 'core.ai.Prompt',
+              description: 'core.app.tip.chatNodeSystemPromptTip',
+              placeholder: 'core.app.tip.chatNodeSystemPromptTip',
+              value: formData.aiSettings.systemPrompt
+            },
+            {
+              key: 'history',
+              renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
+              valueType: 'chatHistory',
+              label: 'core.module.input.label.chat history',
+              required: true,
+              min: 0,
+              max: 30,
+              value: formData.aiSettings.maxHistories
+            },
+            {
+              key: 'userChatInput',
+              renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
+              valueType: 'string',
+              label: '用户问题',
+              required: true,
+              toolDescription: '用户问题',
+              value: ['448745', 'userChatInput']
+            },
+            {
+              key: 'quoteQA',
+              renderTypeList: [FlowNodeInputTypeEnum.settingDatasetQuotePrompt],
+              label: '',
+              debugLabel: '知识库引用',
+              description: '',
+              valueType: 'datasetQuote',
+              value: ['iKBoX2vIzETU', 'quoteQA']
+            }
+          ],
+          outputs: [
+            {
+              id: 'history',
+              key: 'history',
+              label: 'core.module.output.label.New context',
+              description: 'core.module.output.description.New context',
+              valueType: 'chatHistory',
+              type: 'static'
+            },
+            {
+              id: 'answerText',
+              key: 'answerText',
+              label: 'core.module.output.label.Ai response content',
+              description: 'core.module.output.description.Ai response content',
+              valueType: 'string',
+              type: 'static'
+            }
+          ]
         },
-        inputs: tool.inputs,
-        outputs: tool.outputs
-      }))
-    );
-
-    const modules: StoreNodeItemType[] = [
-      {
-        nodeId: 'userChatInput',
-        intro: '当用户发送一个内容后，流程将会从这个模块开始执行。',
-        name: 'core.module.template.Chat entrance',
-        avatar: '/imgs/workflow/userChatInput.png',
-        flowNodeType: 'workflowStart',
-        position: {
-          x: 464.32198615344566,
-          y: 1602.2698463081606
+        {
+          nodeId: 'iKBoX2vIzETU',
+          name: '知识库搜索',
+          intro: '调用“语义检索”和“全文检索”能力，从“知识库”中查找可能与问题相关的参考内容',
+          avatar: '/imgs/workflow/db.png',
+          flowNodeType: 'datasetSearchNode',
+          showStatus: true,
+          position: {
+            x: 918.5901682164496,
+            y: -227.11542247619582
+          },
+          inputs: [
+            {
+              key: 'datasets',
+              renderTypeList: [
+                FlowNodeInputTypeEnum.selectDataset,
+                FlowNodeInputTypeEnum.reference
+              ],
+              label: 'core.module.input.label.Select dataset',
+              value: formData.dataset.datasets,
+              valueType: FlowNodeInputTypeEnum.selectDataset,
+              list: [],
+              required: true
+            },
+            {
+              key: 'similarity',
+              renderTypeList: [FlowNodeInputTypeEnum.selectDatasetParamsModal],
+              label: '',
+              value: formData.dataset.similarity,
+              valueType: 'number'
+            },
+            {
+              key: 'limit',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: formData.dataset.limit,
+              valueType: 'number'
+            },
+            {
+              key: 'searchMode',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'string',
+              value: formData.dataset.searchMode
+            },
+            {
+              key: 'usingReRank',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'boolean',
+              value: formData.dataset.usingReRank
+            },
+            {
+              key: 'datasetSearchUsingExtensionQuery',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'boolean',
+              value: formData.dataset.datasetSearchUsingExtensionQuery
+            },
+            {
+              key: 'datasetSearchExtensionModel',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'string',
+              value: formData.dataset.datasetSearchExtensionModel
+            },
+            {
+              key: 'datasetSearchExtensionBg',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              valueType: 'string',
+              value: formData.dataset.datasetSearchExtensionBg
+            },
+            {
+              key: 'userChatInput',
+              renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
+              valueType: 'string',
+              label: '用户问题',
+              required: true,
+              toolDescription: '需要检索的内容',
+              value: ['448745', 'userChatInput']
+            }
+          ],
+          outputs: [
+            {
+              id: 'isEmpty',
+              key: 'isEmpty',
+              label: 'core.module.output.label.Search result empty',
+              type: 'static',
+              valueType: 'boolean'
+            },
+            {
+              id: 'unEmpty',
+              key: 'unEmpty',
+              label: 'core.module.output.label.Search result not empty',
+              type: 'static',
+              valueType: 'boolean'
+            },
+            {
+              id: 'quoteQA',
+              key: 'quoteQA',
+              label: 'core.module.Dataset quote.label',
+              type: 'static',
+              valueType: 'datasetQuote'
+            }
+          ]
+        }
+      ],
+      edges: [
+        {
+          source: '448745',
+          target: 'iKBoX2vIzETU',
+          sourceHandle: '448745-source-right',
+          targetHandle: 'iKBoX2vIzETU-target-left'
         },
-        inputs: [
+        {
+          source: 'iKBoX2vIzETU',
+          target: '7BdojPlukIQw',
+          sourceHandle: 'iKBoX2vIzETU-source-right',
+          targetHandle: '7BdojPlukIQw-target-left'
+        }
+      ]
+    };
+  }
+  function toolTemplates(formData: AppSimpleEditFormType): WorkflowType {
+    const toolNodeId = getNanoid(6);
+    const datasetNodeId = getNanoid(6);
+
+    const datasetTool: WorkflowType | null =
+      formData.dataset.datasets.length > 0
+        ? {
+            nodes: [
+              {
+                nodeId: datasetNodeId,
+                name: '知识库搜索',
+                intro: '调用“语义检索”和“全文检索”能力，从“知识库”中查找可能与问题相关的参考内容',
+                avatar: '/imgs/workflow/db.png',
+                flowNodeType: 'datasetSearchNode',
+                showStatus: true,
+                position: {
+                  x: 500,
+                  y: 545
+                },
+                inputs: [
+                  {
+                    key: 'datasets',
+                    renderTypeList: [
+                      FlowNodeInputTypeEnum.selectDataset,
+                      FlowNodeInputTypeEnum.reference
+                    ],
+                    label: 'core.module.input.label.Select dataset',
+                    value: formData.dataset.datasets,
+                    valueType: FlowNodeInputTypeEnum.selectDataset,
+                    list: [],
+                    required: true
+                  },
+                  {
+                    key: 'similarity',
+                    renderTypeList: [FlowNodeInputTypeEnum.selectDatasetParamsModal],
+                    label: '',
+                    value: formData.dataset.similarity,
+                    valueType: 'number'
+                  },
+                  {
+                    key: 'limit',
+                    renderTypeList: [FlowNodeInputTypeEnum.hidden],
+                    label: '',
+                    value: formData.dataset.limit,
+                    valueType: 'number'
+                  },
+                  {
+                    key: 'searchMode',
+                    renderTypeList: [FlowNodeInputTypeEnum.hidden],
+                    label: '',
+                    valueType: 'string',
+                    value: formData.dataset.searchMode
+                  },
+                  {
+                    key: 'usingReRank',
+                    renderTypeList: [FlowNodeInputTypeEnum.hidden],
+                    label: '',
+                    valueType: 'boolean',
+                    value: formData.dataset.usingReRank
+                  },
+                  {
+                    key: 'datasetSearchUsingExtensionQuery',
+                    renderTypeList: [FlowNodeInputTypeEnum.hidden],
+                    label: '',
+                    valueType: 'boolean',
+                    value: formData.dataset.datasetSearchUsingExtensionQuery
+                  },
+                  {
+                    key: 'datasetSearchExtensionModel',
+                    renderTypeList: [FlowNodeInputTypeEnum.hidden],
+                    label: '',
+                    valueType: 'string',
+                    value: formData.dataset.datasetSearchExtensionModel
+                  },
+                  {
+                    key: 'datasetSearchExtensionBg',
+                    renderTypeList: [FlowNodeInputTypeEnum.hidden],
+                    label: '',
+                    valueType: 'string',
+                    value: formData.dataset.datasetSearchExtensionBg
+                  },
+                  {
+                    key: 'userChatInput',
+                    renderTypeList: [
+                      FlowNodeInputTypeEnum.reference,
+                      FlowNodeInputTypeEnum.textarea
+                    ],
+                    valueType: 'string',
+                    label: '用户问题',
+                    required: true,
+                    toolDescription: '需要检索的内容'
+                  }
+                ],
+                outputs: [
+                  {
+                    id: 'isEmpty',
+                    key: 'isEmpty',
+                    label: 'core.module.output.label.Search result empty',
+                    type: 'static',
+                    valueType: 'boolean'
+                  },
+                  {
+                    id: 'unEmpty',
+                    key: 'unEmpty',
+                    label: 'core.module.output.label.Search result not empty',
+                    type: 'static',
+                    valueType: 'boolean'
+                  },
+                  {
+                    id: 'quoteQA',
+                    key: 'quoteQA',
+                    label: 'core.module.Dataset quote.label',
+                    type: 'static',
+                    valueType: 'datasetQuote'
+                  }
+                ]
+              }
+            ],
+            edges: [
+              {
+                source: toolNodeId,
+                target: datasetNodeId,
+                sourceHandle: 'selectedTools',
+                targetHandle: 'selectedTools'
+              }
+            ]
+          }
+        : null;
+
+    const pluginTool: WorkflowType[] = formData.selectedTools.map((tool, i) => {
+      const nodeId = getNanoid(6);
+      return {
+        nodes: [
           {
-            key: 'userChatInput',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            valueType: 'string',
-            label: 'core.module.input.label.user question'
+            nodeId,
+            id: tool.id,
+            pluginId: tool.id,
+            name: tool.name,
+            intro: tool.intro,
+            avatar: tool.avatar,
+            flowNodeType: tool.flowNodeType,
+            showStatus: tool.showStatus,
+            position: {
+              x: 500 + 500 * (i + 1),
+              y: 545
+            },
+            inputs: tool.inputs,
+            outputs: tool.outputs
           }
         ],
-        outputs: [
+        edges: [
           {
-            id: 'userChatInput',
-            key: 'userChatInput',
-            label: 'core.module.input.label.user question',
-            type: 'source',
-            valueType: 'string'
+            source: toolNodeId,
+            target: nodeId,
+            sourceHandle: 'selectedTools',
+            targetHandle: 'selectedTools'
           }
         ]
-      },
-      {
-        nodeId: ToolModule.id,
-        name: ToolModule.name,
-        intro: ToolModule.intro,
-        avatar: ToolModule.avatar,
-        flowNodeType: ToolModule.flowNodeType,
-        showStatus: true,
-        position: {
-          x: 981.9682828103937,
-          y: 890.014595014464
-        },
-        inputs: [
-          {
-            key: 'model',
-            renderTypeList: [
-              FlowNodeInputTypeEnum.settingLLMModel,
-              FlowNodeInputTypeEnum.reference
-            ],
-            label: 'core.module.input.label.aiModel',
-            required: true,
-            valueType: 'string',
-            value: formData.aiSettings.model
-          },
-          {
-            key: 'temperature',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '温度',
-            value: formData.aiSettings.temperature,
-            valueType: 'number',
-            min: 0,
-            max: 10,
-            step: 1
-          },
-          {
-            key: 'maxToken',
-            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            label: '回复上限',
-            value: formData.aiSettings.maxToken,
-            valueType: 'number',
-            min: 100,
-            max: 4000,
-            step: 50
-          },
-          {
-            key: 'systemPrompt',
-            renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
-            max: 3000,
-            valueType: 'string',
-            label: 'core.ai.Prompt',
-            description: 'core.app.tip.chatNodeSystemPromptTip',
-            placeholder: 'core.app.tip.chatNodeSystemPromptTip'
-          },
-          {
-            key: 'history',
-            renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
-            label: 'core.module.input.label.chat history',
-            required: true,
-            min: 0,
-            max: 30,
-            valueType: 'chatHistory',
-            value: formData.aiSettings.maxHistories
-          },
-          {
-            key: 'userChatInput',
-            renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
-            label: 'core.module.input.label.user question',
-            required: true,
-            valueType: 'string',
-            value: ['userChatInput', 'userChatInput']
-          }
-        ],
-        outputs: []
-      },
-      ...tools
-    ];
+      };
+    });
 
-    return { modules, tools };
+    const config: WorkflowType = {
+      nodes: [
+        {
+          nodeId: toolNodeId,
+          name: '工具调用（实验）',
+          intro: '通过AI模型自动选择一个或多个功能块进行调用，也可以对插件进行调用。',
+          avatar: '/imgs/workflow/tool.svg',
+          flowNodeType: 'tools',
+          showStatus: true,
+          position: {
+            x: 1062.1738942532802,
+            y: -223.65033022650476
+          },
+          inputs: [
+            {
+              key: 'model',
+              renderTypeList: [
+                FlowNodeInputTypeEnum.settingLLMModel,
+                FlowNodeInputTypeEnum.reference
+              ],
+              label: 'core.module.input.label.aiModel',
+              valueType: 'string',
+              llmModelType: 'all',
+              value: formData.aiSettings.model
+            },
+            {
+              key: 'temperature',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: formData.aiSettings.temperature,
+              valueType: 'number',
+              min: 0,
+              max: 10,
+              step: 1
+            },
+            {
+              key: 'maxToken',
+              renderTypeList: [FlowNodeInputTypeEnum.hidden],
+              label: '',
+              value: formData.aiSettings.maxToken,
+              valueType: 'number',
+              min: 100,
+              max: 4000,
+              step: 50
+            },
+            {
+              key: 'systemPrompt',
+              renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
+              max: 3000,
+              valueType: 'string',
+              label: 'core.ai.Prompt',
+              description: 'core.app.tip.chatNodeSystemPromptTip',
+              placeholder: 'core.app.tip.chatNodeSystemPromptTip',
+              value: formData.aiSettings.systemPrompt
+            },
+            {
+              key: 'history',
+              renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
+              valueType: 'chatHistory',
+              label: 'core.module.input.label.chat history',
+              required: true,
+              min: 0,
+              max: 30,
+              value: formData.aiSettings.maxHistories
+            },
+            {
+              key: 'userChatInput',
+              renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
+              valueType: 'string',
+              label: '用户问题',
+              required: true,
+              value: ['448745', 'userChatInput']
+            }
+          ],
+          outputs: []
+        },
+        // tool nodes
+        ...(datasetTool ? datasetTool.nodes : []),
+        ...pluginTool.map((tool) => tool.nodes).flat()
+      ],
+      edges: [
+        {
+          source: '448745',
+          target: toolNodeId,
+          sourceHandle: '448745-source-right',
+          targetHandle: `${toolNodeId}-target-left`
+        },
+        // tool edges
+        ...(datasetTool ? datasetTool.edges : []),
+        ...pluginTool.map((tool) => tool.edges).flat()
+      ]
+    };
+    console.log(config);
+    return config;
   }
 
-  const modules = (() => {
-    if (data.selectedTools.length > 0) return toolTemplates(data).modules;
+  const workflow = (() => {
+    if (data.selectedTools.length > 0) return toolTemplates(data);
     if (data.dataset.datasets.length > 0) return datasetTemplate(data);
     return simpleChatTemplate(data);
   })();
 
-  const edges = (() => {
-    if (data.selectedTools.length > 0)
-      return [
-        {
-          source: 'userChatInput',
-          target: ToolModule.id,
-          sourcePort: `userChatInput-source-right`,
-          targetPort: `${ToolModule.id}-target-left`
-        }
-        // ...toolTemplates(data).tools.map((tool) => ({
-        //   source: ToolModule.id,
-        //   target: tool.nodeId,
-        //   sourcePort: `${ToolModule.id}-source-bottom`,
-        //   targetPort: `${tool.nodeId}-target-top`
-        // }))
-      ];
-
-    return [
-      {
-        source: 'userChatInput',
-        target: 'chatModule',
-        sourcePort: `userChatInput-source-right`,
-        targetPort: `chatModule-target-left`
-      }
-    ];
-  })();
-
-  return { modules: [...userGuideTemplate(data), ...modules], edges };
+  return {
+    nodes: [systemConfigTemplate(data), workflowStartTemplate(), ...workflow.nodes],
+    edges: workflow.edges
+  };
 }

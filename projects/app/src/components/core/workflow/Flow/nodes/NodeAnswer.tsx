@@ -4,7 +4,6 @@ import NodeCard from './render/NodeCard';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
-import RenderOutput from './render/RenderOutput';
 import { useFlowProviderStore } from '../FlowProvider';
 import RenderToolInput from './render/RenderToolInput';
 import { useTranslation } from 'next-i18next';
@@ -28,7 +27,7 @@ const NodeAnswer = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
           </>
         )}
         <RenderInput nodeId={nodeId} flowInputList={commonInputs} />
-        <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
+        {/* <RenderOutput nodeId={nodeId} flowOutputList={outputs} /> */}
       </Container>
     </NodeCard>
   );

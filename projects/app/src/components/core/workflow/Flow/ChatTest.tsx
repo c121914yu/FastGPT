@@ -54,8 +54,8 @@ const ChatTest = (
     async ({ chatList, controller, generatingMessage, variables }: StartChatFnProps) => {
       /* get histories */
       let historyMaxLen = 6;
-      nodes.forEach((nodes) => {
-        nodes.inputs.forEach((input) => {
+      nodes.forEach((node) => {
+        node.inputs.forEach((input) => {
           if (
             (input.key === NodeInputKeyEnum.history ||
               input.key === NodeInputKeyEnum.historyMaxAmount) &&

@@ -57,7 +57,7 @@ export const splitGuideModule = (guideModules?: StoreNodeItemType) => {
     defaultWhisperConfig;
 
   const scheduledTriggerConfig: AppScheduledTriggerConfigType | null =
-    guideModules?.inputs?.find((item) => item.key === NodeInputKeyEnum.intervalTimer)?.value ??
+    guideModules?.inputs?.find((item) => item.key === NodeInputKeyEnum.scheduleTrigger)?.value ??
     null;
 
   return {

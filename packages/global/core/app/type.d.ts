@@ -86,6 +86,7 @@ export type AppSimpleEditFormType = {
       speed?: number | undefined;
     };
     whisper: AppWhisperConfigType;
+    scheduleTrigger: AppScheduledTriggerConfigType | null;
   };
 };
 

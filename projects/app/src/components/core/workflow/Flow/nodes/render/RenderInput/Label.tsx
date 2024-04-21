@@ -77,7 +77,7 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
             </MyTooltip>
           )}
         </Box>
-        {mode === 'plugin' && canEdit && (
+        {canEdit && (
           <>
             <MyIcon
               name={'common/settingLight'}
@@ -207,7 +207,6 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     max,
     maxLength,
     min,
-    mode,
     nodeId,
     onChangeNode,
     onChangeRenderType,

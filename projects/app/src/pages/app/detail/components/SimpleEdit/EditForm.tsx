@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { AddIcon, QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { appModules2Form, getDefaultAppForm } from '@fastgpt/global/core/app/utils';
+import { appWorkflow2Form, getDefaultAppForm } from '@fastgpt/global/core/app/utils';
 import type { AppSimpleEditFormType } from '@fastgpt/global/core/app/type.d';
 import { welcomeTextTip } from '@fastgpt/global/core/workflow/template/tip';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
@@ -14,7 +14,7 @@ import { useTranslation } from 'next-i18next';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import { useAppStore } from '@/web/core/app/store/useAppStore';
-import { postForm2Modules } from '@/web/core/app/utils';
+import { form2AppWorkflow } from '@/web/core/app/utils';
 
 import dynamic from 'next/dynamic';
 import MyTooltip from '@/components/MyTooltip';
@@ -116,10 +116,10 @@ const EditForm = ({
   /* on save app */
   const { mutate: onSubmitSave, isLoading: isSaving } = useRequest({
     mutationFn: async (data: AppSimpleEditFormType) => {
-      const { modules, edges } = await postForm2Modules(data);
+      const { nodes, edges } = form2AppWorkflow(data);
 
       await updateAppDetail(appDetail._id, {
-        modules,
+        modules: nodes,
         edges,
         type: AppTypeEnum.simple,
         permission: undefined
@@ -132,8 +132,8 @@ const EditForm = ({
   useQuery(
     ['init', appDetail],
     () => {
-      const formatVal = appModules2Form({
-        modules: appDetail.modules
+      const formatVal = appWorkflow2Form({
+        nodes: appDetail.modules
       });
       reset(formatVal);
       setRefresh(!refresh);

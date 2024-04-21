@@ -20,7 +20,7 @@ export type EditOutputFieldMapType = {
   defaultValue?: boolean;
 };
 export type EditNodeFieldType = {
-  inputType?: `${FlowNodeInputTypeEnum}`; // input type
+  inputType?: FlowNodeInputTypeEnum; // input type
   valueType?: `${WorkflowIOValueTypeEnum}`;
   required?: boolean;
   key?: string;

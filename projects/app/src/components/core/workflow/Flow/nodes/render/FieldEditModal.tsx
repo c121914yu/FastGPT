@@ -262,7 +262,7 @@ const FieldEditModal = ({
                     list={inputTypeList}
                     value={getValues('inputType')}
                     onchange={(e: string) => {
-                      const type = e as `${FlowNodeInputTypeEnum}`;
+                      const type = e as FlowNodeInputTypeEnum;
                       const selectedItem = inputTypeList.find((item) => item.value === type);
                       setValue('inputType', type);
                       setValue('valueType', selectedItem?.valueType);

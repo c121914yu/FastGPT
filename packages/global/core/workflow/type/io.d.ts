@@ -5,7 +5,7 @@ import { EditInputFieldMapType, EditOutputFieldMapType } from '../node/type';
 
 export type FlowNodeInputItemType = {
   selectedTypeIndex?: number;
-  renderTypeList: `${FlowNodeInputTypeEnum}`[]; // Node Type. Decide on a render style
+  renderTypeList: FlowNodeInputTypeEnum[]; // Node Type. Decide on a render style
 
   key: `${NodeInputKeyEnum}` | string;
   valueType?: `${WorkflowIOValueTypeEnum}`; // data type

@@ -4,13 +4,13 @@ import NodeCard from './render/NodeCard';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import dynamic from 'next/dynamic';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
+import { SmallAddIcon } from '@chakra-ui/icons';
 import {
   FlowNodeInputTypeEnum,
   FlowNodeOutputTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
 import Container from '../components/Container';
-import { EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
+import { EditInputFieldMapType, EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
 import {
   FlowNodeInputItemType,
   FlowNodeOutputItemType
@@ -24,16 +24,14 @@ import { getNanoid } from '@fastgpt/global/common/string/tools';
 const FieldEditModal = dynamic(() => import('./render/FieldEditModal'));
 
 const defaultCreateField: EditNodeFieldType = {
-  label: '',
   key: '',
   description: '',
   valueType: WorkflowIOValueTypeEnum.string
 };
-const createEditField = {
+const createEditField: EditInputFieldMapType = {
   key: true,
-  name: true,
   description: true,
-  dataType: true
+  valueType: true
 };
 
 const NodePluginOutput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {

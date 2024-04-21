@@ -40,11 +40,7 @@ const ImportSettings = ({ onClose }: Props) => {
             }
             try {
               const data = JSON.parse(value);
-              setEdges([]);
-              setNodes([]);
-              setTimeout(() => {
-                initData(data);
-              }, 10);
+              initData(data);
               onClose();
             } catch (error) {
               toast({
