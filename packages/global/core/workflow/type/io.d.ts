@@ -1,14 +1,14 @@
 import { LLMModelTypeEnum } from '../../ai/constants';
 import { WorkflowIOValueTypeEnum, NodeInputKeyEnum, NodeOutputKeyEnum } from '../constants';
 import { FlowNodeInputTypeEnum, FlowNodeOutputTypeEnum } from '../node/constant';
-import { EditInputFieldMapType, EditOutputFieldMapType } from '../node/type';
+import { EditInputFieldMapType, EditNodeFieldType, EditOutputFieldMapType } from '../node/type';
 
 export type FlowNodeInputItemType = {
   selectedTypeIndex?: number;
   renderTypeList: FlowNodeInputTypeEnum[]; // Node Type. Decide on a render style
 
   key: `${NodeInputKeyEnum}` | string;
-  valueType?: `${WorkflowIOValueTypeEnum}`; // data type
+  valueType?: WorkflowIOValueTypeEnum; // data type
   value?: any;
   label: string;
   debugLabel?: string;
@@ -20,10 +20,6 @@ export type FlowNodeInputItemType = {
 
   // edit
   canEdit?: boolean;
-  editField?: EditInputFieldMapType; // 添加
-
-  // hideInApp?: boolean;
-  // hideInPlugin?: boolean;
 
   // render components params
   referencePlaceholder?: string;
@@ -36,6 +32,12 @@ export type FlowNodeInputItemType = {
   max?: number; // slider, number input
   min?: number; // slider, number input
 
+  defaultValue?: string;
+
+  // dynamic input
+  editField?: EditNodeFieldType['editField'];
+  dynamicParamDefaultValue?: EditNodeFieldType['dynamicParamDefaultValue'];
+
   llmModelType?: `${LLMModelTypeEnum}`;
 };
 
@@ -43,7 +45,7 @@ export type FlowNodeOutputItemType = {
   id: string; // output unique id(Does not follow the key change)
   type: `${FlowNodeOutputTypeEnum}`;
   key: `${NodeOutputKeyEnum}` | string;
-  valueType?: `${WorkflowIOValueTypeEnum}`;
+  valueType?: WorkflowIOValueTypeEnum;
   value?: any;
 
   label?: string;
@@ -52,6 +54,7 @@ export type FlowNodeOutputItemType = {
   required?: boolean;
 
   // component params
+  canEdit?: boolean;
   editField?: EditOutputFieldMapType; // 添加
 };
 

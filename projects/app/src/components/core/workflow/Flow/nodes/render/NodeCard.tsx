@@ -17,7 +17,6 @@ import { ConnectionSourceHandle, ConnectionTargetHandle } from './Handle/Connect
 import { useDebug } from '../../hooks/useDebug';
 import { ResponseBox } from '@/components/ChatBox/WholeResponseModal';
 import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
-import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { getPreviewPluginModule } from '@/web/core/plugin/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { storeNode2FlowNode } from '@/web/core/workflow/utils';
@@ -52,7 +51,8 @@ const NodeCard = (props: Props) => {
     menuForbid,
     isTool = false,
     isError = false,
-    debugResult
+    debugResult,
+    pluginId
   } = props;
 
   const { nodes, nodeList, setHoverNodeId, onUpdateNodeError } = useFlowProviderStore();
@@ -84,6 +84,7 @@ const NodeCard = (props: Props) => {
           <MenuRender
             name={name}
             nodeId={nodeId}
+            pluginId={pluginId}
             flowNodeType={flowNodeType}
             inputs={inputs}
             menuForbid={menuForbid}
@@ -99,9 +100,10 @@ const NodeCard = (props: Props) => {
     avatar,
     t,
     name,
-    menuForbid,
+    pluginId,
     flowNodeType,
     inputs,
+    menuForbid,
     intro
   ]);
 
@@ -150,12 +152,14 @@ export default React.memo(NodeCard);
 const MenuRender = React.memo(function MenuRender({
   name,
   nodeId,
+  pluginId,
   flowNodeType,
   inputs,
   menuForbid
 }: {
   name: string;
   nodeId: string;
+  pluginId?: string;
   flowNodeType: Props['flowNodeType'];
   inputs: Props['inputs'];
   menuForbid?: Props['menuForbid'];
@@ -239,9 +243,6 @@ const MenuRender = React.memo(function MenuRender({
               label: t('plugin.Synchronous version'),
               variant: 'whiteBase',
               onClick: () => {
-                const pluginId = inputs.find(
-                  (item) => item.key === NodeInputKeyEnum.pluginId
-                )?.value;
                 if (!pluginId) return;
                 onOpenConfirmSync(async () => {
                   try {
@@ -353,7 +354,6 @@ const MenuRender = React.memo(function MenuRender({
     DebugInputModal,
     EditTitleModal,
     flowNodeType,
-    inputs,
     menuForbid?.copy,
     menuForbid?.debug,
     menuForbid?.delete,
@@ -368,6 +368,7 @@ const MenuRender = React.memo(function MenuRender({
     onOpenCustomTitleModal,
     onResetNode,
     openDebugNode,
+    pluginId,
     setLoading,
     t,
     toast

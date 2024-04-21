@@ -3,18 +3,7 @@ import { NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import dynamic from 'next/dynamic';
-import {
-  Box,
-  Button,
-  Flex,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer
-} from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import {
   FlowNodeInputItemType,
@@ -30,7 +19,6 @@ import type {
 import { useTranslation } from 'next-i18next';
 import { useFlowProviderStore } from '../FlowProvider';
 import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
-import MyIcon from '@fastgpt/web/components/common/Icon';
 import {
   FlowNodeInputMap,
   FlowNodeInputTypeEnum,
@@ -38,8 +26,6 @@ import {
 } from '@fastgpt/global/core/workflow/node/constant';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 import VariableTable from '../nodes/render/VariableTable';
-
-const FieldEditModal = dynamic(() => import('./render/FieldEditModal'));
 
 const defaultCreateField: EditNodeFieldType = {
   label: '',
@@ -54,8 +40,10 @@ const createEditField: EditInputFieldMapType = {
   description: true,
   required: true,
   valueType: true,
-  inputType: true,
-  isToolInput: true
+  inputType: true
+};
+const dynamicInputEditField: EditInputFieldMapType = {
+  key: true
 };
 
 const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
@@ -102,30 +90,31 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
             }}
             variables={inputs.map((input) => ({
               icon: FlowNodeInputMap[input.renderTypeList[0]]?.icon as string,
-              label: input.label,
+              label: t(input.label),
               type: input.valueType ? t(FlowValueTypeMap[input.valueType]?.label) : '-',
               key: input.key
             }))}
             createField={createField}
             onCreate={({ data }) => {
-              if (!data.key || !data.label || !data.inputType) {
+              if (!data.key || !data.inputType) {
                 return;
               }
 
               const newInput: FlowNodeInputItemType = {
                 key: data.key,
                 valueType: data.valueType,
-                label: data.label,
+                label: data.label || '',
                 renderTypeList: [data.inputType],
                 required: data.required,
                 description: data.description,
                 toolDescription: data.isToolInput ? data.description : undefined,
                 canEdit: true,
                 value: data.defaultValue,
-                editField: createEditField,
+                editField: dynamicInputEditField,
                 maxLength: data.maxLength,
                 max: data.max,
-                min: data.min
+                min: data.min,
+                dynamicParamDefaultValue: data.dynamicParamDefaultValue
               };
 
               onChangeNode({
@@ -152,35 +141,41 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
             onStartEdit={(key) => {
               const input = inputs.find((input) => input.key === key);
               if (!input) return;
+
               setEditField({
-                ...input,
                 inputType: input.renderTypeList[0],
                 valueType: input.valueType,
                 key: input.key,
                 label: input.label,
                 description: input.description,
-                isToolInput: !!input.toolDescription
+                isToolInput: !!input.toolDescription,
+                defaultValue: input.defaultValue,
+                maxLength: input.maxLength,
+                max: input.max,
+                min: input.min,
+                dynamicParamDefaultValue: input.dynamicParamDefaultValue
               });
             }}
             onEdit={({ data, changeKey }) => {
-              if (!data.inputType || !data.key || !data.label || !editField?.key) return;
+              if (!data.inputType || !data.key || !editField?.key) return;
 
               const output = outputs.find((output) => output.key === editField.key);
 
               const newInput: FlowNodeInputItemType = {
                 key: data.key,
                 valueType: data.valueType,
-                label: data.label,
+                label: data.label || '',
                 renderTypeList: [data.inputType],
                 required: data.required,
                 description: data.description,
                 toolDescription: data.isToolInput ? data.description : undefined,
                 canEdit: true,
                 value: data.defaultValue,
-                editField: createEditField,
+                editField: dynamicInputEditField,
                 maxLength: data.maxLength,
                 max: data.max,
-                min: data.min
+                min: data.min,
+                dynamicParamDefaultValue: data.dynamicParamDefaultValue
               };
               const newOutput: FlowNodeOutputItemType = {
                 ...(output as FlowNodeOutputItemType),

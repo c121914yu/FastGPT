@@ -9,19 +9,17 @@ import { LLMModelTypeEnum } from '../../ai/constants';
 /* --------------- edit field ------------------- */
 export type EditInputFieldMapType = EditOutputFieldMapType & {
   inputType?: boolean;
-  required?: boolean;
-  isToolInput?: boolean;
 };
 export type EditOutputFieldMapType = {
-  name?: boolean;
   key?: boolean;
   description?: boolean;
-  valueType?: boolean;
+  valueType?: boolean; // output
+  required?: boolean;
   defaultValue?: boolean;
 };
 export type EditNodeFieldType = {
   inputType?: FlowNodeInputTypeEnum; // input type
-  valueType?: `${WorkflowIOValueTypeEnum}`;
+  valueType?: WorkflowIOValueTypeEnum;
   required?: boolean;
   key?: string;
   label?: string;
@@ -32,4 +30,10 @@ export type EditNodeFieldType = {
   maxLength?: number;
   max?: number;
   min?: number;
+  editField?: EditInputFieldMapType;
+  dynamicParamDefaultValue?: {
+    inputType?: FlowNodeInputTypeEnum; // input type
+    valueType?: WorkflowIOValueTypeEnum;
+    required?: boolean;
+  };
 };

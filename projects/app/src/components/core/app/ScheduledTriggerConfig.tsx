@@ -12,8 +12,8 @@ import { useForm } from 'react-hook-form';
 import { cronParser2Fields } from '@fastgpt/global/common/string/time';
 import TimezoneSelect from '@fastgpt/web/components/common/MySelect/TimezoneSelect';
 
-const MultipleSelect = dynamic(
-  () => import('@fastgpt/web/components/common/MySelect/MultipleSelect')
+const MultipleRowSelect = dynamic(
+  () => import('@fastgpt/web/components/common/MySelect/MultipleRowSelect')
 );
 
 // options type:
@@ -284,7 +284,7 @@ const ScheduledTriggerConfig = ({
                 <Flex alignItems={'center'} mt={5}>
                   <Box flex={'0 0 80px'}>执行时机</Box>
                   <Box flex={'1 0 0'}>
-                    <MultipleSelect
+                    <MultipleRowSelect
                       label={formatLabel}
                       value={cronField}
                       list={cronSelectList.current}

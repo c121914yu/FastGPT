@@ -25,7 +25,7 @@ import ChatBox from '@/components/ChatBox';
 import type { ComponentRef } from '@/components/ChatBox/type.d';
 import { useQuery } from '@tanstack/react-query';
 import { getInitChatInfo } from '@/web/core/chat/api';
-import Tag from '@/components/Tag';
+import Tag from '@fastgpt/web/components/common/Tag/Fill';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { addDays } from 'date-fns';
 import MyBox from '@/components/common/MyBox';

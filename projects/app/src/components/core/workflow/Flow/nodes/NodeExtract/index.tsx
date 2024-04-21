@@ -134,7 +134,7 @@ const NodeExtract = ({ data }: NodeProps<FlowNodeItemType>) => {
         </Box>
       )
     }),
-    [nodeId, t]
+    [nodeId, onChangeNode, t]
   );
 
   return (

@@ -24,6 +24,7 @@ import { getNanoid } from '@fastgpt/global/common/string/tools';
 const FieldEditModal = dynamic(() => import('./render/FieldEditModal'));
 
 const defaultCreateField: EditNodeFieldType = {
+  inputType: FlowNodeInputTypeEnum.reference,
   key: '',
   description: '',
   valueType: WorkflowIOValueTypeEnum.string

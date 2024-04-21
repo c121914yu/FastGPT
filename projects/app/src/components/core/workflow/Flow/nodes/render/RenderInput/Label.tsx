@@ -14,6 +14,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 
 import dynamic from 'next/dynamic';
 import { EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
+import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 
 type Props = {
@@ -36,12 +37,14 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     valueType,
     canEdit,
     key,
-    value,
-    maxLength,
-    max,
-    min
+    value
   } = input;
   const [editField, setEditField] = useState<EditNodeFieldType>();
+
+  const valueTypeLabel = useMemo(
+    () => (valueType ? t(FlowValueTypeMap[valueType]?.label) : ''),
+    [t, valueType]
+  );
 
   const onChangeRenderType = useCallback(
     (e: string) => {
@@ -77,6 +80,22 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
             </MyTooltip>
           )}
         </Box>
+        {/* value type */}
+        {!!valueTypeLabel && (
+          <Box
+            bg={'myGray.100'}
+            color={'myGray.500'}
+            border={'base'}
+            borderRadius={'sm'}
+            ml={2}
+            px={1}
+            py={0.5}
+            fontSize={'11px'}
+          >
+            {valueTypeLabel}
+          </Box>
+        )}
+        {/* edit config */}
         {canEdit && (
           <>
             <MyIcon
@@ -94,10 +113,11 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
                   label,
                   description,
                   isToolInput: !!toolDescription,
-                  defaultValue: value,
-                  maxLength,
-                  max,
-                  min
+                  defaultValue: input.defaultValue,
+                  maxLength: input.maxLength,
+                  max: input.max,
+                  min: input.min,
+                  dynamicParamDefaultValue: input.dynamicParamDefaultValue
                 })
               }
             />
@@ -123,6 +143,16 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
               }}
             />
           </>
+        )}
+        {/* input type select */}
+        {renderTypeList && renderTypeList.length > 1 && (
+          <Box ml={2}>
+            <NodeInputSelect
+              renderTypeList={renderTypeList}
+              renderTypeIndex={selectedTypeIndex}
+              onChange={onChangeRenderType}
+            />
+          </Box>
         )}
 
         {!!editField?.key && (
@@ -186,15 +216,6 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
             }}
           />
         )}
-        {renderTypeList && renderTypeList.length > 1 && (
-          <Box ml={2}>
-            <NodeInputSelect
-              renderTypeList={renderTypeList}
-              renderTypeIndex={selectedTypeIndex}
-              onChange={onChangeRenderType}
-            />
-          </Box>
-        )}
       </Flex>
     );
   }, [
@@ -204,9 +225,6 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     input,
     key,
     label,
-    max,
-    maxLength,
-    min,
     nodeId,
     onChangeNode,
     onChangeRenderType,
@@ -216,8 +234,8 @@ const InputLabel = ({ nodeId, input, output, mode }: Props) => {
     selectedTypeIndex,
     t,
     toolDescription,
-    value,
-    valueType
+    valueType,
+    valueTypeLabel
   ]);
 
   return <>{RenderLabel}</>;

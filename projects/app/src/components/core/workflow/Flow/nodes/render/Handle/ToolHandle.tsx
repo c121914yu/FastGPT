@@ -3,7 +3,6 @@ import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 import { Box, BoxProps } from '@chakra-ui/react';
 import {
   WorkflowIOValueTypeEnum,
-  NodeInputKeyEnum,
   NodeOutputKeyEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
@@ -20,7 +19,8 @@ export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
   const { connectingEdge, edges } = useFlowProviderStore();
   const handleId = NodeOutputKeyEnum.selectedTools;
 
-  const connected = edges.some((edge) => edge.targetHandle === handleId);
+  const connected = edges.some((edge) => edge.target === nodeId && edge.targetHandle === handleId);
+
   // if top handle is connected, return null
   const hidden =
     !connected &&

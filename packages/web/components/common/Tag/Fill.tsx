@@ -10,8 +10,8 @@ const FillTag = ({ children, colorSchema = 'blue', ...props }: Props) => {
   const theme = useMemo(() => {
     const map = {
       blue: {
-        bg: 'primary.50',
-        color: 'primary.600'
+        bg: 'primary.100',
+        color: 'primary.700'
       },
       green: {
         bg: 'green.50',
@@ -36,8 +36,9 @@ const FillTag = ({ children, colorSchema = 'blue', ...props }: Props) => {
       lineHeight={1}
       py={1}
       borderRadius={'sm'}
-      fontSize={'xs'}
+      fontSize={'sm'}
       alignItems={'center'}
+      whiteSpace={'nowrap'}
       {...props}
     >
       {children}

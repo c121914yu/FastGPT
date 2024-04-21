@@ -68,6 +68,7 @@ const EditFieldModal = ({
         onChangeNode({
           nodeId,
           type: 'addInput',
+          index: 1,
           value: {
             ...e,
             label: e.key

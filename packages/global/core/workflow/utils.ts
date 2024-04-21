@@ -91,8 +91,7 @@ export const getModuleInputUiField = (input: FlowNodeInputItemType) => {
   return {};
 };
 
-export const plugin2ModuleIO = (
-  pluginId: string,
+export const pluginData2FlowNodeIO = (
   nodes: StoreNodeItemType[]
 ): {
   inputs: FlowNodeInputItemType[];
@@ -107,15 +106,14 @@ export const plugin2ModuleIO = (
           ...item,
           ...getModuleInputUiField(item),
           value: getOrInitModuleInputValue(item),
-          edit: false,
-          connected: false
+          canEdit: false
         }))
       : [],
     outputs: pluginOutput
       ? [
           ...pluginOutput.outputs.map((item) => ({
             ...item,
-            edit: false
+            canEdit: false
           }))
         ]
       : []
