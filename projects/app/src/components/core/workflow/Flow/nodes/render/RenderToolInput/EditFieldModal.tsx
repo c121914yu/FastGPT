@@ -29,20 +29,29 @@ const EditFieldModal = ({
   const { toast } = useToast();
   const { onChangeNode } = useFlowProviderStore();
 
-  const { register, getValues, setValue, handleSubmit, watch } = useForm<FlowNodeInputItemType>({
+  const { register, setValue, handleSubmit, watch } = useForm<FlowNodeInputItemType>({
     defaultValues: defaultValue
   });
+  const valueType = watch('valueType');
 
   const selectTypeList = useRef([
     {
-      label: '字符串',
+      label: t('core.module.valueType.string'),
       value: 'string'
+    },
+    {
+      label: t('core.module.valueType.number'),
+      value: 'number'
+    },
+    {
+      label: t('core.module.valueType.boolean'),
+      value: 'boolean'
     }
   ]);
 
   const { mutate: onclickSubmit } = useRequest({
     mutationFn: async (e: FlowNodeInputItemType) => {
-      const inputConfig = {
+      const inputConfig: FlowNodeInputItemType = {
         ...e,
         label: e.key
       };
@@ -59,7 +68,6 @@ const EditFieldModal = ({
         onChangeNode({
           nodeId,
           type: 'addInput',
-          key: e.key,
           value: {
             ...e,
             label: e.key
@@ -92,11 +100,11 @@ const EditFieldModal = ({
           <Switch {...register('required')} />
         </Flex>
         <Flex alignItems={'center'} mb={5}>
-          <Box flex={'0 0 80px'}>{t('core.module.Field key')}</Box>
+          <Box flex={'0 0 80px'}>{t('core.module.Data Type')}</Box>
           <Box flex={'1 0 0'}>
             <MySelect
               list={selectTypeList.current}
-              value={getValues('valueType')}
+              value={valueType}
               onchange={(e: any) => {
                 setValue('valueType', e);
               }}
@@ -104,7 +112,7 @@ const EditFieldModal = ({
           </Box>
         </Flex>
         <Flex alignItems={'center'} mb={5}>
-          <Box flex={'0 0 80px'}>{'字段key'}</Box>
+          <Box flex={'0 0 80px'}>{t('core.module.Field Name')}</Box>
           <Input
             bg={'myGray.50'}
             {...register('key', {

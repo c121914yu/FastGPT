@@ -28,6 +28,19 @@ import {
 } from '@fastgpt/global/core/workflow/constants';
 import JsonEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
 
+const defaultValue: EditNodeFieldType = {
+  inputType: FlowNodeInputTypeEnum.reference,
+  valueType: WorkflowIOValueTypeEnum.string,
+  key: '',
+  label: '',
+  description: '',
+  isToolInput: false,
+  defaultValue: '',
+  maxLength: 0,
+  max: 0,
+  min: 0
+};
+
 const FieldEditModal = ({
   editField = {
     key: true
@@ -45,7 +58,6 @@ const FieldEditModal = ({
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const isCreate = useMemo(() => !defaultField.key, [defaultField.key]);
   const showDynamicInputSelect =
     !keys.includes(DYNAMIC_INPUT_KEY) || defaultField.key === DYNAMIC_INPUT_KEY;
 
@@ -115,6 +127,7 @@ const FieldEditModal = ({
 
   const { register, getValues, setValue, handleSubmit, watch } = useForm<EditNodeFieldType>({
     defaultValues: {
+      ...defaultValue,
       ...defaultField,
       valueType: defaultField.valueType ?? WorkflowIOValueTypeEnum.string
     }
@@ -184,8 +197,17 @@ const FieldEditModal = ({
       if (!data.key) return;
 
       data.label = data.key;
+      data.key = data.key.trim();
 
-      if (isCreate && keys.includes(data.key)) {
+      // create check key
+      if (!defaultField.key && keys.includes(data.key)) {
+        return toast({
+          status: 'warning',
+          title: t('core.module.edit.Field Already Exist')
+        });
+      }
+      // edit check repeat key
+      if (defaultField.key && defaultField.key !== data.key && keys.includes(data.key)) {
         return toast({
           status: 'warning',
           title: t('core.module.edit.Field Already Exist')
@@ -203,7 +225,7 @@ const FieldEditModal = ({
         changeKey: !keys.includes(data.key)
       });
     },
-    [isCreate, keys, onSubmit, showDataTypeSelect, t, toast]
+    [defaultField.key, keys, onSubmit, showDataTypeSelect, t, toast]
   );
   const onSubmitError = useCallback(
     (e: Object) => {

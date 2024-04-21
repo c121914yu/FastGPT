@@ -61,10 +61,10 @@ const RenderToolInput = ({
           <Table bg={'white'}>
             <Thead>
               <Tr>
-                <Th bg={'myGray.50'}>字段名</Th>
-                <Th bg={'myGray.50'}>字段描述</Th>
-                <Th bg={'myGray.50'}>必须</Th>
-                {canEdit && <Th bg={'myGray.50'}></Th>}
+                <Th>字段名</Th>
+                <Th>字段描述</Th>
+                <Th>必须</Th>
+                {canEdit && <Th></Th>}
               </Tr>
             </Thead>
             <Tbody>
@@ -95,8 +95,7 @@ const RenderToolInput = ({
                           onChangeNode({
                             nodeId,
                             type: 'delInput',
-                            key: item.key,
-                            value: ''
+                            key: item.key
                           });
                         }}
                       />

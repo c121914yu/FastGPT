@@ -8,6 +8,7 @@ import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/const
 import { SourceHandle } from '../Handle';
 import { getHandleId } from '@fastgpt/global/core/workflow/utils';
 import { Position } from 'reactflow';
+import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 
 const OutputLabel = ({
   nodeId,
@@ -22,6 +23,11 @@ const OutputLabel = ({
   const { t } = useTranslation();
   const { label = '', description, valueType } = item;
   const theme = useTheme();
+
+  const valueTypeLabel = useMemo(
+    () => (valueType ? t(FlowValueTypeMap[valueType]?.label) : '-'),
+    [t, valueType]
+  );
 
   const Render = useMemo(() => {
     return (
@@ -48,7 +54,7 @@ const OutputLabel = ({
           px={1}
           py={0.5}
         >
-          {valueType}
+          {valueTypeLabel}
         </Box>
         {item.type === FlowNodeOutputTypeEnum.source && (
           <SourceHandle
@@ -60,7 +66,7 @@ const OutputLabel = ({
         )}
       </Flex>
     );
-  }, [description, item.key, item.type, label, nodeId, t, theme.borders.sm, valueType]);
+  }, [description, item.key, item.type, label, nodeId, t, theme.borders.sm, valueTypeLabel]);
 
   return Render;
 };

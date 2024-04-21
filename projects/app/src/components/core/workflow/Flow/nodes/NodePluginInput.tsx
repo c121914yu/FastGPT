@@ -37,6 +37,7 @@ import {
   FlowNodeOutputTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
+import VariableTable from '../nodes/render/VariableTable';
 
 const FieldEditModal = dynamic(() => import('./render/FieldEditModal'));
 
@@ -79,108 +80,34 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         {...data}
       >
         <Container mt={1}>
-          <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
-            <Box position={'relative'} fontWeight={'medium'}>
-              {t('core.workflow.Custom inputs')}
-            </Box>
+          <Flex className="nodrag" cursor={'default'} alignItems={'center'} mb={3}>
+            <Box>{t('core.workflow.Custom inputs')}</Box>
             <Box flex={'1 0 0'} />
             <Button
               variant={'whitePrimary'}
               leftIcon={<SmallAddIcon />}
               iconSpacing={1}
               size={'sm'}
-              mr={'-5px'}
               onClick={() => setCreateField(defaultCreateField)}
             >
               {t('common.Add New')}
             </Button>
           </Flex>
-          <Box
-            mt={2}
-            borderRadius={'md'}
-            overflow={'hidden'}
-            borderWidth={'1px'}
-            borderBottom="none"
-          >
-            <TableContainer>
-              <Table bg={'white'}>
-                <Thead>
-                  <Tr bg={'myGray.50'}>
-                    <Th>{t('core.module.variable.variable name')}</Th>
-                    <Th>{t('core.workflow.Value type')}</Th>
-                    <Th></Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {inputs.map((item) => {
-                    const renderType = item.renderTypeList[0] || FlowNodeInputTypeEnum.reference;
-                    return (
-                      <Tr key={item.key}>
-                        <Td>
-                          <Flex alignItems={'center'}>
-                            <MyIcon
-                              mr={1}
-                              name={FlowNodeInputMap[renderType]?.icon as any}
-                              w={'14px'}
-                            />
-                            {item.label}
-                          </Flex>
-                        </Td>
-                        <Td>{item.valueType ? t(FlowValueTypeMap[item.valueType]?.label) : '-'}</Td>
-                        <Td>
-                          <MyIcon
-                            mr={3}
-                            name={'common/settingLight'}
-                            w={'16px'}
-                            cursor={'pointer'}
-                            onClick={() => {
-                              setEditField({
-                                ...item,
-                                inputType: item.renderTypeList[0],
-                                valueType: item.valueType,
-                                key: item.key,
-                                label: item.label,
-                                description: item.description,
-                                isToolInput: !!item.toolDescription
-                              });
-                            }}
-                          />
-                          <MyIcon
-                            className="delete"
-                            name={'delete'}
-                            w={'16px'}
-                            cursor={'pointer'}
-                            ml={2}
-                            _hover={{ color: 'red.500' }}
-                            onClick={() => {
-                              onChangeNode({
-                                nodeId,
-                                type: 'delInput',
-                                key: item.key
-                              });
-                              onChangeNode({
-                                nodeId,
-                                type: 'delOutput',
-                                key: item.key
-                              });
-                            }}
-                          />{' '}
-                        </Td>
-                      </Tr>
-                    );
-                  })}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </Box>
-        </Container>
-        {!!createField && (
-          <FieldEditModal
-            editField={createEditField}
-            defaultField={createField}
+          <VariableTable
+            fieldEditType={createEditField}
             keys={inputs.map((input) => input.key)}
-            onClose={() => setCreateField(undefined)}
-            onSubmit={({ data }) => {
+            onCloseFieldEdit={() => {
+              setCreateField(undefined);
+              setEditField(undefined);
+            }}
+            variables={inputs.map((input) => ({
+              icon: FlowNodeInputMap[input.renderTypeList[0]]?.icon as string,
+              label: input.label,
+              type: input.valueType ? t(FlowValueTypeMap[input.valueType]?.label) : '-',
+              key: input.key
+            }))}
+            createField={createField}
+            onCreate={({ data }) => {
               if (!data.key || !data.label || !data.inputType) {
                 return;
               }
@@ -221,17 +148,24 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               });
               setCreateField(undefined);
             }}
-          />
-        )}
-        {!!editField?.key && (
-          <FieldEditModal
-            editField={createEditField}
-            keys={inputs.map((input) => input.key).filter((key) => key !== editField.key)}
-            defaultField={editField}
-            onClose={() => setEditField(undefined)}
-            onSubmit={({ data, changeKey }) => {
+            editField={editField}
+            onStartEdit={(key) => {
+              const input = inputs.find((input) => input.key === key);
+              if (!input) return;
+              setEditField({
+                ...input,
+                inputType: input.renderTypeList[0],
+                valueType: input.valueType,
+                key: input.key,
+                label: input.label,
+                description: input.description,
+                isToolInput: !!input.toolDescription
+              });
+            }}
+            onEdit={({ data, changeKey }) => {
+              if (!data.inputType || !data.key || !data.label || !editField?.key) return;
+
               const output = outputs.find((output) => output.key === editField.key);
-              if (!data.inputType || !data.key || !data.label || !editField.key) return;
 
               const newInput: FlowNodeInputItemType = {
                 key: data.key,
@@ -284,8 +218,20 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               }
               setEditField(undefined);
             }}
+            onDelete={(key) => {
+              onChangeNode({
+                nodeId,
+                type: 'delInput',
+                key
+              });
+              onChangeNode({
+                nodeId,
+                type: 'delOutput',
+                key
+              });
+            }}
           />
-        )}
+        </Container>
       </NodeCard>
     );
   }, [createField, data, editField, inputs, nodeId, onChangeNode, outputs, selected, t]);

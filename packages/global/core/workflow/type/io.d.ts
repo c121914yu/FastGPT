@@ -1,7 +1,7 @@
 import { LLMModelTypeEnum } from '../../ai/constants';
 import { WorkflowIOValueTypeEnum, NodeInputKeyEnum, NodeOutputKeyEnum } from '../constants';
 import { FlowNodeInputTypeEnum, FlowNodeOutputTypeEnum } from '../node/constant';
-import { EditInputFieldMapType } from '../node/type';
+import { EditInputFieldMapType, EditOutputFieldMapType } from '../node/type';
 
 export type FlowNodeInputItemType = {
   selectedTypeIndex?: number;
@@ -41,15 +41,18 @@ export type FlowNodeInputItemType = {
 
 export type FlowNodeOutputItemType = {
   id: string; // output unique id(Does not follow the key change)
-  type?: `${FlowNodeOutputTypeEnum}`;
+  type: `${FlowNodeOutputTypeEnum}`;
   key: `${NodeOutputKeyEnum}` | string;
-  value?: any;
   valueType?: `${WorkflowIOValueTypeEnum}`;
-  required?: boolean;
+  value?: any;
 
   label?: string;
   description?: string;
   defaultValue?: any;
+  required?: boolean;
+
+  // component params
+  editField?: EditOutputFieldMapType; // 添加
 };
 
 export type ReferenceValueProps = [string, string | undefined];
