@@ -224,10 +224,10 @@ function ScheduledTrigger({ data }: { data: FlowNodeItemType }) {
       onChange={(e) => {
         onChangeNode({
           nodeId,
-          key: NodeInputKeyEnum.intervalTimer,
+          key: NodeInputKeyEnum.scheduleTrigger,
           type: 'updateInput',
           value: {
-            ...inputs.find((item) => item.key === NodeInputKeyEnum.intervalTimer),
+            ...inputs.find((item) => item.key === NodeInputKeyEnum.scheduleTrigger),
             value: e
           }
         });

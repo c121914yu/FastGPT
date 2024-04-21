@@ -8,7 +8,7 @@ import InputLabel from './Label';
 import type { RenderInputProps } from './type';
 
 const RenderList: {
-  types: `${FlowNodeInputTypeEnum}`[];
+  types: FlowNodeInputTypeEnum[];
   Component: React.ComponentType<RenderInputProps>;
 }[] = [
   {

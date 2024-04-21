@@ -32,13 +32,5 @@ export const AssignedAnswerModule: FlowNodeTemplateType = {
       placeholder: 'core.module.input.description.Response content'
     }
   ],
-  outputs: [
-    {
-      id: NodeOutputKeyEnum.text,
-      key: NodeOutputKeyEnum.text,
-      label: '',
-      type: FlowNodeOutputTypeEnum.hidden,
-      valueType: WorkflowIOValueTypeEnum.string
-    }
-  ]
+  outputs: []
 };

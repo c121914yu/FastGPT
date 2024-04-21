@@ -44,13 +44,13 @@ export type FlowNodeTemplateType = FlowNodeCommonType & {
   templateType: `${FlowNodeTemplateTypeEnum}`;
 
   // show handle
-  sourceHandle: {
+  sourceHandle?: {
     left: boolean;
     right: boolean;
     top: boolean;
     bottom: boolean;
   };
-  targetHandle: {
+  targetHandle?: {
     left: boolean;
     right: boolean;
     top: boolean;
@@ -88,11 +88,6 @@ export type StoreNodeItemType = FlowNodeCommonType & {
     x: number;
     y: number;
   };
-
-  // targetNodes: NodeTargetNodeItemType[]; // 输出到的节点数据
-  // sourceNodes: NodeSourceNodeItemType[]; // 来源的节点数据
-  inputs: FlowNodeInputItemType[];
-  outputs: FlowNodeOutputItemType[];
 };
 
 /* connection type */

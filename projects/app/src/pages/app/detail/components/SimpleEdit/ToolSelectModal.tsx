@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useTranslation } from 'next-i18next';
@@ -38,6 +38,7 @@ import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import { debounce } from 'lodash';
 import { useForm } from 'react-hook-form';
 import JsonEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
+import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 
 type Props = {
   selectedTools: FlowNodeTemplateType[];
@@ -112,6 +113,7 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
       h={['90vh', '80vh']}
       overflow={'none'}
     >
+      {/* Header: row and search */}
       <Box px={[3, 6]} pt={4} display={'flex'} justifyContent={'space-between'} w={'full'}>
         <RowTabs
           list={[
@@ -142,6 +144,7 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
           />
         </InputGroup>
       </Box>
+      {/* route components */}
       {templateType === TemplateTypeEnum.teamPlugin && !searchKey && currentParent && (
         <Flex mt={2} px={[3, 6]}>
           <ParentPaths
@@ -181,65 +184,49 @@ const RenderList = React.memo(function RenderList({
   setCurrentParent: (e: { parentId: string; parentName: string }) => void;
 }) {
   const { t } = useTranslation();
-  const { toast } = useToast();
-  const [currentTool, setCurrentTool] = useState<FlowNodeTemplateType>();
+  const [configTool, setConfigTool] = useState<FlowNodeTemplateType>();
+  const onCloseConfigTool = useCallback(() => setConfigTool(undefined), []);
 
-  const {
-    onOpen: onParamsModalOpen,
-    isOpen: isParamsModalOpen,
-    onClose: onParamsModalClose
-  } = useDisclosure();
+  const { register, getValues, setValue, handleSubmit, reset } = useForm<Record<string, any>>({});
+
+  const checkToolInputValid = useCallback((tool: FlowNodeTemplateType) => {
+    for (const input of tool.inputs) {
+      const renderType = input.renderTypeList?.[input.selectedTypeIndex || 0];
+      if (renderType === FlowNodeInputTypeEnum.addInputParam) {
+        return false;
+      }
+    }
+    return true;
+  }, []);
+
+  const filterValidTools = useMemo(
+    () => templates.filter(checkToolInputValid),
+    [checkToolInputValid, templates]
+  );
 
   const { mutate: onClickAdd, isLoading } = useRequest({
     mutationFn: async (template: FlowNodeTemplateType) => {
       const res = await getPreviewPluginModule(template.id);
 
-      // check inputs valid
-      for (const input of res.inputs) {
-        if (
-          [
-            NodeInputKeyEnum.switch,
-            NodeInputKeyEnum.pluginStart,
-            NodeInputKeyEnum.pluginId
-          ].includes(input.key as any)
-        ) {
-          continue;
-        }
-
-        if (!input.toolDescription) {
-          res && setCurrentTool(res);
-          return onParamsModalOpen();
-          // return toast({
-          //   status: 'warning',
-          //   title: t('core.app.ToolCall.This plugin cannot be called as a tool')
-          // });
-        }
+      if (!checkToolInputValid(res)) {
+        return t('core.app.ToolCall.This plugin cannot be called as a tool');
       }
-      return res;
-    },
-    onSuccess(res: FlowNodeTemplateType) {
-      res && onAddTool(res);
+      // All input is tool params
+      if (res.inputs.every((input) => input.toolDescription)) {
+        onAddTool(res);
+      } else {
+        reset();
+        setConfigTool(res);
+      }
     },
     errorToast: t('core.module.templates.Load plugin error')
   });
 
-  const { register, getValues, setValue, handleSubmit, reset } = useForm<Record<string, any>>({
-    defaultValues: currentTool?.inputs.reduce((acc, input) => {
-      //@ts-ignore
-      acc[input.key] = undefined;
-      return acc;
-    }, {})
-  });
-
-  useEffect(() => {
-    reset();
-  }, [currentTool, reset]);
-
-  return templates.length === 0 && !isLoadingData ? (
+  return filterValidTools.length === 0 && !isLoadingData ? (
     <EmptyTip text={t('core.app.ToolCall.No plugin')} />
   ) : (
     <MyBox>
-      {templates.map((item, i) => {
+      {filterValidTools.map((item, i) => {
         const selected = !!selectedTools.find((tool) => tool.id === item.id);
         return (
           <Flex
@@ -297,97 +284,91 @@ const RenderList = React.memo(function RenderList({
           </Flex>
         );
       })}
-      {isParamsModalOpen && (
+      {!!configTool && (
         <MyModal
           isOpen
           title={t('core.app.ToolCall.Parameter setting')}
           iconSrc="core/app/toolCall"
-          onClose={onParamsModalClose}
           overflow={'auto'}
         >
           <ModalBody>
-            {currentTool &&
-              currentTool.inputs.map((input, index) => {
-                const renderType = input.renderTypeList?.[input.selectedTypeIndex || 0];
-                const required = input.required || false;
+            {configTool.inputs.map((input) => {
+              const required = input.required || false;
 
-                if (renderType === 'reference') return null;
-
-                return (
-                  <Box key={input.key} _notLast={{ mb: 4 }} px={1}>
-                    <Box display={'inline-block'} position={'relative'} mb={1}>
-                      {t(input.debugLabel || input.label)}
-                    </Box>
-                    {(() => {
-                      if (input.valueType === WorkflowIOValueTypeEnum.string) {
-                        return (
-                          <Textarea
-                            {...register(input.key, {
-                              required
-                            })}
-                            placeholder={t(input.placeholder || '')}
-                            bg={'myGray.50'}
-                          />
-                        );
-                      }
-                      if (input.valueType === WorkflowIOValueTypeEnum.number) {
-                        return (
-                          <NumberInput
-                            step={input.step}
-                            min={input.min}
-                            max={input.max}
-                            bg={'myGray.50'}
-                          >
-                            <NumberInputField
-                              {...register(input.key, {
-                                required: input.required,
-                                min: input.min,
-                                max: input.max,
-                                valueAsNumber: true
-                              })}
-                            />
-                            <NumberInputStepper>
-                              <NumberIncrementStepper />
-                              <NumberDecrementStepper />
-                            </NumberInputStepper>
-                          </NumberInput>
-                        );
-                      }
-                      if (input.valueType === WorkflowIOValueTypeEnum.boolean) {
-                        return <Switch size={'lg'} {...register(input.key, { required })} />;
-                      }
+              return (
+                <Box key={input.key} _notLast={{ mb: 4 }} px={1}>
+                  <Box display={'inline-block'} position={'relative'} mb={1}>
+                    {t(input.debugLabel || input.label)}
+                  </Box>
+                  {(() => {
+                    if (input.valueType === WorkflowIOValueTypeEnum.string) {
                       return (
-                        <JsonEditor
-                          bg={'myGray.50'}
+                        <Textarea
+                          {...register(input.key, {
+                            required
+                          })}
                           placeholder={t(input.placeholder || '')}
-                          resize
-                          value={getValues(input.key)}
-                          onChange={(e) => {
-                            setValue(input.key, e);
-                          }}
+                          bg={'myGray.50'}
                         />
                       );
-                    })()}
-                  </Box>
-                );
-              })}
+                    }
+                    if (input.valueType === WorkflowIOValueTypeEnum.number) {
+                      return (
+                        <NumberInput
+                          step={input.step}
+                          min={input.min}
+                          max={input.max}
+                          bg={'myGray.50'}
+                        >
+                          <NumberInputField
+                            {...register(input.key, {
+                              required: input.required,
+                              min: input.min,
+                              max: input.max,
+                              valueAsNumber: true
+                            })}
+                          />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
+                      );
+                    }
+                    if (input.valueType === WorkflowIOValueTypeEnum.boolean) {
+                      return <Switch size={'lg'} {...register(input.key, { required })} />;
+                    }
+                    return (
+                      <JsonEditor
+                        bg={'myGray.50'}
+                        placeholder={t(input.placeholder || '')}
+                        resize
+                        value={getValues(input.key)}
+                        onChange={(e) => {
+                          setValue(input.key, e);
+                        }}
+                      />
+                    );
+                  })()}
+                </Box>
+              );
+            })}
           </ModalBody>
           <ModalFooter gap={6}>
-            <Button onClick={onParamsModalClose} variant={'whiteBase'}>
+            <Button onClick={onCloseConfigTool} variant={'whiteBase'}>
               {t('common.Cancel')}
             </Button>
             <Button
               variant={'primary'}
               onClick={handleSubmit((data) => {
-                currentTool &&
-                  onAddTool({
-                    ...currentTool,
-                    inputs: currentTool.inputs.map((input) => ({
-                      ...input,
-                      value: data[input.key]
-                    }))
-                  });
-                onParamsModalClose();
+                onAddTool({
+                  ...configTool,
+                  inputs: configTool.inputs.map((input) => ({
+                    ...input,
+                    value: data[input.key] ?? input.value
+                  }))
+                });
+                onCloseConfigTool();
               })}
             >
               {t('common.Confirm')}

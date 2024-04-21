@@ -67,10 +67,10 @@ export async function dispatchDatasetSearch(
   }
 
   // query extension
-  const extensionModel =
-    datasetSearchUsingExtensionQuery && datasetSearchExtensionModel
-      ? getLLMModel(datasetSearchExtensionModel)
-      : undefined;
+  const extensionModel = datasetSearchUsingExtensionQuery
+    ? getLLMModel(datasetSearchExtensionModel)
+    : undefined;
+
   const { concatQueries, rewriteQuery, aiExtensionResult } = await datasetSearchQueryExtension({
     query: userChatInput,
     extensionModel,

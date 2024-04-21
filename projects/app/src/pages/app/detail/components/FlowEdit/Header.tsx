@@ -13,7 +13,7 @@ import {
   getWorkflowStore,
   useFlowProviderStore
 } from '@/components/core/workflow/Flow/FlowProvider';
-import { flowNode2StoreNodes, filterExportModules } from '@/components/core/workflow/utils';
+import { flowNode2StoreNodes } from '@/components/core/workflow/utils';
 import { useAppStore } from '@/web/core/app/store/useAppStore';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
@@ -161,7 +161,7 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
                 onClick: async () => {
                   const data = await flowData2StoreDataAndCheck();
                   if (data) {
-                    copyData(filterExportModules(data.nodes), t('app.Export Config Successful'));
+                    copyData(JSON.stringify(data, null, 2), t('app.Export Config Successful'));
                   }
                 }
               }

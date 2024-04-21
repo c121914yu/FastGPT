@@ -42,7 +42,7 @@ export enum NodeInputKeyEnum {
   tts = 'tts',
   whisper = 'whisper',
   variables = 'variables',
-  intervalTimer = 'intervalTimer',
+  scheduleTrigger = 'scheduleTrigger',
 
   agents = 'agents', // cq agent key
 

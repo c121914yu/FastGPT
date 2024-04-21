@@ -406,12 +406,9 @@ const NodeIntro = React.memo(function NodeIntro({
             {t(intro)}
           </Box>
           {moduleIsTool && (
-            <MyIcon
-              name={'edit'}
-              w={'12px'}
-              p={'2px'}
-              cursor={'pointer'}
-              _hover={{ color: 'primary.500' }}
+            <Button
+              size={'xs'}
+              variant={'whiteBase'}
               onClick={() => {
                 onOpenIntroModal({
                   defaultVal: intro,
@@ -425,7 +422,9 @@ const NodeIntro = React.memo(function NodeIntro({
                   }
                 });
               }}
-            />
+            >
+              {t('core.module.Edit intro')}
+            </Button>
           )}
         </Flex>
         <EditIntroModal maxLength={500} />
