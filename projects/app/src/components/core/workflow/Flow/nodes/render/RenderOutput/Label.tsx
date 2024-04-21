@@ -12,16 +12,15 @@ import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
 
 const OutputLabel = ({
   nodeId,
-  outputKey,
   outputs,
-  ...item
-}: FlowNodeOutputItemType & {
-  outputKey: string;
+  output
+}: {
   nodeId: string;
   outputs: FlowNodeOutputItemType[];
+  output: FlowNodeOutputItemType;
 }) => {
   const { t } = useTranslation();
-  const { label = '', description, valueType } = item;
+  const { label = '', description, valueType } = output;
 
   const valueTypeLabel = useMemo(
     () => (valueType ? t(FlowValueTypeMap[valueType]?.label) : '-'),
@@ -30,43 +29,49 @@ const OutputLabel = ({
 
   const Render = useMemo(() => {
     return (
-      <Flex
-        className="nodrag"
-        cursor={'default'}
-        alignItems={'center'}
-        position={'relative'}
-        fontWeight={'medium'}
-        color={'myGray.600'}
-      >
-        <Box position={'relative'}>{t(label)}</Box>
-        {description && (
-          <MyTooltip label={t(description)} forceShow>
-            <QuestionOutlineIcon display={['none', 'inline']} mr={1} />
-          </MyTooltip>
-        )}
-        <Box
-          bg={'myGray.100'}
-          color={'myGray.500'}
-          border={'base'}
-          borderRadius={'sm'}
-          ml={2}
-          px={1}
-          py={0.5}
-          fontSize={'11px'}
+      <Box position={'relative'}>
+        <Flex
+          className="nodrag"
+          cursor={'default'}
+          alignItems={'center'}
+          fontWeight={'medium'}
+          color={'myGray.600'}
+          {...(output.type === FlowNodeOutputTypeEnum.source
+            ? {
+                flexDirection: 'row-reverse'
+              }
+            : {})}
         >
-          {valueTypeLabel}
-        </Box>
-        {item.type === FlowNodeOutputTypeEnum.source && (
+          <Box position={'relative'}>{t(label)}</Box>
+          {description && (
+            <MyTooltip label={t(description)} forceShow>
+              <QuestionOutlineIcon display={['none', 'inline']} />
+            </MyTooltip>
+          )}
+          <Box
+            bg={'myGray.100'}
+            color={'myGray.500'}
+            border={'base'}
+            borderRadius={'sm'}
+            mx={2}
+            px={1}
+            py={0.5}
+            fontSize={'11px'}
+          >
+            {valueTypeLabel}
+          </Box>
+        </Flex>
+        {output.type === FlowNodeOutputTypeEnum.source && (
           <SourceHandle
             nodeId={nodeId}
-            handleId={getHandleId(nodeId, 'source', item.key)}
+            handleId={getHandleId(nodeId, 'source', output.key)}
             translate={[26, 0]}
             position={Position.Right}
           />
         )}
-      </Flex>
+      </Box>
     );
-  }, [description, item.key, item.type, label, nodeId, t, valueTypeLabel]);
+  }, [description, output.key, output.type, label, nodeId, t, valueTypeLabel]);
 
   return Render;
 };
