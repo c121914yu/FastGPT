@@ -3,7 +3,7 @@ import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/consta
 import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 
 export const defaultEditFormData: FlowNodeInputItemType = {
-  valueType: 'string',
+  valueType: WorkflowIOValueTypeEnum.string,
   renderTypeList: [FlowNodeInputTypeEnum.reference],
   key: '',
   label: '',

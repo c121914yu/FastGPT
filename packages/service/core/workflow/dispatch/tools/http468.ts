@@ -2,7 +2,8 @@ import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/ind
 import {
   DYNAMIC_INPUT_KEY,
   NodeInputKeyEnum,
-  NodeOutputKeyEnum
+  NodeOutputKeyEnum,
+  WorkflowIOValueTypeEnum
 } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import axios from 'axios';
@@ -75,7 +76,7 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
       return httpHeader.reduce((acc: Record<string, string>, item) => {
         const key = replaceVariable(item.key, concatVariables);
         const value = replaceVariable(item.value, concatVariables);
-        acc[key] = valueTypeFormat(value, 'string');
+        acc[key] = valueTypeFormat(value, WorkflowIOValueTypeEnum.string);
         return acc;
       }, {});
     } catch (error) {
@@ -85,7 +86,7 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
   const params = httpParams.reduce((acc: Record<string, string>, item) => {
     const key = replaceVariable(item.key, concatVariables);
     const value = replaceVariable(item.value, concatVariables);
-    acc[key] = valueTypeFormat(value, 'string');
+    acc[key] = valueTypeFormat(value, WorkflowIOValueTypeEnum.string);
     return acc;
   }, {});
   const requestBody = await (() => {

@@ -379,10 +379,10 @@ const MenuRender = React.memo(function MenuRender({
 
 const NodeIntro = React.memo(function NodeIntro({
   nodeId,
-  intro
+  intro = ''
 }: {
   nodeId: string;
-  intro: string;
+  intro?: string;
 }) {
   const { t } = useTranslation();
   const { onChangeNode, splitToolInputs } = useFlowProviderStore();

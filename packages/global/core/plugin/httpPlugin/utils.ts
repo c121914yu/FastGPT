@@ -239,7 +239,7 @@ export const httpApiSchema2Plugins = async ({
       for (const key in headersObj) {
         httpNodeHeaders.push({
           key,
-          type: 'string',
+          type: WorkflowIOValueTypeEnum.string,
           // @ts-ignore
           value: headersObj[key]
         });
@@ -276,7 +276,7 @@ export const httpApiSchema2Plugins = async ({
         inputs: [
           {
             key: pluginOutputKey,
-            valueType: 'string',
+            valueType: WorkflowIOValueTypeEnum.string,
             label: pluginOutputKey,
             renderTypeList: [FlowNodeInputTypeEnum.reference],
             required: false,
@@ -284,7 +284,6 @@ export const httpApiSchema2Plugins = async ({
             canEdit: true,
             editField: {
               key: true,
-              name: true,
               description: true,
               valueType: true
             },
@@ -295,7 +294,7 @@ export const httpApiSchema2Plugins = async ({
           {
             id: pluginOutputId,
             key: pluginOutputKey,
-            valueType: 'string',
+            valueType: WorkflowIOValueTypeEnum.string,
             label: pluginOutputKey,
             type: FlowNodeOutputTypeEnum.static
           }
@@ -316,7 +315,7 @@ export const httpApiSchema2Plugins = async ({
           {
             key: 'DYNAMIC_INPUT_KEY',
             renderTypeList: [FlowNodeInputTypeEnum.addInputParam],
-            valueType: FlowNodeOutputTypeEnum.dynamic,
+            valueType: WorkflowIOValueTypeEnum.dynamic,
             label: '',
             required: false,
             description: 'core.module.input.description.HTTP Dynamic Input',
@@ -329,7 +328,7 @@ export const httpApiSchema2Plugins = async ({
           {
             key: 'system_httpMethod',
             renderTypeList: [FlowNodeInputTypeEnum.custom],
-            valueType: 'string',
+            valueType: WorkflowIOValueTypeEnum.string,
             label: '',
             value: item.method.toUpperCase(),
             required: true
@@ -337,7 +336,7 @@ export const httpApiSchema2Plugins = async ({
           {
             key: 'system_httpReqUrl',
             renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            valueType: 'string',
+            valueType: WorkflowIOValueTypeEnum.string,
             label: '',
             description: 'core.module.input.description.Http Request Url',
             placeholder: 'https://api.ai.com/getInventory',
@@ -347,7 +346,7 @@ export const httpApiSchema2Plugins = async ({
           {
             key: 'system_httpHeader',
             renderTypeList: [FlowNodeInputTypeEnum.custom],
-            valueType: 'any',
+            valueType: WorkflowIOValueTypeEnum.any,
             value: httpNodeHeaders,
             label: '',
             description: 'core.module.input.description.Http Request Header',
@@ -357,7 +356,7 @@ export const httpApiSchema2Plugins = async ({
           {
             key: 'system_httpParams',
             renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            valueType: 'any',
+            valueType: WorkflowIOValueTypeEnum.any,
             value: httpNodeParams,
             label: '',
             required: false
@@ -365,28 +364,13 @@ export const httpApiSchema2Plugins = async ({
           {
             key: 'system_httpJsonBody',
             renderTypeList: [FlowNodeInputTypeEnum.hidden],
-            valueType: 'any',
+            valueType: WorkflowIOValueTypeEnum.any,
             value: httpNodeBody,
             label: '',
             required: false
           }
         ],
-        outputs: [
-          {
-            id: 'httpRawResponse',
-            key: 'httpRawResponse',
-            label: '原始响应',
-            description: 'HTTP请求的原始响应。只能接受字符串或JSON类型响应数据。',
-            valueType: 'any',
-            type: FlowNodeOutputTypeEnum.static
-          },
-          {
-            id: 'userChatInput',
-            key: 'system_addOutputParam',
-            valueType: 'any',
-            label: ''
-          }
-        ]
+        outputs: HttpModule468.outputs
       }
     ];
 
