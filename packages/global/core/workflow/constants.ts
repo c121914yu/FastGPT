@@ -108,8 +108,6 @@ export enum NodeOutputKeyEnum {
   addOutputParam = 'system_addOutputParam',
 
   // dataset
-  datasetIsEmpty = 'isEmpty',
-  datasetUnEmpty = 'unEmpty',
   datasetQuoteQA = 'quoteQA',
 
   // classify

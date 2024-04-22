@@ -1,5 +1,9 @@
 export const primaryColor = '#3370FF';
 export const lowPrimaryColor = '#94B5FF';
+export const handleSize = {
+  width: '18px',
+  height: '18px'
+};
 
 export const sourceCommonStyle = {
   backgroundColor: 'white',

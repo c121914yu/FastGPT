@@ -10,6 +10,7 @@ import { Connection, Handle, Position } from 'reactflow';
 import { useFlowProviderStore } from '../../../FlowProvider';
 import { useCallback } from 'react';
 import { getHandleId } from '@fastgpt/global/core/workflow/utils';
+const handleSize = '14px';
 
 type ToolHandleProps = BoxProps & {
   nodeId: string;
@@ -40,17 +41,20 @@ export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
       <Handle
         style={{
           borderRadius: '0',
-          backgroundColor: 'transparent'
+          backgroundColor: 'transparent',
+          border: 'none',
+          width: handleSize,
+          height: handleSize
         }}
         type="target"
         id={handleId}
         position={Position.Top}
       >
         <Box
-          w={'14px'}
-          h={'14px'}
+          w={handleSize}
+          h={handleSize}
           border={'4px solid #5E8FFF'}
-          transform={'translate(-40%,-30%) rotate(45deg)'}
+          transform={'translate(0,-30%) rotate(45deg)'}
           pointerEvents={'none'}
           visibility={hidden ? 'hidden' : 'visible'}
         />
@@ -90,7 +94,10 @@ export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
       <Handle
         style={{
           borderRadius: '0',
-          backgroundColor: 'transparent'
+          backgroundColor: 'transparent',
+          border: 'none',
+          width: handleSize,
+          height: handleSize
         }}
         type="source"
         id={NodeOutputKeyEnum.selectedTools}
@@ -98,10 +105,10 @@ export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
         onConnect={onConnect}
       >
         <Box
-          w={'14px'}
-          h={'14px'}
+          w={handleSize}
+          h={handleSize}
           border={'4px solid #5E8FFF'}
-          transform={'translate(-40%,-30%) rotate(45deg)'}
+          transform={'translate(0,30%) rotate(45deg)'}
           pointerEvents={'none'}
         />
       </Handle>

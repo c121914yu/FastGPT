@@ -2,9 +2,8 @@ import React, { useMemo } from 'react';
 import { Handle, Position } from 'reactflow';
 import { useFlowProviderStore } from '../../../FlowProvider';
 import { SmallAddIcon } from '@chakra-ui/icons';
-import { handleHighLightStyle, sourceCommonStyle, handleConnectedStyle } from './style';
+import { handleHighLightStyle, sourceCommonStyle, handleConnectedStyle, handleSize } from './style';
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { Box } from '@chakra-ui/react';
 
 type Props = {
   nodeId: string;
@@ -92,7 +91,8 @@ const MySourceHandle = React.memo(function MySourceHandle({
                 visibility: 'hidden',
                 ...(translateStr && {
                   transform: `translate(${translateStr})`
-                })
+                }),
+                ...handleSize
               }
         }
         type="source"
@@ -216,7 +216,8 @@ const MyTargetHandle = React.memo(function MyTargetHandle({
             ? styles
             : {
                 visibility: 'hidden',
-                transform
+                transform,
+                ...handleSize
               }
         }
         type="target"

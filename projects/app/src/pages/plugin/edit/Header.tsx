@@ -17,7 +17,10 @@ import {
   useFlowProviderStore
 } from '@/components/core/workflow/Flow/FlowProvider';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
-import { checkWorkflowNodeAndConnection } from '@/web/core/workflow/utils';
+import {
+  checkWorkflowNodeAndConnection,
+  filterSensitiveNodesData
+} from '@/web/core/workflow/utils';
 
 const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 
@@ -101,7 +104,17 @@ const Header = ({ plugin, onClose }: Props) => {
               onClick: async () => {
                 const data = await flowData2StoreDataAndCheck();
                 if (data) {
-                  copyData(filterExportModules(data.nodes), t('app.Export Config Successful'));
+                  copyData(
+                    JSON.stringify(
+                      {
+                        nodes: filterSensitiveNodesData(data.nodes),
+                        edges: data.edges
+                      },
+                      null,
+                      2
+                    ),
+                    t('app.Export Config Successful')
+                  );
                 }
               }
             }

@@ -1,13 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { type ChatHistoryItemResType } from '@fastgpt/global/core/chat/type.d';
 import { DispatchNodeResponseType } from '@fastgpt/global/core/workflow/runtime/type.d';
-import type { ChatItemType } from '@fastgpt/global/core/chat/type';
 import { Flex, BoxProps, useDisclosure, useTheme, Box } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
 import dynamic from 'next/dynamic';
-import FillTag from '@fastgpt/web/components/common/Tag/Fill';
+import MyTag from '@fastgpt/web/components/common/Tag/index';
 import MyTooltip from '../MyTooltip';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { getSourceNameIcon } from '@fastgpt/global/core/dataset/utils';
@@ -99,11 +98,6 @@ const ResponseTags = ({
     };
   }, [showDetail, flowResponses]);
 
-  const TagStyles: BoxProps = {
-    mr: 2,
-    bg: 'transparent'
-  };
-
   return flowResponses.length === 0 ? null : (
     <>
       {sourceList.length > 0 && (
@@ -150,57 +144,52 @@ const ResponseTags = ({
         </>
       )}
       {showDetail && (
-        <Flex alignItems={'center'} mt={3} flexWrap={'wrap'}>
+        <Flex alignItems={'center'} mt={3} flexWrap={'wrap'} gap={2}>
           {quoteList.length > 0 && (
             <MyTooltip label="查看引用">
-              <FillTag
+              <MyTag
                 colorSchema="blue"
+                type="solid"
                 cursor={'pointer'}
-                {...TagStyles}
                 onClick={() => setQuoteModalData({ rawSearch: quoteList })}
               >
                 {quoteList.length}条引用
-              </FillTag>
+              </MyTag>
             </MyTooltip>
           )}
           {llmModuleAccount === 1 && (
             <>
               {historyPreview.length > 0 && (
                 <MyTooltip label={'点击查看上下文预览'}>
-                  <FillTag
+                  <MyTag
                     colorSchema="green"
                     cursor={'pointer'}
-                    {...TagStyles}
+                    type="solid"
                     onClick={() => setContextModalData(historyPreview)}
                   >
                     {historyPreview.length}条上下文
-                  </FillTag>
+                  </MyTag>
                 </MyTooltip>
               )}
             </>
           )}
           {llmModuleAccount > 1 && (
-            <FillTag colorSchema="blue" {...TagStyles}>
+            <MyTag type="solid" colorSchema="blue">
               多组 AI 对话
-            </FillTag>
+            </MyTag>
           )}
 
           {isPc && runningTime > 0 && (
             <MyTooltip label={'模块运行时间和'}>
-              <FillTag colorSchema="purple" cursor={'default'} {...TagStyles}>
+              <MyTag colorSchema="purple" type="solid" cursor={'default'}>
                 {runningTime}s
-              </FillTag>
+              </MyTag>
             </MyTooltip>
           )}
           <MyTooltip label={t('core.chat.response.Read complete response tips')}>
-            <FillTag
-              colorSchema="gray"
-              cursor={'pointer'}
-              {...TagStyles}
-              onClick={onOpenWholeModal}
-            >
+            <MyTag colorSchema="gray" type="solid" cursor={'pointer'} onClick={onOpenWholeModal}>
               {t('core.chat.response.Read complete response')}
-            </FillTag>
+            </MyTag>
           </MyTooltip>
         </Flex>
       )}

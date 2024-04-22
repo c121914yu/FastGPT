@@ -20,7 +20,10 @@ import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import MyMenu from '@fastgpt/web/components/common/MyMenu';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
-import { checkWorkflowNodeAndConnection } from '@/web/core/workflow/utils';
+import {
+  checkWorkflowNodeAndConnection,
+  filterSensitiveNodesData
+} from '@/web/core/workflow/utils';
 
 const ImportSettings = dynamic(() => import('@/components/core/workflow/Flow/ImportSettings'));
 
@@ -161,7 +164,17 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
                 onClick: async () => {
                   const data = await flowData2StoreDataAndCheck();
                   if (data) {
-                    copyData(JSON.stringify(data, null, 2), t('app.Export Config Successful'));
+                    copyData(
+                      JSON.stringify(
+                        {
+                          nodes: filterSensitiveNodesData(data.nodes),
+                          edges: data.edges
+                        },
+                        null,
+                        2
+                      ),
+                      t('app.Export Config Successful')
+                    );
                   }
                 }
               }

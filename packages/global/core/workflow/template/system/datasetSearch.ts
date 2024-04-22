@@ -21,7 +21,7 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
   id: FlowNodeTypeEnum.datasetSearchNode,
   templateType: FlowNodeTemplateTypeEnum.functionCall,
   flowNodeType: FlowNodeTypeEnum.datasetSearchNode,
-  sourceHandle: getHandleConfig(false, false, false, false),
+  sourceHandle: getHandleConfig(true, true, true, true),
   targetHandle: getHandleConfig(true, true, true, true),
   avatar: '/imgs/workflow/db.png',
   name: '知识库搜索',
@@ -94,23 +94,10 @@ export const DatasetSearchModule: FlowNodeTemplateType = {
   ],
   outputs: [
     {
-      id: NodeOutputKeyEnum.datasetIsEmpty,
-      key: NodeOutputKeyEnum.datasetIsEmpty,
-      label: 'core.module.output.label.Search result empty',
-      type: FlowNodeOutputTypeEnum.source,
-      valueType: WorkflowIOValueTypeEnum.boolean
-    },
-    {
-      id: NodeOutputKeyEnum.datasetUnEmpty,
-      key: NodeOutputKeyEnum.datasetUnEmpty,
-      label: 'core.module.output.label.Search result not empty',
-      type: FlowNodeOutputTypeEnum.source,
-      valueType: WorkflowIOValueTypeEnum.boolean
-    },
-    {
       id: NodeOutputKeyEnum.datasetQuoteQA,
       key: NodeOutputKeyEnum.datasetQuoteQA,
       label: 'core.module.Dataset quote.label',
+      description: '特殊数组格式，搜索结果为空时，返回空数组。',
       type: FlowNodeOutputTypeEnum.static,
       valueType: WorkflowIOValueTypeEnum.datasetQuote
     }
