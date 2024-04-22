@@ -53,7 +53,7 @@ export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
         <Box
           w={handleSize}
           h={handleSize}
-          border={'4px solid #5E8FFF'}
+          border={'4px solid #8774EE'}
           transform={'translate(0,-30%) rotate(45deg)'}
           pointerEvents={'none'}
           visibility={hidden ? 'hidden' : 'visible'}
@@ -107,7 +107,7 @@ export const ToolSourceHandle = ({ nodeId }: ToolHandleProps) => {
         <Box
           w={handleSize}
           h={handleSize}
-          border={'4px solid #5E8FFF'}
+          border={'4px solid #8774EE'}
           transform={'translate(0,30%) rotate(45deg)'}
           pointerEvents={'none'}
         />
