@@ -388,9 +388,11 @@ const RenderList = React.memo(function RenderList({
                     />
                     <Box ml={5} flex={'1 0 0'}>
                       <Box color={'black'}>{t(template.name)}</Box>
-                      <Box className="textEllipsis3" color={'myGray.500'} fontSize={'sm'}>
-                        {t(template.intro)}
-                      </Box>
+                      {template.intro && (
+                        <Box className="textEllipsis3" color={'myGray.500'} fontSize={'sm'}>
+                          {t(template.intro)}
+                        </Box>
+                      )}
                     </Box>
                   </Flex>
                 ))}

@@ -29,6 +29,7 @@ export function MaxLengthPlugin({ maxLength }: { maxLength: number }): null {
             lastRestoredEditorState = prevEditorState;
             $restoreEditorState(editor, prevEditorState);
           } else {
+            //@ts-ignore
             trimTextContentFromAnchor(editor, anchor, delCount);
           }
         }

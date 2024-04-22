@@ -104,8 +104,8 @@ export default function Editor({
               overflow={'overlay'}
             >
               <Box
-                color={'myGray.500'}
-                fontSize={'sm'}
+                color={'myGray.400'}
+                fontSize={'11px'}
                 userSelect={'none'}
                 whiteSpace={'pre-wrap'}
                 wordBreak={'break-all'}
@@ -148,7 +148,7 @@ export default function Editor({
         <Box
           zIndex={10}
           position={'absolute'}
-          bottom={1}
+          bottom={0}
           right={2}
           cursor={'pointer'}
           onClick={onOpenModal}

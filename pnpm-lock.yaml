@@ -235,6 +235,9 @@ importers:
       '@lexical/react':
         specifier: 0.12.6
         version: 0.12.6(lexical@0.12.6)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.14)
+      '@lexical/selection':
+        specifier: ^0.14.5
+        version: 0.14.5
       '@lexical/text':
         specifier: 0.12.6
         version: 0.12.6(lexical@0.12.6)
@@ -3575,6 +3578,12 @@ packages:
       lexical: 0.12.6
     dependencies:
       lexical: 0.12.6
+    dev: false
+
+  /@lexical/selection@0.14.5:
+    resolution: {integrity: sha512-uK4X1wOSnlq2xvIIludnPb6i+grtV4IR7Y1Dg7ZGFJfk1q5FWuS9iA3iVjZbSiehgbZef5nDCPRez9WN/F5krA==}
+    dependencies:
+      lexical: 0.14.5
     dev: false
 
   /@lexical/table@0.12.6(lexical@0.12.6):
@@ -8638,6 +8647,10 @@ packages:
 
   /lexical@0.12.6:
     resolution: {integrity: sha512-Nlfjc+k9cIWpOMv7XufF0Mv09TAXSemNAuAqFLaOwTcN+RvhvYTDtVLSp9D9r+5I097fYs1Vf/UYwH2xEpkFfQ==}
+    dev: false
+
+  /lexical@0.14.5:
+    resolution: {integrity: sha512-ouV7Gyr9+3WT3WTrCgRAD3iZnlJWfs2/kBl2x3J2Q3X9uCWJn/zn21fQ8G1EUHlu0dvXPBmdk9hXb/FjTClt6Q==}
     dev: false
 
   /lib0@0.2.93:
