@@ -1,9 +1,5 @@
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
-import { filterGPTMessageByMaxTokens } from '../../../chat/utils';
-import {
-  countGptMessagesTokens,
-  countMessagesTokens
-} from '@fastgpt/global/common/string/tiktoken';
+import { countMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import { ChatItemValueTypeEnum, ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAIApi } from '../../../ai/config';
@@ -17,12 +13,6 @@ import { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { ModelTypeEnum, getLLMModel } from '../../../ai/model';
 import { getHistories } from '../utils';
 import { formatModelChars2Points } from '../../../../support/wallet/usage/utils';
-import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
-import {
-  ChatCompletionCreateParams,
-  ChatCompletionMessageParam,
-  ChatCompletionTool
-} from '@fastgpt/global/core/ai/type';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 import { getHandleId } from '@fastgpt/global/core/workflow/utils';

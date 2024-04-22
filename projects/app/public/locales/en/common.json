@@ -919,6 +919,7 @@
       "input": {
         "Add Input": "Add Input",
         "Input Number": "Input: {{length}}",
+        "add": "Add condition",
         "description": {
           "Background": "",
           "HTTP Dynamic Input": "Receive output values from preceding nodes as variables, which can be used as parameters in HTTP requests.",
