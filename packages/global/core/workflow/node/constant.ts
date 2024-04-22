@@ -22,6 +22,8 @@ export enum FlowNodeInputTypeEnum { // render ui
   selectDatasetParamsModal = 'selectDatasetParamsModal',
   settingDatasetQuotePrompt = 'settingDatasetQuotePrompt',
 
+  select = 'select',
+
   hidden = 'hidden',
   custom = 'custom'
 }
@@ -101,7 +103,8 @@ export enum FlowNodeTypeEnum {
   queryExtension = 'cfr',
   tools = 'tools',
   stopTool = 'stopTool',
-  lafModule = 'lafModule'
+  lafModule = 'lafModule',
+  ifElseModule = 'ifElseModule'
 }
 
 export const EDGE_TYPE = 'default';

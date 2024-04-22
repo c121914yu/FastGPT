@@ -126,7 +126,10 @@ export enum NodeOutputKeyEnum {
   httpRawResponse = 'httpRawResponse',
 
   // plugin
-  pluginStart = 'pluginStart'
+  pluginStart = 'pluginStart',
+
+  if = 'IF',
+  else = 'ELSE'
 }
 
 export enum VariableInputEnum {

@@ -39,6 +39,7 @@ import { ChatItemValueTypeEnum } from '@fastgpt/global/core/chat/constants';
 import { DispatchFlowResponse } from './type';
 import { dispatchStopToolCall } from './agent/runTool/stopTool';
 import { dispatchLafRequest } from './tools/runLaf';
+import { dispatchIfElse } from './tools/runIfElse';
 import { RuntimeEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { getReferenceVariableValue } from '@fastgpt/global/core/workflow/runtime/utils';
 import { dispatchSystemConfig } from './init/systemConfiig';
@@ -60,6 +61,7 @@ const callbackMap: Record<`${FlowNodeTypeEnum}`, Function> = {
   [FlowNodeTypeEnum.tools]: dispatchRunTools,
   [FlowNodeTypeEnum.stopTool]: dispatchStopToolCall,
   [FlowNodeTypeEnum.lafModule]: dispatchLafRequest,
+  [FlowNodeTypeEnum.ifElseModule]: dispatchIfElse,
 
   // none
   [FlowNodeTypeEnum.systemConfig]: dispatchSystemConfig,
