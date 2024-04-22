@@ -19,20 +19,6 @@ RUN [ -f pnpm-lock.yaml ] || (echo "Lockfile not found." && exit 1)
 
 RUN pnpm i
 
-# --------- install dependence -----------
-FROM node:18.17-alpine AS workerDeps
-WORKDIR /app
-
-ARG proxy
-
-RUN [ -z "$proxy" ] || sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-RUN apk add --no-cache libc6-compat && npm install -g pnpm@8.6.0
-# if proxy exists, set proxy
-RUN [ -z "$proxy" ] || pnpm config set registry https://registry.npmmirror.com
-
-COPY ./worker /app/worker
-RUN cd /app/worker && pnpm i --production --ignore-workspace
-
 # --------- builder -----------
 FROM node:18.17-alpine AS builder
 WORKDIR /app
@@ -74,8 +60,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/projects/$name/.next/standalone /
 COPY --from=builder --chown=nextjs:nodejs /app/projects/$name/.next/static /app/projects/$name/.next/static
 # copy package.json to version file
 COPY --from=builder /app/projects/$name/package.json ./package.json 
-# copy woker
-COPY --from=workerDeps /app/worker /app/worker
 # copy config
 COPY ./projects/$name/data /app/data
 RUN chown -R nextjs:nodejs /app/data

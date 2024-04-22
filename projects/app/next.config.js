@@ -8,20 +8,6 @@ const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === 'development' ? false : true,
   compress: true,
   webpack(config, { isServer }) {
-    if (!isServer) {
-      config.resolve = {
-        ...config.resolve,
-        fallback: {
-          ...config.resolve.fallback,
-          fs: false
-        }
-      };
-    } else {
-      if (!config.externals) {
-        config.externals = [];
-      }
-      config.externals.push('isolated-vm');
-    }
     Object.assign(config.resolve.alias, {
       '@mongodb-js/zstd': false,
       '@aws-sdk/credential-providers': false,
@@ -45,6 +31,38 @@ const nextConfig = {
       exprContextCritical: false,
       unknownContextCritical: false
     };
+
+    if (isServer) {
+      config.externals.push('isolated-vm');
+      config.externals.push('worker_threads');
+
+      if (config.name === 'server') {
+        // config.output.globalObject = 'self';
+
+        const oldEntry = config.entry;
+        config = {
+          ...config,
+          async entry(...args) {
+            const entries = await oldEntry(...args);
+            return {
+              ...entries,
+              htmlStr2Md: path.resolve(process.cwd(), '../../packages/service/worker/htmlStr2Md.ts')
+            };
+          }
+        };
+      }
+    } else {
+      config.resolve = {
+        ...config.resolve,
+        fallback: {
+          ...config.resolve.fallback,
+          fs: false
+        }
+      };
+      if (!config.externals) {
+        config.externals = [];
+      }
+    }
 
     return config;
   },
