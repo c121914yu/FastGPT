@@ -8,7 +8,6 @@ import ReactFlow, {
   NodeProps,
   ReactFlowProvider,
   useReactFlow,
-  OnInit,
   NodeChange,
   OnConnectStartParams,
   addEdge,
@@ -55,7 +54,8 @@ const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
   [FlowNodeTypeEnum.stopTool]: (data: NodeProps<FlowNodeItemType>) => (
     <NodeSimple {...data} minW={'100px'} maxW={'300px'} />
   ),
-  [FlowNodeTypeEnum.lafModule]: dynamic(() => import('./nodes/NodeLaf'))
+  [FlowNodeTypeEnum.lafModule]: dynamic(() => import('./nodes/NodeLaf')),
+  [FlowNodeTypeEnum.ifElseModule]: dynamic(() => import('./nodes/NodeIfElse'))
 };
 const edgeTypes = {
   [EDGE_TYPE]: ButtonEdge

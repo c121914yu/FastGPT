@@ -174,6 +174,7 @@ export const ReferSelector = ({ placeholder, value, list, onSelect, styles }: Se
       <Button
         justifyContent={'space-between'}
         width={'100%'}
+        minW={'200px'}
         rightIcon={<ChevronDownIcon />}
         variant={'whiteFlow'}
         _active={{
