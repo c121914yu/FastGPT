@@ -38,18 +38,19 @@ type FormType = {
 
 const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) => {
   const { t } = useTranslation();
-  const [refresh, setRefresh] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const theme = useTheme();
   const { isPc, feConfigs } = useSystemStore();
-  const { register, setValue, getValues, handleSubmit } = useForm<FormType>({
+  const { register, setValue, watch, handleSubmit } = useForm<FormType>({
     defaultValues: {
       avatar: '/icon/logo.svg',
       name: '',
       templateId: appTemplates[0].id
     }
   });
+  const avatar = watch('avatar');
+  const templateId = watch('templateId');
 
   const { File, onOpen: onOpenSelectFile } = useSelectFile({
     fileType: '.jpg,.png',
@@ -68,7 +69,6 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
           maxH: 300
         });
         setValue('avatar', src);
-        setRefresh((state) => !state);
       } catch (err: any) {
         toast({
           title: getErrText(err, t('common.error.Select avatar failed')),
@@ -118,7 +118,7 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
           <MyTooltip label={t('common.Set Avatar')}>
             <Avatar
               flexShrink={0}
-              src={getValues('avatar')}
+              src={avatar}
               w={['28px', '32px']}
               h={['28px', '32px']}
               cursor={'pointer'}
@@ -154,9 +154,10 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                   borderRadius={'md'}
                   cursor={'pointer'}
                   boxShadow={'sm'}
-                  {...(getValues('templateId') === item.id
+                  {...(templateId === item.id
                     ? {
-                        bg: 'myWhite.600'
+                        bg: 'primary.50',
+                        borderColor: 'primary.500'
                       }
                     : {
                         _hover: {
@@ -165,7 +166,6 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                       })}
                   onClick={() => {
                     setValue('templateId', item.id);
-                    setRefresh((state) => !state);
                   }}
                 >
                   <Flex alignItems={'center'}>

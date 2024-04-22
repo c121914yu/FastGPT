@@ -25,7 +25,7 @@
     "Connection type is different": "连接的类型不一致",
     "Copy Module Config": "复制配置",
     "Dataset Quote Template": "知识库问答模式",
-    "Export Config Successful": "已复制配置，请注意检查是否有重要数据",
+    "Export Config Successful": "已复制配置，自动过滤部分敏感信息，请注意检查是否仍有敏感数据",
     "Export Configs": "导出配置",
     "Feedback Count": "用户反馈",
     "Import Configs": "导入配置",

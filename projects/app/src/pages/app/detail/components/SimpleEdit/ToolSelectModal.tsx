@@ -209,8 +209,9 @@ const RenderList = React.memo(function RenderList({
       const res = await getPreviewPluginModule(template.id);
 
       if (!checkToolInputValid(res)) {
-        return t('core.app.ToolCall.This plugin cannot be called as a tool');
+        return Promise.reject(t('core.app.ToolCall.This plugin cannot be called as a tool'));
       }
+
       // All input is tool params
       if (res.inputs.every((input) => input.toolDescription)) {
         onAddTool(res);

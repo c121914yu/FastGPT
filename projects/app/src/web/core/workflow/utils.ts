@@ -15,7 +15,7 @@ import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { systemConfigNode2VariableNode } from './adapt';
 import { VARIABLE_NODE_ID } from './constants';
-import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 
 export const nodeTemplate2FlowNode = ({
   template,
@@ -212,4 +212,22 @@ export const checkWorkflowNodeAndConnection = ({
       return [data.nodeId];
     }
   }
+};
+
+export const filterSensitiveNodesData = (nodes: StoreNodeItemType[]) => {
+  const cloneNodes = JSON.parse(JSON.stringify(nodes)) as StoreNodeItemType[];
+
+  cloneNodes.forEach((node) => {
+    // selected dataset
+    if (node.flowNodeType === FlowNodeTypeEnum.datasetSearchNode) {
+      node.inputs.forEach((input) => {
+        if (input.key === NodeInputKeyEnum.datasetSelectList) {
+          input.value = [];
+        }
+      });
+    }
+
+    return node;
+  });
+  return cloneNodes;
 };

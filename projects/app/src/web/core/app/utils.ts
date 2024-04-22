@@ -4,7 +4,7 @@ import {
   FlowNodeInputTypeEnum,
   FlowNodeTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
-import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
@@ -14,6 +14,7 @@ type WorkflowType = {
   edges: StoreEdgeItemType[];
 };
 export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
+  const workflowStartNodeId = 'workflowStartNodeId';
   function systemConfigTemplate(formData: AppSimpleEditFormType): StoreNodeItemType {
     return {
       nodeId: 'userGuide',
@@ -67,7 +68,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
   }
   function workflowStartTemplate(): StoreNodeItemType {
     return {
-      nodeId: '448745',
+      nodeId: workflowStartNodeId,
       name: '流程开始',
       intro: '',
       avatar: '/imgs/workflow/userChatInput.svg',
@@ -80,7 +81,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
         {
           key: 'userChatInput',
           renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
-          valueType: 'string',
+          valueType: WorkflowIOValueTypeEnum.string,
           label: '用户问题',
           required: true,
           toolDescription: '用户问题'
@@ -91,7 +92,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
           id: 'userChatInput',
           key: 'userChatInput',
           label: 'core.module.input.label.user question',
-          valueType: 'string',
+          valueType: WorkflowIOValueTypeEnum.string,
           type: 'static'
         }
       ]
@@ -120,7 +121,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
                 FlowNodeInputTypeEnum.reference
               ],
               label: 'core.module.input.label.aiModel',
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               value: formData.aiSettings.model
             },
             {
@@ -128,7 +129,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: formData.aiSettings.temperature,
-              valueType: 'number',
+              valueType: WorkflowIOValueTypeEnum.number,
               min: 0,
               max: 10,
               step: 1
@@ -138,7 +139,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: formData.aiSettings.maxToken,
-              valueType: 'number',
+              valueType: WorkflowIOValueTypeEnum.number,
               min: 100,
               max: 4000,
               step: 50
@@ -148,25 +149,25 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: true,
-              valueType: 'boolean'
+              valueType: WorkflowIOValueTypeEnum.boolean
             },
             {
               key: 'quoteTemplate',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'string'
+              valueType: WorkflowIOValueTypeEnum.string
             },
             {
               key: 'quotePrompt',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'string'
+              valueType: WorkflowIOValueTypeEnum.string
             },
             {
               key: 'systemPrompt',
               renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
               max: 3000,
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               label: 'core.ai.Prompt',
               description: 'core.app.tip.chatNodeSystemPromptTip',
               placeholder: 'core.app.tip.chatNodeSystemPromptTip',
@@ -175,7 +176,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
             {
               key: 'history',
               renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
-              valueType: 'chatHistory',
+              valueType: WorkflowIOValueTypeEnum.chatHistory,
               label: 'core.module.input.label.chat history',
               required: true,
               min: 0,
@@ -185,11 +186,11 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
             {
               key: 'userChatInput',
               renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               label: '用户问题',
               required: true,
               toolDescription: '用户问题',
-              value: ['448745', 'userChatInput']
+              value: [workflowStartNodeId, 'userChatInput']
             },
             {
               key: 'quoteQA',
@@ -197,7 +198,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               label: '',
               debugLabel: '知识库引用',
               description: '',
-              valueType: 'datasetQuote'
+              valueType: WorkflowIOValueTypeEnum.datasetQuote
             }
           ],
           outputs: [
@@ -206,7 +207,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               key: 'history',
               label: 'core.module.output.label.New context',
               description: 'core.module.output.description.New context',
-              valueType: 'chatHistory',
+              valueType: WorkflowIOValueTypeEnum.chatHistory,
               type: 'static'
             },
             {
@@ -214,7 +215,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               key: 'answerText',
               label: 'core.module.output.label.Ai response content',
               description: 'core.module.output.description.Ai response content',
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               type: 'static'
             }
           ]
@@ -222,9 +223,9 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
       ],
       edges: [
         {
-          source: '448745',
+          source: workflowStartNodeId,
           target: '7BdojPlukIQw',
-          sourceHandle: '448745-source-right',
+          sourceHandle: `${workflowStartNodeId}-source-right`,
           targetHandle: '7BdojPlukIQw-target-left'
         }
       ]
@@ -252,7 +253,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
                 FlowNodeInputTypeEnum.reference
               ],
               label: 'core.module.input.label.aiModel',
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               value: formData.aiSettings.model
             },
             {
@@ -260,7 +261,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: formData.aiSettings.temperature,
-              valueType: 'number',
+              valueType: WorkflowIOValueTypeEnum.number,
               min: 0,
               max: 10,
               step: 1
@@ -270,7 +271,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: formData.aiSettings.maxToken,
-              valueType: 'number',
+              valueType: WorkflowIOValueTypeEnum.number,
               min: 100,
               max: 4000,
               step: 50
@@ -280,25 +281,25 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: true,
-              valueType: 'boolean'
+              valueType: WorkflowIOValueTypeEnum.boolean
             },
             {
               key: 'quoteTemplate',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'string'
+              valueType: WorkflowIOValueTypeEnum.string
             },
             {
               key: 'quotePrompt',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'string'
+              valueType: WorkflowIOValueTypeEnum.string
             },
             {
               key: 'systemPrompt',
               renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
               max: 3000,
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               label: 'core.ai.Prompt',
               description: 'core.app.tip.chatNodeSystemPromptTip',
               placeholder: 'core.app.tip.chatNodeSystemPromptTip',
@@ -307,7 +308,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
             {
               key: 'history',
               renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
-              valueType: 'chatHistory',
+              valueType: WorkflowIOValueTypeEnum.chatHistory,
               label: 'core.module.input.label.chat history',
               required: true,
               min: 0,
@@ -317,11 +318,11 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
             {
               key: 'userChatInput',
               renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               label: '用户问题',
               required: true,
               toolDescription: '用户问题',
-              value: ['448745', 'userChatInput']
+              value: [workflowStartNodeId, 'userChatInput']
             },
             {
               key: 'quoteQA',
@@ -329,7 +330,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               label: '',
               debugLabel: '知识库引用',
               description: '',
-              valueType: 'datasetQuote',
+              valueType: WorkflowIOValueTypeEnum.datasetQuote,
               value: ['iKBoX2vIzETU', 'quoteQA']
             }
           ],
@@ -339,7 +340,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               key: 'history',
               label: 'core.module.output.label.New context',
               description: 'core.module.output.description.New context',
-              valueType: 'chatHistory',
+              valueType: WorkflowIOValueTypeEnum.chatHistory,
               type: 'static'
             },
             {
@@ -347,7 +348,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               key: 'answerText',
               label: 'core.module.output.label.Ai response content',
               description: 'core.module.output.description.Ai response content',
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               type: 'static'
             }
           ]
@@ -372,7 +373,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               ],
               label: 'core.module.input.label.Select dataset',
               value: formData.dataset.datasets,
-              valueType: FlowNodeInputTypeEnum.selectDataset,
+              valueType: WorkflowIOValueTypeEnum.selectDataset,
               list: [],
               required: true
             },
@@ -381,90 +382,76 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.selectDatasetParamsModal],
               label: '',
               value: formData.dataset.similarity,
-              valueType: 'number'
+              valueType: WorkflowIOValueTypeEnum.number
             },
             {
               key: 'limit',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: formData.dataset.limit,
-              valueType: 'number'
+              valueType: WorkflowIOValueTypeEnum.number
             },
             {
               key: 'searchMode',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               value: formData.dataset.searchMode
             },
             {
               key: 'usingReRank',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'boolean',
+              valueType: WorkflowIOValueTypeEnum.boolean,
               value: formData.dataset.usingReRank
             },
             {
               key: 'datasetSearchUsingExtensionQuery',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'boolean',
+              valueType: WorkflowIOValueTypeEnum.boolean,
               value: formData.dataset.datasetSearchUsingExtensionQuery
             },
             {
               key: 'datasetSearchExtensionModel',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               value: formData.dataset.datasetSearchExtensionModel
             },
             {
               key: 'datasetSearchExtensionBg',
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               value: formData.dataset.datasetSearchExtensionBg
             },
             {
               key: 'userChatInput',
               renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               label: '用户问题',
               required: true,
               toolDescription: '需要检索的内容',
-              value: ['448745', 'userChatInput']
+              value: [workflowStartNodeId, 'userChatInput']
             }
           ],
           outputs: [
-            {
-              id: 'isEmpty',
-              key: 'isEmpty',
-              label: 'core.module.output.label.Search result empty',
-              type: 'static',
-              valueType: 'boolean'
-            },
-            {
-              id: 'unEmpty',
-              key: 'unEmpty',
-              label: 'core.module.output.label.Search result not empty',
-              type: 'static',
-              valueType: 'boolean'
-            },
             {
               id: 'quoteQA',
               key: 'quoteQA',
               label: 'core.module.Dataset quote.label',
               type: 'static',
-              valueType: 'datasetQuote'
+              valueType: WorkflowIOValueTypeEnum.datasetQuote
             }
           ]
         }
       ],
       edges: [
         {
-          source: '448745',
+          source: workflowStartNodeId,
           target: 'iKBoX2vIzETU',
-          sourceHandle: '448745-source-right',
+          sourceHandle: `${workflowStartNodeId}-source-right`,
           targetHandle: 'iKBoX2vIzETU-target-left'
         },
         {
@@ -504,7 +491,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
                     ],
                     label: 'core.module.input.label.Select dataset',
                     value: formData.dataset.datasets,
-                    valueType: FlowNodeInputTypeEnum.selectDataset,
+                    valueType: WorkflowIOValueTypeEnum.selectDataset,
                     list: [],
                     required: true
                   },
@@ -513,48 +500,48 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
                     renderTypeList: [FlowNodeInputTypeEnum.selectDatasetParamsModal],
                     label: '',
                     value: formData.dataset.similarity,
-                    valueType: 'number'
+                    valueType: WorkflowIOValueTypeEnum.number
                   },
                   {
                     key: 'limit',
                     renderTypeList: [FlowNodeInputTypeEnum.hidden],
                     label: '',
                     value: formData.dataset.limit,
-                    valueType: 'number'
+                    valueType: WorkflowIOValueTypeEnum.number
                   },
                   {
                     key: 'searchMode',
                     renderTypeList: [FlowNodeInputTypeEnum.hidden],
                     label: '',
-                    valueType: 'string',
+                    valueType: WorkflowIOValueTypeEnum.string,
                     value: formData.dataset.searchMode
                   },
                   {
                     key: 'usingReRank',
                     renderTypeList: [FlowNodeInputTypeEnum.hidden],
                     label: '',
-                    valueType: 'boolean',
+                    valueType: WorkflowIOValueTypeEnum.boolean,
                     value: formData.dataset.usingReRank
                   },
                   {
                     key: 'datasetSearchUsingExtensionQuery',
                     renderTypeList: [FlowNodeInputTypeEnum.hidden],
                     label: '',
-                    valueType: 'boolean',
+                    valueType: WorkflowIOValueTypeEnum.boolean,
                     value: formData.dataset.datasetSearchUsingExtensionQuery
                   },
                   {
                     key: 'datasetSearchExtensionModel',
                     renderTypeList: [FlowNodeInputTypeEnum.hidden],
                     label: '',
-                    valueType: 'string',
+                    valueType: WorkflowIOValueTypeEnum.string,
                     value: formData.dataset.datasetSearchExtensionModel
                   },
                   {
                     key: 'datasetSearchExtensionBg',
                     renderTypeList: [FlowNodeInputTypeEnum.hidden],
                     label: '',
-                    valueType: 'string',
+                    valueType: WorkflowIOValueTypeEnum.string,
                     value: formData.dataset.datasetSearchExtensionBg
                   },
                   {
@@ -563,7 +550,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
                       FlowNodeInputTypeEnum.reference,
                       FlowNodeInputTypeEnum.textarea
                     ],
-                    valueType: 'string',
+                    valueType: WorkflowIOValueTypeEnum.string,
                     label: '用户问题',
                     required: true,
                     toolDescription: '需要检索的内容'
@@ -571,25 +558,11 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
                 ],
                 outputs: [
                   {
-                    id: 'isEmpty',
-                    key: 'isEmpty',
-                    label: 'core.module.output.label.Search result empty',
-                    type: 'static',
-                    valueType: 'boolean'
-                  },
-                  {
-                    id: 'unEmpty',
-                    key: 'unEmpty',
-                    label: 'core.module.output.label.Search result not empty',
-                    type: 'static',
-                    valueType: 'boolean'
-                  },
-                  {
                     id: 'quoteQA',
                     key: 'quoteQA',
                     label: 'core.module.Dataset quote.label',
                     type: 'static',
-                    valueType: 'datasetQuote'
+                    valueType: WorkflowIOValueTypeEnum.datasetQuote
                   }
                 ]
               }
@@ -658,7 +631,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
                 FlowNodeInputTypeEnum.reference
               ],
               label: 'core.module.input.label.aiModel',
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               llmModelType: 'all',
               value: formData.aiSettings.model
             },
@@ -667,7 +640,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: formData.aiSettings.temperature,
-              valueType: 'number',
+              valueType: WorkflowIOValueTypeEnum.number,
               min: 0,
               max: 10,
               step: 1
@@ -677,7 +650,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               renderTypeList: [FlowNodeInputTypeEnum.hidden],
               label: '',
               value: formData.aiSettings.maxToken,
-              valueType: 'number',
+              valueType: WorkflowIOValueTypeEnum.number,
               min: 100,
               max: 4000,
               step: 50
@@ -686,7 +659,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
               key: 'systemPrompt',
               renderTypeList: [FlowNodeInputTypeEnum.textarea, FlowNodeInputTypeEnum.reference],
               max: 3000,
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               label: 'core.ai.Prompt',
               description: 'core.app.tip.chatNodeSystemPromptTip',
               placeholder: 'core.app.tip.chatNodeSystemPromptTip',
@@ -695,7 +668,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
             {
               key: 'history',
               renderTypeList: [FlowNodeInputTypeEnum.numberInput, FlowNodeInputTypeEnum.reference],
-              valueType: 'chatHistory',
+              valueType: WorkflowIOValueTypeEnum.chatHistory,
               label: 'core.module.input.label.chat history',
               required: true,
               min: 0,
@@ -705,10 +678,10 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
             {
               key: 'userChatInput',
               renderTypeList: [FlowNodeInputTypeEnum.reference, FlowNodeInputTypeEnum.textarea],
-              valueType: 'string',
+              valueType: WorkflowIOValueTypeEnum.string,
               label: '用户问题',
               required: true,
-              value: ['448745', 'userChatInput']
+              value: [workflowStartNodeId, 'userChatInput']
             }
           ],
           outputs: []
@@ -719,9 +692,9 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
       ],
       edges: [
         {
-          source: '448745',
+          source: workflowStartNodeId,
           target: toolNodeId,
-          sourceHandle: '448745-source-right',
+          sourceHandle: `${workflowStartNodeId}-source-right`,
           targetHandle: `${toolNodeId}-target-left`
         },
         // tool edges

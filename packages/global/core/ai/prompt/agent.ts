@@ -41,10 +41,14 @@ export const Prompt_ExtractJson = `你可以从 <对话记录></对话记录> �
 </对话记录>
 `;
 
-export const Prompt_CQJson = `我会给你几个问题类型，请参考背景知识（可能为空）和对话记录，判断我“本次问题”的类型，并返回一个问题“类型ID”:
+export const Prompt_CQJson = `你是一个语义判断器，可以判断我的问题属于哪个类型。
+
 <问题类型>
 {{typeList}}
 </问题类型>
+
+请结合<背景知识></背景知识> 和 <对话记录></对话记录>， 判断当前问题属于哪个“问题分类”，并返回“类型ID”。
+
 
 <背景知识>
 {{systemPrompt}}
@@ -54,7 +58,7 @@ export const Prompt_CQJson = `我会给你几个问题类型，请参考背景�
 {{history}}
 </对话记录>
 
-Human："{{question}}"
+当前问题："{{question}}"
 
 类型ID=
 `;

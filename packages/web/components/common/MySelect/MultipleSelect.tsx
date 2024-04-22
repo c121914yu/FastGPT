@@ -1,7 +1,7 @@
 import { Box, Flex, useDisclosure, useOutsideClick } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { useTranslation } from 'next-i18next';
-import FillTag from '../Tag/Fill';
+import FillTag from '../Tag/index';
 import MyIcon from '../Icon';
 
 export type SelectProps = {

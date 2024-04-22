@@ -28,8 +28,6 @@ type DatasetSearchProps = ModuleDispatchProps<{
   [NodeInputKeyEnum.datasetSearchExtensionBg]: string;
 }>;
 export type DatasetSearchResponse = DispatchNodeResultType<{
-  [NodeOutputKeyEnum.datasetIsEmpty]?: boolean;
-  [NodeOutputKeyEnum.datasetUnEmpty]?: boolean;
   [NodeOutputKeyEnum.datasetQuoteQA]: SearchDataResponseItemType[];
 }>;
 
@@ -151,8 +149,6 @@ export async function dispatchDatasetSearch(
   }
 
   return {
-    isEmpty: searchRes.length === 0 ? true : undefined,
-    unEmpty: searchRes.length > 0 ? true : undefined,
     quoteQA: searchRes,
     [DispatchNodeResponseKeyEnum.nodeResponse]: responseData,
     nodeDispatchUsages,

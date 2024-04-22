@@ -15,6 +15,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import dynamic from 'next/dynamic';
 import { EditNodeFieldType } from '@fastgpt/global/core/workflow/node/type';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
+import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 
 type Props = {
@@ -65,6 +66,8 @@ const InputLabel = ({ nodeId, input, output }: Props) => {
   );
 
   const RenderLabel = useMemo(() => {
+    const renderType = renderTypeList[selectedTypeIndex || 0];
+
     return (
       <Flex className="nodrag" cursor={'default'} alignItems={'center'} position={'relative'}>
         <Box position={'relative'} fontWeight={'medium'} color={'myGray.600'}>
@@ -81,7 +84,7 @@ const InputLabel = ({ nodeId, input, output }: Props) => {
           )}
         </Box>
         {/* value type */}
-        {!!valueTypeLabel && (
+        {renderType === FlowNodeInputTypeEnum.reference && !!valueTypeLabel && (
           <Box
             bg={'myGray.100'}
             color={'myGray.500'}
@@ -238,7 +241,7 @@ const InputLabel = ({ nodeId, input, output }: Props) => {
     valueTypeLabel
   ]);
 
-  return <>{RenderLabel}</>;
+  return RenderLabel;
 };
 
 export default React.memo(InputLabel);

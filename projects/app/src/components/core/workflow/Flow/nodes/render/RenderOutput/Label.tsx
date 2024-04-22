@@ -9,6 +9,7 @@ import { SourceHandle } from '../Handle';
 import { getHandleId } from '@fastgpt/global/core/workflow/utils';
 import { Position } from 'reactflow';
 import { FlowValueTypeMap } from '@/web/core/workflow/constants/dataType';
+import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 
 const OutputLabel = ({
   nodeId,
@@ -42,12 +43,10 @@ const OutputLabel = ({
               }
             : {})}
         >
-          <Box position={'relative'}>{t(label)}</Box>
-          {description && (
-            <MyTooltip label={t(description)} forceShow>
-              <QuestionOutlineIcon display={['none', 'inline']} />
-            </MyTooltip>
-          )}
+          <Box position={'relative'} mr={1}>
+            {t(label)}
+          </Box>
+          {description && <QuestionTip label={t(description)} />}
           <Box
             bg={'myGray.100'}
             color={'myGray.500'}
