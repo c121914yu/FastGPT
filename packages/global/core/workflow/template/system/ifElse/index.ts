@@ -29,7 +29,7 @@ export const ifElseNode: FlowNodeTemplateType = {
       label: '',
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       required: false,
-      value: 'And' // And, Or
+      value: 'AND' // AND, OR
     },
     {
       key: NodeInputKeyEnum.ifElseList,

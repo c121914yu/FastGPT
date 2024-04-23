@@ -34,7 +34,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const condition = useMemo(
     () =>
       (inputs.find((input) => input.key === NodeInputKeyEnum.condition)
-        ?.value as IfElseConditionType) || 'Or',
+        ?.value as IfElseConditionType) || 'OR',
     [inputs]
   );
   const ifElseList = useMemo(
@@ -126,7 +126,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                           key: 'condition',
                           value: {
                             ...conditionInput,
-                            value: conditionInput.value === 'Or' ? 'And' : 'Or'
+                            value: conditionInput.value === 'OR' ? 'AND' : 'OR'
                           }
                         });
                       }}
