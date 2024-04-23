@@ -53,8 +53,6 @@ parentPort?.on(
       data: total
     });
 
-    if (global) {
-      global.close();
-    }
+    global?.close?.();
   }
 );

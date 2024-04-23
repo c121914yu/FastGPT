@@ -267,6 +267,7 @@ export async function searchDatasetData(props: SearchDatasetDataProps) {
 
     for await (const item of list) {
       totalTokens += await countPromptTokens(item.q + item.a);
+
       if (totalTokens > maxTokens + 500) {
         break;
       }
