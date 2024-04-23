@@ -30,14 +30,10 @@ import {
 import { formatTimeToChatTime } from '@/utils/tools';
 import { useCopyData } from '@/web/common/hooks/useCopyData';
 import { useForm } from 'react-hook-form';
-import { defaultOutLinkForm, defaultWecomOutLinkForm } from '@/constants/app';
-import type {
-  OutLinkEditType,
-  OutLinkConfigEditType,
-  OutLinkSchema
-} from '@fastgpt/global/support/outLink/type.d';
+import { defaultOutLinkForm } from '@/constants/app';
+import type { OutLinkEditType, OutLinkSchema } from '@fastgpt/global/support/outLink/type.d';
 import { useRequest } from '@/web/common/hooks/useRequest';
-import { OutlinkType } from '@fastgpt/global/support/outLink/constant';
+import { OutlinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
 import { useTranslation } from 'next-i18next';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -51,11 +47,7 @@ import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 
 const SelectUsingWayModal = dynamic(() => import('./SelectUsingWayModal'));
 
-<<<<<<< HEAD
-const Share = ({ appId }: { appId: string }) => {
-=======
-const Share = ({ appId, type = OutlinkType.share }: { appId: string; type: OutlinkType }) => {
->>>>>>> 5e09bb80 (feat: feishu app release)
+const Share = ({ appId }: { appId: string; type: OutlinkTypeEnum }) => {
   const { t } = useTranslation();
   const { Loading, setIsLoading } = useLoading();
   const { feConfigs } = useSystemStore();
@@ -72,7 +64,9 @@ const Share = ({ appId, type = OutlinkType.share }: { appId: string; type: Outli
     isFetching,
     data: shareChatList = [],
     refetch: refetchShareChatList
-  } = useQuery(['initShareChatList', appId], () => getShareChatList(appId));
+  } = useQuery(['initShareChatList', appId], () =>
+    getShareChatList({ appId, type: OutlinkTypeEnum.share })
+  );
 
   return (
     <Box position={'relative'} pt={3} px={5} minH={'50vh'}>
@@ -89,9 +83,9 @@ const Share = ({ appId, type = OutlinkType.share }: { appId: string; type: Outli
           size={['sm', 'md']}
           {...(shareChatList.length >= 10
             ? {
-              isDisabled: true,
-              title: t('core.app.share.Amount limit tip')
-            }
+                isDisabled: true,
+                title: t('core.app.share.Amount limit tip')
+              }
             : {})}
           onClick={() => setEditLinkData(defaultOutLinkForm)}
         >
@@ -123,10 +117,11 @@ const Share = ({ appId, type = OutlinkType.share }: { appId: string; type: Outli
                 <Td>
                   {Math.round(item.usagePoints)}
                   {feConfigs?.isPlus
-                    ? `${item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
-                      ? ` / ${item.limit.maxUsagePoints}`
-                      : ` / ${t('common.Unlimited')}`
-                    }`
+                    ? `${
+                        item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
+                          ? ` / ${item.limit.maxUsagePoints}`
+                          : ` / ${t('common.Unlimited')}`
+                      }`
                     : ''}
                 </Td>
                 <Td>{item.responseDetail ? '✔' : '✖'}</Td>
@@ -144,7 +139,7 @@ const Share = ({ appId, type = OutlinkType.share }: { appId: string; type: Outli
                 <Td>{item.lastTime ? formatTimeToChatTime(item.lastTime) : t('common.Un used')}</Td>
                 <Td display={'flex'} alignItems={'center'}>
                   <Button
-                    onClick={() => setSelectedLinkData(item)}
+                    onClick={() => setSelectedLinkData(item as OutLinkSchema)}
                     size={'sm'}
                     mr={3}
                     variant={'whitePrimary'}
@@ -249,7 +244,7 @@ function EditLinkModal({
   onEdit
 }: {
   appId: string;
-  type: `${OutlinkType}`;
+  type: `${OutlinkTypeEnum}`;
   defaultData: OutLinkEditType;
   onClose: () => void;
   onCreate: (id: string) => void;

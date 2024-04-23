@@ -1,5 +1,5 @@
 import { AppSchema } from 'core/app/type';
-import { OutlinkType } from './constant';
+import { OutlinkTypeEnum } from './constant';
 
 // Feishu Config interface
 export interface Feishu {
@@ -36,7 +36,7 @@ export type OutLinkSchema<T = void> = {
   name: string;
   usagePoints: number;
   lastTime: Date;
-  type: OutlinkType;
+  type: OutlinkTypeEnum;
 
   // whether the response content is detailed
   responseDetail: boolean;

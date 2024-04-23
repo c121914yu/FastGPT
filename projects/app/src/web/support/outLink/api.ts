@@ -16,7 +16,6 @@ export const putShareChat = (data: OutLinkEditType) =>
 
 // get shareChat
 export function getShareChatList<T>(data: { appId: string; type: OutLinkSchema<T>['type'] }) {
-  console.log('get data', data);
   return GET<OutLinkSchema<T>[]>(`/support/outLink/list`, data);
 }
 

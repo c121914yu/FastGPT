@@ -24,7 +24,7 @@ import type {
   OutLinkEditType,
   OutLinkSchema
 } from '@fastgpt/global/support/outLink/type.d';
-import { OutlinkType } from '@fastgpt/global/support/outLink/constant';
+import { OutlinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
 import { useTranslation } from 'next-i18next';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -48,7 +48,7 @@ const FeiShu = ({ appId }: { appId: string }) => {
     data: shareChatList = [],
     refetch: refetchShareChatList
   } = useQuery(['initShareChatList', appId], () =>
-    getShareChatList<Feishu>({ appId, type: OutlinkType.feishu })
+    getShareChatList<Feishu>({ appId, type: OutlinkTypeEnum.feishu })
   );
 
   console.log(shareChatList);

@@ -1,5 +1,6 @@
-export enum OutlinkType {
+export enum OutlinkTypeEnum {
   share = 'share',
   iframe = 'iframe',
-  apikey = 'apikey'
+  apikey = 'apikey',
+  feishu = 'feishu'
 }
