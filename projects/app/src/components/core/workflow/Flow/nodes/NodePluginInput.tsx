@@ -88,12 +88,15 @@ const NodePluginInput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               setCreateField(undefined);
               setEditField(undefined);
             }}
-            variables={inputs.map((input) => ({
-              icon: FlowNodeInputMap[input.renderTypeList[0]]?.icon as string,
-              label: t(input.label),
-              type: input.valueType ? t(FlowValueTypeMap[input.valueType]?.label) : '-',
-              key: input.key
-            }))}
+            variables={inputs.map((input) => {
+              const inputType = input.renderTypeList[0];
+              return {
+                icon: FlowNodeInputMap[inputType]?.icon as string,
+                label: t(input.label),
+                type: input.valueType ? t(FlowValueTypeMap[input.valueType]?.label) : '-',
+                key: input.key
+              };
+            })}
             createField={createField}
             onCreate={({ data }) => {
               if (!data.key || !data.inputType) {

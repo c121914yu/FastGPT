@@ -1,4 +1,4 @@
-import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from './node/constant';
+import { FlowNodeTypeEnum } from './node/constant';
 import {
   WorkflowIOValueTypeEnum,
   NodeInputKeyEnum,

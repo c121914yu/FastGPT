@@ -1,5 +1,5 @@
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
-import { countMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
+import { countMessagesTokens } from '../../../../common/string/tiktoken';
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import { ChatItemValueTypeEnum, ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAIApi } from '../../../ai/config';
@@ -131,7 +131,7 @@ const completions = async ({
     agents.find((item) => answer.includes(item.key) || answer.includes(item.value))?.key || '';
 
   return {
-    tokens: countMessagesTokens(messages),
+    tokens: await countMessagesTokens(messages),
     arg: { type: id }
   };
 };

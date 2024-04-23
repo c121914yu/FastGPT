@@ -67,7 +67,7 @@ export const pushQAUsage = async ({
     modelType: ModelTypeEnum.llm,
     tokens
   });
-
+  console.log(tokens, '----');
   concatUsage({
     billId,
     teamId,
