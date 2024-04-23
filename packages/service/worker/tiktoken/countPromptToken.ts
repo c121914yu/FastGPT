@@ -1,6 +1,5 @@
 /* Only the token of gpt-3.5-turbo is used */
 import { Tiktoken } from 'js-tiktoken/lite';
-import encodingJson from './cl100k_base.json';
 import { ChatCompletionContentPart } from '@fastgpt/global/core/ai/type';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import { parentPort } from 'worker_threads';
@@ -9,15 +8,14 @@ import { parentPort } from 'worker_threads';
 parentPort?.on(
   'message',
   ({
+    enc,
     prompt = '',
     role = ''
   }: {
+    enc: Tiktoken;
     prompt: string | ChatCompletionContentPart[] | null | undefined;
     role: '' | `${ChatCompletionRequestMessageRoleEnum}`;
   }) => {
-    /* init tikToken obj */
-    const enc = new Tiktoken(encodingJson);
-
     /* count one prompt tokens */
     const countPromptTokens = (
       prompt: string | ChatCompletionContentPart[] | null | undefined = '',

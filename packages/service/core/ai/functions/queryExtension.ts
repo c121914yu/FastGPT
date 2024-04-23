@@ -1,7 +1,7 @@
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
 import { getAIApi } from '../config';
 import { ChatItemType } from '@fastgpt/global/core/chat/type';
-import { countGptMessagesTokens } from '../../../common/string/tiktoken';
+import { countGptMessagesTokens } from '../../../common/string/tiktoken/index';
 import { ChatCompletionMessageParam } from '@fastgpt/global/core/ai/type';
 import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 
