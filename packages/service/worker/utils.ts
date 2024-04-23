@@ -2,7 +2,9 @@ import { Worker } from 'worker_threads';
 import path from 'path';
 
 export enum WorkerNameEnum {
-  htmlStr2Md = 'htmlStr2Md'
+  htmlStr2Md = 'htmlStr2Md',
+  countGptMessagesTokens = 'countGptMessagesTokens',
+  countPromptToken = 'countPromptToken'
 }
 
 export const runWorker = <T = any>(name: WorkerNameEnum, params?: Record<string, any>) => {

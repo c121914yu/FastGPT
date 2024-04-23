@@ -19,10 +19,7 @@ import type { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { postTextCensor } from '../../../../common/api/requestPlusApi';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import type { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
-import {
-  countGptMessagesTokens,
-  countMessagesTokens
-} from '@fastgpt/global/common/string/tiktoken';
+import { countGptMessagesTokens, countMessagesTokens } from '../../../../common/string/tiktoken';
 import {
   chats2GPTMessages,
   getSystemPrompt,
@@ -42,7 +39,7 @@ import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/ty
 import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getHistories } from '../utils';
-import { filterSearchResultsByMaxChars } from '@fastgpt/global/core/dataset/search/utils';
+import { filterSearchResultsByMaxChars } from '../../utils';
 import { getHistoryPreview } from '@fastgpt/global/core/chat/utils';
 
 export type ChatProps = ModuleDispatchProps<
@@ -94,7 +91,7 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
     return Promise.reject('The chat model is undefined, you need to select a chat model.');
   }
 
-  const { quoteText } = filterQuote({
+  const { quoteText } = await filterQuote({
     quoteQA,
     model: modelConstantsData,
     quoteTemplate
@@ -110,7 +107,7 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
     });
   }
 
-  const { filterMessages } = getChatMessages({
+  const { filterMessages } = await getChatMessages({
     model: modelConstantsData,
     histories: chatHistories,
     quoteQA,
@@ -208,7 +205,7 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
   });
   const chatCompleteMessages = GPTMessages2Chats(completeMessages);
 
-  const tokens = countMessagesTokens(chatCompleteMessages);
+  const tokens = await countMessagesTokens(chatCompleteMessages);
   const { totalPoints, modelName } = formatModelChars2Points({
     model,
     tokens,
@@ -239,7 +236,7 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
   };
 };
 
-function filterQuote({
+async function filterQuote({
   quoteQA = [],
   model,
   quoteTemplate
@@ -259,7 +256,7 @@ function filterQuote({
   }
 
   // slice filterSearch
-  const filterQuoteQA = filterSearchResultsByMaxChars(quoteQA, model.quoteMaxToken);
+  const filterQuoteQA = await filterSearchResultsByMaxChars(quoteQA, model.quoteMaxToken);
 
   const quoteText =
     filterQuoteQA.length > 0
@@ -270,7 +267,7 @@ function filterQuote({
     quoteText
   };
 }
-function getChatMessages({
+async function getChatMessages({
   quotePrompt,
   quoteText,
   quoteQA,
@@ -310,7 +307,7 @@ function getChatMessages({
   ];
   const adaptMessages = chats2GPTMessages({ messages, reserveId: false });
 
-  const filterMessages = filterGPTMessageByMaxTokens({
+  const filterMessages = await filterGPTMessageByMaxTokens({
     messages: adaptMessages,
     maxTokens: model.maxContext - 300 // filter token. not response maxToken
   });
@@ -319,7 +316,7 @@ function getChatMessages({
     filterMessages
   };
 }
-function getMaxTokens({
+async function getMaxTokens({
   maxToken,
   model,
   filterMessages = []
@@ -332,7 +329,7 @@ function getMaxTokens({
   const tokensLimit = model.maxContext;
 
   /* count response max token */
-  const promptsToken = countGptMessagesTokens(filterMessages);
+  const promptsToken = await countGptMessagesTokens(filterMessages);
   maxToken = promptsToken + maxToken > tokensLimit ? tokensLimit - promptsToken : maxToken;
 
   if (maxToken <= 0) {

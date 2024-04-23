@@ -50,9 +50,6 @@ importers:
       encoding:
         specifier: ^0.1.13
         version: 0.1.13
-      js-tiktoken:
-        specifier: ^1.0.7
-        version: 1.0.7
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
@@ -141,6 +138,9 @@ importers:
       joplin-turndown-plugin-gfm:
         specifier: ^1.0.12
         version: 1.0.12
+      js-tiktoken:
+        specifier: ^1.0.7
+        version: 1.0.7
       json5:
         specifier: ^2.2.3
         version: 2.2.3

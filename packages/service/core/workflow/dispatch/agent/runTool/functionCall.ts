@@ -23,7 +23,7 @@ import { dispatchWorkFlow } from '../../index';
 import { DispatchToolModuleProps, RunToolResponse, ToolNodeItemType } from './type.d';
 import json5 from 'json5';
 import { DispatchFlowResponse } from '../../type';
-import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
+import { countGptMessagesTokens } from '../../../../../common/string/tiktoken';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { AIChatItemType } from '@fastgpt/global/core/chat/type';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
@@ -72,7 +72,7 @@ export const runToolWithFunctionCall = async (
     };
   });
 
-  const filterMessages = filterGPTMessageByMaxTokens({
+  const filterMessages = await filterGPTMessageByMaxTokens({
     messages,
     maxTokens: toolModel.maxContext - 500 // filter token. not response maxToken
   });
@@ -211,7 +211,7 @@ export const runToolWithFunctionCall = async (
       ...filterMessages,
       assistantToolMsgParams
     ] as ChatCompletionMessageParam[];
-    const tokens = countGptMessagesTokens(concatToolMessages, undefined, functions);
+    const tokens = await countGptMessagesTokens(concatToolMessages, undefined, functions);
     const completeMessages = [
       ...concatToolMessages,
       ...toolsRunResponse.map((item) => item?.functionCallMsg)
@@ -278,7 +278,7 @@ export const runToolWithFunctionCall = async (
       content: answer
     };
     const completeMessages = filterMessages.concat(gptAssistantResponse);
-    const tokens = countGptMessagesTokens(completeMessages, undefined, functions);
+    const tokens = await countGptMessagesTokens(completeMessages, undefined, functions);
     // console.log(tokens, 'response token');
 
     // concat tool assistant

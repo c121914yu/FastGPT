@@ -27,7 +27,12 @@ export enum FlowNodeInputTypeEnum { // render ui
   hidden = 'hidden',
   custom = 'custom'
 }
-export const FlowNodeInputMap = {
+export const FlowNodeInputMap: Record<
+  FlowNodeInputTypeEnum,
+  {
+    icon: string;
+  }
+> = {
   [FlowNodeInputTypeEnum.reference]: {
     icon: 'core/workflow/inputType/reference'
   },
@@ -36,6 +41,9 @@ export const FlowNodeInputMap = {
   },
   [FlowNodeInputTypeEnum.numberInput]: {
     icon: 'core/workflow/inputType/numberInput'
+  },
+  [FlowNodeInputTypeEnum.select]: {
+    icon: 'core/workflow/inputType/input'
   },
   [FlowNodeInputTypeEnum.switch]: {
     icon: 'core/workflow/inputType/switch'

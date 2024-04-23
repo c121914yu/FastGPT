@@ -2,7 +2,7 @@ import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/ty
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { datasetSearchResultConcat } from '@fastgpt/global/core/dataset/search/utils';
-import { filterSearchResultsByMaxChars } from '@fastgpt/global/core/dataset/search/utils';
+import { filterSearchResultsByMaxChars } from '../../utils';
 
 type DatasetConcatProps = ModuleDispatchProps<
   {
@@ -30,6 +30,6 @@ export async function dispatchDatasetConcat(
   );
 
   return {
-    [NodeOutputKeyEnum.datasetQuoteQA]: filterSearchResultsByMaxChars(rrfConcatResults, limit)
+    [NodeOutputKeyEnum.datasetQuoteQA]: await filterSearchResultsByMaxChars(rrfConcatResults, limit)
   };
 }

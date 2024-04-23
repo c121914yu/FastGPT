@@ -19,7 +19,7 @@ import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/co
 import { dispatchWorkFlow } from '../../index';
 import { DispatchToolModuleProps, RunToolResponse, ToolNodeItemType } from './type.d';
 import json5 from 'json5';
-import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
+import { countGptMessagesTokens } from '../../../../../common/string/tiktoken';
 import { getNanoid, replaceVariable } from '@fastgpt/global/common/string/tools';
 import { AIChatItemType } from '@fastgpt/global/core/chat/type';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
@@ -81,7 +81,7 @@ export const runToolWithPromptCall = async (
     toolsPrompt
   });
 
-  const filterMessages = filterGPTMessageByMaxTokens({
+  const filterMessages = await filterGPTMessageByMaxTokens({
     messages,
     maxTokens: toolModel.maxContext - 500 // filter token. not response maxToken
   });
@@ -132,7 +132,7 @@ export const runToolWithPromptCall = async (
       content: parseAnswerResult
     };
     const completeMessages = filterMessages.concat(gptAssistantResponse);
-    const tokens = countGptMessagesTokens(completeMessages, undefined);
+    const tokens = await countGptMessagesTokens(completeMessages, undefined);
     // console.log(tokens, 'response token');
 
     // concat tool assistant
@@ -242,7 +242,7 @@ export const runToolWithPromptCall = async (
     ...filterMessages,
     assistantToolMsgParams
   ] as ChatCompletionMessageParam[];
-  const tokens = countGptMessagesTokens(concatToolMessages, undefined);
+  const tokens = await countGptMessagesTokens(concatToolMessages, undefined);
   const completeMessages: ChatCompletionMessageParam[] = [
     ...concatToolMessages,
     {

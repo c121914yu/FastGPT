@@ -24,7 +24,7 @@ import { dispatchWorkFlow } from '../../index';
 import { DispatchToolModuleProps, RunToolResponse, ToolNodeItemType } from './type.d';
 import json5 from 'json5';
 import { DispatchFlowResponse } from '../../type';
-import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
+import { countGptMessagesTokens } from '../../../../../common/string/tiktoken';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
 import { AIChatItemType } from '@fastgpt/global/core/chat/type';
 import { updateToolInputValue } from './utils';
@@ -82,7 +82,7 @@ export const runToolWithToolChoice = async (
     };
   });
 
-  const filterMessages = filterGPTMessageByMaxTokens({
+  const filterMessages = await filterGPTMessageByMaxTokens({
     messages,
     maxTokens: toolModel.maxContext - 300 // filter token. not response maxToken
   });
@@ -216,7 +216,7 @@ export const runToolWithToolChoice = async (
       ...filterMessages,
       assistantToolMsgParams
     ] as ChatCompletionMessageParam[];
-    const tokens = countGptMessagesTokens(concatToolMessages, tools);
+    const tokens = await countGptMessagesTokens(concatToolMessages, tools);
     const completeMessages = [
       ...concatToolMessages,
       ...toolsRunResponse.map((item) => item?.toolMsgParams)
@@ -285,7 +285,7 @@ export const runToolWithToolChoice = async (
       content: answer
     };
     const completeMessages = filterMessages.concat(gptAssistantResponse);
-    const tokens = countGptMessagesTokens(completeMessages, tools);
+    const tokens = await countGptMessagesTokens(completeMessages, tools);
     // console.log(tokens, 'response token');
 
     // concat tool assistant
