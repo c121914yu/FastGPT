@@ -56,7 +56,5 @@ parentPort?.on('message', (params: { html: string }) => {
     });
   }
 
-  if (global) {
-    global.close();
-  }
+  global?.close?.();
 });
