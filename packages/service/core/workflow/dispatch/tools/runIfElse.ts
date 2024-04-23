@@ -1,21 +1,22 @@
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
-import { RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
+import {
+  DispatchNodeResultType,
+  RuntimeNodeItemType
+} from '@fastgpt/global/core/workflow/runtime/type';
 import { VariableConditionEnum } from '@fastgpt/global/core/workflow/template/system/ifElse/constant';
 import {
   IfElseConditionType,
   IfElseListItemType
 } from '@fastgpt/global/core/workflow/template/system/ifElse/type';
+import { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type';
 import { getHandleId } from '@fastgpt/global/core/workflow/utils';
 
-type Props = {
-  params: {
-    condition: IfElseConditionType;
-    ifElseList: IfElseListItemType[];
-    agents: any[];
-  };
-  runtimeNodes: RuntimeNodeItemType[];
-  node: { nodeId: string };
-};
+type Props = ModuleDispatchProps<{
+  [NodeInputKeyEnum.condition]: IfElseConditionType;
+  [NodeInputKeyEnum.ifElseList]: IfElseListItemType[];
+  [NodeInputKeyEnum.agents]: { key: string; value: string }[];
+}>;
 
 function checkCondition(condition: VariableConditionEnum, variableValue: any, value: string) {
   const operations = {
@@ -42,7 +43,7 @@ function checkCondition(condition: VariableConditionEnum, variableValue: any, va
   return (operations[condition] || (() => false))();
 }
 
-export const dispatchIfElse = async (props: Props): Promise<any> => {
+export const dispatchIfElse = async (props: Props): Promise<DispatchNodeResultType<{}>> => {
   const {
     params,
     runtimeNodes,
@@ -77,10 +78,10 @@ export const dispatchIfElse = async (props: Props): Promise<any> => {
     },
     [DispatchNodeResponseKeyEnum.skipHandleId]: !result
       ? agents
-          .filter((item: any) => item.value === 'IF')
-          .map((item: any) => getHandleId(nodeId, 'source', item.key))
+          .filter((item) => item.value === 'IF')
+          .map((item) => getHandleId(nodeId, 'source', item.key))
       : agents
-          .filter((item: any) => item.value === 'ELSE')
-          .map((item: any) => getHandleId(nodeId, 'source', item.key))
+          .filter((item) => item.value === 'ELSE')
+          .map((item) => getHandleId(nodeId, 'source', item.key))
   };
 };

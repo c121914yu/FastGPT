@@ -75,7 +75,7 @@ export type DispatchNodeResponseType = {
   pluginDetail?: ChatHistoryItemResType[];
 
   // if-else
-  ifElseResult?: boolean;
+  ifElseResult?: 'IF' | 'ELSE';
 
   // tool
   toolCallTokens?: number;
