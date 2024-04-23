@@ -1,55 +1,104 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import NodeCard from './render/NodeCard';
 import { useTranslation } from 'next-i18next';
 import { useFlowProviderStore } from '../FlowProvider';
 import { Box, Button, Flex, background } from '@chakra-ui/react';
 import { SmallAddIcon } from '@chakra-ui/icons';
-import Reference from './render/RenderInput/templates/Reference';
 import Select from './render/RenderInput/templates/Select';
 import TextInput from './render/RenderInput/templates/TextInput';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import RenderOutput from './render/RenderOutput';
-import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import RenderInput from './render/RenderInput';
+import { NodeProps } from 'reactflow';
+import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type';
+import {
+  IfElseConditionType,
+  IfElseListItemType
+} from '@fastgpt/global/core/workflow/template/system/ifElse/type';
+import Container from '../components/Container';
+import { ReferenceValueProps } from '@fastgpt/global/core/workflow/type/io';
+import { ReferSelector, useReference } from './render/RenderInput/templates/Reference';
+import {
+  VariableConditionEnum,
+  allConditionList,
+  arrayConditionList,
+  booleanConditionList,
+  numberConditionList
+} from '@fastgpt/global/core/workflow/template/system/ifElse/constant';
+import { stringConditionList } from '../../../../../../../../packages/global/core/workflow/template/system/ifElse/constant';
+import MySelect from '@fastgpt/web/components/common/MySelect';
 
-const NodeIfElse = ({
-  data,
-  selected,
-  minW = '350px',
-  maxW
-}: {
-  data: any;
-  selected: boolean;
-  minW?: string | number;
-  maxW?: string | number;
-}) => {
+const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
-  const { splitToolInputs } = useFlowProviderStore();
-  const { nodeId, inputs, outputs } = data;
-  const { commonInputs } = splitToolInputs(inputs, nodeId);
+  const { nodeId, inputs = [] } = data;
   const { onChangeNode } = useFlowProviderStore();
 
-  const inputChunks = useMemo(() => {
-    var chunkedArr = [];
-    const copy = commonInputs.filter(
-      (item: any) => item.key !== 'condition' && item.key !== 'agents'
+  const condition = useMemo(
+    () =>
+      (inputs.find((input) => input.key === NodeInputKeyEnum.condition)
+        ?.value as IfElseConditionType) || 'OR',
+    [inputs]
+  );
+  const ifElseList = useMemo(
+    () =>
+      (inputs.find((input) => input.key === NodeInputKeyEnum.ifElseList)
+        ?.value as IfElseListItemType[]) || [],
+    [inputs]
+  );
+
+  const onUpdateIfElseList = useCallback(
+    (value: IfElseListItemType[]) => {
+      const ifElseListInput = inputs.find((input) => input.key === NodeInputKeyEnum.ifElseList);
+      if (!ifElseListInput) return;
+
+      onChangeNode({
+        nodeId,
+        type: 'updateInput',
+        key: NodeInputKeyEnum.ifElseList,
+        value: {
+          ...ifElseListInput,
+          value
+        }
+      });
+    },
+    [inputs, nodeId, onChangeNode]
+  );
+
+  const RenderAddCondition = useMemo(() => {
+    return (
+      <Button
+        onClick={() => {
+          onUpdateIfElseList([
+            ...ifElseList,
+            {
+              variable: undefined,
+              condition: undefined,
+              value: undefined
+            }
+          ]);
+        }}
+        variant={'whiteBase'}
+        leftIcon={<SmallAddIcon />}
+        my={3}
+        w={'full'}
+      >
+        {t('core.module.input.add')}
+      </Button>
     );
-    for (var i = 0; i < copy.length; i += 3) {
-      chunkedArr.push(copy.slice(i, i + 3));
-    }
-    return chunkedArr;
-  }, [commonInputs]);
+  }, [ifElseList, onUpdateIfElseList, t]);
 
   return (
-    <NodeCard minW={minW} maxW={maxW} selected={selected} {...data}>
-      <>
-        <Box px={4} mx={2} mb={2} py={'10px'} position={'relative'} borderRadius={'md'}>
-          <RenderOutput nodeId={nodeId} flowOutputList={[outputs[0]]} />
-          {inputChunks.map((items: any, index: number) => {
+    <NodeCard selected={selected} {...data}>
+      <Box py={3} px={4}>
+        <Box className="nowheel">
+          {ifElseList.map((item, i) => {
             return (
-              <>
-                {index > 0 && (
-                  <Flex alignItems={'center'} w={'full'} py={'1'}>
+              <Box key={i}>
+                {/* border */}
+                {i !== 0 && (
+                  <Flex alignItems={'center'} w={'full'} py={'5px'}>
                     <Box
                       w={'auto'}
                       flex={1}
@@ -66,31 +115,24 @@ const NodeIfElse = ({
                       alignItems={'center'}
                       cursor={'pointer'}
                       rounded={'md'}
-                      h={8}
-                      _hover={{
-                        bg: 'myGray.150'
-                      }}
                       onClick={() => {
+                        const conditionInput = inputs.find(
+                          (input) => input.key === NodeInputKeyEnum.condition
+                        );
+                        if (!conditionInput) return;
+
                         onChangeNode({
                           nodeId,
                           type: 'updateInput',
                           key: 'condition',
                           value: {
-                            key: 'condition',
-                            valueType: WorkflowIOValueTypeEnum.string,
-                            label: 'condition',
-                            renderTypeList: [FlowNodeInputTypeEnum.hidden],
-                            required: true,
-                            value:
-                              commonInputs.find((item: any) => item.key === 'condition')?.value ===
-                              'OR'
-                                ? 'AND'
-                                : 'OR'
+                            ...conditionInput,
+                            value: conditionInput.value === 'OR' ? 'AND' : 'OR'
                           }
                         });
                       }}
                     >
-                      {commonInputs.find((item: any) => item.key === 'condition')?.value || 'OR'}
+                      {condition}
                       <MyIcon ml={1} boxSize={5} name="change" />
                     </Flex>
                     <Box
@@ -104,17 +146,71 @@ const NodeIfElse = ({
                     ></Box>
                   </Flex>
                 )}
-                <Flex key={index} gap={2} alignItems={'center'}>
-                  {items.map((item: any, key: number) => {
-                    if (item.renderTypeList?.includes('reference')) {
-                      return <Reference key={key} item={item} nodeId={nodeId} />;
-                    } else if (item.renderTypeList?.includes('input')) {
-                      return <TextInput key={key} item={item} nodeId={nodeId} />;
-                    } else {
-                      return <Select key={key} item={item} nodeId={nodeId} />;
-                    }
-                  })}
-                  {inputChunks.length > 1 && (
+                {/* condition list */}
+                <Flex gap={2} alignItems={'center'}>
+                  {/* variable reference */}
+                  <Box flex={'0 0 250px'}>
+                    <Reference
+                      nodeId={nodeId}
+                      variable={item.variable}
+                      onSelect={(e) => {
+                        onUpdateIfElseList(
+                          ifElseList.map((ifElse, index) => {
+                            if (index === i) {
+                              return {
+                                ...ifElse,
+                                variable: e
+                              };
+                            }
+                            return ifElse;
+                          })
+                        );
+                      }}
+                    />
+                  </Box>
+                  {/* condition select */}
+                  <Box flex={'0 0 130px'}>
+                    <ConditionSelect
+                      condition={item.condition}
+                      variable={item.variable}
+                      onSelect={(e) => {
+                        onUpdateIfElseList(
+                          ifElseList.map((ifElse, index) => {
+                            if (index === i) {
+                              return {
+                                ...ifElse,
+                                condition: e
+                              };
+                            }
+                            return ifElse;
+                          })
+                        );
+                      }}
+                    />
+                  </Box>
+                  {/* value */}
+                  <Box flex={'0 0 200px'}>
+                    <ConditionValueInput
+                      value={item.value}
+                      condition={item.condition}
+                      variable={item.variable}
+                      onSelect={(e) => {
+                        onUpdateIfElseList(
+                          ifElseList.map((ifElse, index) => {
+                            if (index === i) {
+                              return {
+                                ...ifElse,
+                                value: e
+                              };
+                            }
+                            return ifElse;
+                          })
+                        );
+                      }}
+                    />
+                  </Box>
+                  {/* delete */}
+                  {ifElseList.length > 1 && (
                     <MyIcon
                       ml={2}
                       boxSize={5}
@@ -123,91 +219,138 @@ const NodeIfElse = ({
                       _hover={{ color: 'red.600' }}
                       color={'myGray.400'}
                       onClick={() => {
-                        items.map((item: any) => {
-                          onChangeNode({
-                            nodeId,
-                            type: 'delInput',
-                            key: item.key
-                          });
-                        });
+                        onUpdateIfElseList(ifElseList.filter((_, index) => index !== i));
                       }}
                     />
                   )}
                 </Flex>
-              </>
+              </Box>
             );
           })}
-          <Button
-            onClick={() => {
-              onChangeNode({
-                nodeId,
-                type: 'addInput',
-                value: [
-                  {
-                    key: `input${inputChunks.length + 1}`,
-                    valueType: 'any',
-                    label: `input${inputChunks.length + 1}`,
-                    renderTypeList: ['reference'],
-                    required: true
-                  },
-                  {
-                    key: `select${inputChunks.length + 1}`,
-                    valueType: 'string',
-                    label: `select${inputChunks.length + 1}`,
-                    required: true,
-                    canEdit: true,
-                    value: 'equalTo',
-                    renderTypeList: ['select'],
-                    list: [
-                      {
-                        label: '等于',
-                        value: 'equalTo'
-                      },
-                      {
-                        label: '不等于',
-                        value: 'notEqualTo'
-                      },
-                      {
-                        label: '大于',
-                        value: 'greaterThan'
-                      },
-                      {
-                        label: '小于',
-                        value: 'lessThan'
-                      },
-                      {
-                        label: '大于等于',
-                        value: 'greaterThanOrEqualTo'
-                      },
-                      {
-                        label: '小于等于',
-                        value: 'lessThanOrEqualTo'
-                      }
-                    ]
-                  },
-                  {
-                    key: `value${inputChunks.length + 1}`,
-                    valueType: 'string',
-                    label: `value${inputChunks.length + 1}`,
-                    renderTypeList: ['input'],
-                    required: true,
-                    value: ''
-                  }
-                ]
-              });
-            }}
-            variant={'whiteBase'}
-            leftIcon={<SmallAddIcon />}
-            mt={3}
-            w={'full'}
-            mb={4}
-          >
-            {t('core.module.input.add')}
-          </Button>
-          <RenderOutput nodeId={nodeId} flowOutputList={[outputs[1]]} />
         </Box>
-      </>
+        {RenderAddCondition}
+      </Box>
     </NodeCard>
   );
 };
 export default React.memo(NodeIfElse);
+
+const Reference = ({
+  nodeId,
+  variable,
+  onSelect
+}: {
+  nodeId: string;
+  variable?: ReferenceValueProps;
+  onSelect: (e: ReferenceValueProps) => void;
+}) => {
+  const { t } = useTranslation();
+
+  const { referenceList, formatValue } = useReference({
+    nodeId,
+    valueType: WorkflowIOValueTypeEnum.any,
+    value: variable
+  });
+
+  return (
+    <ReferSelector
+      placeholder={t('选择引用变量')}
+      list={referenceList}
+      value={formatValue}
+      onSelect={onSelect}
+    />
+  );
+};
+
+/* Different data types have different options */
+const ConditionSelect = ({
+  condition,
+  variable,
+  onSelect
+}: {
+  condition?: VariableConditionEnum;
+  variable?: ReferenceValueProps;
+  onSelect: (e: VariableConditionEnum) => void;
+}) => {
+  const { nodeList } = useFlowProviderStore();
+
+  // get condition type
+  const valueType = useMemo(() => {
+    if (!variable) return;
+    const node = nodeList.find((node) => node.nodeId === variable[0]);
+
+    if (!node) return WorkflowIOValueTypeEnum.any;
+    const output = node.outputs.find((item) => item.id === variable[1]);
+
+    if (!output) return WorkflowIOValueTypeEnum.any;
+    return output.valueType;
+  }, [nodeList, variable]);
+
+  const conditionList = useMemo(() => {
+    if (valueType === WorkflowIOValueTypeEnum.string) return stringConditionList;
+    if (valueType === WorkflowIOValueTypeEnum.number) return numberConditionList;
+    if (valueType === WorkflowIOValueTypeEnum.boolean) return booleanConditionList;
+    if (
+      valueType === WorkflowIOValueTypeEnum.chatHistory ||
+      valueType === WorkflowIOValueTypeEnum.datasetQuote ||
+      valueType === WorkflowIOValueTypeEnum.dynamic ||
+      valueType === WorkflowIOValueTypeEnum.selectApp ||
+      valueType === WorkflowIOValueTypeEnum.tools
+    )
+      return arrayConditionList;
+
+    if (valueType === WorkflowIOValueTypeEnum.any) return allConditionList;
+
+    return [];
+  }, [valueType]);
+
+  return (
+    <MySelect
+      w={'100%'}
+      list={conditionList}
+      value={condition}
+      onchange={onSelect}
+      placeholder="选择条件"
+    ></MySelect>
+  );
+};
+
+/* 
+  Different condition can be entered differently
+  empty, notEmpty: forbid input
+  boolean type: select true/false
+*/
+const ConditionValueInput = ({
+  value,
+  variable,
+  condition,
+  onSelect
+}: {
+  value?: string;
+  variable?: ReferenceValueProps;
+  condition?: VariableConditionEnum;
+  onSelect: (e: string) => void;
+}) => {
+  const { nodeList } = useFlowProviderStore();
+
+  // get value type
+  const valueType = useMemo(() => {
+    if (!variable) return;
+    const node = nodeList.find((node) => node.nodeId === variable[0]);
+
+    if (!node) return WorkflowIOValueTypeEnum.any;
+    const output = node.outputs.find((item) => item.id === variable[1]);
+
+    if (!output) return WorkflowIOValueTypeEnum.any;
+    return output.valueType;
+  }, [nodeList, variable]);
+
+  // const Select = useMemo(() => {
+  //   return <MySelect list={} />
+  // },[])
+
+  if (valueType === WorkflowIOValueTypeEnum.boolean) {
+  }
+
+  return <></>;
+};

@@ -314,9 +314,6 @@ importers:
       '@types/react-dom':
         specifier: 18.2.0
         version: 18.2.0
-      '@types/turndown':
-        specifier: ^5.0.4
-        version: 5.0.4
 
   projects/app:
     dependencies:
