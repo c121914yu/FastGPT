@@ -188,29 +188,26 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                     />
                   </Box>
                   {/* value */}
-                  {item?.condition !== VariableConditionEnum.isEmpty &&
-                    item?.condition !== VariableConditionEnum.isNotEmpty && (
-                      <Box w={'200px'}>
-                        <ConditionValueInput
-                          value={item.value}
-                          condition={item.condition}
-                          variable={item.variable}
-                          onSelect={(e) => {
-                            onUpdateIfElseList(
-                              ifElseList.map((ifElse, index) => {
-                                if (index === i) {
-                                  return {
-                                    ...ifElse,
-                                    value: e
-                                  };
-                                }
-                                return ifElse;
-                              })
-                            );
-                          }}
-                        />
-                      </Box>
-                    )}
+                  <Box w={'200px'}>
+                    <ConditionValueInput
+                      value={item.value}
+                      condition={item.condition}
+                      variable={item.variable}
+                      onSelect={(e) => {
+                        onUpdateIfElseList(
+                          ifElseList.map((ifElse, index) => {
+                            if (index === i) {
+                              return {
+                                ...ifElse,
+                                value: e
+                              };
+                            }
+                            return ifElse;
+                          })
+                        );
+                      }}
+                    />
+                  </Box>
                   {/* delete */}
                   {ifElseList.length > 1 && (
                     <MyIcon
@@ -350,7 +347,20 @@ const ConditionValueInput = ({
     return output.valueType;
   }, [nodeList, variable]);
 
-  if (valueType === WorkflowIOValueTypeEnum.boolean) {
+  if (
+    condition === VariableConditionEnum.isEmpty ||
+    condition === VariableConditionEnum.isNotEmpty
+  ) {
+    return (
+      <MyInput
+        value={value}
+        w={'100%'}
+        placeholder={'输入值'}
+        onChange={(e) => onSelect(e.target.value)}
+        isDisabled
+      />
+    );
+  } else if (valueType === WorkflowIOValueTypeEnum.boolean) {
     return (
       <MySelect
         list={[

@@ -1,9 +1,6 @@
 import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
-import {
-  DispatchNodeResultType,
-  RuntimeNodeItemType
-} from '@fastgpt/global/core/workflow/runtime/type';
+import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 import { VariableConditionEnum } from '@fastgpt/global/core/workflow/template/system/ifElse/constant';
 import {
   IfElseConditionType,
@@ -15,7 +12,6 @@ import { getHandleId } from '@fastgpt/global/core/workflow/utils';
 type Props = ModuleDispatchProps<{
   [NodeInputKeyEnum.condition]: IfElseConditionType;
   [NodeInputKeyEnum.ifElseList]: IfElseListItemType[];
-  [NodeInputKeyEnum.agents]: { key: string; value: string }[];
 }>;
 
 function checkCondition(condition: VariableConditionEnum, variableValue: any, value: string) {
@@ -49,7 +45,7 @@ export const dispatchIfElse = async (props: Props): Promise<DispatchNodeResultTy
     runtimeNodes,
     node: { nodeId }
   } = props;
-  const { condition, ifElseList, agents } = params;
+  const { condition, ifElseList } = params;
   const listResult = ifElseList.map((item) => {
     const { variable, condition: variableCondition, value } = item;
 
@@ -76,12 +72,8 @@ export const dispatchIfElse = async (props: Props): Promise<DispatchNodeResultTy
       totalPoints: 0,
       ifElseResult: result ? 'IF' : 'ELSE'
     },
-    [DispatchNodeResponseKeyEnum.skipHandleId]: !result
-      ? agents
-          .filter((item) => item.value === 'IF')
-          .map((item) => getHandleId(nodeId, 'source', item.key))
-      : agents
-          .filter((item) => item.value === 'ELSE')
-          .map((item) => getHandleId(nodeId, 'source', item.key))
+    [DispatchNodeResponseKeyEnum.skipHandleId]: result
+      ? [getHandleId(nodeId, 'source', 'IF')]
+      : [getHandleId(nodeId, 'source', 'ELSE')]
   };
 };
