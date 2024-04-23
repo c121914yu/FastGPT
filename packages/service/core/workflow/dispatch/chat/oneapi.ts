@@ -19,7 +19,10 @@ import type { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { postTextCensor } from '../../../../common/api/requestPlusApi';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import type { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
-import { countGptMessagesTokens, countMessagesTokens } from '../../../../common/string/tiktoken';
+import {
+  countGptMessagesTokens,
+  countMessagesTokens
+} from '../../../../common/string/tiktoken/index';
 import {
   chats2GPTMessages,
   getSystemPrompt,

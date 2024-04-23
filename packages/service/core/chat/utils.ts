@@ -1,5 +1,5 @@
 import { IMG_BLOCK_KEY } from '@fastgpt/global/core/chat/constants';
-import { countGptMessagesTokens } from '../../common/string/tiktoken';
+import { countGptMessagesTokens } from '../../common/string/tiktoken/index';
 import type {
   ChatCompletionContentPart,
   ChatCompletionMessageParam

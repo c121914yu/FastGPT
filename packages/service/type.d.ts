@@ -7,6 +7,7 @@ import {
   LLMModelItemType
 } from '@fastgpt/global/core/ai/model.d';
 import { SubPlanType } from '@fastgpt/global/support/wallet/sub/type';
+import { Tiktoken } from 'js-tiktoken';
 
 declare global {
   var feConfigs: FastGPTFeConfigsType;
@@ -18,4 +19,6 @@ declare global {
   var audioSpeechModels: AudioSpeechModelType[];
   var whisperModel: WhisperModelType;
   var reRankModels: ReRankModelItemType[];
+
+  var tiktokenEnc: Tiktoken;
 }

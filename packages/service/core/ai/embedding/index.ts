@@ -1,6 +1,6 @@
 import { VectorModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { getAIApi } from '../config';
-import { countPromptTokens } from '../../../common/string/tiktoken';
+import { countPromptTokens } from '../../../common/string/tiktoken/index';
 import { EmbeddingTypeEnm } from '@fastgpt/global/core/ai/constants';
 
 type GetVectorProps = {

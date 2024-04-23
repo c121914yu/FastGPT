@@ -1,6 +1,5 @@
 /* Only the token of gpt-3.5-turbo is used */
 import { Tiktoken } from 'js-tiktoken/lite';
-import encodingJson from './cl100k_base.json';
 import {
   ChatCompletionMessageParam,
   ChatCompletionContentPart,
@@ -14,17 +13,16 @@ import { parentPort } from 'worker_threads';
 parentPort?.on(
   'message',
   ({
+    enc,
     messages,
     tools,
     functionCall
   }: {
+    enc: Tiktoken;
     messages: ChatCompletionMessageParam[];
     tools?: ChatCompletionTool[];
     functionCall?: ChatCompletionCreateParams.Function[];
   }) => {
-    /* init tikToken obj */
-    const enc = new Tiktoken(encodingJson);
-
     /* count one prompt tokens */
     const countPromptTokens = (
       prompt: string | ChatCompletionContentPart[] | null | undefined = '',

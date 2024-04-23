@@ -1,7 +1,10 @@
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
 import { filterGPTMessageByMaxTokens } from '../../../chat/utils';
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
-import { countMessagesTokens, countGptMessagesTokens } from '../../../../common/string/tiktoken';
+import {
+  countMessagesTokens,
+  countGptMessagesTokens
+} from '../../../../common/string/tiktoken/index';
 import { ChatItemValueTypeEnum, ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAIApi } from '../../../ai/config';
 import type { ContextExtractAgentItemType } from '@fastgpt/global/core/workflow/type/index.d';

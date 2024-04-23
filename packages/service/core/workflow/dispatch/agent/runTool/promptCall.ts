@@ -19,7 +19,7 @@ import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/co
 import { dispatchWorkFlow } from '../../index';
 import { DispatchToolModuleProps, RunToolResponse, ToolNodeItemType } from './type.d';
 import json5 from 'json5';
-import { countGptMessagesTokens } from '../../../../../common/string/tiktoken';
+import { countGptMessagesTokens } from '../../../../../common/string/tiktoken/index';
 import { getNanoid, replaceVariable } from '@fastgpt/global/common/string/tools';
 import { AIChatItemType } from '@fastgpt/global/core/chat/type';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';

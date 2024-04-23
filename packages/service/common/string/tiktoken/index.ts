@@ -6,8 +6,19 @@ import {
 } from '@fastgpt/global/core/ai/type';
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
 import { ChatItemType } from '@fastgpt/global/core/chat/type';
-import { WorkerNameEnum, runWorker } from '../../worker/utils';
+import { WorkerNameEnum, runWorker } from '../../../worker/utils';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
+import { Tiktoken } from 'js-tiktoken/lite';
+import encodingJson from './cl100k_base.json';
+
+export const getEnc = () => {
+  if (global && global.tiktokenEnc) {
+    return global.tiktokenEnc;
+  }
+  const enc = new Tiktoken(encodingJson);
+  global.tiktokenEnc = enc;
+  return enc;
+};
 
 /* count one prompt tokens */
 export const countPromptTokens = async (
@@ -17,7 +28,8 @@ export const countPromptTokens = async (
   try {
     const total = await runWorker<number>(WorkerNameEnum.countPromptToken, {
       prompt,
-      role
+      role,
+      enc: getEnc()
     });
 
     return total;

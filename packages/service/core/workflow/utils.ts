@@ -1,5 +1,5 @@
 import { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
-import { countPromptTokens } from '../../common/string/tiktoken';
+import { countPromptTokens } from '../../common/string/tiktoken/index';
 
 /* filter search result */
 export const filterSearchResultsByMaxChars = async (
