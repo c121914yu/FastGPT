@@ -55,7 +55,7 @@ const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
     <NodeSimple {...data} minW={'100px'} maxW={'300px'} />
   ),
   [FlowNodeTypeEnum.lafModule]: dynamic(() => import('./nodes/NodeLaf')),
-  [FlowNodeTypeEnum.ifElseModule]: dynamic(() => import('./nodes/NodeIfElse'))
+  [FlowNodeTypeEnum.ifElseNode]: dynamic(() => import('./nodes/NodeIfElse'))
 };
 const edgeTypes = {
   [EDGE_TYPE]: ButtonEdge

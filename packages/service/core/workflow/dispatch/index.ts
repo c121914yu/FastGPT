@@ -61,7 +61,7 @@ const callbackMap: Record<`${FlowNodeTypeEnum}`, Function> = {
   [FlowNodeTypeEnum.tools]: dispatchRunTools,
   [FlowNodeTypeEnum.stopTool]: dispatchStopToolCall,
   [FlowNodeTypeEnum.lafModule]: dispatchLafRequest,
-  [FlowNodeTypeEnum.ifElseModule]: dispatchIfElse,
+  [FlowNodeTypeEnum.ifElseNode]: dispatchIfElse,
 
   // none
   [FlowNodeTypeEnum.systemConfig]: dispatchSystemConfig,

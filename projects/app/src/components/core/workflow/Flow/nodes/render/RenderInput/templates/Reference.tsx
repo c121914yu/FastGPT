@@ -28,7 +28,52 @@ type SelectProps = {
 
 const Reference = ({ item, nodeId }: RenderInputProps) => {
   const { t } = useTranslation();
-  const { onChangeNode, nodeList, edges } = useFlowProviderStore();
+  const { onChangeNode } = useFlowProviderStore();
+
+  const onSelect = useCallback(
+    (e: any) => {
+      onChangeNode({
+        nodeId,
+        type: 'updateInput',
+        key: item.key,
+        value: {
+          ...item,
+          value: e
+        }
+      });
+    },
+    [item, nodeId, onChangeNode]
+  );
+
+  const { referenceList, formatValue } = useReference({
+    nodeId,
+    valueType: item.valueType,
+    value: item.value
+  });
+
+  return (
+    <ReferSelector
+      placeholder={t(item.referencePlaceholder || '选择引用变量')}
+      list={referenceList}
+      value={formatValue}
+      onSelect={onSelect}
+    />
+  );
+};
+
+export default React.memo(Reference);
+
+export const useReference = ({
+  nodeId,
+  valueType,
+  value
+}: {
+  nodeId: string;
+  valueType?: WorkflowIOValueTypeEnum;
+  value?: any;
+}) => {
+  const { t } = useTranslation();
+  const { nodeList, edges } = useFlowProviderStore();
 
   const referenceList = useMemo(() => {
     const sourceNodes = computedNodeInputReference({
@@ -53,9 +98,9 @@ const Reference = ({ item, nodeId }: RenderInputProps) => {
           children: node.outputs
             .filter(
               (output) =>
-                item.valueType === WorkflowIOValueTypeEnum.any ||
+                valueType === WorkflowIOValueTypeEnum.any ||
                 output.valueType === WorkflowIOValueTypeEnum.any ||
-                output.valueType === item.valueType
+                output.valueType === valueType
             )
             .map((output) => {
               return {
@@ -68,55 +113,27 @@ const Reference = ({ item, nodeId }: RenderInputProps) => {
       .filter((item) => item.children.length > 0);
 
     return list;
-  }, [edges, item.valueType, nodeId, nodeList, t]);
-
-  const onSelect = useCallback(
-    (e: any) => {
-      onChangeNode({
-        nodeId,
-        type: 'updateInput',
-        key: item.key,
-        value: {
-          ...item,
-          value: e
-        }
-      });
-    },
-    [item, nodeId, onChangeNode]
-  );
+  }, [edges, nodeId, nodeList, t, valueType]);
 
   const formatValue = useMemo(() => {
     if (
-      Array.isArray(item.value) &&
-      item.value.length === 2 &&
-      typeof item.value[0] === 'string' &&
-      typeof item.value[1] === 'string'
+      Array.isArray(value) &&
+      value.length === 2 &&
+      typeof value[0] === 'string' &&
+      typeof value[1] === 'string'
     ) {
-      return item.value as ReferenceValueProps;
+      return value as ReferenceValueProps;
     }
     return undefined;
-  }, [item.value]);
+  }, [value]);
 
-  const Render = useMemo(() => {
-    return (
-      <ReferSelector
-        placeholder={t(item.referencePlaceholder || '选择引用变量')}
-        list={referenceList}
-        value={formatValue}
-        onSelect={onSelect}
-      />
-    );
-  }, [formatValue, item.referencePlaceholder, onSelect, referenceList, t]);
-
-  return Render;
+  return {
+    referenceList,
+    formatValue
+  };
 };
-
-export default React.memo(Reference);
-
-export const ReferSelector = ({ placeholder, value, list, onSelect, styles }: SelectProps) => {
-  const { t } = useTranslation();
+export const ReferSelector = ({ placeholder, value, list = [], onSelect, styles }: SelectProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const closeTimer = useRef<any>();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedNodeReference, setSelectedItem] = useState<ReferenceValueProps>();
@@ -211,8 +228,10 @@ export const ReferSelector = ({ placeholder, value, list, onSelect, styles }: Se
           borderRadius={'md'}
           zIndex={1}
           minW={'100%'}
+          maxW={'500px'}
+          w={'auto'}
         >
-          <Box flex={'1 0 0'} pr={2}>
+          <Box flex={1} pr={2}>
             {list.map((item) => (
               <Flex
                 key={item.value}
@@ -220,6 +239,7 @@ export const ReferSelector = ({ placeholder, value, list, onSelect, styles }: Se
                 cursor={'pointer'}
                 px={2}
                 borderRadius={'md'}
+                whiteSpace={'nowrap'}
                 _hover={{
                   bg: 'primary.50',
                   color: 'primary.600'
@@ -240,7 +260,7 @@ export const ReferSelector = ({ placeholder, value, list, onSelect, styles }: Se
             {list.length === 0 && <EmptyTip text={'没有可用的变量'} pt={1} pb={3} />}
           </Box>
           {selectedNodeReference?.[0] && selectedNodeChildren.length > 0 && (
-            <Box borderLeft={'base'} pl={2} flex={'1 0 0'}>
+            <Box borderLeft={'base'} pl={2} flex={1}>
               {selectedNodeChildren.map((item) => (
                 <Flex
                   key={item.value}

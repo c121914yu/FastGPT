@@ -94,7 +94,11 @@ export enum NodeInputKeyEnum {
 
   // plugin
   pluginId = 'pluginId',
-  pluginStart = 'pluginStart'
+  pluginStart = 'pluginStart',
+
+  // if else
+  condition = 'condition',
+  ifElseList = 'ifElseList'
 }
 
 export enum NodeOutputKeyEnum {
