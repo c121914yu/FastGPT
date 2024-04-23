@@ -237,6 +237,14 @@ export const ResponseBox = React.memo(function ResponseBox({
           />
         </>
 
+        {/* if-else */}
+        <>
+          <Row
+            label={t('core.chat.response.module if else Result')}
+            value={activeModule?.ifElseResult}
+          />
+        </>
+
         {/* extract */}
         <>
           <Row
