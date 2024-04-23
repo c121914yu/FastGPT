@@ -9,6 +9,7 @@ import { ChatItemType } from '@fastgpt/global/core/chat/type';
 import { WorkerNameEnum, getWorker } from '../../../worker/utils';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
+import { addLog } from '../../system/log';
 
 export const getTiktokenWorker = () => {
   if (global.tiktokenWorker) {
@@ -40,16 +41,23 @@ export const countGptMessagesTokens = (
   functionCall?: ChatCompletionCreateParams.Function[]
 ) => {
   return new Promise<number>((resolve) => {
-    const timer = setTimeout(() => {
-      resolve(0);
-    }, 300);
+    const start = Date.now();
 
     const { worker, callbackMap } = getTiktokenWorker();
     const id = getNanoid();
 
+    const timer = setTimeout(() => {
+      resolve(0);
+      delete callbackMap[id];
+    }, 300);
+
     callbackMap[id] = (data) => {
       resolve(data);
       clearTimeout(timer);
+
+      // 检测是否有内存泄漏
+      addLog.info(`Count token time: ${Date.now() - start}, token: ${data}`);
+      console.log(Object.keys(global.tiktokenWorker.callbackMap));
     };
 
     worker.postMessage({
