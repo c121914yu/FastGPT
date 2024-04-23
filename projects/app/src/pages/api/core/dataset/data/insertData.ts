@@ -60,7 +60,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
     }));
 
     // token check
-    const token = await countPromptTokens(formatQ, 'system');
+    const token = await countPromptTokens(formatQ + formatA, '');
     const vectorModelData = getVectorModel(vectorModel);
 
     if (token > vectorModelData.maxToken) {

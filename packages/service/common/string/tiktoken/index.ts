@@ -6,36 +6,59 @@ import {
 } from '@fastgpt/global/core/ai/type';
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
 import { ChatItemType } from '@fastgpt/global/core/chat/type';
-import { WorkerNameEnum, runWorker } from '../../../worker/utils';
+import { WorkerNameEnum, getWorker } from '../../../worker/utils';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
-import { Tiktoken } from 'js-tiktoken/lite';
-import encodingJson from './cl100k_base.json';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
-export const getEnc = () => {
-  if (global && global.tiktokenEnc) {
-    return global.tiktokenEnc;
+export const getTiktokenWorker = () => {
+  if (global.tiktokenWorker) {
+    return global.tiktokenWorker;
   }
-  const enc = new Tiktoken(encodingJson);
-  global.tiktokenEnc = enc;
-  return enc;
+
+  const worker = getWorker(WorkerNameEnum.countGptMessagesTokens);
+
+  worker.on('message', ({ id, data }: { id: string; data: number }) => {
+    const callback = global.tiktokenWorker?.callbackMap?.[id];
+
+    if (callback) {
+      callback?.(data);
+      delete global.tiktokenWorker.callbackMap[id];
+    }
+  });
+
+  global.tiktokenWorker = {
+    worker,
+    callbackMap: {}
+  };
+
+  return global.tiktokenWorker;
 };
 
-/* count one prompt tokens */
-export const countPromptTokens = async (
-  prompt: string | ChatCompletionContentPart[] | null | undefined = '',
-  role: '' | `${ChatCompletionRequestMessageRoleEnum}` = ''
+export const countGptMessagesTokens = (
+  messages: ChatCompletionMessageParam[],
+  tools?: ChatCompletionTool[],
+  functionCall?: ChatCompletionCreateParams.Function[]
 ) => {
-  try {
-    const total = await runWorker<number>(WorkerNameEnum.countPromptToken, {
-      prompt,
-      role,
-      enc: getEnc()
-    });
+  return new Promise<number>((resolve) => {
+    const timer = setTimeout(() => {
+      resolve(0);
+    }, 300);
 
-    return total;
-  } catch (error) {
-    return 0;
-  }
+    const { worker, callbackMap } = getTiktokenWorker();
+    const id = getNanoid();
+
+    callbackMap[id] = (data) => {
+      resolve(data);
+      clearTimeout(timer);
+    };
+
+    worker.postMessage({
+      id,
+      messages,
+      tools,
+      functionCall
+    });
+  });
 };
 
 export const countMessagesTokens = (messages: ChatItemType[]) => {
@@ -44,20 +67,18 @@ export const countMessagesTokens = (messages: ChatItemType[]) => {
   return countGptMessagesTokens(adaptMessages);
 };
 
-export const countGptMessagesTokens = async (
-  messages: ChatCompletionMessageParam[],
-  tools?: ChatCompletionTool[],
-  functionCall?: ChatCompletionCreateParams.Function[]
+/* count one prompt tokens */
+export const countPromptTokens = async (
+  prompt: string | ChatCompletionContentPart[] | null | undefined = '',
+  role: '' | `${ChatCompletionRequestMessageRoleEnum}` = ''
 ) => {
-  try {
-    const total = await runWorker<number>(WorkerNameEnum.countGptMessagesTokens, {
-      messages,
-      tools,
-      functionCall
-    });
+  const total = await countGptMessagesTokens([
+    {
+      //@ts-ignore
+      role,
+      content: prompt
+    }
+  ]);
 
-    return total;
-  } catch (error) {
-    return 0;
-  }
+  return total;
 };

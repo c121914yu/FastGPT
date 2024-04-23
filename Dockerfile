@@ -58,10 +58,15 @@ COPY --from=builder /app/projects/$name/public /app/projects/$name/public
 COPY --from=builder /app/projects/$name/next.config.js /app/projects/$name/next.config.js
 COPY --from=builder --chown=nextjs:nodejs /app/projects/$name/.next/standalone /app/
 COPY --from=builder --chown=nextjs:nodejs /app/projects/$name/.next/static /app/projects/$name/.next/static
+# copy server chunks
+COPY --from=builder --chown=nextjs:nodejs /app/projects/$name/.next/server/chunks /app/projects/$name/.next/server/chunks
+# copy worker
+COPY --from=builder --chown=nextjs:nodejs /app/projects/$name/.next/server/worker /app/projects/$name/.next/server/worker
 # copy package.json to version file
 COPY --from=builder /app/projects/$name/package.json ./package.json 
 # copy config
 COPY ./projects/$name/data /app/data
+
 RUN chown -R nextjs:nodejs /app/data
 
 ENV NODE_ENV production
