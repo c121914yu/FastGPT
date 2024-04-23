@@ -2,7 +2,7 @@ import { AppSchema } from 'core/app/type';
 import { OutlinkTypeEnum } from './constant';
 
 // Feishu Config interface
-export interface Feishu {
+export interface FeishuType {
   appId: string;
   appSecret: string;
   // Encrypt config
@@ -14,7 +14,7 @@ export interface Feishu {
 }
 
 // TODO: Unused
-export interface Wecom {
+export interface WecomType {
   ReplyLimit: Boolean;
   defaultResponse: string;
   immediateResponse: boolean;

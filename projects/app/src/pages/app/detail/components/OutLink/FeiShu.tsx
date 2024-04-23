@@ -20,7 +20,7 @@ import { formatTimeToChatTime } from '@/utils/tools';
 import { useCopyData } from '@/web/common/hooks/useCopyData';
 import { defaultFeishuOutLinkForm } from '@/constants/app';
 import type {
-  Feishu,
+  FeishuType,
   OutLinkEditType,
   OutLinkSchema
 } from '@fastgpt/global/support/outLink/type.d';
@@ -40,18 +40,16 @@ const FeiShu = ({ appId }: { appId: string }) => {
   const { Loading, setIsLoading } = useLoading();
   const { feConfigs } = useSystemStore();
   const { copyData } = useCopyData();
-  const [editFeiShuLinkData, setEditFeiShuLinkData] = useState<OutLinkEditType<Feishu>>();
-  const [selectedLinkData, setSelectedLinkData] = useState<OutLinkSchema<Feishu>>();
+  const [editFeiShuLinkData, setEditFeiShuLinkData] = useState<OutLinkEditType<FeishuType>>();
+  const [selectedLinkData, setSelectedLinkData] = useState<OutLinkSchema<FeishuType>>();
   const { toast } = useToast();
   const {
     isFetching,
     data: shareChatList = [],
     refetch: refetchShareChatList
   } = useQuery(['initShareChatList', appId], () =>
-    getShareChatList<Feishu>({ appId, type: OutlinkTypeEnum.feishu })
+    getShareChatList<FeishuType>({ appId, type: OutlinkTypeEnum.feishu })
   );
-
-  console.log(shareChatList);
 
   return (
     <Box position={'relative'} pt={3} px={5} minH={'50vh'}>

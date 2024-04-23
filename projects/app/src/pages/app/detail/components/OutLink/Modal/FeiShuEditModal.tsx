@@ -4,7 +4,7 @@ import MyModal from '@fastgpt/web/components/common/MyModal';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import MyTooltip from '@/components/MyTooltip';
 import { OutlinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
-import type { Feishu, OutLinkEditType } from '@fastgpt/global/support/outLink/type';
+import type { FeishuType, OutLinkEditType } from '@fastgpt/global/support/outLink/type';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { useRequest } from '@/web/common/hooks/useRequest';
@@ -19,7 +19,7 @@ const FeiShuEditModal = ({
   onEdit
 }: {
   appId: string;
-  defaultData: OutLinkEditType<Feishu>;
+  defaultData: OutLinkEditType<FeishuType>;
   onClose: () => void;
   onCreate: (id: string) => void;
   onEdit: () => void;
@@ -36,7 +36,7 @@ const FeiShuEditModal = ({
   const isEdit = useMemo(() => !!defaultData?._id, [defaultData]);
 
   const { mutate: onclickCreate, isLoading: creating } = useRequest({
-    mutationFn: async (e: OutLinkEditType<Feishu>) => {
+    mutationFn: async (e: OutLinkEditType<FeishuType>) => {
       console.log(e);
       createShareChat({
         ...e,
@@ -48,7 +48,7 @@ const FeiShuEditModal = ({
     onSuccess: onCreate
   });
   const { mutate: onclickUpdate, isLoading: updating } = useRequest({
-    mutationFn: (e: OutLinkEditType<Feishu>) => {
+    mutationFn: (e: OutLinkEditType<FeishuType>) => {
       return updateShareChat(e);
     },
     errorToast: t('common.Update Failed'),
