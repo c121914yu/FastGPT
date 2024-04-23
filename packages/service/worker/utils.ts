@@ -3,27 +3,29 @@ import path from 'path';
 
 export enum WorkerNameEnum {
   htmlStr2Md = 'htmlStr2Md',
-  countGptMessagesTokens = 'countGptMessagesTokens',
-  countPromptToken = 'countPromptToken'
+  countGptMessagesTokens = 'countGptMessagesTokens'
 }
 
-export const runWorker = <T = any>(name: WorkerNameEnum, params?: Record<string, any>) => {
-  const workerPath = path.join(process.cwd(), '.next', 'server', `${name}.js`);
+export const getWorker = (name: WorkerNameEnum) => {
+  const workerPath = path.join(process.cwd(), '.next', 'server', 'worker', `${name}.js`);
+  return new Worker(workerPath);
+};
 
+export const runWorker = <T = any>(name: WorkerNameEnum, params?: Record<string, any>) => {
   return new Promise<T>((resolve, reject) => {
-    const worker = new Worker(workerPath);
+    const worker = getWorker(name);
 
     worker.postMessage(params);
 
     worker.on('message', (msg: { type: 'success' | 'error'; data: any }) => {
-      worker.terminate();
-
       if (msg.type === 'error') return reject(msg.data);
 
       resolve(msg.data);
     });
 
     worker.on('error', (err) => {
+      worker.terminate();
+
       reject(err);
     });
   });

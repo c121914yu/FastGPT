@@ -46,17 +46,13 @@ const nextConfig = {
             const entries = await oldEntry(...args);
             return {
               ...entries,
-              htmlStr2Md: path.resolve(
+              'worker/htmlStr2Md': path.resolve(
                 process.cwd(),
                 '../../packages/service/worker/htmlStr2Md.ts'
               ),
-              countGptMessagesTokens: path.resolve(
+              'worker/countGptMessagesTokens': path.resolve(
                 process.cwd(),
                 '../../packages/service/worker/tiktoken/countGptMessagesTokens.ts'
-              ),
-              countPromptToken: path.resolve(
-                process.cwd(),
-                '../../packages/service/worker/tiktoken/countPromptToken.ts'
               )
             };
           }

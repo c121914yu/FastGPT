@@ -7,7 +7,7 @@ import {
   LLMModelItemType
 } from '@fastgpt/global/core/ai/model.d';
 import { SubPlanType } from '@fastgpt/global/support/wallet/sub/type';
-import { Tiktoken } from 'js-tiktoken';
+import { Worker } from 'worker_threads';
 
 declare global {
   var feConfigs: FastGPTFeConfigsType;
@@ -20,5 +20,8 @@ declare global {
   var whisperModel: WhisperModelType;
   var reRankModels: ReRankModelItemType[];
 
-  var tiktokenEnc: Tiktoken;
+  var tiktokenWorker: {
+    worker: Worker;
+    callbackMap: Record<string, (e: number) => void>;
+  };
 }

@@ -1,5 +1,6 @@
 /* Only the token of gpt-3.5-turbo is used */
 import { Tiktoken } from 'js-tiktoken/lite';
+import encodingJson from './cl100k_base.json';
 import {
   ChatCompletionMessageParam,
   ChatCompletionContentPart,
@@ -9,20 +10,23 @@ import {
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import { parentPort } from 'worker_threads';
 
+const enc = new Tiktoken(encodingJson);
+
 /* count messages tokens */
 parentPort?.on(
   'message',
   ({
-    enc,
+    id,
     messages,
     tools,
     functionCall
   }: {
-    enc: Tiktoken;
+    id: string;
     messages: ChatCompletionMessageParam[];
     tools?: ChatCompletionTool[];
     functionCall?: ChatCompletionCreateParams.Function[];
   }) => {
+    const start = Date.now();
     /* count one prompt tokens */
     const countPromptTokens = (
       prompt: string | ChatCompletionContentPart[] | null | undefined = '',
@@ -102,6 +106,7 @@ parentPort?.on(
       countToolsTokens(functionCall);
 
     parentPort?.postMessage({
+      id,
       type: 'success',
       data: total
     });
