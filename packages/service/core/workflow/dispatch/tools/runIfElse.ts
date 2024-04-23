@@ -59,13 +59,7 @@ export const dispatchIfElse = async (props: Props): Promise<DispatchNodeResultTy
     return checkCondition(variableCondition as VariableConditionEnum, variableValue, value || '');
   });
 
-  let result: boolean;
-
-  if (condition === 'And') {
-    result = listResult.every(Boolean);
-  } else {
-    result = listResult.some(Boolean);
-  }
+  const result = condition === 'AND' ? listResult.every(Boolean) : listResult.some(Boolean);
 
   return {
     [DispatchNodeResponseKeyEnum.nodeResponse]: {
@@ -73,7 +67,7 @@ export const dispatchIfElse = async (props: Props): Promise<DispatchNodeResultTy
       ifElseResult: result ? 'IF' : 'ELSE'
     },
     [DispatchNodeResponseKeyEnum.skipHandleId]: result
-      ? [getHandleId(nodeId, 'source', 'IF')]
-      : [getHandleId(nodeId, 'source', 'ELSE')]
+      ? [getHandleId(nodeId, 'source', 'ELSE')]
+      : [getHandleId(nodeId, 'source', 'IF')]
   };
 };
