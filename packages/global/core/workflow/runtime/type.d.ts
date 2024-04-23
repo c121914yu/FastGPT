@@ -74,8 +74,8 @@ export type DispatchNodeResponseType = {
   pluginOutput?: Record<string, any>;
   pluginDetail?: ChatHistoryItemResType[];
 
-  // tf switch
-  tfSwitchResult?: boolean;
+  // if-else
+  ifElseResult?: boolean;
 
   // tool
   toolCallTokens?: number;

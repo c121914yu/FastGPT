@@ -4,20 +4,15 @@ import { useTranslation } from 'next-i18next';
 import { useFlowProviderStore } from '../FlowProvider';
 import { Box, Button, Flex, background } from '@chakra-ui/react';
 import { SmallAddIcon } from '@chakra-ui/icons';
-import Select from './render/RenderInput/templates/Select';
-import TextInput from './render/RenderInput/templates/TextInput';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import RenderOutput from './render/RenderOutput';
 import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
-import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import RenderInput from './render/RenderInput';
 import { NodeProps } from 'reactflow';
 import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type';
 import {
   IfElseConditionType,
   IfElseListItemType
 } from '@fastgpt/global/core/workflow/template/system/ifElse/type';
-import Container from '../components/Container';
 import { ReferenceValueProps } from '@fastgpt/global/core/workflow/type/io';
 import { ReferSelector, useReference } from './render/RenderInput/templates/Reference';
 import {
@@ -27,18 +22,19 @@ import {
   booleanConditionList,
   numberConditionList
 } from '@fastgpt/global/core/workflow/template/system/ifElse/constant';
-import { stringConditionList } from '../../../../../../../../packages/global/core/workflow/template/system/ifElse/constant';
+import { stringConditionList } from '@fastgpt/global/core/workflow/template/system/ifElse/constant';
 import MySelect from '@fastgpt/web/components/common/MySelect';
+import MyInput from '@/components/MyInput';
 
 const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
-  const { nodeId, inputs = [] } = data;
+  const { nodeId, inputs = [], outputs } = data;
   const { onChangeNode } = useFlowProviderStore();
 
   const condition = useMemo(
     () =>
       (inputs.find((input) => input.key === NodeInputKeyEnum.condition)
-        ?.value as IfElseConditionType) || 'OR',
+        ?.value as IfElseConditionType) || 'Or',
     [inputs]
   );
   const ifElseList = useMemo(
@@ -91,6 +87,9 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
 
   return (
     <NodeCard selected={selected} {...data}>
+      <Box px={6}>
+        <RenderOutput nodeId={nodeId} flowOutputList={[outputs[0]]} />
+      </Box>
       <Box py={3} px={4}>
         <Box className="nowheel">
           {ifElseList.map((item, i) => {
@@ -127,7 +126,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                           key: 'condition',
                           value: {
                             ...conditionInput,
-                            value: conditionInput.value === 'OR' ? 'AND' : 'OR'
+                            value: conditionInput.value === 'Or' ? 'And' : 'Or'
                           }
                         });
                       }}
@@ -149,7 +148,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                 {/* condition list */}
                 <Flex gap={2} alignItems={'center'}>
                   {/* variable reference */}
-                  <Box flex={'0 0 250px'}>
+                  <Box w={'250px'}>
                     <Reference
                       nodeId={nodeId}
                       variable={item.variable}
@@ -169,7 +168,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                     />
                   </Box>
                   {/* condition select */}
-                  <Box flex={'0 0 130px'}>
+                  <Box w={'130px'} flex={1}>
                     <ConditionSelect
                       condition={item.condition}
                       variable={item.variable}
@@ -189,26 +188,29 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                     />
                   </Box>
                   {/* value */}
-                  <Box flex={'0 0 200px'}>
-                    <ConditionValueInput
-                      value={item.value}
-                      condition={item.condition}
-                      variable={item.variable}
-                      onSelect={(e) => {
-                        onUpdateIfElseList(
-                          ifElseList.map((ifElse, index) => {
-                            if (index === i) {
-                              return {
-                                ...ifElse,
-                                value: e
-                              };
-                            }
-                            return ifElse;
-                          })
-                        );
-                      }}
-                    />
-                  </Box>
+                  {item?.condition !== VariableConditionEnum.isEmpty &&
+                    item?.condition !== VariableConditionEnum.isNotEmpty && (
+                      <Box w={'200px'}>
+                        <ConditionValueInput
+                          value={item.value}
+                          condition={item.condition}
+                          variable={item.variable}
+                          onSelect={(e) => {
+                            onUpdateIfElseList(
+                              ifElseList.map((ifElse, index) => {
+                                if (index === i) {
+                                  return {
+                                    ...ifElse,
+                                    value: e
+                                  };
+                                }
+                                return ifElse;
+                              })
+                            );
+                          }}
+                        />
+                      </Box>
+                    )}
                   {/* delete */}
                   {ifElseList.length > 1 && (
                     <MyIcon
@@ -229,6 +231,9 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
           })}
         </Box>
         {RenderAddCondition}
+      </Box>
+      <Box px={6} mb={4}>
+        <RenderOutput nodeId={nodeId} flowOutputList={[outputs[1]]} />
       </Box>
     </NodeCard>
   );
@@ -345,12 +350,26 @@ const ConditionValueInput = ({
     return output.valueType;
   }, [nodeList, variable]);
 
-  // const Select = useMemo(() => {
-  //   return <MySelect list={} />
-  // },[])
-
   if (valueType === WorkflowIOValueTypeEnum.boolean) {
+    return (
+      <MySelect
+        list={[
+          { label: 'True', value: 'true' },
+          { label: 'False', value: 'false' }
+        ]}
+        onchange={onSelect}
+        value={value}
+        placeholder={'选择值'}
+      />
+    );
+  } else {
+    return (
+      <MyInput
+        value={value}
+        placeholder={'输入值'}
+        w={'100%'}
+        onChange={(e) => onSelect(e.target.value)}
+      />
+    );
   }
-
-  return <></>;
 };

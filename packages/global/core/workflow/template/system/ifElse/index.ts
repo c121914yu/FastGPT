@@ -32,6 +32,22 @@ export const ifElseNode: FlowNodeTemplateType = {
       value: 'And' // And, Or
     },
     {
+      key: NodeInputKeyEnum.agents,
+      renderTypeList: [FlowNodeInputTypeEnum.hidden],
+      valueType: WorkflowIOValueTypeEnum.any,
+      label: '',
+      value: [
+        {
+          value: 'IF',
+          key: 'IF'
+        },
+        {
+          value: 'ELSE',
+          key: 'ELSE'
+        }
+      ]
+    },
+    {
       key: NodeInputKeyEnum.ifElseList,
       renderTypeList: [FlowNodeInputTypeEnum.hidden],
       valueType: WorkflowIOValueTypeEnum.any,
