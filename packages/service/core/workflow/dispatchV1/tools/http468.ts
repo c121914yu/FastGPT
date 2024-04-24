@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type';
 import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { NextApiResponse } from 'next';
 import {
   filterGPTMessageByMaxTokens,

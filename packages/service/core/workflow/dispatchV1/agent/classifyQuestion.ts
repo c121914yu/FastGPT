@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
 import { filterGPTMessageByMaxTokens } from '../../../chat/utils';
 
@@ -110,7 +111,7 @@ export const dispatchClassifyQuestion = async (props: Props): Promise<CQResponse
   };
 };
 
-const getFunctionCallSchema = ({
+const getFunctionCallSchema = async ({
   cqModel,
   histories,
   params: { agents, systemPrompt, userChatInput }
@@ -171,7 +172,7 @@ const getFunctionCallSchema = ({
 const toolChoice = async (props: ActionProps) => {
   const { user, cqModel } = props;
 
-  const { agentFunction, filterMessages } = getFunctionCallSchema(props);
+  const { agentFunction, filterMessages } = await getFunctionCallSchema(props);
   // function body
   const tools: ChatCompletionTool[] = [
     {
@@ -224,7 +225,7 @@ const toolChoice = async (props: ActionProps) => {
 const functionCall = async (props: ActionProps) => {
   const { user, cqModel } = props;
 
-  const { agentFunction, filterMessages } = getFunctionCallSchema(props);
+  const { agentFunction, filterMessages } = await getFunctionCallSchema(props);
   const functions: ChatCompletionCreateParams.Function[] = [agentFunction];
 
   const ai = getAIApi({

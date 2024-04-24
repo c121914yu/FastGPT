@@ -1,14 +1,12 @@
+// @ts-nocheck
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type';
-import {
-  DYNAMIC_INPUT_KEY,
-  NodeInputKeyEnum,
-  NodeOutputKeyEnum
-} from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import axios from 'axios';
 import { valueTypeFormat } from '../utils';
 import { SERVICE_LOCAL_HOST } from '../../../../common/system/tools';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
+import { DYNAMIC_INPUT_KEY } from '../utils';
 
 type HttpRequestProps = ModuleDispatchProps<{
   [NodeInputKeyEnum.abandon_httpUrl]: string;

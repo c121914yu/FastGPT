@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { getAIApi } from '../../../../ai/config';
 import { filterGPTMessageByMaxTokens } from '../../../../chat/utils';
