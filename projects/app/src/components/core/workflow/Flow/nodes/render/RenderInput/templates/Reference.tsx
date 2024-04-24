@@ -156,8 +156,6 @@ export const ReferSelector = ({ placeholder, value, list = [], onSelect }: Selec
   }, [list, value]);
 
   const Render = useMemo(() => {
-    console.log(1111);
-
     return (
       <MultipleRowSelect
         label={

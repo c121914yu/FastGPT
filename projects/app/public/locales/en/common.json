@@ -300,6 +300,7 @@
       "Select app from template": "Select from the template",
       "Select quote template": "Select quote template",
       "Set a name for your app": "App name",
+      "Setting ai property": "Click Configure AI model properties",
       "Share link": "Share",
       "Share link desc": "Share links with other users and use them directly without logging in",
       "Share link desc detail": "You can share the model directly with other users to have a conversation, and the other user can have a conversation directly without logging in. Note that this function will consume the balance of your account, please keep the link!",

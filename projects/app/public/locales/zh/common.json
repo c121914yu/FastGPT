@@ -300,6 +300,7 @@
       "Select app from template": "从模板中选择",
       "Select quote template": "选择引用提示模板",
       "Set a name for your app": "给应用设置一个名称",
+      "Setting ai property": "点击配置AI模型相关属性",
       "Share link": "免登录窗口",
       "Share link desc": "分享链接给其他用户，无需登录即可直接进行使用",
       "Share link desc detail": "可以直接分享该模型给其他用户去进行对话，对方无需登录即可直接进行对话。注意，这个功能会消耗你账号的余额，请保管好链接！",
