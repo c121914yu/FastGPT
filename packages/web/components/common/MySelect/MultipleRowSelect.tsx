@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useMemo, useCallback, useState } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import { Button, useDisclosure, Box, Flex, useOutsideClick } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { MultipleSelectProps } from './type';
@@ -39,7 +39,10 @@ const MultipleRowSelect = ({
             px={2}
             borderLeft={index !== 0 ? 'base' : 'none'}
             maxH={`${maxH}px`}
-            overflowY={'auto'}
+            // overflowY={'auto'}
+            whiteSpace={'nowrap'}
+            w={'auto'}
+            maxW={'auto'}
           >
             {list.map((item) => (
               <Flex
@@ -48,7 +51,6 @@ const MultipleRowSelect = ({
                 cursor={'pointer'}
                 px={2}
                 borderRadius={'md'}
-                whiteSpace={'nowrap'}
                 _hover={{
                   bg: 'primary.50',
                   color: 'primary.600'
@@ -112,7 +114,7 @@ const MultipleRowSelect = ({
       {isOpen && (
         <Flex
           position={'absolute'}
-          top={'40px'}
+          top={'45px'}
           py={2}
           bg={'white'}
           border={'1px solid #fff'}
