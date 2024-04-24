@@ -588,7 +588,7 @@ const ChatBox = (
         setLoading(false);
       };
     },
-    [chatHistories, onDelMessage, sendPrompt, setLoading, toast]
+    [chatHistories, onDelMessage, sendPrompt, setChatHistories, setLoading, toast]
   );
   // delete one message(One human and the ai response)
   const delOneMessage = useCallback(

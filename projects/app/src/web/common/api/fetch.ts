@@ -109,7 +109,7 @@ export const streamFetch = ({
     try {
       // auto complete variables
       const variables = data?.variables || {};
-      variables.cTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
+      variables.cTime = dayjs().format('YYYY-MM-DD HH:mm:ss dddd');
 
       const requestData = {
         method: 'POST',
