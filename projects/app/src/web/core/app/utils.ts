@@ -8,6 +8,7 @@ import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/
 
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { EditorVariablePickerType } from '@fastgpt/web/components/common/Textarea/PromptEditor/type';
 
 type WorkflowType = {
   nodes: StoreNodeItemType[];
@@ -717,3 +718,12 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
     edges: workflow.edges
   };
 }
+
+export const getSystemVariables = (): EditorVariablePickerType[] => {
+  return [
+    {
+      label: '当前时间',
+      key: 'cTime'
+    }
+  ];
+};

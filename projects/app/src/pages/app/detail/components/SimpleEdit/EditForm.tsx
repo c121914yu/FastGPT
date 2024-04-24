@@ -29,6 +29,7 @@ import SettingLLMModel from '@/components/core/ai/SettingLLMModel';
 import type { SettingAIDataType } from '@fastgpt/global/core/app/type.d';
 import DeleteIcon, { hoverDeleteStyles } from '@fastgpt/web/components/common/Icon/delete';
 import { TTSTypeEnum } from '@/constants/app';
+import { getSystemVariables } from '@/web/core/app/utils';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/app/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/app/DatasetParamsModal'));
@@ -101,7 +102,10 @@ const EditForm = ({
   const selectLLMModel = watch('aiSettings.model');
   const datasetSearchSetting = watch('dataset');
   const variables = watch('userGuide.variables');
-  const formatVariables = useMemo(() => formatEditorVariablePickerIcon(variables), [variables]);
+  const formatVariables = useMemo(
+    () => formatEditorVariablePickerIcon([...getSystemVariables(), ...variables]),
+    [variables]
+  );
   const searchMode = watch('dataset.searchMode');
 
   const selectDatasets = useMemo(

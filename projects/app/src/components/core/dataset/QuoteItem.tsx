@@ -183,7 +183,9 @@ const QuoteItem = ({
                         w={'100%'}
                         size="sm"
                         borderRadius={'20px'}
-                        colorScheme={scoreTheme[i]?.colorSchema}
+                        {...(scoreTheme[i] && {
+                          colorScheme: scoreTheme[i].colorSchema
+                        })}
                         bg="#E8EBF0"
                       />
                     )}
