@@ -101,11 +101,11 @@ const completions = async ({
             content: replaceVariable(cqModel.customCQPrompt || Prompt_CQJson, {
               systemPrompt: systemPrompt || 'null',
               typeList: agents
-                .map((item) => `{"问题类型": "${item.value}", "类型ID": "${item.key}"}`)
-                .join('\n'),
+                .map((item) => `{"类型ID":"${item.key}", "问题类型":"${item.value}"}`)
+                .join('------'),
               history: histories
                 .map((item) => `${item.obj}:${chatValue2RuntimePrompt(item.value).text}`)
-                .join('\n'),
+                .join('------'),
               question: userChatInput
             })
           }
@@ -118,7 +118,7 @@ const completions = async ({
     userKey: user.openaiAccount,
     timeout: 480000
   });
-  console.log(JSON.stringify(chats2GPTMessages({ messages, reserveId: false }), null, 2));
+
   const data = await ai.chat.completions.create({
     model: cqModel.model,
     temperature: 0.01,
@@ -126,7 +126,10 @@ const completions = async ({
     stream: false
   });
   const answer = data.choices?.[0].message?.content || '';
+
+  console.log(JSON.stringify(chats2GPTMessages({ messages, reserveId: false }), null, 2));
   console.log(answer, '----');
+
   const id =
     agents.find((item) => answer.includes(item.key) || answer.includes(item.value))?.key || '';
 
