@@ -1,7 +1,7 @@
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import { dispatchWorkFlow } from '../index';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { DYNAMIC_INPUT_KEY } from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getPluginRuntimeById } from '../../../plugin/controller';
 import { authPluginCanUse } from '../../../../support/permission/auth/plugin';
@@ -12,6 +12,7 @@ import {
 } from '@fastgpt/global/core/workflow/runtime/utils';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 import { updateToolInputValue } from '../agent/runTool/utils';
+import { replaceVariable } from '@fastgpt/global/common/string/tools';
 
 type RunPluginProps = ModuleDispatchProps<{
   [key: string]: any;
@@ -39,38 +40,61 @@ export const dispatchRunPlugin = async (props: RunPluginProps): Promise<RunPlugi
     (item) => item.flowNodeType === FlowNodeTypeEnum.pluginInput
   );
   if (!inputModule) return Promise.reject('Plugin error, It has no set input.');
-  const hasDynamicInput = inputModule.inputs.find((input) => input.key === DYNAMIC_INPUT_KEY);
+  const hasDynamicInput = inputModule.inputs.find(
+    (input) => input.key === NodeInputKeyEnum.addInputParam
+  );
 
   const startParams: Record<string, any> = (() => {
     if (!hasDynamicInput) return data;
 
     const params: Record<string, any> = {
-      [DYNAMIC_INPUT_KEY]: {}
+      [NodeInputKeyEnum.addInputParam]: {}
     };
 
     for (const key in data) {
+      if (key === NodeInputKeyEnum.addInputParam) continue;
+
       const input = inputModule.inputs.find((input) => input.key === key);
       if (input) {
         params[key] = data[key];
       } else {
-        params[DYNAMIC_INPUT_KEY][key] = data[key];
+        params[NodeInputKeyEnum.addInputParam][key] = data[key];
       }
     }
 
     return params;
   })();
 
+  // replace input by dynamic variables
+  if (hasDynamicInput) {
+    for (const key in startParams) {
+      if (key === NodeInputKeyEnum.addInputParam) continue;
+      startParams[key] = replaceVariable(
+        startParams[key],
+        startParams[NodeInputKeyEnum.addInputParam]
+      );
+    }
+  }
+
   const { flowResponses, flowUsages, assistantResponses } = await dispatchWorkFlow({
     ...props,
     runtimeNodes: storeNodes2RuntimeNodes(plugin.nodes, getDefaultEntryNodeIds(plugin.nodes)).map(
-      (node) => ({
-        ...node,
-        showStatus: false,
-        inputs: updateToolInputValue({
-          inputs: node.inputs,
-          params: startParams
-        })
-      })
+      (node) => {
+        if (node.flowNodeType === FlowNodeTypeEnum.pluginInput) {
+          return {
+            ...node,
+            showStatus: false,
+            inputs: updateToolInputValue({
+              inputs: node.inputs,
+              params: startParams
+            })
+          };
+        }
+        return {
+          ...node,
+          showStatus: false
+        };
+      }
     ),
     runtimeEdges: initWorkflowEdgeStatus(plugin.edges)
   });

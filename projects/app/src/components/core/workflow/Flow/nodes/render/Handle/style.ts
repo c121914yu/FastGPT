@@ -8,7 +8,7 @@ export const handleSize = {
 export const sourceCommonStyle = {
   backgroundColor: 'white',
   borderWidth: '3px',
-  transition: 'all 0.1s'
+  borderRadius: '50%'
 };
 export const handleConnectedStyle = {
   borderColor: lowPrimaryColor,

@@ -1,4 +1,4 @@
-import { FlowNodeTypeEnum } from './node/constant';
+import { FlowNodeOutputTypeEnum, FlowNodeTypeEnum } from './node/constant';
 import {
   WorkflowIOValueTypeEnum,
   NodeInputKeyEnum,
@@ -111,9 +111,13 @@ export const pluginData2FlowNodeIO = (
       : [],
     outputs: pluginOutput
       ? [
-          ...pluginOutput.outputs.map((item) => ({
-            ...item,
-            canEdit: false
+          ...pluginOutput.inputs.map((item) => ({
+            id: item.key,
+            type: FlowNodeOutputTypeEnum.static,
+            key: item.key,
+            valueType: item.valueType,
+            label: item.label || item.key,
+            description: item.description
           }))
         ]
       : []

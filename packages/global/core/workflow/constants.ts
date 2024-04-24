@@ -165,7 +165,6 @@ export const variableMap = {
   }
 };
 
-export const DYNAMIC_INPUT_KEY = 'DYNAMIC_INPUT_KEY';
 export const DYNAMIC_INPUT_REFERENCE_KEY = 'DYNAMIC_INPUT_REFERENCE_KEY';
 
 /* run time */

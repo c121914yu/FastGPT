@@ -41,7 +41,6 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { onChangeNode } = useFlowProviderStore();
 
   const [createField, setCreateField] = useState<EditNodeFieldType>();
-  const [editField, setEditField] = useState<EditNodeFieldType>();
 
   return (
     <NodeCard
@@ -107,75 +106,8 @@ const NodePluginOutput = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
               type: 'addInput',
               value: newInput
             });
-            onChangeNode({
-              nodeId,
-              type: 'addOutput',
-              value: newOutput
-            });
+
             setCreateField(undefined);
-          }}
-        />
-      )}
-      {!!editField?.key && (
-        <FieldEditModal
-          editField={createEditField}
-          defaultField={editField}
-          keys={[editField.key]}
-          onClose={() => setEditField(undefined)}
-          onSubmit={({ data, changeKey }) => {
-            if (!data.inputType || !data.key || !data.label || !editField.key) return;
-
-            // check key valid
-            const memInput = inputs.find((item) => item.key === editField.key);
-            const memOutput = outputs.find((item) => item.key === editField.key);
-
-            if (!memInput || !memOutput) return setEditField(undefined);
-
-            const newInput: FlowNodeInputItemType = {
-              ...memInput,
-              renderTypeList: [data.inputType],
-              valueType: data.valueType,
-              key: data.key,
-              required: data.required,
-              label: data.label,
-              description: data.description
-            };
-            const newOutput: FlowNodeOutputItemType = {
-              ...memOutput,
-              valueType: data.valueType,
-              key: data.key,
-              label: data.label
-            };
-
-            if (changeKey) {
-              onChangeNode({
-                nodeId,
-                type: 'replaceInput',
-                key: editField.key,
-                value: newInput
-              });
-              onChangeNode({
-                nodeId,
-                type: 'replaceOutput',
-                key: editField.key,
-                value: newOutput
-              });
-            } else {
-              onChangeNode({
-                nodeId,
-                type: 'updateInput',
-                key: newInput.key,
-                value: newInput
-              });
-              onChangeNode({
-                nodeId,
-                type: 'updateOutput',
-                key: newOutput.key,
-                value: newOutput
-              });
-            }
-
-            setEditField(undefined);
           }}
         />
       )}

@@ -1,10 +1,10 @@
 import { VectorModelItemType } from '../ai/model.d';
-import { DYNAMIC_INPUT_KEY } from './constants';
+import { NodeInputKeyEnum } from './constants';
 
 export type SelectedDatasetType = { datasetId: string; vectorModel: VectorModelItemType }[];
 
 export type HttpBodyType<T = any> = {
-  [DYNAMIC_INPUT_KEY]: Record<string, any>;
+  [NodeInputKeyEnum.addInputParam]: Record<string, any>;
 } & T;
 export type HttpQueryType = {
   appId: string;

@@ -50,13 +50,18 @@ const MySourceHandle = React.memo(function MySourceHandle({
     }
   }, [active, position, translate]);
 
+  const transform = useMemo(
+    () => (translateStr ? `translate(${translateStr})` : ''),
+    [translateStr]
+  );
+
   const { styles, showAddIcon } = useMemo(() => {
     if (active) {
       return {
         styles: {
           ...highlightStyle,
           ...(translateStr && {
-            transform: `translate(${translateStr})`
+            transform
           })
         },
         showAddIcon: true
@@ -68,7 +73,7 @@ const MySourceHandle = React.memo(function MySourceHandle({
         styles: {
           ...connectedStyle,
           ...(translateStr && {
-            transform: `translate(${translateStr})`
+            transform
           })
         },
         showAddIcon: false
@@ -79,7 +84,7 @@ const MySourceHandle = React.memo(function MySourceHandle({
       styles: undefined,
       showAddIcon: false
     };
-  }, [active, connected, highlightStyle, connectedStyle, translateStr]);
+  }, [active, connected, highlightStyle, translateStr, transform, connectedStyle]);
 
   const RenderHandle = useMemo(() => {
     return (
@@ -89,9 +94,7 @@ const MySourceHandle = React.memo(function MySourceHandle({
             ? styles
             : {
                 visibility: 'hidden',
-                ...(translateStr && {
-                  transform: `translate(${translateStr})`
-                }),
+                transform,
                 ...handleSize
               }
         }
@@ -105,7 +108,7 @@ const MySourceHandle = React.memo(function MySourceHandle({
         )}
       </Handle>
     );
-  }, [handleId, position, showAddIcon, styles, translateStr]);
+  }, [handleId, position, showAddIcon, styles, transform]);
 
   if (!node) return null;
   if (connectingEdge?.handleId === NodeOutputKeyEnum.selectedTools) return null;
@@ -113,23 +116,13 @@ const MySourceHandle = React.memo(function MySourceHandle({
 });
 
 export const SourceHandle = (props: Props) => {
-  const styleString = useMemo(
-    () =>
-      JSON.stringify({
-        highlightStyle: {
-          ...sourceCommonStyle,
-          ...handleHighLightStyle
-        },
-        connectedStyle: {
-          ...sourceCommonStyle,
-          ...handleConnectedStyle
-        }
-      }),
-    []
+  return (
+    <MySourceHandle
+      {...props}
+      highlightStyle={{ ...sourceCommonStyle, ...handleHighLightStyle }}
+      connectedStyle={{ ...sourceCommonStyle, ...handleConnectedStyle }}
+    />
   );
-  const parseStyle = useMemo(() => JSON.parse(styleString), [styleString]);
-
-  return <MySourceHandle {...props} {...parseStyle} />;
 };
 
 const MyTargetHandle = React.memo(function MyTargetHandle({
@@ -232,23 +225,13 @@ const MyTargetHandle = React.memo(function MyTargetHandle({
 });
 
 export const TargetHandle = (props: Props) => {
-  const styleString = useMemo(
-    () =>
-      JSON.stringify({
-        highlightStyle: {
-          ...sourceCommonStyle,
-          ...handleHighLightStyle
-        },
-        connectedStyle: {
-          ...sourceCommonStyle,
-          ...handleConnectedStyle
-        }
-      }),
-    []
+  return (
+    <MyTargetHandle
+      {...props}
+      highlightStyle={{ ...sourceCommonStyle, ...handleHighLightStyle }}
+      connectedStyle={{ ...sourceCommonStyle, ...handleConnectedStyle }}
+    />
   );
-  const parseStyle = useMemo(() => JSON.parse(styleString), [styleString]);
-
-  return <MyTargetHandle {...props} {...parseStyle} />;
 };
 
 export default <></>;

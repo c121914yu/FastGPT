@@ -21,11 +21,10 @@ const FieldEditModal = dynamic(() => import('../FieldEditModal'));
 type Props = {
   nodeId: string;
   input: FlowNodeInputItemType;
-  output?: FlowNodeOutputItemType;
   mode?: 'app' | 'plugin';
 };
 
-const InputLabel = ({ nodeId, input, output }: Props) => {
+const InputLabel = ({ nodeId, input }: Props) => {
   const { t } = useTranslation();
   const { onChangeNode } = useFlowProviderStore();
   const {
@@ -181,12 +180,6 @@ const InputLabel = ({ nodeId, input, output }: Props) => {
                 max: data.max,
                 min: data.min
               };
-              const newOutput: FlowNodeOutputItemType = {
-                ...(output as FlowNodeOutputItemType),
-                valueType: data.valueType,
-                key: data.key,
-                label: data.label
-              };
 
               if (changeKey) {
                 onChangeNode({
@@ -195,24 +188,12 @@ const InputLabel = ({ nodeId, input, output }: Props) => {
                   key: editField.key,
                   value: newInput
                 });
-                onChangeNode({
-                  nodeId,
-                  type: 'replaceOutput',
-                  key: editField.key,
-                  value: newOutput
-                });
               } else {
                 onChangeNode({
                   nodeId,
                   type: 'updateInput',
                   key: newInput.key,
                   value: newInput
-                });
-                onChangeNode({
-                  nodeId,
-                  type: 'updateOutput',
-                  key: newOutput.key,
-                  value: newOutput
                 });
               }
               setEditField(undefined);
@@ -231,7 +212,6 @@ const InputLabel = ({ nodeId, input, output }: Props) => {
     nodeId,
     onChangeNode,
     onChangeRenderType,
-    output,
     renderTypeList,
     required,
     selectedTypeIndex,

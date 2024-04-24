@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Box,
   Button,
@@ -21,10 +21,7 @@ import {
 } from '@fastgpt/global/core/workflow/node/type.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MySelect from '@fastgpt/web/components/common/MySelect';
-import {
-  DYNAMIC_INPUT_KEY,
-  WorkflowIOValueTypeEnum
-} from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 
 import dynamic from 'next/dynamic';
 
@@ -68,8 +65,8 @@ const FieldEditModal = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const showDynamicInputSelect =
-    !keys.includes(FlowNodeInputTypeEnum.addInputParam) ||
-    defaultField.key === FlowNodeInputTypeEnum.addInputParam;
+    !keys.includes(NodeInputKeyEnum.addInputParam) ||
+    defaultField.key === NodeInputKeyEnum.addInputParam;
 
   const inputTypeList = useMemo(
     () => [
@@ -140,9 +137,9 @@ const FieldEditModal = ({
               label: t('core.workflow.inputType.dynamicTargetInput'),
               value: FlowNodeInputTypeEnum.addInputParam,
               defaultValue: {
-                label: '',
+                label: t('core.workflow.inputType.dynamicTargetInput'),
                 valueType: WorkflowIOValueTypeEnum.dynamic,
-                key: FlowNodeInputTypeEnum.addInputParam,
+                key: NodeInputKeyEnum.addInputParam,
                 required: false
               }
             }

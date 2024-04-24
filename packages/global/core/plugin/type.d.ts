@@ -31,8 +31,6 @@ export type PluginTemplateType = PluginRuntimeType & {
   source: `${PluginSourceEnum}`;
   templateType: FlowNodeTemplateType['templateType'];
   intro: string;
-  nodes: StoreNodeItemType[];
-  edges: StoreEdgeItemType[];
 };
 
 export type PluginRuntimeType = {

@@ -1,4 +1,4 @@
-import { DYNAMIC_INPUT_KEY, DYNAMIC_INPUT_REFERENCE_KEY, NodeInputKeyEnum } from '../constants';
+import { NodeInputKeyEnum } from '../constants';
 import { FlowNodeInputTypeEnum } from '../node/constant';
 import { WorkflowIOValueTypeEnum } from '../constants';
 import { chatNodeSystemPromptTip } from './tip';
@@ -24,7 +24,7 @@ export const Input_Template_UserChatInput: FlowNodeInputItemType = {
 };
 
 export const Input_Template_DynamicInput: FlowNodeInputItemType = {
-  key: DYNAMIC_INPUT_KEY,
+  key: NodeInputKeyEnum.addInputParam,
   renderTypeList: [FlowNodeInputTypeEnum.addInputParam],
   valueType: WorkflowIOValueTypeEnum.dynamic,
   label: '',
