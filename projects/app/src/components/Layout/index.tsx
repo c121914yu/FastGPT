@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Box, useColorMode, Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useLoading } from '@fastgpt/web/hooks/useLoading';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -10,8 +10,8 @@ import { getUnreadCount } from '@/web/support/user/inform/api';
 import dynamic from 'next/dynamic';
 
 import Auth from './auth';
-import Navbar from './navbar';
-import NavbarPhone from './navbarPhone';
+const Navbar = dynamic(() => import('./navbar'));
+const NavbarPhone = dynamic(() => import('./navbarPhone'));
 const UpdateInviteModal = dynamic(() => import('@/components/support/user/team/UpdateInviteModal'));
 const NotSufficientModal = dynamic(() => import('@/components/support/wallet/NotSufficientModal'));
 const SystemMsgModal = dynamic(() => import('@/components/support/user/inform/SystemMsgModal'));

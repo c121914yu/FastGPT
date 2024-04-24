@@ -1,5 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Box, Flex, IconButton, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import {
+  Box,
+  Card,
+  Flex,
+  IconButton,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  css
+} from '@chakra-ui/react';
 import type {
   FlowNodeTemplateType,
   nodeTemplateListType
@@ -26,6 +35,7 @@ import { useRouter } from 'next/router';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import { useQuery } from '@tanstack/react-query';
 import { debounce } from 'lodash';
+import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 
 type ModuleTemplateListProps = {
   isOpen: boolean;
@@ -334,7 +344,14 @@ const RenderList = React.memo(function RenderList({
       <Box flex={'1 0 0'} overflow={'overlay'} px={'20px'}>
         <Box mx={'auto'}>
           {formatTemplates.map((item, i) => (
-            <Box key={item.type}>
+            <Box
+              key={item.type}
+              css={css({
+                span: {
+                  display: 'block'
+                }
+              })}
+            >
               {item.label && (
                 <Flex>
                   <Box fontWeight={'bold'} flex={1}>
@@ -345,56 +362,71 @@ const RenderList = React.memo(function RenderList({
 
               <>
                 {item.list.map((template) => (
-                  <Flex
+                  <MyTooltip
                     key={template.id}
-                    alignItems={'center'}
-                    p={5}
-                    cursor={'pointer'}
-                    _hover={{ bg: 'myWhite.600' }}
-                    borderRadius={'sm'}
-                    draggable={template.pluginType !== PluginTypeEnum.folder}
-                    onDragEnd={(e) => {
-                      if (e.clientX < sliderWidth) return;
-                      onAddNode({
-                        template,
-                        position: { x: e.clientX, y: e.clientY }
-                      });
-                    }}
-                    onClick={(e) => {
-                      if (template.pluginType === PluginTypeEnum.folder) {
-                        return setCurrentParent({
-                          parentId: template.id,
-                          parentName: template.name
-                        });
-                      }
-                      if (isPc) {
-                        return onAddNode({
-                          template,
-                          position: { x: sliderWidth * 1.5, y: 200 }
-                        });
-                      }
-                      onAddNode({
-                        template: template,
-                        position: { x: e.clientX, y: e.clientY }
-                      });
-                      onClose();
-                    }}
+                    placement={'right'}
+                    label={
+                      <Box>
+                        <Flex alignItems={'center'}>
+                          <Avatar
+                            src={template.avatar}
+                            w={'24px'}
+                            objectFit={'contain'}
+                            borderRadius={'0'}
+                          />
+                          <Box fontWeight={'bold'} ml={3}>
+                            {t(template.name)}
+                          </Box>
+                        </Flex>
+                        <Box mt={2}>{t(template.intro || 'core.workflow.Not intro')}</Box>
+                      </Box>
+                    }
                   >
-                    <Avatar
-                      src={template.avatar}
-                      w={'34px'}
-                      objectFit={'contain'}
-                      borderRadius={'0'}
-                    />
-                    <Box ml={5} flex={'1 0 0'}>
-                      <Box color={'black'}>{t(template.name)}</Box>
-                      {template.intro && (
-                        <Box className="textEllipsis3" color={'myGray.500'} fontSize={'sm'}>
-                          {t(template.intro)}
-                        </Box>
-                      )}
-                    </Box>
-                  </Flex>
+                    <Flex
+                      alignItems={'center'}
+                      p={5}
+                      cursor={'pointer'}
+                      _hover={{ bg: 'myWhite.600' }}
+                      borderRadius={'sm'}
+                      draggable={template.pluginType !== PluginTypeEnum.folder}
+                      onDragEnd={(e) => {
+                        if (e.clientX < sliderWidth) return;
+                        onAddNode({
+                          template,
+                          position: { x: e.clientX, y: e.clientY }
+                        });
+                      }}
+                      onClick={(e) => {
+                        if (template.pluginType === PluginTypeEnum.folder) {
+                          return setCurrentParent({
+                            parentId: template.id,
+                            parentName: template.name
+                          });
+                        }
+                        if (isPc) {
+                          return onAddNode({
+                            template,
+                            position: { x: sliderWidth * 1.5, y: 200 }
+                          });
+                        }
+                        onAddNode({
+                          template: template,
+                          position: { x: e.clientX, y: e.clientY }
+                        });
+                        onClose();
+                      }}
+                    >
+                      <Avatar
+                        src={template.avatar}
+                        w={'30px'}
+                        objectFit={'contain'}
+                        borderRadius={'0'}
+                      />
+                      <Box color={'black'} ml={5} flex={'1 0 0'}>
+                        {t(template.name)}
+                      </Box>
+                    </Flex>
+                  </MyTooltip>
                 ))}
               </>
             </Box>
