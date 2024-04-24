@@ -6,6 +6,8 @@ import type { SettingAIDataType } from '@fastgpt/global/core/app/type.d';
 import AISettingModal from '@/components/core/ai/AISettingModal';
 import Avatar from '@/components/Avatar';
 import { HUGGING_FACE_ICON } from '@fastgpt/global/common/system/constants';
+import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import { useTranslation } from 'next-i18next';
 
 type Props = {
   llmModelType?: `${LLMModelTypeEnum}`;
@@ -14,6 +16,7 @@ type Props = {
 };
 
 const SettingLLMModel = ({ llmModelType = LLMModelTypeEnum.all, defaultData, onChange }: Props) => {
+  const { t } = useTranslation();
   const { llmModelList } = useSystemStore();
 
   const model = defaultData.model;
@@ -49,6 +52,7 @@ const SettingLLMModel = ({ llmModelType = LLMModelTypeEnum.all, defaultData, onC
         w={'100%'}
         justifyContent={'flex-start'}
         variant={'whiteFlow'}
+        title={t('core.app.Setting ai property')}
         _active={{
           transform: 'none'
         }}

@@ -35,14 +35,13 @@ const MultipleRowSelect = ({
       return (
         <>
           <Box
-            flex={'1 0 0'}
+            flex={'1 0 auto'}
+            // width={0}
             px={2}
             borderLeft={index !== 0 ? 'base' : 'none'}
             maxH={`${maxH}px`}
-            // overflowY={'auto'}
+            overflowY={'auto'}
             whiteSpace={'nowrap'}
-            w={'auto'}
-            maxW={'auto'}
           >
             {list.map((item) => (
               <Flex
@@ -112,7 +111,7 @@ const MultipleRowSelect = ({
         <Box>{label ?? placeholder}</Box>
       </Button>
       {isOpen && (
-        <Flex
+        <Box
           position={'absolute'}
           top={'45px'}
           py={2}
@@ -122,9 +121,12 @@ const MultipleRowSelect = ({
           borderRadius={'md'}
           zIndex={1}
           minW={'100%'}
+          w={'max-content'}
         >
-          <RenderList list={list} index={0} />
-        </Flex>
+          <Flex>
+            <RenderList list={list} index={0} />
+          </Flex>
+        </Box>
       )}
     </Box>
   );
