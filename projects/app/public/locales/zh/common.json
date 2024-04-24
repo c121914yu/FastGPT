@@ -1126,6 +1126,9 @@
         "switch": "开关",
         "target": "外部数据",
         "textarea": "多行输入框"
+      },
+      "tool": {
+        "Select Tool": "选择工具"
       }
     }
   },

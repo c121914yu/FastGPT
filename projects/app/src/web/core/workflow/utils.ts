@@ -54,7 +54,7 @@ export const storeNode2FlowNode = ({
   const moduleItem: FlowNodeItemType = {
     ...template,
     ...storeNode,
-    avatar: template?.avatar,
+    avatar: storeNode?.avatar || template?.avatar,
     inputs: storeNode.inputs
       .map((storeInput) => {
         const templateInput =
