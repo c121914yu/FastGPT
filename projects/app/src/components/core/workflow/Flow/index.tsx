@@ -31,6 +31,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyTooltip from '@/components/MyTooltip';
 import { connectionLineStyle, defaultEdgeOptions } from '../constants';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
+import { useKeyboard } from './hooks/useKeyboard';
 
 const NodeSimple = dynamic(() => import('./nodes/NodeSimple'));
 const nodeTypes: Record<`${FlowNodeTypeEnum}`, any> = {
@@ -69,6 +70,8 @@ const Container = React.memo(function Container() {
     type: 'delete'
   });
 
+  const { isDowningCtrl } = useKeyboard();
+
   const {
     reactFlowWrapper,
     nodes,
@@ -79,6 +82,7 @@ const Container = React.memo(function Container() {
     setConnectingEdge
   } = useFlowProviderStore();
 
+  /* node */
   const handleNodesChange = useCallback(
     (changes: NodeChange[]) => {
       for (const change of changes) {
@@ -97,12 +101,14 @@ const Container = React.memo(function Container() {
               );
             })();
           }
+        } else if (change.type === 'select' && change.selected === false && isDowningCtrl) {
+          change.selected = true;
         }
       }
 
       onNodesChange(changes);
     },
-    [nodes, onNodesChange, onOpenConfirmDeleteNode, setEdges, t, toast]
+    [isDowningCtrl, nodes, onNodesChange, onOpenConfirmDeleteNode, setEdges, t, toast]
   );
   const handleEdgeChange = useCallback(
     (changes: EdgeChange[]) => {

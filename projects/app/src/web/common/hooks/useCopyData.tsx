@@ -28,11 +28,13 @@ export const useCopyData = () => {
         document.body?.removeChild(textarea);
       }
 
-      toast({
-        title,
-        status: 'success',
-        duration
-      });
+      if (title) {
+        toast({
+          title,
+          status: 'success',
+          duration
+        });
+      }
     },
     [t, toast]
   );

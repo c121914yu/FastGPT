@@ -1082,6 +1082,7 @@
       "Change input type tip": "修改输入类型会清空已填写的值，请确认！",
       "Check Failed": "工作流校验失败，请检查节点或连线是否正常",
       "Confirm stop debug": "确认终止调试？调试信息将会不保留。",
+      "Copy node": "已复制节点",
       "Custom inputs": "自定义输入",
       "Custom outputs": "自定义输出",
       "Custom variable": "自定义变量",

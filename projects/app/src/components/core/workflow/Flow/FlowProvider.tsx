@@ -5,7 +5,6 @@ import {
   type EdgeChange,
   useNodesState,
   useEdgesState,
-  Connection,
   OnConnectStartParams
 } from 'reactflow';
 import type {

@@ -1080,6 +1080,7 @@
       "Change input type tip": "Changing the input type will empty the entered values, please confirm!",
       "Check Failed": "Workflow verification fails. Check whether the node or connection is normal",
       "Confirm stop debug": "Do you want to terminate debugging? Debugging information is not retained.",
+      "Copy node": "Copy node",
       "Custom inputs": "Inputs",
       "Custom outputs": "Outputs",
       "Custom variable": "Custom variable",
