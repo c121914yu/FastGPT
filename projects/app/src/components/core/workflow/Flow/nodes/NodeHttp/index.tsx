@@ -113,14 +113,16 @@ const RenderHttpMethodAndUrl = React.memo(function RenderHttpMethodAndUrl({
 
   const onChangeUrl = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChangeNode({
-        nodeId,
-        type: 'updateInput',
-        key: NodeInputKeyEnum.httpReqUrl,
-        value: {
-          ...requestUrl,
-          value: e.target.value
-        }
+      startSts(() => {
+        onChangeNode({
+          nodeId,
+          type: 'updateInput',
+          key: NodeInputKeyEnum.httpReqUrl,
+          value: {
+            ...requestUrl,
+            value: e.target.value
+          }
+        });
       });
     },
     [nodeId, onChangeNode, requestUrl]
@@ -460,136 +462,156 @@ const RenderForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
-  const handleKeyChange = (index: number, newKey: string) => {
-    setList((prevList) => {
-      if (!newKey) {
-        setUpdateTrigger((prev) => !prev);
-        toast({
-          status: 'warning',
-          title: t('core.module.http.Key cannot be empty')
-        });
-        return prevList;
-      }
-      const checkExist = prevList.find((item, i) => i !== index && item.key == newKey);
-      if (checkExist) {
-        setUpdateTrigger((prev) => !prev);
-        toast({
-          status: 'warning',
-          title: t('core.module.http.Key already exists')
-        });
-        return prevList;
-      }
-      return prevList.map((item, i) => (i === index ? { ...item, key: newKey } : item));
-    });
-    setShouldUpdateNode(true);
-  };
+  const handleKeyChange = useCallback(
+    (index: number, newKey: string) => {
+      setList((prevList) => {
+        if (!newKey) {
+          setUpdateTrigger((prev) => !prev);
+          toast({
+            status: 'warning',
+            title: t('core.module.http.Key cannot be empty')
+          });
+          return prevList;
+        }
+        const checkExist = prevList.find((item, i) => i !== index && item.key == newKey);
+        if (checkExist) {
+          setUpdateTrigger((prev) => !prev);
+          toast({
+            status: 'warning',
+            title: t('core.module.http.Key already exists')
+          });
+          return prevList;
+        }
+        return prevList.map((item, i) => (i === index ? { ...item, key: newKey } : item));
+      });
+      setShouldUpdateNode(true);
+    },
+    [t, toast]
+  );
 
-  const handleAddNewProps = (key: string, value: string = '') => {
-    setList((prevList) => {
-      if (!key) {
-        return prevList;
-      }
+  const handleAddNewProps = useCallback(
+    (key: string, value: string = '') => {
+      setList((prevList) => {
+        if (!key) {
+          return prevList;
+        }
 
-      const checkExist = prevList.find((item) => item.key === key);
-      if (checkExist) {
-        setUpdateTrigger((prev) => !prev);
-        toast({
-          status: 'warning',
-          title: t('core.module.http.Key already exists')
-        });
-        return prevList;
-      }
-      return [...prevList, { key, type: 'string', value }];
-    });
+        const checkExist = prevList.find((item) => item.key === key);
+        if (checkExist) {
+          setUpdateTrigger((prev) => !prev);
+          toast({
+            status: 'warning',
+            title: t('core.module.http.Key already exists')
+          });
+          return prevList;
+        }
+        return [...prevList, { key, type: 'string', value }];
+      });
 
-    setShouldUpdateNode(true);
-  };
+      setShouldUpdateNode(true);
+    },
+    [t, toast]
+  );
 
-  return (
-    <TableContainer overflowY={'visible'} overflowX={'unset'}>
-      <Table>
-        <Thead>
-          <Tr>
-            <Th px={2}>{t('core.module.http.Props name')}</Th>
-            <Th px={2}>{t('core.module.http.Props value')}</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {list.map((item, index) => (
-            <Tr key={`${input.key}${index}`}>
+  const Render = useMemo(() => {
+    return (
+      <TableContainer overflowY={'visible'} overflowX={'unset'}>
+        <Table>
+          <Thead>
+            <Tr>
+              <Th px={2}>{t('core.module.http.Props name')}</Th>
+              <Th px={2}>{t('core.module.http.Props value')}</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {list.map((item, index) => (
+              <Tr key={`${input.key}${index}`}>
+                <Td p={0} w={'150px'}>
+                  <HttpInput
+                    hasVariablePlugin={false}
+                    hasDropDownPlugin={tabType === TabEnum.headers}
+                    setDropdownValue={(value) => {
+                      handleKeyChange(index, value);
+                      setUpdateTrigger((prev) => !prev);
+                    }}
+                    placeholder={t('core.module.http.Props name')}
+                    value={item.key}
+                    variables={leftVariables}
+                    onBlur={(val) => {
+                      handleKeyChange(index, val);
+                    }}
+                    updateTrigger={updateTrigger}
+                  />
+                </Td>
+                <Td p={0}>
+                  <Box display={'flex'} alignItems={'center'}>
+                    <HttpInput
+                      placeholder={t('core.module.http.Props value')}
+                      value={item.value}
+                      variables={variables}
+                      onBlur={(val) => {
+                        setList((prevList) =>
+                          prevList.map((item, i) => (i === index ? { ...item, value: val } : item))
+                        );
+                        setShouldUpdateNode(true);
+                      }}
+                    />
+                    <MyIcon
+                      name={'delete'}
+                      cursor={'pointer'}
+                      _hover={{ color: 'red.600' }}
+                      w={'14px'}
+                      onClick={() => {
+                        setList((prevlist) => prevlist.filter((val) => val.key !== item.key));
+                        setShouldUpdateNode(true);
+                      }}
+                    />
+                  </Box>
+                </Td>
+              </Tr>
+            ))}
+            <Tr>
               <Td p={0} w={'150px'}>
                 <HttpInput
                   hasVariablePlugin={false}
                   hasDropDownPlugin={tabType === TabEnum.headers}
-                  setDropdownValue={(value) => {
-                    handleKeyChange(index, value);
+                  setDropdownValue={(val) => {
+                    handleAddNewProps(val);
                     setUpdateTrigger((prev) => !prev);
                   }}
-                  placeholder={t('core.module.http.Props name')}
-                  value={item.key}
+                  placeholder={t('core.module.http.Add props')}
+                  value={''}
                   variables={leftVariables}
-                  onBlur={(val) => {
-                    handleKeyChange(index, val);
-                  }}
                   updateTrigger={updateTrigger}
+                  onBlur={(val) => {
+                    handleAddNewProps(val);
+                    setUpdateTrigger((prev) => !prev);
+                  }}
                 />
               </Td>
               <Td p={0}>
                 <Box display={'flex'} alignItems={'center'}>
-                  <HttpInput
-                    placeholder={t('core.module.http.Props value')}
-                    value={item.value}
-                    variables={variables}
-                    onBlur={(val) => {
-                      setList((prevList) =>
-                        prevList.map((item, i) => (i === index ? { ...item, value: val } : item))
-                      );
-                      setShouldUpdateNode(true);
-                    }}
-                  />
-                  <MyIcon
-                    name={'delete'}
-                    cursor={'pointer'}
-                    _hover={{ color: 'red.600' }}
-                    w={'14px'}
-                    onClick={() => {
-                      setList((prevlist) => prevlist.filter((val) => val.key !== item.key));
-                      setShouldUpdateNode(true);
-                    }}
-                  />
+                  <HttpInput />
                 </Box>
               </Td>
             </Tr>
-          ))}
-          <Tr>
-            <Td p={0} w={'150px'}>
-              <HttpInput
-                hasVariablePlugin={false}
-                hasDropDownPlugin={tabType === TabEnum.headers}
-                setDropdownValue={(val) => {
-                  handleAddNewProps(val);
-                  setUpdateTrigger((prev) => !prev);
-                }}
-                placeholder={t('core.module.http.Add props')}
-                value={''}
-                variables={leftVariables}
-                updateTrigger={updateTrigger}
-                onBlur={(val) => {
-                  handleAddNewProps(val);
-                  setUpdateTrigger((prev) => !prev);
-                }}
-              />
-            </Td>
-            <Td p={0}>
-              <Box display={'flex'} alignItems={'center'}>
-                <HttpInput />
-              </Box>
-            </Td>
-          </Tr>
-        </Tbody>
-      </Table>
-    </TableContainer>
-  );
+          </Tbody>
+        </Table>
+      </TableContainer>
+    );
+  }, [
+    handleAddNewProps,
+    handleKeyChange,
+    input.key,
+    leftVariables,
+    list,
+    t,
+    tabType,
+    updateTrigger,
+    variables
+  ]);
+
+  return Render;
 };
 const RenderJson = ({
   nodeId,
@@ -604,31 +626,35 @@ const RenderJson = ({
   const { onChangeNode } = useFlowProviderStore();
   const [_, startSts] = useTransition();
 
-  return (
-    <Box mt={1}>
-      <JSONEditor
-        bg={'white'}
-        defaultHeight={200}
-        resize
-        value={input.value}
-        placeholder={t('core.module.template.http body placeholder')}
-        onChange={(e) => {
-          startSts(() => {
-            onChangeNode({
-              nodeId,
-              type: 'updateInput',
-              key: input.key,
-              value: {
-                ...input,
-                value: e
-              }
+  const Render = useMemo(() => {
+    return (
+      <Box mt={1}>
+        <JSONEditor
+          bg={'white'}
+          defaultHeight={200}
+          resize
+          value={input.value}
+          placeholder={t('core.module.template.http body placeholder')}
+          onChange={(e) => {
+            startSts(() => {
+              onChangeNode({
+                nodeId,
+                type: 'updateInput',
+                key: input.key,
+                value: {
+                  ...input,
+                  value: e
+                }
+              });
             });
-          });
-        }}
-        variables={variables}
-      />
-    </Box>
-  );
+          }}
+          variables={variables}
+        />
+      </Box>
+    );
+  }, [input, nodeId, onChangeNode, t, variables]);
+
+  return Render;
 };
 const RenderPropsItem = ({ text, num }: { text: string; num: number }) => {
   return (

@@ -86,7 +86,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   }, [ifElseList, onUpdateIfElseList, t]);
 
   return (
-    <NodeCard selected={selected} {...data}>
+    <NodeCard selected={selected} maxW={'1000px'} {...data}>
       <Box px={6}>
         <RenderOutput nodeId={nodeId} flowOutputList={[outputs[0]]} />
       </Box>
@@ -148,7 +148,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                 {/* condition list */}
                 <Flex gap={2} alignItems={'center'}>
                   {/* variable reference */}
-                  <Box w={'250px'}>
+                  <Box minW={'250px'}>
                     <Reference
                       nodeId={nodeId}
                       variable={item.variable}
