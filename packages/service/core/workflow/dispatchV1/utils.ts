@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import {
   WorkflowIOValueTypeEnum,

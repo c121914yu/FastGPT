@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
 import { filterGPTMessageByMaxTokens } from '../../../chat/utils';
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';

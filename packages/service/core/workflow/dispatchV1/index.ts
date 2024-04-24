@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextApiResponse } from 'next';
 import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
@@ -218,9 +219,9 @@ export async function dispatchWorkFlowV1({
     );
   }
   async function moduleRun(module: RuntimeNodeItemType): Promise<any> {
-    if (res.closed || props.maxRunTimes <= 0) return Promise.resolve();
+    if (res?.closed || props.maxRunTimes <= 0) return Promise.resolve();
 
-    if (stream && detail && module.showStatus) {
+    if (res && stream && detail && module.showStatus) {
       responseStatus({
         res,
         name: module.name,
@@ -301,6 +302,7 @@ export async function dispatchWorkFlowV1({
       history: [] // abandon history field. History module will get histories from other fields.
     })
   );
+
   await checkModulesCanRun(initModules);
 
   // focus try to run pluginOutput
@@ -353,11 +355,7 @@ function loadModules(
                 return true;
               }
 
-              return (
-                item.type === FlowNodeInputTypeEnum.systemInput ||
-                item.connected ||
-                item.value !== undefined
-              );
+              return item.type === 'systemInput' || item.connected || item.value !== undefined;
             }
           ) // filter unconnected target input
           .map((item) => {
