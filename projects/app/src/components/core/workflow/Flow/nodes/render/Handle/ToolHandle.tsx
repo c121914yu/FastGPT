@@ -51,6 +51,7 @@ export const ToolTargetHandle = ({ nodeId }: ToolHandleProps) => {
         position={Position.Top}
       >
         <Box
+          className="flow-handle"
           w={handleSize}
           h={handleSize}
           border={'4px solid #8774EE'}

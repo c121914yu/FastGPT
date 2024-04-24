@@ -27,7 +27,7 @@ const NodeTools = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
           <Divider
             showBorderBottom={false}
             icon={<MyIcon name="phoneTabbar/tool" w={'16px'} h={'16px'} />}
-            text={t('core.module.template.Tool module')}
+            text={t('core.workflow.tool.Select Tool')}
           />
         </Box>
 

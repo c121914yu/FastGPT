@@ -1124,6 +1124,9 @@
         "switch": "Switch",
         "target": "Target Data",
         "textarea": "Textarea"
+      },
+      "tool": {
+        "Select Tool": "Select Tool"
       }
     }
   },

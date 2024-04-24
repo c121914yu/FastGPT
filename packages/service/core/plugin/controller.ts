@@ -6,6 +6,7 @@ import { PluginSourceEnum } from '@fastgpt/global/core/plugin/constants';
 import type { PluginRuntimeType, PluginTemplateType } from '@fastgpt/global/core/plugin/type.d';
 import { FlowNodeTemplateTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import { getHandleConfig } from '../../../global/core/workflow/template/utils';
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 /* 
   plugin id rule:
@@ -61,7 +62,7 @@ export async function getPluginPreviewNode({ id }: { id: string }): Promise<Flow
   const plugin = await getPluginTemplateById(id);
 
   return {
-    id: plugin.id,
+    id: getNanoid(),
     pluginId: plugin.id,
     templateType: plugin.templateType,
     flowNodeType: FlowNodeTypeEnum.pluginModule,
