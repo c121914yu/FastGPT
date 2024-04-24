@@ -55,14 +55,12 @@ const NodeCard = (props: Props) => {
     pluginId
   } = props;
 
-  const { nodes, nodeList, setHoverNodeId, onUpdateNodeError } = useFlowProviderStore();
+  const { nodeList, setHoverNodeId, onUpdateNodeError } = useFlowProviderStore();
 
   const showToolHandle = useMemo(
     () => isTool && !!nodeList.find((item) => item?.flowNodeType === FlowNodeTypeEnum.tools),
     [isTool, nodeList]
   );
-
-  const hasSelectedNode = useMemo(() => nodes.some((node) => node.selected), [nodes]);
 
   /* Node header */
   const Header = useMemo(() => {

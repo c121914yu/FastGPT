@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { LLMModelTypeEnum, llmModelTypeFilterMap } from '@fastgpt/global/core/ai/constants';
-import { Box, Button, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Flex, css, useDisclosure } from '@chakra-ui/react';
 import type { SettingAIDataType } from '@fastgpt/global/core/app/type.d';
 import AISettingModal from '@/components/core/ai/AISettingModal';
 import Avatar from '@/components/Avatar';
@@ -47,28 +47,36 @@ const SettingLLMModel = ({ llmModelType = LLMModelTypeEnum.all, defaultData, onC
   }, []);
 
   return (
-    <Box position={'relative'}>
-      <Button
-        w={'100%'}
-        justifyContent={'flex-start'}
-        variant={'whiteFlow'}
-        title={t('core.app.Setting ai property')}
-        _active={{
-          transform: 'none'
-        }}
-        leftIcon={
-          <Avatar
-            borderRadius={'0'}
-            src={selectedModel?.avatar || HUGGING_FACE_ICON}
-            fallbackSrc={HUGGING_FACE_ICON}
-            w={'18px'}
-          />
+    <Box
+      css={css({
+        span: {
+          display: 'block'
         }
-        pl={4}
-        onClick={onOpenAIChatSetting}
-      >
-        {selectedModel?.name}
-      </Button>
+      })}
+      position={'relative'}
+    >
+      <MyTooltip label={t('core.app.Setting ai property')}>
+        <Button
+          w={'100%'}
+          justifyContent={'flex-start'}
+          variant={'whiteFlow'}
+          _active={{
+            transform: 'none'
+          }}
+          leftIcon={
+            <Avatar
+              borderRadius={'0'}
+              src={selectedModel?.avatar || HUGGING_FACE_ICON}
+              fallbackSrc={HUGGING_FACE_ICON}
+              w={'18px'}
+            />
+          }
+          pl={4}
+          onClick={onOpenAIChatSetting}
+        >
+          {selectedModel?.name}
+        </Button>
+      </MyTooltip>
       {isOpenAIChatSetting && (
         <AISettingModal
           onClose={onCloseAIChatSetting}

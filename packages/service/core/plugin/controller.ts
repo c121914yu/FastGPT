@@ -51,7 +51,8 @@ const getPluginTemplateById = async (id: string): Promise<PluginTemplateType> =>
       source: PluginSourceEnum.personal,
       nodes: item.modules,
       edges: item.edges,
-      templateType: FlowNodeTemplateTypeEnum.personalPlugin
+      templateType: FlowNodeTemplateTypeEnum.personalPlugin,
+      isTool: true
     };
   }
   return Promise.reject('plugin not found');

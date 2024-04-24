@@ -1087,6 +1087,7 @@
       "Debug": "Debug",
       "Debug Node": "Workflow Debug",
       "Failed": "Running failed",
+      "Not intro": "This node is not introduced",
       "Run from here": "Run from here",
       "Run result": "Run result",
       "Running": "Running",
