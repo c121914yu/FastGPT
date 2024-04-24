@@ -40,6 +40,9 @@ import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
 import { UserChatItemType } from '@fastgpt/global/core/chat/type';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 
+import { dispatchWorkFlowV1 } from '@fastgpt/service/core/workflow/dispatchV1';
+import { setEntryEntries } from '@fastgpt/service/core/workflow/dispatchV1/utils';
+
 type FastGptWebChatProps = {
   chatId?: string; // undefined: nonuse history, '': new chat, 'xxxxx': use history
   appId?: string;
@@ -171,27 +174,52 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
     const responseChatItemId: string | undefined = messages[messages.length - 1].dataId;
 
     /* start flow controller */
-    const { flowResponses, flowUsages, assistantResponses } = await dispatchWorkFlow({
-      res,
-      mode: 'chat',
-      user,
-      teamId: String(teamId),
-      tmbId: String(tmbId),
-      appId: String(app._id),
-      chatId,
-      responseChatItemId,
-      runtimeNodes: storeNodes2RuntimeNodes(app.modules, getDefaultEntryNodeIds(app.modules)),
-      runtimeEdges: initWorkflowEdgeStatus(app.edges),
-      variables: {
-        ...variables,
-        userChatInput: text
-      },
-      inputFiles: files,
-      histories: concatHistories,
-      stream,
-      detail,
-      maxRunTimes: 200
-    });
+    const { flowResponses, flowUsages, assistantResponses } = await (async () => {
+      if (app.version === 'v2') {
+        return dispatchWorkFlow({
+          res,
+          mode: 'chat',
+          user,
+          teamId: String(teamId),
+          tmbId: String(tmbId),
+          appId: String(app._id),
+          chatId,
+          responseChatItemId,
+          runtimeNodes: storeNodes2RuntimeNodes(app.modules, getDefaultEntryNodeIds(app.modules)),
+          runtimeEdges: initWorkflowEdgeStatus(app.edges),
+          variables: {
+            ...variables,
+            userChatInput: text
+          },
+          inputFiles: files,
+          histories: concatHistories,
+          stream,
+          detail,
+          maxRunTimes: 200
+        });
+      }
+      return dispatchWorkFlowV1({
+        res,
+        mode: 'chat',
+        user,
+        teamId: String(teamId),
+        tmbId: String(tmbId),
+        appId: String(app._id),
+        chatId,
+        responseChatItemId,
+        //@ts-ignore
+        modules: setEntryEntries(app.modules),
+        variables,
+        inputFiles: files,
+        histories: concatHistories,
+        startParams: {
+          userChatInput: text
+        },
+        stream,
+        detail,
+        maxRunTimes: 200
+      });
+    })();
 
     // save chat
     if (chatId) {
