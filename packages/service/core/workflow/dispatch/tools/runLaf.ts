@@ -1,9 +1,5 @@
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
-import {
-  DYNAMIC_INPUT_KEY,
-  NodeInputKeyEnum,
-  NodeOutputKeyEnum
-} from '@fastgpt/global/core/workflow/constants';
+import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import axios from 'axios';
 import { valueTypeFormat } from '../utils';
@@ -13,7 +9,7 @@ import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/ty
 
 type LafRequestProps = ModuleDispatchProps<{
   [NodeInputKeyEnum.httpReqUrl]: string;
-  [DYNAMIC_INPUT_KEY]: Record<string, any>;
+  [NodeInputKeyEnum.addInputParam]: Record<string, any>;
   [key: string]: any;
 }>;
 type LafResponse = DispatchNodeResultType<{
@@ -31,7 +27,11 @@ export const dispatchLafRequest = async (props: LafRequestProps): Promise<LafRes
     variables,
     node: { outputs },
     histories,
-    params: { system_httpReqUrl: httpReqUrl, [DYNAMIC_INPUT_KEY]: dynamicInput, ...body }
+    params: {
+      system_httpReqUrl: httpReqUrl,
+      [NodeInputKeyEnum.addInputParam]: dynamicInput,
+      ...body
+    }
   } = props;
 
   if (!httpReqUrl) {

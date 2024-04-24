@@ -65,6 +65,8 @@ const RenderList: {
   }
 ];
 
+const hideLabelTypeList = [FlowNodeInputTypeEnum.addInputParam];
+
 type Props = {
   flowInputList: FlowNodeInputItemType[];
   nodeId: string;
@@ -98,7 +100,9 @@ const RenderInput = ({ flowInputList, nodeId, CustomComponent, mb = 5 }: Props) 
 
       return renderType !== FlowNodeInputTypeEnum.hidden ? (
         <Box key={input.key} _notLast={{ mb }} position={'relative'}>
-          {!!input.label && <InputLabel nodeId={nodeId} input={input} />}
+          {!!input.label && !hideLabelTypeList.includes(renderType) && (
+            <InputLabel nodeId={nodeId} input={input} />
+          )}
           {!!RenderComponent && (
             <Box mt={2} className={'nodrag'}>
               {RenderComponent}

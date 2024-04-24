@@ -49,12 +49,9 @@ export const dispatchIfElse = async (props: Props): Promise<DispatchNodeResultTy
   const listResult = ifElseList.map((item) => {
     const { variable, condition: variableCondition, value } = item;
 
-    const node = runtimeNodes.find((node) => node.nodeId === variable[0]);
-    if (!node) return false;
-    const output = node.outputs.find((item) => item.id === variable[1]);
-    if (!output) return false;
-
-    const variableValue = output.value;
+    const variableValue = runtimeNodes
+      .find((node) => node.nodeId === variable[0])
+      ?.outputs?.find((item) => item.id === variable[1])?.value;
 
     return checkCondition(variableCondition as VariableConditionEnum, variableValue, value || '');
   });

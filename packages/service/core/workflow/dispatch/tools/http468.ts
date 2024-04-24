@@ -1,17 +1,21 @@
 import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type/index.d';
 import {
-  DYNAMIC_INPUT_KEY,
   NodeInputKeyEnum,
   NodeOutputKeyEnum,
   WorkflowIOValueTypeEnum
 } from '@fastgpt/global/core/workflow/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import {
+  DispatchNodeResponseKeyEnum,
+  SseResponseEventEnum
+} from '@fastgpt/global/core/workflow/runtime/constants';
 import axios from 'axios';
 import { valueTypeFormat } from '../utils';
 import { SERVICE_LOCAL_HOST } from '../../../../common/system/tools';
 import { addLog } from '../../../../common/system/log';
 import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
 import { getErrText } from '@fastgpt/global/common/error/utils';
+import { responseWrite } from '../../../../common/response';
+import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
 
 type PropsArrType = {
   key: string;
@@ -25,7 +29,7 @@ type HttpRequestProps = ModuleDispatchProps<{
   [NodeInputKeyEnum.httpHeaders]: PropsArrType[];
   [NodeInputKeyEnum.httpParams]: PropsArrType[];
   [NodeInputKeyEnum.httpJsonBody]: string;
-  [DYNAMIC_INPUT_KEY]: Record<string, any>;
+  [NodeInputKeyEnum.addInputParam]: Record<string, any>;
   [key: string]: any;
 }>;
 type HttpResponse = DispatchNodeResultType<{
@@ -37,6 +41,8 @@ const UNDEFINED_SIGN = 'UNDEFINED_SIGN';
 
 export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<HttpResponse> => {
   let {
+    res,
+    detail,
     appId,
     chatId,
     responseChatItemId,
@@ -49,7 +55,7 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
       system_httpHeader: httpHeader,
       system_httpParams: httpParams = [],
       system_httpJsonBody: httpJsonBody,
-      [DYNAMIC_INPUT_KEY]: dynamicInput,
+      [NodeInputKeyEnum.addInputParam]: dynamicInput,
       ...body
     }
   } = props;
@@ -90,12 +96,17 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
     return acc;
   }, {});
   const requestBody = await (() => {
-    if (!httpJsonBody) return { [DYNAMIC_INPUT_KEY]: dynamicInput };
-    httpJsonBody = replaceVariable(httpJsonBody, concatVariables);
+    const dynamicInputBody = {
+      ...dynamicInput,
+      ...concatVariables
+    };
+
+    if (!httpJsonBody) return { [NodeInputKeyEnum.addInputParam]: dynamicInputBody };
+    httpJsonBody = replaceVariable(httpJsonBody, dynamicInputBody);
     try {
       const jsonParse = JSON.parse(httpJsonBody);
       const removeSignJson = removeUndefinedSign(jsonParse);
-      return { [DYNAMIC_INPUT_KEY]: dynamicInput, ...removeSignJson };
+      return { [NodeInputKeyEnum.addInputParam]: dynamicInputBody, ...removeSignJson };
     } catch (error) {
       console.log(error);
       return Promise.reject(`Invalid JSON body: ${httpJsonBody}`);
@@ -117,6 +128,16 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
       const output = outputs.find((item) => item.key === key);
       if (!output) continue;
       results[key] = valueTypeFormat(formatResponse[key], output.valueType);
+    }
+
+    if (typeof formatResponse[NodeOutputKeyEnum.answerText] === 'string') {
+      responseWrite({
+        res,
+        event: detail ? SseResponseEventEnum.fastAnswer : undefined,
+        data: textAdaptGptResponse({
+          text: formatResponse[NodeOutputKeyEnum.answerText]
+        })
+      });
     }
 
     return {

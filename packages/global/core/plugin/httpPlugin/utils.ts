@@ -5,7 +5,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import { PluginTypeEnum } from '../constants';
 import { FlowNodeInputItemType, FlowNodeOutputItemType } from '../../workflow/type/io.d';
 import { FlowNodeInputTypeEnum, FlowNodeOutputTypeEnum } from '../../workflow/node/constant';
-import { WorkflowIOValueTypeEnum } from '../../workflow/constants';
+import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '../../workflow/constants';
 import { PluginInputModule } from '../../workflow/template/system/pluginInput';
 import { PluginOutputModule } from '../../workflow/template/system/pluginOutput';
 import { HttpModule468 } from '../../workflow/template/system/http468';
@@ -313,7 +313,7 @@ export const httpApiSchema2Plugins = async ({
         },
         inputs: [
           {
-            key: 'DYNAMIC_INPUT_KEY',
+            key: NodeInputKeyEnum.addInputParam,
             renderTypeList: [FlowNodeInputTypeEnum.addInputParam],
             valueType: WorkflowIOValueTypeEnum.dynamic,
             label: '',

@@ -25,12 +25,10 @@ import React, {
   useState,
   useEffect
 } from 'react';
-import { customAlphabet } from 'nanoid';
 import { storeEdgesRenderEdge, storeNode2FlowNode } from '@/web/core/workflow/utils';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { EDGE_TYPE, FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { NodeOutputKeyEnum, RuntimeEdgeStatusEnum } from '@fastgpt/global/core/workflow/constants';
-import { useTranslation } from 'next-i18next';
 import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
 import { RuntimeEdgeItemType, StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
@@ -39,8 +37,6 @@ import { postWorkflowDebug } from '@/web/core/workflow/api';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { checkNodeRunStatus } from '@fastgpt/global/core/workflow/runtime/utils';
 import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
-
-const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
 type OnChange<ChangesType> = (changes: ChangesType[]) => void;
 
@@ -338,6 +334,7 @@ export const FlowProvider = ({
             onDelEdge({ nodeId, sourceHandle: props.key });
             const oldOutputIndex = node.data.outputs.findIndex((item) => item.key === props.key);
             updateObj.outputs = node.data.outputs.filter((item) => item.key !== props.key);
+            console.log(props.value);
             setTimeout(() => {
               onChangeNode({
                 nodeId,
