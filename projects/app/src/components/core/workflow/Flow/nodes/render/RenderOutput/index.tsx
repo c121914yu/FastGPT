@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import type { FlowNodeOutputItemType } from '@fastgpt/global/core/workflow/type/io.d';
-import { Box, Button, Flex, Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import { FlowNodeOutputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import OutputLabel from './Label';
 import { RenderOutputProps } from './type';
-import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import VariableTable from '../VariableTable';
@@ -171,7 +170,7 @@ const RenderOutput = ({
         {renderOutputs.map((output) => {
           return output.label ? (
             <Box key={output.key} _notLast={{ mb: 5 }} position={'relative'}>
-              <OutputLabel nodeId={nodeId} outputs={copyOutputs} output={output} />
+              <OutputLabel nodeId={nodeId} output={output} />
             </Box>
           ) : null;
         })}

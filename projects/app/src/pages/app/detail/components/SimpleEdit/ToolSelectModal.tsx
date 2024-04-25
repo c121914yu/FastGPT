@@ -17,8 +17,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Switch,
-  Textarea,
-  useDisclosure
+  Textarea
 } from '@chakra-ui/react';
 import RowTabs from '@fastgpt/web/components/common/Tabs/RowTabs';
 import { useWorkflowStore } from '@/web/core/workflow/store/workflow';
@@ -26,19 +25,19 @@ import { useRequest } from '@fastgpt/web/hooks/useRequest';
 import { useQuery } from '@tanstack/react-query';
 import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type/index.d';
-import { useToast } from '@fastgpt/web/hooks/useToast';
 import Avatar from '@/components/Avatar';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { AddIcon } from '@chakra-ui/icons';
 import { getPreviewPluginModule } from '@/web/core/plugin/api';
 import MyBox from '@/components/common/MyBox';
-import { NodeInputKeyEnum, WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
+import { WorkflowIOValueTypeEnum } from '@fastgpt/global/core/workflow/constants';
 import ParentPaths from '@/components/common/ParentPaths';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import { debounce } from 'lodash';
 import { useForm } from 'react-hook-form';
 import JsonEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 
 type Props = {
   selectedTools: FlowNodeTemplateType[];
@@ -296,67 +295,70 @@ const RenderList = React.memo(function RenderList({
           overflow={'auto'}
         >
           <ModalBody>
-            {configTool.inputs.map((input) => {
-              const required = input.required || false;
+            {configTool.inputs
+              .filter((item) => !item.toolDescription)
+              .map((input) => {
+                const required = input.required || false;
 
-              return (
-                <Box key={input.key} _notLast={{ mb: 4 }} px={1}>
-                  <Box display={'inline-block'} position={'relative'} mb={1}>
-                    {t(input.debugLabel || input.label)}
-                  </Box>
-                  {(() => {
-                    if (input.valueType === WorkflowIOValueTypeEnum.string) {
+                return (
+                  <Box key={input.key} _notLast={{ mb: 4 }} px={1}>
+                    <Flex position={'relative'} mb={1} alignItems={'center'}>
+                      {t(input.debugLabel || input.label)}
+                      {input.description && <QuestionTip label={input.description} ml={1} />}
+                    </Flex>
+                    {(() => {
+                      if (input.valueType === WorkflowIOValueTypeEnum.string) {
+                        return (
+                          <Textarea
+                            {...register(input.key, {
+                              required
+                            })}
+                            placeholder={t(input.placeholder || '')}
+                            bg={'myGray.50'}
+                          />
+                        );
+                      }
+                      if (input.valueType === WorkflowIOValueTypeEnum.number) {
+                        return (
+                          <NumberInput
+                            step={input.step}
+                            min={input.min}
+                            max={input.max}
+                            bg={'myGray.50'}
+                          >
+                            <NumberInputField
+                              {...register(input.key, {
+                                required: input.required,
+                                min: input.min,
+                                max: input.max,
+                                valueAsNumber: true
+                              })}
+                            />
+                            <NumberInputStepper>
+                              <NumberIncrementStepper />
+                              <NumberDecrementStepper />
+                            </NumberInputStepper>
+                          </NumberInput>
+                        );
+                      }
+                      if (input.valueType === WorkflowIOValueTypeEnum.boolean) {
+                        return <Switch size={'lg'} {...register(input.key, { required })} />;
+                      }
                       return (
-                        <Textarea
-                          {...register(input.key, {
-                            required
-                          })}
-                          placeholder={t(input.placeholder || '')}
+                        <JsonEditor
                           bg={'myGray.50'}
+                          placeholder={t(input.placeholder || '')}
+                          resize
+                          value={getValues(input.key)}
+                          onChange={(e) => {
+                            setValue(input.key, e);
+                          }}
                         />
                       );
-                    }
-                    if (input.valueType === WorkflowIOValueTypeEnum.number) {
-                      return (
-                        <NumberInput
-                          step={input.step}
-                          min={input.min}
-                          max={input.max}
-                          bg={'myGray.50'}
-                        >
-                          <NumberInputField
-                            {...register(input.key, {
-                              required: input.required,
-                              min: input.min,
-                              max: input.max,
-                              valueAsNumber: true
-                            })}
-                          />
-                          <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                          </NumberInputStepper>
-                        </NumberInput>
-                      );
-                    }
-                    if (input.valueType === WorkflowIOValueTypeEnum.boolean) {
-                      return <Switch size={'lg'} {...register(input.key, { required })} />;
-                    }
-                    return (
-                      <JsonEditor
-                        bg={'myGray.50'}
-                        placeholder={t(input.placeholder || '')}
-                        resize
-                        value={getValues(input.key)}
-                        onChange={(e) => {
-                          setValue(input.key, e);
-                        }}
-                      />
-                    );
-                  })()}
-                </Box>
-              );
-            })}
+                    })()}
+                  </Box>
+                );
+              })}
           </ModalBody>
           <ModalFooter gap={6}>
             <Button onClick={onCloseConfigTool} variant={'whiteBase'}>

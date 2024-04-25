@@ -481,7 +481,7 @@ const EditForm = ({
           onRemoveTool={(e) => {
             setValue(
               'selectedTools',
-              selectedTools.filter((item) => item.id !== e.id)
+              selectedTools.filter((item) => item.pluginId !== e.pluginId)
             );
           }}
           onClose={onCloseToolsSelect}
