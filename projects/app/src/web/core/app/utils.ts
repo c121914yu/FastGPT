@@ -586,7 +586,7 @@ export function form2AppWorkflow(data: AppSimpleEditFormType): WorkflowType {
           {
             nodeId,
             id: tool.id,
-            pluginId: tool.id,
+            pluginId: tool.pluginId,
             name: tool.name,
             intro: tool.intro,
             avatar: tool.avatar,

@@ -15,7 +15,9 @@ export const useKeyboard = () => {
 
   const onCopy = useCallback(async () => {
     const { nodes } = await getWorkflowStore();
-    const selectedNodes = nodes.filter((node) => node.selected && node.data?.unique !== true);
+    const selectedNodes = nodes.filter(
+      (node) => node.selected && !node.data?.isError && node.data?.unique !== true
+    );
     if (selectedNodes.length === 0) return;
     copyData(JSON.stringify(selectedNodes), t('core.workflow.Copy node'));
   }, [copyData, t]);

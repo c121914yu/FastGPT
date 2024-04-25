@@ -36,7 +36,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       tmbId,
       modules,
       edges,
-      type
+      type,
+      version: 'v2'
     });
 
     jsonRes(res, {

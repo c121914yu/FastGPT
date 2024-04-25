@@ -44,7 +44,7 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
   const { isPc, feConfigs } = useSystemStore();
   const { register, setValue, watch, handleSubmit } = useForm<FormType>({
     defaultValues: {
-      avatar: '/icon/logo.svg',
+      avatar: '',
       name: '',
       templateId: appTemplates[0].id
     }
@@ -86,7 +86,7 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
         return Promise.reject(t('core.dataset.error.Template does not exist'));
       }
       return postCreateApp({
-        avatar: data.avatar,
+        avatar: data.avatar || template.avatar,
         name: data.name,
         type: template.type,
         modules: template.modules || [],

@@ -1,14 +1,5 @@
-import {
-  FlowNodeTemplateTypeEnum,
-  WorkflowIOValueTypeEnum,
-  NodeInputKeyEnum,
-  NodeOutputKeyEnum
-} from '../../constants';
-import {
-  FlowNodeInputTypeEnum,
-  FlowNodeOutputTypeEnum,
-  FlowNodeTypeEnum
-} from '../../node/constant';
+import { FlowNodeTemplateTypeEnum } from '../../constants';
+import { FlowNodeTypeEnum } from '../../node/constant';
 import { FlowNodeTemplateType } from '../../type';
 import { getHandleConfig } from '../utils';
 

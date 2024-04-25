@@ -193,7 +193,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                       value={item.value}
                       condition={item.condition}
                       variable={item.variable}
-                      onSelect={(e) => {
+                      onChange={(e) => {
                         onUpdateIfElseList(
                           ifElseList.map((ifElse, index) => {
                             if (index === i) {
@@ -323,15 +323,15 @@ const ConditionSelect = ({
   boolean type: select true/false
 */
 const ConditionValueInput = ({
-  value,
+  value = '',
   variable,
   condition,
-  onSelect
+  onChange
 }: {
   value?: string;
   variable?: ReferenceValueProps;
   condition?: VariableConditionEnum;
-  onSelect: (e: string) => void;
+  onChange: (e: string) => void;
 }) => {
   const { nodeList } = useFlowProviderStore();
 
@@ -347,27 +347,14 @@ const ConditionValueInput = ({
     return output.valueType;
   }, [nodeList, variable]);
 
-  if (
-    condition === VariableConditionEnum.isEmpty ||
-    condition === VariableConditionEnum.isNotEmpty
-  ) {
-    return (
-      <MyInput
-        value={value}
-        w={'100%'}
-        placeholder={'输入值'}
-        onChange={(e) => onSelect(e.target.value)}
-        isDisabled
-      />
-    );
-  } else if (valueType === WorkflowIOValueTypeEnum.boolean) {
+  if (valueType === WorkflowIOValueTypeEnum.boolean) {
     return (
       <MySelect
         list={[
           { label: 'True', value: 'true' },
           { label: 'False', value: 'false' }
         ]}
-        onchange={onSelect}
+        onchange={onChange}
         value={value}
         placeholder={'选择值'}
       />
@@ -378,7 +365,11 @@ const ConditionValueInput = ({
         value={value}
         placeholder={'输入值'}
         w={'100%'}
-        onChange={(e) => onSelect(e.target.value)}
+        isDisabled={
+          condition === VariableConditionEnum.isEmpty ||
+          condition === VariableConditionEnum.isNotEmpty
+        }
+        onChange={(e) => onChange(e.target.value)}
       />
     );
   }

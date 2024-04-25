@@ -14,6 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const data: FlowNodeTemplateType[] =
       global.communityPlugins?.map((plugin) => ({
         id: plugin.id,
+        pluginId: plugin.id,
         templateType: plugin.templateType ?? FlowNodeTemplateTypeEnum.other,
         flowNodeType: FlowNodeTypeEnum.pluginModule,
         avatar: plugin.avatar,

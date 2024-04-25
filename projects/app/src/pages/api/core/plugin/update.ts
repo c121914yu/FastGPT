@@ -27,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       intro: props.intro,
       avatar: props.avatar,
       parentId: props.parentId,
+      version: 'v2',
       ...(modules && {
         modules: modules
       }),
@@ -75,7 +76,8 @@ const updateHttpChildrenPlugin = async ({
   const dbPlugins = await MongoPlugin.find(
     {
       parentId: parent.id,
-      teamId
+      teamId,
+      version: 'v2'
     },
     '_id metadata'
   );

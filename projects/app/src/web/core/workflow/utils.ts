@@ -61,7 +61,8 @@ export const storeNode2FlowNode = ({
           template.inputs.find((item) => item.key === storeInput.key) || storeInput;
         return {
           ...templateInput,
-          ...storeInput
+          ...storeInput,
+          renderTypeList: templateInput.renderTypeList
         };
       })
       .concat(

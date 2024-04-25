@@ -228,7 +228,8 @@ const RenderList = React.memo(function RenderList({
   ) : (
     <MyBox>
       {filterValidTools.map((item, i) => {
-        const selected = !!selectedTools.find((tool) => tool.id === item.id);
+        const selected = selectedTools.some((tool) => tool.pluginId === item.pluginId);
+
         return (
           <Flex
             key={item.id}

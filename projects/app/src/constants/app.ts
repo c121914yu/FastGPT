@@ -15,7 +15,8 @@ export const defaultApp: AppDetailType = {
   isOwner: false,
   canWrite: false,
   teamTags: [],
-  edges: []
+  edges: [],
+  version: 'v2'
 };
 
 export const defaultOutLinkForm: OutLinkEditType = {

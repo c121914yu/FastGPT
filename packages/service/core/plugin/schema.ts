@@ -60,6 +60,10 @@ const PluginSchema = new Schema({
       apiSchemaStr: String,
       customHeaders: String
     }
+  },
+  version: {
+    type: String,
+    enum: ['v1', 'v2']
   }
 });
 

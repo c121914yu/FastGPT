@@ -11,6 +11,8 @@ import { useToast } from '@fastgpt/web/hooks/useToast';
 import Loading from '@fastgpt/web/components/common/MyLoading';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useTranslation } from 'next-i18next';
+import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
+import { v1Workflow2V2 } from '@/web/core/workflow/adapt';
 
 type Props = { pluginId: string };
 
@@ -33,20 +35,39 @@ const Render = ({ pluginId }: Props) => {
       }
     }
   );
+  const isV2Workflow = pluginDetail?.version === 'v2';
+  const { openConfirm, ConfirmModal } = useConfirm({
+    showCancel: false,
+    content:
+      '检测到您的高级编排为旧版，系统将为您自动格式化成新版工作流。\n\n由于版本差异较大，会导致许多工作流无法正常排布，请重新手动连接工作流。如仍异常，可尝试删除对应节点后重新添加。\n\n你可以直接点击测试进行调试，无需点击保存，点击保存为新版工作流。'
+  });
 
   useEffect(() => {
-    initData(
-      JSON.parse(
-        JSON.stringify({
-          nodes: pluginDetail?.modules || [],
-          edges: pluginDetail?.edges || []
-        })
-      )
-    );
-  }, [pluginDetail?.edges, pluginDetail?.modules]);
+    if (isV2Workflow) {
+      initData(
+        JSON.parse(
+          JSON.stringify({
+            nodes: pluginDetail?.modules || [],
+            edges: pluginDetail?.edges || []
+          })
+        )
+      );
+    }
+  }, [isV2Workflow, pluginDetail?.edges, pluginDetail?.modules]);
+
+  useEffect(() => {
+    if (!isV2Workflow && pluginDetail) {
+      openConfirm(() => {
+        initData(JSON.parse(JSON.stringify(v1Workflow2V2((pluginDetail.modules || []) as any))));
+      })();
+    }
+  }, [isV2Workflow, openConfirm, pluginDetail]);
 
   return pluginDetail ? (
-    <Flow Header={<Header plugin={pluginDetail} onClose={() => router.back()} />} />
+    <>
+      <Flow Header={<Header plugin={pluginDetail} onClose={() => router.back()} />} />
+      {!isV2Workflow && <ConfirmModal countDown={0} />}
+    </>
   ) : (
     <Loading />
   );

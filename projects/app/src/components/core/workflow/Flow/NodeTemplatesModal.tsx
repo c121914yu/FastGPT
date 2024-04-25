@@ -319,7 +319,11 @@ const RenderList = React.memo(function RenderList({
       const mouseY = (position.y - reactFlowBounds.top - y) / zoom;
 
       const node = nodeTemplate2FlowNode({
-        template: templateNode,
+        template: {
+          ...templateNode,
+          name: t(templateNode.name),
+          intro: t(templateNode.intro || '')
+        },
         position: { x: mouseX, y: mouseY - 20 },
         selected: true
       });

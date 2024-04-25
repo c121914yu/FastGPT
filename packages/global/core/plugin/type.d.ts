@@ -22,6 +22,7 @@ export type PluginItemSchema = {
     apiSchemaStr?: string;
     customHeaders?: string;
   };
+  version?: 'v1' | 'v2';
 };
 
 /* plugin template */

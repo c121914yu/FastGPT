@@ -82,7 +82,9 @@ const RenderHeaderContainer = React.memo(function RenderHeaderContainer({
           modules: nodes,
           edges,
           type: AppTypeEnum.advanced,
-          permission: undefined
+          permission: undefined,
+          //@ts-ignore
+          version: 'v2'
         });
         toast({
           status: 'success',
