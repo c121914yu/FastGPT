@@ -123,7 +123,7 @@ const NodeIfElse = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                         onChangeNode({
                           nodeId,
                           type: 'updateInput',
-                          key: 'condition',
+                          key: NodeInputKeyEnum.condition,
                           value: {
                             ...conditionInput,
                             value: conditionInput.value === 'OR' ? 'AND' : 'OR'
