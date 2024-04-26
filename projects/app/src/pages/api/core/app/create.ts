@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { jsonRes } from '@fastgpt/service/common/response';
-import type { CreateAppParams } from '@fastgpt/global/core/app/api.d';
+import type { CreateAppParams } from '@/global/core/app/api.d';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 import { MongoApp } from '@fastgpt/service/core/app/schema';
 import { authUserNotVisitor } from '@fastgpt/service/support/permission/auth/user';

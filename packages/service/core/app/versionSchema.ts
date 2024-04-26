@@ -2,7 +2,7 @@ import { connectionMongo, type Model } from '../../common/mongo';
 const { Schema, model, models } = connectionMongo;
 import { AppVersionSchemaType } from '@fastgpt/global/core/app/version';
 
-export const AppVersionCollectionName = 'apps';
+export const AppVersionCollectionName = 'app.versions';
 
 const AppVersionSchema = new Schema({
   appId: {

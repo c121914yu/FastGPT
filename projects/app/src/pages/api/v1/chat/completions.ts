@@ -42,6 +42,8 @@ import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runti
 import { dispatchWorkFlowV1 } from '@fastgpt/service/core/workflow/dispatchV1';
 import { setEntryEntries } from '@fastgpt/service/core/workflow/dispatchV1/utils';
 import { NextAPI } from '@/service/middle/entry';
+import { MongoAppVersion } from '@fastgpt/service/core/app/versionSchema';
+import { getAppLatestVersion } from '@fastgpt/service/core/app/controller';
 
 type FastGptWebChatProps = {
   chatId?: string; // undefined: nonuse history, '': new chat, 'xxxxx': use history
@@ -163,13 +165,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       })();
 
-    // get and concat history
-    const { history } = await getChatItems({
-      appId: app._id,
-      chatId,
-      limit: 30,
-      field: `dataId obj value`
-    });
+    // 1. get and concat history; 2. get app workflow
+    const [{ history }, { nodes, edges }] = await Promise.all([
+      getChatItems({
+        appId: app._id,
+        chatId,
+        limit: 30,
+        field: `dataId obj value`
+      }),
+      getAppLatestVersion(app._id, app)
+    ]);
     const concatHistories = history.concat(chatMessages);
     const responseChatItemId: string | undefined = messages[messages.length - 1].dataId;
 
@@ -185,8 +190,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           appId: String(app._id),
           chatId,
           responseChatItemId,
-          runtimeNodes: storeNodes2RuntimeNodes(app.modules, getDefaultEntryNodeIds(app.modules)),
-          runtimeEdges: initWorkflowEdgeStatus(app.edges),
+          runtimeNodes: storeNodes2RuntimeNodes(nodes, getDefaultEntryNodeIds(nodes)),
+          runtimeEdges: initWorkflowEdgeStatus(edges),
           variables: {
             ...variables,
             userChatInput: text

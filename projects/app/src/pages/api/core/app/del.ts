@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { jsonRes } from '@fastgpt/service/common/response';
 import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
 import { MongoApp } from '@fastgpt/service/core/app/schema';
 import { MongoOutLink } from '@fastgpt/service/support/outLink/schema';
@@ -55,8 +54,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
       { session }
     );
   });
-
-  jsonRes(res);
 }
 
 export default NextAPI(handler);

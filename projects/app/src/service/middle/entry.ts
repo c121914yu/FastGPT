@@ -4,12 +4,20 @@ import { connectToDatabase } from '../mongo';
 import { withNextCors } from '@fastgpt/service/common/middle/cors';
 
 export const NextAPI = (...args: NextApiHandler[]): NextApiHandler => {
-  return async function (req: NextApiRequest, res: NextApiResponse) {
+  return async function api(req: NextApiRequest, res: NextApiResponse) {
     try {
       await Promise.all([withNextCors(req, res), connectToDatabase()]);
 
+      let response = null;
       for (const handler of args) {
-        await handler(req, res);
+        response = await handler(req, res);
+      }
+
+      if (!res.writableFinished) {
+        return jsonRes(res, {
+          code: 200,
+          data: response
+        });
       }
     } catch (error) {
       return jsonRes(res, {
