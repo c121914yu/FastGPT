@@ -8,6 +8,7 @@ import {
 } from '@fastgpt/global/core/workflow/template/system/ifElse/type';
 import { ModuleDispatchProps } from '@fastgpt/global/core/workflow/type';
 import { getHandleId } from '@fastgpt/global/core/workflow/utils';
+import { VARIABLE_NODE_ID } from '../../../../../../projects/app/src/web/core/workflow/constants';
 
 type Props = ModuleDispatchProps<{
   [NodeInputKeyEnum.condition]: IfElseConditionType;
@@ -43,15 +44,21 @@ export const dispatchIfElse = async (props: Props): Promise<DispatchNodeResultTy
   const {
     params,
     runtimeNodes,
+    variables,
     node: { nodeId }
   } = props;
   const { condition, ifElseList } = params;
   const listResult = ifElseList.map((item) => {
     const { variable, condition: variableCondition, value } = item;
 
-    const variableValue = runtimeNodes
-      .find((node) => node.nodeId === variable[0])
-      ?.outputs?.find((item) => item.id === variable[1])?.value;
+    let variableValue = '';
+    if (variable[0] === VARIABLE_NODE_ID) {
+      variableValue = variables[variable[1]];
+    } else {
+      variableValue = runtimeNodes
+        .find((node) => node.nodeId === variable[0])
+        ?.outputs?.find((item) => item.id === variable[1])?.value;
+    }
 
     return checkCondition(variableCondition as VariableConditionEnum, variableValue, value || '');
   });
