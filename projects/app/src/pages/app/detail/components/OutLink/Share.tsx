@@ -203,7 +203,7 @@ const Share = ({ appId }: { appId: string; type: OutlinkTypeEnum }) => {
       {!!editLinkData && (
         <EditLinkModal
           appId={appId}
-          type={'share'}
+          type={OutlinkTypeEnum.share}
           defaultData={editLinkData}
           onCreate={(id) => {
             const url = `${location.origin}/chat/share?shareId=${id}`;
@@ -244,7 +244,7 @@ function EditLinkModal({
   onEdit
 }: {
   appId: string;
-  type: `${OutlinkTypeEnum}`;
+  type: OutlinkTypeEnum;
   defaultData: OutLinkEditType;
   onClose: () => void;
   onCreate: (id: string) => void;

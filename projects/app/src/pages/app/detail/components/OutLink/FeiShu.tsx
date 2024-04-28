@@ -31,7 +31,7 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MyTooltip from '@/components/MyTooltip';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
-import MyMenu from '@/components/MyMenu';
+import MyMenu from '@fastgpt/web/components/common/MyMenu';
 import FeiShuEditModal from './Modal/FeiShuEditModal';
 const SelectUsingWayModal = dynamic(() => import('./Modal/SelectUsingWayModal'));
 
