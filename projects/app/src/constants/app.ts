@@ -1,5 +1,5 @@
 import { AppDetailType } from '@fastgpt/global/core/app/type.d';
-import type { Feishu, OutLinkEditType } from '@fastgpt/global/support/outLink/type.d';
+import type { FeishuType, OutLinkEditType } from '@fastgpt/global/support/outLink/type.d';
 
 export const defaultApp: AppDetailType = {
   _id: '',
@@ -45,7 +45,7 @@ export const defaultOutLinkForm: OutLinkEditType = {
 //   }
 // };
 
-export const defaultFeishuOutLinkForm: OutLinkEditType<Feishu> = {
+export const defaultFeishuOutLinkForm: OutLinkEditType<FeishuType> = {
   name: '',
   limit: {
     QPM: 100,
