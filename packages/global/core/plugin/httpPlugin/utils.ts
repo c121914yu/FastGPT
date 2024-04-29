@@ -378,14 +378,14 @@ export const httpApiSchema2Plugins = async ({
       {
         source: pluginInputId,
         target: httpId,
-        sourcePort: `${pluginInputId}-source-right`,
-        targetPort: `${httpId}-target-left`
+        sourceHandle: `${pluginInputId}-source-right`,
+        targetHandle: `${httpId}-target-left`
       },
       {
         source: httpId,
         target: pluginOutputId,
-        sourcePort: `${httpId}-source-right`,
-        targetPort: `${pluginOutputId}-target-left`
+        sourceHandle: `${httpId}-source-right`,
+        targetHandle: `${pluginOutputId}-target-left`
       }
     ];
 
