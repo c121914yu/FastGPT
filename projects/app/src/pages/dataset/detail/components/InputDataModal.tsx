@@ -316,14 +316,14 @@ const InputDataModal = ({
                         borderColor={'transparent'}
                         px={0}
                         pt={0}
+                        placeholder={t('dataset.data.Index Placeholder')}
                         _focus={{
                           px: 3,
                           py: 2,
+                          boxShadow: 'active',
                           borderColor: 'primary.500',
-                          boxShadow: '0px 0px 0px 2.4px rgba(51, 112, 255, 0.15)',
                           bg: 'white'
                         }}
-                        placeholder={t('dataset.data.Index Placeholder')}
                         {...register(`indexes.${i}.text`, {
                           required: true
                         })}

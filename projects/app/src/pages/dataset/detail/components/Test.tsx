@@ -149,8 +149,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
           borderRadius={'md'}
           {...(isFocus
             ? {
-                borderColor: 'primary.500',
-                boxShadow: '0px 0px 0px 2.4px rgba(51, 112, 255, 0.15)'
+                borderColor: 'primary.500'
               }
             : {
                 borderColor: 'primary.300'

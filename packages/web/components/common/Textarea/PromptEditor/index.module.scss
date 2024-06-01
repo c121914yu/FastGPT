@@ -26,14 +26,14 @@
   outline: none;
   border: 1px solid;
   border-color: var(--chakra-colors-primary-600);
-  box-shadow: 0px 0px 0px 2.4px rgba(51, 112, 255, 0.15);
+  box-shadow: var(--chakra-shadows-active);
 }
 
 .contentEditable_isFlow:focus {
   outline: none;
   border: 1px solid;
   border-color: var(--chakra-colors-primary-600);
-  box-shadow: 0px 0px 0px 2.4px rgba(51, 112, 255, 0.15);
+  box-shadow: var(--chakra-shadows-active);
 }
 
 .variable {

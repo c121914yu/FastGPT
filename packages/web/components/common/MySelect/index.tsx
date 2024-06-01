@@ -85,7 +85,7 @@ const MySelect = (
           }}
           {...(isOpen
             ? {
-                boxShadow: '0px 0px 4px #A8DBFF',
+                boxShadow: 'active',
                 borderColor: 'primary.500'
               }
             : {})}
