@@ -584,16 +584,17 @@ export const theme = extendTheme({
     body: 'PingFang,Noto Sans,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"'
   },
   fontSizes: {
-    xs: '0.8rem',
-    sm: '0.93rem',
+    xs: '0.75rem',
+    sm: '0.875rem',
     md: '1rem',
-    lg: '1.15rem',
-    xl: '1.3rem',
-    '2xl': '1.45rem',
-    '3xl': '1.6rem',
-    '4xl': '1.75rem',
-    '5xl': '1.9rem',
-    '6xl': '2.05rem'
+    lg: '1.125rem',
+    xl: '1.375rem',
+    '2xl': '1.5rem',
+    '3xl': '1.75rem',
+    '4xl': '2rem',
+    '5xl': '2.25rem',
+    '6xl': '3.25rem',
+    '7xl': '4rem'
   },
   borders: {
     sm: '1px solid #E8EBF0',
