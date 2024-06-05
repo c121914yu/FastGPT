@@ -99,7 +99,7 @@ const PublishHistoriesSlider = () => {
         maxW={'300px'}
         px={0}
         showMask={false}
-        mt={'60px'}
+        top={'60px'}
         overflow={'unset'}
       >
         <Button

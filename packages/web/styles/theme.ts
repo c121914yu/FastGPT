@@ -446,7 +446,7 @@ export const theme = extendTheme({
       'html, body': {
         fontSize: '14px',
         color: 'myGray.900',
-        fontWeight: 400,
+        fontWeight: 500,
         height: '100%',
         overflow: 'hidden'
       },

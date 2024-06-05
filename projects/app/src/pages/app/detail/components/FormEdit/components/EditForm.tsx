@@ -1,5 +1,14 @@
 import React, { useEffect, useMemo, useTransition } from 'react';
-import { Box, Flex, Grid, BoxProps, useTheme, useDisclosure, Button } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Grid,
+  BoxProps,
+  useTheme,
+  useDisclosure,
+  Button,
+  HStack
+} from '@chakra-ui/react';
 import { AddIcon, QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
@@ -30,6 +39,7 @@ import { useUpdate } from 'ahooks';
 import { useI18n } from '@/web/context/I18n';
 import { useContextSelector } from 'use-context-selector';
 import { AppContext } from '@/web/core/app/context/appContext';
+import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/app/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/app/DatasetParamsModal'));
@@ -99,10 +109,6 @@ const EditForm = ({
     onClose: onCloseToolsSelect
   } = useDisclosure();
 
-  const { openConfirm: openConfirmSave, ConfirmModal: ConfirmSaveModal } = useConfirm({
-    content: t('core.app.edit.Confirm Save App Tip')
-  });
-
   const aiSystemPrompt = watch('aiSettings.systemPrompt');
   const selectLLMModel = watch('aiSettings.model');
   const datasetSearchSetting = watch('dataset');
@@ -168,18 +174,17 @@ const EditForm = ({
         zIndex={100}
         px={4}
         {...(isSticky && {
-          borderBottom: theme.borders.base,
-          boxShadow: '0 2px 10px rgba(0,0,0,0.12)'
+          borderBottom: 'base',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.12)',
+          bg: 'white'
         })}
       >
-        <Flex alignItems={'center'}>
-          <Box fontSize={['md', 'xl']} color={'myGray.800'}>
+        <HStack>
+          <Box fontSize={'lg'} color={'black'}>
             {t('core.app.App params config')}
           </Box>
-          <MyTooltip label={t('core.app.Simple Config Tip')} forceShow>
-            <MyIcon name={'common/questionLight'} color={'myGray.500'} ml={2} />
-          </MyTooltip>
-        </Flex>
+          <QuestionTip label={t('core.app.Simple Config Tip')} />
+        </HStack>
         <Button
           isLoading={isSaving}
           size={['sm', 'md']}
@@ -190,16 +195,10 @@ const EditForm = ({
           }
           variant={appDetail.type === AppTypeEnum.simple ? 'primary' : 'whitePrimary'}
           onClick={() => {
-            if (appDetail.type !== AppTypeEnum.simple) {
-              openConfirmSave(handleSubmit((data) => onSubmitPublish(data)))();
-            } else {
-              handleSubmit((data) => onSubmitPublish(data))();
-            }
+            handleSubmit((data) => onSubmitPublish(data))();
           }}
         >
-          {appDetail.type !== AppTypeEnum.simple
-            ? t('core.app.Change to simple mode')
-            : t('core.app.Publish')}
+          {t('core.app.Publish')}
         </Button>
       </Flex>
 
@@ -464,7 +463,6 @@ const EditForm = ({
         </Box>
       </Box>
 
-      <ConfirmSaveModal bg={appDetail.type === AppTypeEnum.simple ? '' : 'red.600'} countDown={5} />
       {isOpenDatasetSelect && (
         <DatasetSelectModal
           isOpen={isOpenDatasetSelect}

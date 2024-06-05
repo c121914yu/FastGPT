@@ -91,7 +91,7 @@ const ApiKeyTable = ({ tips, appId }: { tips: string; appId?: string }) => {
       <Box display={['block', 'flex']} py={[0, 3]} px={5} alignItems={'center'}>
         <Box flex={1}>
           <Flex alignItems={'flex-end'}>
-            <Box fontSize={['md', 'xl']} fontWeight={'bold'}>
+            <Box fontSize={['md', 'lg']} fontWeight={'bold'}>
               {t('support.openapi.Api manager')}
             </Box>
             {feConfigs?.docUrl && (
@@ -248,7 +248,7 @@ const ApiKeyTable = ({ tips, appId }: { tips: string; appId?: string }) => {
         iconSrc="/imgs/modal/key.svg"
         title={
           <Box>
-            <Box fontWeight={'bold'} fontSize={'xl'}>
+            <Box fontWeight={'bold'} fontSize={'lg'}>
               {t('support.openapi.New api key')}
             </Box>
             <Box fontSize={'sm'} color={'myGray.600'}>

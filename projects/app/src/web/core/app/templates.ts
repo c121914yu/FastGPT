@@ -11,7 +11,7 @@ import {
 export const appTemplates: (AppItemType & {
   avatar: string;
   intro: string;
-  type: `${AppTypeEnum}`;
+  type: AppTypeEnum;
 })[] = [
   {
     id: 'simpleChat',
@@ -823,7 +823,7 @@ export const appTemplates: (AppItemType & {
     avatar: '/imgs/workflow/cq.png',
     name: '问题分类 + 知识库',
     intro: '先对用户的问题进行分类，再根据不同类型问题，执行不同的操作',
-    type: AppTypeEnum.advanced,
+    type: AppTypeEnum.workflow,
     modules: [
       {
         nodeId: 'userGuide',

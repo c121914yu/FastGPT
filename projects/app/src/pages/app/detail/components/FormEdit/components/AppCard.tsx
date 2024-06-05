@@ -17,7 +17,8 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { useI18n } from '@/web/context/I18n';
 import { AppContext } from '@/web/core/app/context/appContext';
 import { useContextSelector } from 'use-context-selector';
-const InfoModal = dynamic(() => import('../InfoModal'));
+
+const InfoModal = dynamic(() => import('../../InfoModal'));
 
 const AppCard = () => {
   const router = useRouter();
@@ -63,7 +64,7 @@ const AppCard = () => {
     <>
       <Box px={4}>
         <Flex alignItems={'center'} justifyContent={'space-between'}>
-          <Box fontSize={['md', 'xl']} fontWeight={'bold'}>
+          <Box fontSize={['md', 'lg']} fontWeight={'bold'}>
             <PermissionIconText defaultPermission={appDetail.defaultPermission} />
           </Box>
           <Box color={'myGray.500'} fontSize={'sm'}>

@@ -72,7 +72,7 @@ const Share = ({ appId }: { appId: string; type: PublishChannelEnum }) => {
   return (
     <Box position={'relative'} pt={3} px={5} minH={'50vh'}>
       <Flex justifyContent={'space-between'}>
-        <Box fontWeight={'bold'} fontSize={['md', 'xl']}>
+        <Box fontWeight={'bold'} fontSize={['md', 'lg']}>
           {t('core.app.Share link')}
           <MyTooltip forceShow label={t('core.app.Share link desc detail')}>
             <QuestionOutlineIcon ml={1} />

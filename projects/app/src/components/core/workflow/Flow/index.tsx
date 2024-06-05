@@ -203,60 +203,48 @@ const Container = React.memo(function Container() {
   );
 });
 
-const Flow = ({ Header, ...data }: { Header: React.ReactNode }) => {
+const Flow = () => {
   const {
     isOpen: isOpenTemplate,
     onOpen: onOpenTemplate,
     onClose: onCloseTemplate
   } = useDisclosure();
 
-  const memoRenderContainer = useMemo(() => {
-    return (
+  return (
+    <ReactFlowProvider>
       <Box
         minH={'400px'}
-        flex={'1 0 0'}
         w={'100%'}
-        h={0}
+        h={'100%'}
         position={'relative'}
         onContextMenu={(e) => {
           e.preventDefault();
           return false;
         }}
       >
-        {/* open module template */}
-        <IconButton
-          position={'absolute'}
-          top={5}
-          left={5}
-          size={'mdSquare'}
-          borderRadius={'50%'}
-          icon={<SmallCloseIcon fontSize={'26px'} />}
-          transform={isOpenTemplate ? '' : 'rotate(135deg)'}
-          transition={'0.2s ease'}
-          aria-label={''}
-          zIndex={1}
-          boxShadow={'2px 2px 6px #85b1ff'}
-          onClick={() => {
-            isOpenTemplate ? onCloseTemplate() : onOpenTemplate();
-          }}
-        />
-
-        <Container {...data} />
-
-        <NodeTemplatesModal isOpen={isOpenTemplate} onClose={onCloseTemplate} />
+        <Container />
+        <>
+          {/* open module template */}
+          <IconButton
+            position={'absolute'}
+            top={5}
+            left={5}
+            size={'mdSquare'}
+            borderRadius={'50%'}
+            icon={<SmallCloseIcon fontSize={'26px'} />}
+            transform={isOpenTemplate ? '' : 'rotate(135deg)'}
+            transition={'0.2s ease'}
+            aria-label={''}
+            zIndex={1}
+            boxShadow={'2px 2px 6px #85b1ff'}
+            onClick={() => {
+              isOpenTemplate ? onCloseTemplate() : onOpenTemplate();
+            }}
+          />
+          <NodeTemplatesModal isOpen={isOpenTemplate} onClose={onCloseTemplate} />
+        </>
       </Box>
-    );
-  }, [data, isOpenTemplate, onCloseTemplate, onOpenTemplate]);
-
-  return (
-    <Box h={'100%'} position={'fixed'} zIndex={999} top={0} left={0} right={0} bottom={0}>
-      <ReactFlowProvider>
-        <Flex h={'100%'} flexDirection={'column'} bg={'myGray.50'}>
-          {Header}
-          {memoRenderContainer}
-        </Flex>
-      </ReactFlowProvider>
-    </Box>
+    </ReactFlowProvider>
   );
 };
 

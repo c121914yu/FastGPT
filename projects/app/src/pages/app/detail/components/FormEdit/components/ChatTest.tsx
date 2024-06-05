@@ -7,7 +7,6 @@ import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d
 import { streamFetch } from '@/web/common/api/fetch';
 import MyTooltip from '@/components/MyTooltip';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { getGuideModule } from '@fastgpt/global/core/workflow/utils';
 import { checkChatSupportSelectFileByModules } from '@/web/core/chat/utils';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 import {
@@ -104,7 +103,7 @@ const ChatTest = ({
       bg={'white'}
     >
       <Flex px={[2, 5]}>
-        <Box fontSize={['md', 'xl']} fontWeight={'bold'} flex={1}>
+        <Box fontSize={['md', 'lg']} fontWeight={'bold'} flex={1}>
           {appT('Chat Debug')}
         </Box>
         <MyTooltip label={t('core.chat.Restart')}>

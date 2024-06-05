@@ -34,12 +34,16 @@ import DateRangePicker, { DateRangeType } from '@fastgpt/web/components/common/D
 import { formatChatValue2InputType } from '@/components/ChatBox/utils';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { useI18n } from '@/web/context/I18n';
+import { useContextSelector } from 'use-context-selector';
+import { AppContext } from '@/web/core/app/context/appContext';
 
-const Logs = ({ appId }: { appId: string }) => {
+const Logs = () => {
   const { t } = useTranslation();
   const { appT } = useI18n();
-
   const { isPc } = useSystemStore();
+
+  const { appDetail } = useContextSelector(AppContext, (v) => v);
+  const appId = appDetail._id;
 
   const [dateRange, setDateRange] = useState<DateRangeType>({
     from: addDays(new Date(), -7),
@@ -75,7 +79,7 @@ const Logs = ({ appId }: { appId: string }) => {
       <Box px={[4, 8]}>
         {isPc && (
           <>
-            <Box fontWeight={'bold'} fontSize={['md', 'xl']} mb={2}>
+            <Box fontWeight={'bold'} fontSize={['md', 'lg']} mb={2}>
               {appT('Chat logs')}
             </Box>
             <Box color={'myGray.500'} fontSize={'sm'}>

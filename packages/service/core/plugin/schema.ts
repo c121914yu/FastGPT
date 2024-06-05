@@ -68,6 +68,9 @@ const PluginSchema = new Schema({
   nodeVersion: {
     type: String,
     default: ''
+  },
+  inited: {
+    type: Boolean
   }
 });
 

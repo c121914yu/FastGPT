@@ -12,10 +12,11 @@ import { AppPermission } from '../../support/permission/app/controller';
 
 export type AppSchema = {
   _id: string;
+  parentId?: string;
   teamId: string;
   tmbId: string;
   name: string;
-  type: `${AppTypeEnum}`;
+  type: AppTypeEnum;
   version?: 'v1' | 'v2';
   avatar: string;
   intro: string;
@@ -29,6 +30,13 @@ export type AppSchema = {
   scheduledTriggerConfig?: AppScheduledTriggerConfigType | null;
   scheduledTriggerNextTime?: Date;
 
+  pluginMetadata?: {
+    pluginUid?: string;
+    apiSchemaStr?: string;
+    customHeaders?: string;
+    version?: string;
+  };
+
   inited?: boolean;
   teamTags: string[];
   defaultPermission: PermissionValueType;
@@ -39,6 +47,7 @@ export type AppListItemType = {
   name: string;
   avatar: string;
   intro: string;
+  type: AppTypeEnum;
   defaultPermission: PermissionValueType;
   permission: AppPermission;
 };

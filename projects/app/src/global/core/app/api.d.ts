@@ -4,14 +4,14 @@ import { AppSchema } from '@fastgpt/global/core/app/type';
 export type CreateAppParams = {
   name?: string;
   avatar?: string;
-  type?: `${AppTypeEnum}`;
+  type?: AppTypeEnum;
   modules: AppSchema['modules'];
   edges?: AppSchema['edges'];
 };
 
 export type AppUpdateParams = {
   name?: string;
-  type?: `${AppTypeEnum}`;
+  type?: AppTypeEnum;
   avatar?: string;
   intro?: string;
   nodes?: AppSchema['modules'];
@@ -23,7 +23,7 @@ export type AppUpdateParams = {
 };
 
 export type PostPublishAppProps = {
-  type: `${AppTypeEnum}`;
+  type: AppTypeEnum;
   nodes: AppSchema['modules'];
   edges: AppSchema['edges'];
   chatConfig: AppSchema['chatConfig'];

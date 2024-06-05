@@ -17,6 +17,7 @@ import PermissionIconText from '@/components/support/permission/IconText';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useI18n } from '@/web/context/I18n';
 import { useTranslation } from 'next-i18next';
+import AppTypeTag from '@/components/core/app/AppTypeTag';
 
 const MyApps = () => {
   const { t } = useTranslation();
@@ -147,12 +148,15 @@ const MyApps = () => {
                 {app.intro || '这个应用还没写介绍~'}
               </Box>
               <Flex h={'34px'} alignItems={'flex-end'}>
-                <Box flex={1}>
+                <Flex flex={1} gap={4}>
                   <PermissionIconText
                     defaultPermission={app.defaultPermission}
-                    color={'myGray.600'}
+                    color={'myGray.500'}
                   />
-                </Box>
+                  <Box>
+                    <AppTypeTag type={app.type} w={'14px'} />
+                  </Box>
+                </Flex>
                 {app.permission.hasWritePer && (
                   <IconButton
                     className="chat"

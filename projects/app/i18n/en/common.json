@@ -277,6 +277,7 @@
       "Whisper": "Voice input",
       "Whisper Tip": "Configure voice input related parameters",
       "Whisper config": "Voice input configuration",
+      "Workflow": "Workflow",
       "create app": "Create your own AI app",
       "deterministic": "Rigorous",
       "edit": {
@@ -300,6 +301,7 @@
         "Source And Time": "Source & Time"
       },
       "navbar": {
+        "App setting": "Settings",
         "External": "External use",
         "Flow mode": "Advanced arrangement",
         "Publish": "Publish",
@@ -323,7 +325,8 @@
       "publish": {
         "Fei Shu Bot Desc": "Access to Lark bot",
         "Fei shu bot": "Lark",
-        "Fei shu bot publish": "Publish to Lark bot"
+        "Fei shu bot publish": "Publish to Lark bot",
+        "Publish channel": "Channel"
       },
       "schedule": {
         "Default prompt": "Default question",

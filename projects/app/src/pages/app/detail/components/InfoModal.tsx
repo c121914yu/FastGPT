@@ -161,6 +161,7 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
             <Input
               bg={'myWhite.600'}
               placeholder={t('core.app.Set a name for your app')}
+              maxLength={40}
               {...register('name', {
                 required: true
               })}

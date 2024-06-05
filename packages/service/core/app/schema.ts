@@ -22,6 +22,11 @@ export const chatConfigType = {
 };
 
 const AppSchema = new Schema({
+  parentId: {
+    type: Schema.Types.ObjectId,
+    ref: AppCollectionName,
+    default: null
+  },
   teamId: {
     type: Schema.Types.ObjectId,
     ref: TeamCollectionName,
@@ -32,10 +37,6 @@ const AppSchema = new Schema({
     ref: TeamMemberCollectionName,
     required: true
   },
-  name: {
-    type: String,
-    required: true
-  },
   type: {
     type: String,
     default: 'advanced',
@@ -44,6 +45,11 @@ const AppSchema = new Schema({
   version: {
     type: String,
     enum: ['v1', 'v2']
+  },
+
+  name: {
+    type: String,
+    required: true
   },
   avatar: {
     type: String,
@@ -56,16 +62,6 @@ const AppSchema = new Schema({
   updateTime: {
     type: Date,
     default: () => new Date()
-  },
-
-  // role and auth
-  permission: {
-    type: String,
-    enum: Object.keys(PermissionTypeMap),
-    default: PermissionTypeEnum.private
-  },
-  teamTags: {
-    type: [String]
   },
 
   // tmp store
@@ -83,15 +79,9 @@ const AppSchema = new Schema({
   },
 
   scheduledTriggerConfig: {
-    cronString: {
-      type: String
-    },
-    timezone: {
-      type: String
-    },
-    defaultPrompt: {
-      type: String
-    }
+    cronString: String,
+    timezone: String,
+    defaultPrompt: String
   },
   scheduledTriggerNextTime: {
     type: Date
@@ -105,6 +95,17 @@ const AppSchema = new Schema({
   defaultPermission: {
     type: Number,
     default: AppDefaultPermission
+  },
+  teamTags: {
+    type: [String]
+  },
+
+  // plugin
+  pluginMetadata: {
+    pluginUid: String,
+    apiSchemaStr: String,
+    customHeaders: String,
+    version: String
   }
 });
 

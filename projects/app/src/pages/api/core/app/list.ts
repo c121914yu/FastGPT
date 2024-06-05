@@ -24,7 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>): Promise<
 
   /* temp: get all apps and per */
   const [myApps, rpList] = await Promise.all([
-    MongoApp.find({ teamId }, '_id avatar name intro tmbId defaultPermission')
+    MongoApp.find({ teamId }, '_id avatar name intro tmbId type defaultPermission')
       .sort({
         updateTime: -1
       })
@@ -56,6 +56,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>): Promise<
     avatar: app.avatar,
     name: app.name,
     intro: app.intro,
+    type: app.type,
     permission: app.permission,
     defaultPermission: app.defaultPermission
   }));

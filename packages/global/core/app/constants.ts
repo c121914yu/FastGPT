@@ -2,14 +2,21 @@ import { AppTTSConfigType, AppWhisperConfigType } from './type';
 
 export enum AppTypeEnum {
   simple = 'simple',
-  advanced = 'advanced'
+  workflow = 'advanced',
+  plugin = 'plugin'
 }
 export const AppTypeMap = {
   [AppTypeEnum.simple]: {
-    label: 'simple'
+    label: '简易应用',
+    icon: 'core/app/simpleBot'
   },
-  [AppTypeEnum.advanced]: {
-    label: 'advanced'
+  [AppTypeEnum.workflow]: {
+    label: '工作流',
+    icon: 'core/app/workflowBot'
+  },
+  [AppTypeEnum.plugin]: {
+    label: '插件',
+    icon: 'core/app/pluginBot'
   }
 };
 

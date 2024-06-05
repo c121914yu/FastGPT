@@ -7,19 +7,20 @@ import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import { useForm } from 'react-hook-form';
 import { appWorkflow2Form, getDefaultAppForm } from '@fastgpt/global/core/app/utils';
 
-import ChatTest from './ChatTest';
-import AppCard from './AppCard';
-import EditForm from './EditForm';
+import ChatTest from './components/ChatTest';
+import AppCard from './components/AppCard';
+import EditForm from './components/EditForm';
 import { AppSimpleEditFormType } from '@fastgpt/global/core/app/type';
 import { v1Workflow2V2 } from '@/web/core/workflow/adapt';
 import { AppContext } from '@/web/core/app/context/appContext';
 import { useContextSelector } from 'use-context-selector';
 
-const SimpleEdit = ({ appId }: { appId: string }) => {
+const SimpleEdit = () => {
   const { isPc } = useSystemStore();
   const { parentRef, divRef, isSticky } = useSticky();
   const { loadAllDatasets } = useDatasetStore();
   const { appDetail } = useContextSelector(AppContext, (v) => v);
+  const appId = appDetail._id;
 
   const editForm = useForm<AppSimpleEditFormType>({
     defaultValues: getDefaultAppForm()

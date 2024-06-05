@@ -278,6 +278,7 @@
       "Whisper": "语音输入",
       "Whisper Tip": "配置语音输入相关参数",
       "Whisper config": "语音输入配置",
+      "Workflow": "工作流",
       "create app": "创建属于你的 AI 应用",
       "deterministic": "严谨",
       "edit": {
@@ -301,6 +302,7 @@
         "Source And Time": "来源 & 时间"
       },
       "navbar": {
+        "App setting": "应用设置",
         "External": "外部使用",
         "Flow mode": "高级编排",
         "Publish": "发布",
@@ -324,7 +326,8 @@
       "publish": {
         "Fei Shu Bot Desc": "接入到飞书机器人中",
         "Fei shu bot": "飞书",
-        "Fei shu bot publish": "发布到飞书机器人"
+        "Fei shu bot publish": "发布到飞书机器人",
+        "Publish channel": "发布渠道"
       },
       "schedule": {
         "Default prompt": "默认问题",

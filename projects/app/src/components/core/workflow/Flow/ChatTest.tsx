@@ -1,13 +1,5 @@
 import type { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/index.d';
-import { AppSchema } from '@fastgpt/global/core/app/type.d';
-import React, {
-  useMemo,
-  useCallback,
-  useRef,
-  forwardRef,
-  useImperativeHandle,
-  ForwardedRef
-} from 'react';
+import React, { useCallback, useRef, forwardRef, useImperativeHandle, ForwardedRef } from 'react';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { Box, Flex, IconButton } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
@@ -16,11 +8,7 @@ import MyTooltip from '@/components/MyTooltip';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import ChatBox from '@/components/ChatBox';
 import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d';
-import {
-  checkChatSupportSelectFileByModules,
-  getAppQuestionGuidesByModules
-} from '@/web/core/chat/utils';
-import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import { checkChatSupportSelectFileByModules } from '@/web/core/chat/utils';
 import { useTranslation } from 'next-i18next';
 import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import {

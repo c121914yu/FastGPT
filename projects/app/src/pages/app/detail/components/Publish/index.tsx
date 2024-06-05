@@ -8,12 +8,18 @@ import MyRadio from '@/components/common/MyRadio';
 import { useTranslation } from 'next-i18next';
 
 import Link from './Link';
+import { AppContext } from '@/web/core/app/context/appContext';
+import { useContextSelector } from 'use-context-selector';
+
 const API = dynamic(() => import('./API'));
 const FeiShu = dynamic(() => import('./FeiShu'));
 
-const OutLink = ({ appId }: { appId: string }) => {
+const OutLink = () => {
   const { t } = useTranslation();
   const theme = useTheme();
+
+  const { appDetail } = useContextSelector(AppContext, (v) => v);
+
   const publishList = useRef([
     {
       icon: '/imgs/modal/shareFill.svg',
@@ -39,12 +45,12 @@ const OutLink = ({ appId }: { appId: string }) => {
 
   return (
     <Box pt={[1, 5]}>
-      <Box fontWeight={'bold'} fontSize={['md', 'xl']} mb={2} px={[4, 8]}>
-        {t('core.app.navbar.Publish app')}
+      <Box fontWeight={'bold'} fontSize={['md', 'lg']} mb={2} px={5}>
+        {t('core.app.publish.Publish channel')}
       </Box>
-      <Box pb={[5, 7]} px={[4, 8]} borderBottom={theme.borders.base}>
+      <Box pb={[5, 7]} px={5} borderBottom={theme.borders.base}>
         <MyRadio
-          gridTemplateColumns={['repeat(1,1fr)', 'repeat(auto-fill, minmax(0, 300px))']}
+          gridTemplateColumns={['repeat(1,1fr)', 'repeat(auto-fill, minmax(0, 400px))']}
           iconSize={'20px'}
           list={publishList.current}
           value={linkType}
@@ -53,10 +59,10 @@ const OutLink = ({ appId }: { appId: string }) => {
       </Box>
 
       {linkType === PublishChannelEnum.share && (
-        <Link appId={appId} type={PublishChannelEnum.share} />
+        <Link appId={appDetail._id} type={PublishChannelEnum.share} />
       )}
-      {linkType === PublishChannelEnum.apikey && <API appId={appId} />}
-      {linkType === PublishChannelEnum.feishu && <FeiShu appId={appId} />}
+      {linkType === PublishChannelEnum.apikey && <API appId={appDetail._id} />}
+      {linkType === PublishChannelEnum.feishu && <FeiShu appId={appDetail._id} />}
     </Box>
   );
 };

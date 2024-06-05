@@ -1,57 +1,114 @@
-import React, { useEffect, useMemo } from 'react';
-import { AppSchema } from '@fastgpt/global/core/app/type.d';
-import Header from './Header';
-import Flow from '@/components/core/workflow/Flow';
-import { appSystemModuleTemplates } from '@fastgpt/global/core/workflow/template/constants';
-import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
-import { v1Workflow2V2 } from '@/web/core/workflow/adapt';
-import WorkflowContextProvider, { WorkflowContext } from '@/components/core/workflow/context';
-import { useContextSelector } from 'use-context-selector';
+import React, { useMemo } from 'react';
+import Header from './Header/index';
+import { Box, Flex, HStack } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
+import { useTabHook, TabEnum } from '../hooks/TabHook';
+import Workflow from './Workflow';
+import { useTranslation } from 'next-i18next';
 import { AppContext } from '@/web/core/app/context/appContext';
-import { useMount } from 'ahooks';
+import { useContextSelector } from 'use-context-selector';
+import { useI18n } from '@/web/context/I18n';
+import WorkflowContextProvider from '@/components/core/workflow/context';
+import { appSystemModuleTemplates } from '@fastgpt/global/core/workflow/template/constants';
+const Publish = dynamic(() => import('../Publish'), {});
+const Logs = dynamic(() => import('../Logs'), {});
 
-type Props = { onClose: () => void };
+const FlowEdit = () => {
+  const { t } = useTranslation();
+  const { appT } = useI18n();
+  const { currentTab, setCurrentTab } = useTabHook();
+  const { appDetail } = useContextSelector(AppContext, (v) => v);
 
-const Render = ({ onClose }: Props) => {
-  const appDetail = useContextSelector(AppContext, (e) => e.appDetail);
-
-  const isV2Workflow = appDetail?.version === 'v2';
-  const { openConfirm, ConfirmModal } = useConfirm({
-    showCancel: false,
-    content:
-      '检测到您的高级编排为旧版，系统将为您自动格式化成新版工作流。\n\n由于版本差异较大，会导致一些工作流无法正常排布，请重新手动连接工作流。如仍异常，可尝试删除对应节点后重新添加。\n\n你可以直接点击调试进行工作流测试，调试完毕后点击发布。直到你点击发布，新工作流才会真正保存生效。\n\n在你发布新工作流前，自动保存不会生效。'
-  });
-
-  const initData = useContextSelector(WorkflowContext, (v) => v.initData);
-
-  const workflowStringData = JSON.stringify({
-    nodes: appDetail.modules || [],
-    edges: appDetail.edges || []
-  });
-
-  useMount(() => {
-    if (!isV2Workflow) {
-      openConfirm(() => {
-        initData(JSON.parse(JSON.stringify(v1Workflow2V2((appDetail.modules || []) as any))));
-      })();
-    } else {
-      initData(JSON.parse(workflowStringData));
-    }
-  });
-
-  const memoRender = useMemo(() => {
-    return <Flow Header={<Header onClose={onClose} />} />;
-  }, [onClose]);
+  const tabList = useMemo(
+    () => [
+      {
+        label: t('core.app.Workflow'),
+        id: TabEnum.edit
+      },
+      ...(appDetail.permission.hasManagePer
+        ? [
+            {
+              label: t('core.app.navbar.Publish app'),
+              id: TabEnum.publish
+            },
+            { label: appT('Chat logs'), id: TabEnum.logs }
+          ]
+        : [])
+    ],
+    [appDetail.permission.hasManagePer, appT, t]
+  );
 
   return (
-    <>
-      {memoRender}
-      {!isV2Workflow && <ConfirmModal countDown={0} />}
-    </>
+    <Flex
+      flexDirection={'column'}
+      position={'fixed'}
+      zIndex={999}
+      top={0}
+      left={0}
+      right={0}
+      bottom={0}
+      bg={'white'}
+    >
+      <Box
+        display={['block', 'flex']}
+        py={3}
+        px={[2, 5, 8]}
+        borderBottom={'base'}
+        alignItems={'center'}
+        userSelect={'none'}
+        bg={'myGray.25'}
+        h={['auto', '67px']}
+        position={'relative'}
+      >
+        {/* tab */}
+        <HStack
+          gap={5}
+          position={['relative', 'absolute']}
+          top={['auto', '50%']}
+          left={['auto', '50%']}
+          transform={['none', 'translate(-50%,-50%)']}
+          justifyContent={'center'}
+          mb={[3, 0]}
+          zIndex={1}
+        >
+          {tabList.map((tab) => (
+            <Box
+              key={tab.id}
+              fontSize={'lg'}
+              {...(currentTab === tab.id
+                ? {
+                    color: 'primary.600',
+                    cursor: 'default',
+                    fontWeight: 'bold'
+                  }
+                : {
+                    color: 'myGray.500',
+                    cursor: 'pointer',
+                    onClick: () => setCurrentTab(tab.id)
+                  })}
+            >
+              {tab.label}
+            </Box>
+          ))}
+        </HStack>
+        <Box flex={'1 0 0'}>
+          <Header />
+        </Box>
+      </Box>
+      <Box flex={'1 0 0'}>
+        {currentTab === TabEnum.edit && <Workflow />}
+        {currentTab === TabEnum.logs && <Logs />}
+        {currentTab === TabEnum.publish && (
+          <Box px={5}>
+            <Publish />
+          </Box>
+        )}
+      </Box>
+    </Flex>
   );
 };
 
-export default React.memo(function FlowEdit(props: Props) {
+const Render = () => {
   const appDetail = useContextSelector(AppContext, (e) => e.appDetail);
   const filterAppIds = useMemo(() => [appDetail._id], [appDetail._id]);
 
@@ -64,7 +121,9 @@ export default React.memo(function FlowEdit(props: Props) {
         basicNodeTemplates: appSystemModuleTemplates
       }}
     >
-      <Render {...props} />
+      <FlowEdit />
     </WorkflowContextProvider>
   );
-});
+};
+
+export default React.memo(Render);

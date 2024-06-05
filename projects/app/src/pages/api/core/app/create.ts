@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   const {
     name = 'APP',
     avatar,
-    type = AppTypeEnum.advanced,
+    type = AppTypeEnum.workflow,
     modules,
     edges
   } = req.body as CreateAppParams;
