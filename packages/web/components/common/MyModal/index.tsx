@@ -11,6 +11,7 @@ import {
   useMediaQuery
 } from '@chakra-ui/react';
 import MyIcon from '../Icon';
+import { connectBaseUrl } from '../../../common/system/utils';
 
 export interface MyModalProps extends ModalContentProps {
   iconSrc?: string;
@@ -64,7 +65,13 @@ const MyModal = ({
             {iconSrc && (
               <>
                 {iconSrc.startsWith('/') ? (
-                  <Image mr={3} objectFit={'contain'} alt="" src={iconSrc} w={'20px'} />
+                  <Image
+                    mr={3}
+                    objectFit={'contain'}
+                    alt=""
+                    src={connectBaseUrl(iconSrc)}
+                    w={'20px'}
+                  />
                 ) : (
                   <MyIcon mr={3} name={iconSrc as any} w={'20px'} />
                 )}

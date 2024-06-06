@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import MyRadio from '@/components/common/MyRadio';
 import Share from './Share';
 import { useTranslation } from 'next-i18next';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 const API = dynamic(() => import('./API'));
 
 const OutLink = ({ appId }: { appId: string }) => {
@@ -26,7 +27,7 @@ const OutLink = ({ appId }: { appId: string }) => {
           iconSize={'20px'}
           list={[
             {
-              icon: '/imgs/modal/shareFill.svg',
+              icon: connectBaseUrl('/imgs/modal/shareFill.svg'),
               title: t('core.app.Share link'),
               desc: t('core.app.Share link desc'),
               value: OutLinkTypeEnum.share

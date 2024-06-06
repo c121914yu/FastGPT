@@ -9,6 +9,7 @@ import {
   Skeleton,
   useDisclosure
 } from '@chakra-ui/react';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 const MdImage = ({ src }: { src?: string }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +32,7 @@ const MdImage = ({ src }: { src?: string }) => {
         borderRadius={'md'}
         src={src}
         alt={''}
-        fallbackSrc={'/imgs/errImg.png'}
+        fallbackSrc={connectBaseUrl('/imgs/errImg.png')}
         fallbackStrategy={'onError'}
         cursor={succeed ? 'pointer' : 'default'}
         loading="lazy"
@@ -61,7 +62,7 @@ const MdImage = ({ src }: { src?: string }) => {
             w={'100%'}
             maxH={'80vh'}
             referrerPolicy="no-referrer"
-            fallbackSrc={'/imgs/errImg.png'}
+            fallbackSrc={connectBaseUrl('/imgs/errImg.png')}
             fallbackStrategy={'onError'}
             objectFit={'contain'}
             onWheel={handleWheel}

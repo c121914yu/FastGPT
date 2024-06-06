@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import { useQuery } from '@tanstack/react-query';
 import { debounce } from 'lodash';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 type ModuleTemplateListProps = {
   isOpen: boolean;
@@ -340,7 +341,7 @@ const RenderList = React.memo(function RenderList({
                   }}
                 >
                   <Avatar
-                    src={template.avatar}
+                    src={template.avatar && connectBaseUrl(template.avatar)}
                     w={'34px'}
                     objectFit={'contain'}
                     borderRadius={'0'}

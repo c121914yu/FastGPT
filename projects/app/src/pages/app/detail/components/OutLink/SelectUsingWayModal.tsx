@@ -10,6 +10,7 @@ import { useCopyData } from '@/web/common/hooks/useCopyData';
 import { useSelectFile } from '@/web/common/file/hooks/useSelectFile';
 import { fileToBase64 } from '@/web/common/file/utils';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 enum UsingWayEnum {
   link = 'link',
@@ -29,15 +30,15 @@ const SelectUsingWayModal = ({ share, onClose }: { share: OutLinkSchema; onClose
 
   const VariableTypeList = [
     {
-      title: <Image src={'/imgs/outlink/link.svg'} alt={''} />,
+      title: <Image src={connectBaseUrl('/imgs/outlink/link.svg')} alt={''} />,
       value: UsingWayEnum.link
     },
     {
-      title: <Image src={'/imgs/outlink/iframe.svg'} alt={''} />,
+      title: <Image src={connectBaseUrl('/imgs/outlink/iframe.svg')} alt={''} />,
       value: UsingWayEnum.iframe
     },
     {
-      title: <Image src={'/imgs/outlink/script.svg'} alt={''} />,
+      title: <Image src={connectBaseUrl('/imgs/outlink/script.svg')} alt={''} />,
       value: UsingWayEnum.script
     }
   ];

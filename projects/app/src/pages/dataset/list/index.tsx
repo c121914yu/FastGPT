@@ -34,6 +34,7 @@ import ParentPaths from '@/components/common/ParentPaths';
 import DatasetTypeTag from '@/components/core/dataset/DatasetTypeTag';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { getErrText } from '@fastgpt/global/common/error/utils';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 const CreateModal = dynamic(() => import('./component/CreateModal'), { ssr: false });
 const MoveModal = dynamic(() => import('./component/MoveModal'), { ssr: false });
@@ -143,7 +144,7 @@ const Kb = () => {
           }))}
           FirstPathDom={
             <Flex flex={1} alignItems={'center'}>
-              <Image src={'/imgs/module/db.png'} alt={''} mr={2} h={'24px'} />
+              <Image src={connectBaseUrl('/imgs/module/db.png')} alt={''} mr={2} h={'24px'} />
               <Box className="textlg" letterSpacing={1} fontSize={'24px'} fontWeight={'bold'}>
                 {t('core.dataset.My Dataset')}
               </Box>
@@ -183,7 +184,7 @@ const Kb = () => {
               {
                 label: (
                   <Flex>
-                    <Image src={'/imgs/module/db.png'} alt={''} w={'20px'} mr={1} />
+                    <Image src={connectBaseUrl('/imgs/module/db.png')} alt={''} w={'20px'} mr={1} />
                     {t('core.dataset.Dataset')}
                   </Flex>
                 ),

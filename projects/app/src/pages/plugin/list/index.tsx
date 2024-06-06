@@ -18,6 +18,7 @@ import HttpPluginEditModal, { defaultHttpPlugin } from './component/HttpPluginEd
 import { PluginTypeEnum } from '@fastgpt/global/core/plugin/constants';
 import ParentPaths from '@/components/common/ParentPaths';
 import { EditFormType } from './component/type';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 const TeamPlugins = () => {
   const { t } = useTranslation();
@@ -58,7 +59,7 @@ const TeamPlugins = () => {
           }))}
           FirstPathDom={
             <Flex flex={1} alignItems={'center'}>
-              <Image src={'/imgs/module/plugin.svg'} alt={''} mr={2} h={'24px'} />
+              <Image src={connectBaseUrl('/imgs/module/plugin.svg')} alt={''} mr={2} h={'24px'} />
               <Box className="textlg" letterSpacing={1} fontSize={'24px'} fontWeight={'bold'}>
                 {t('plugin.My Plugins')}({t('common.Beta')})
               </Box>
@@ -88,7 +89,12 @@ const TeamPlugins = () => {
               {
                 label: (
                   <Flex>
-                    <Image src={'/imgs/module/plugin.svg'} alt={''} w={'18px'} mr={1} />
+                    <Image
+                      src={connectBaseUrl('/imgs/module/plugin.svg')}
+                      alt={''}
+                      w={'18px'}
+                      mr={1}
+                    />
                     {t('plugin.Custom Plugin')}
                   </Flex>
                 ),
@@ -97,7 +103,13 @@ const TeamPlugins = () => {
               {
                 label: (
                   <Flex display={'flex'} alignItems={'center'}>
-                    <Image src={'/imgs/module/http.png'} alt={''} w={'18px'} h={'14px'} mr={1} />
+                    <Image
+                      src={connectBaseUrl('/imgs/module/http.png')}
+                      alt={''}
+                      w={'18px'}
+                      h={'14px'}
+                      mr={1}
+                    />
                     {t('plugin.HTTP Plugin')}
                   </Flex>
                 ),

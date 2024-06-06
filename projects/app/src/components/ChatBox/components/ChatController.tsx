@@ -10,6 +10,7 @@ import { useTranslation } from 'next-i18next';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { formatChatValue2InputType } from '../utils';
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 export type ChatControllerProps = {
   isChatting: boolean;
@@ -128,7 +129,12 @@ const ChatController = ({
                 onClick={() => cancelAudio()}
               />
             </MyTooltip>
-            <Image src="/icon/speaking.gif" w={'23px'} alt={''} borderRight={theme.borders.base} />
+            <Image
+              src={connectBaseUrl('/icon/speaking.gif')}
+              w={'23px'}
+              alt={''}
+              borderRight={theme.borders.base}
+            />
           </Flex>
         ) : (
           <MyTooltip label={t('core.app.TTS')}>

@@ -1,12 +1,13 @@
 import { AppDetailType } from '@fastgpt/global/core/app/type.d';
 import type { OutLinkEditType } from '@fastgpt/global/support/outLink/type.d';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 export const defaultApp: AppDetailType = {
   _id: '',
   userId: 'userId',
   name: '应用加载中',
   type: 'simple',
-  avatar: '/icon/logo.svg',
+  avatar: connectBaseUrl('/icon/logo.svg'),
   intro: '',
   updateTime: Date.now(),
   modules: [],
