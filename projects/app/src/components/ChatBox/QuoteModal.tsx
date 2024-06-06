@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
 import QuoteItem from '../core/dataset/QuoteItem';
 import RawSourceBox from '../core/dataset/RawSourceBox';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 const QuoteModal = ({
   rawSearch = [],
@@ -42,7 +43,7 @@ const QuoteModal = ({
         h={['90vh', '80vh']}
         isCentered
         minW={['90vw', '600px']}
-        iconSrc={!!metadata ? undefined : '/imgs/modal/quote.svg'}
+        iconSrc={!!metadata ? undefined : connectBaseUrl('/imgs/modal/quote.svg')}
         title={
           <Box>
             {metadata ? (

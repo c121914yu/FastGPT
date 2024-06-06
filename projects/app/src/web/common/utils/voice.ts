@@ -5,6 +5,7 @@ import type { AppTTSConfigType } from '@fastgpt/global/core/module/type.d';
 import { TTSTypeEnum } from '@/constants/app';
 import { useTranslation } from 'next-i18next';
 import type { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat.d';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 export const useAudioPlay = (props?: OutLinkChatAuthProps & { ttsConfig?: AppTTSConfigType }) => {
   const { t } = useTranslation();
@@ -52,7 +53,7 @@ export const useAudioPlay = (props?: OutLinkChatAuthProps & { ttsConfig?: AppTTS
           audioController.current = new AbortController();
 
           /* request tts */
-          const response = await fetch('/api/core/chat/item/getSpeech', {
+          const response = await fetch(connectBaseUrl('/api/core/chat/item/getSpeech'), {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

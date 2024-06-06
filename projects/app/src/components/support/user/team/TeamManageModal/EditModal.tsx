@@ -13,6 +13,7 @@ import Avatar from '@/components/Avatar';
 import { postCreateTeam, putUpdateTeam } from '@/web/support/user/team/api';
 import { CreateTeamProps } from '@fastgpt/global/support/user/team/controller.d';
 import { MongoImageTypeEnum } from '@fastgpt/global/common/file/image/constants';
+import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
 
 export type FormDataType = CreateTeamProps & {
   id?: string;
@@ -20,7 +21,7 @@ export type FormDataType = CreateTeamProps & {
 
 export const defaultForm = {
   name: '',
-  avatar: '/icon/logo.svg'
+  avatar: connectBaseUrl('/icon/logo.svg')
 };
 
 function EditModal({
