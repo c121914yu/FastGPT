@@ -17,6 +17,7 @@ import { change2DefaultLng, setLngStore } from '@/web/common/utils/i18n';
 
 import 'nprogress/nprogress.css';
 import '@/web/styles/reset.scss';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
 
 //Binding events.
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -111,7 +112,7 @@ function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no, viewport-fit=cover"
         />
-        <link rel="icon" href={feConfigs.favicon || process.env.SYSTEM_FAVICON} />
+        <link rel="icon" href={getWebReqUrl(feConfigs.favicon || process.env.SYSTEM_FAVICON)} />
       </Head>
       {scripts?.map((item, i) => <Script key={i} strategy="lazyOnload" {...item}></Script>)}
 

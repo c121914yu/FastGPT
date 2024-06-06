@@ -27,6 +27,7 @@
     "papaparse": "^5.4.1",
     "@lexical/utils": "0.12.6",
     "@lexical/text": "0.12.6",
+    "next": "13.5.2",
     "date-fns": "2.30.0",
     "react-day-picker": "^8.7.1",
     "lodash": "^4.17.21",

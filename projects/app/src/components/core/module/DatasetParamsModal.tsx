@@ -29,7 +29,7 @@ import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import SelectAiModel from '@/components/Select/AIModelSelector';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
 
 export type DatasetParamsProps = {
   searchMode: `${DatasetSearchModeEnum}`;
@@ -134,7 +134,7 @@ const DatasetParamsModal = ({
             {
               label: t('core.module.template.Query extension'),
               id: SearchSettingTabEnum.queryExtension,
-              icon: connectBaseUrl('/imgs/module/cfr.svg')
+              icon: getWebReqUrl('/imgs/module/cfr.svg')
             }
           ]}
           activeId={currentTabType}

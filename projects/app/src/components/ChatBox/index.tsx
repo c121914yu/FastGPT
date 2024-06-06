@@ -58,7 +58,7 @@ import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/consta
 import ChatItem from './components/ChatItem';
 
 import dynamic from 'next/dynamic';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
 const ResponseTags = dynamic(() => import('./ResponseTags'));
 const FeedbackModal = dynamic(() => import('./FeedbackModal'));
 const ReadFeedbackModal = dynamic(() => import('./ReadFeedbackModal'));
@@ -848,7 +848,7 @@ const ChatBox = (
 
   return (
     <Flex flexDirection={'column'} h={'100%'}>
-      <Script src={connectBaseUrl('/js/html2pdf.bundle.min.js')} strategy="lazyOnload"></Script>
+      <Script src={getWebReqUrl('/js/html2pdf.bundle.min.js')} strategy="lazyOnload"></Script>
       {/* chat box container */}
       <Box ref={ChatBoxRef} flex={'1 0 0'} h={0} w={'100%'} overflow={'overlay'} px={[4, 0]} pb={3}>
         <Box id="chat-container" maxW={['100%', '92%']} h={'100%'} mx={'auto'}>

@@ -1,7 +1,7 @@
 import { useSpeech } from '@/web/common/hooks/useSpeech';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { Box, Flex, Image, Spinner, Textarea } from '@chakra-ui/react';
-import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import { Box, Flex, Spinner, Textarea } from '@chakra-ui/react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'next-i18next';
 import MyTooltip from '../MyTooltip';
 import MyIcon from '@fastgpt/web/components/common/Icon';
@@ -16,6 +16,7 @@ import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
 import { ChatBoxInputFormType, ChatBoxInputType, UserInputFileItemType } from './type';
 import { textareaMinH } from './constants';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
 
 const MessageInput = ({
@@ -268,7 +269,7 @@ const MessageInput = ({
                 display={['', 'none']}
               />
               {item.type === ChatFileTypeEnum.image && (
-                <Image
+                <MyImage
                   alt={'img'}
                   src={item.icon}
                   w={['50px', '70px']}

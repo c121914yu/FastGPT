@@ -4,10 +4,10 @@ import { Box, BoxProps } from '@chakra-ui/react';
 import MyIcon from '../../Icon';
 import { useToast } from '../../../../hooks/useToast';
 import { useTranslation } from 'next-i18next';
-import { connectBaseUrl } from '../../../../common/system/utils';
+import { getWebReqUrl } from '../../../../common/system/utils';
 
 loader.config({
-  paths: { vs: connectBaseUrl('/js/monaco-editor.0.45.0/vs') }
+  paths: { vs: getWebReqUrl('/js/monaco-editor.0.45.0/vs') }
 });
 
 type EditorVariablePickerType = {

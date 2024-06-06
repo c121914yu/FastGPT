@@ -18,7 +18,7 @@ import type { ComponentRef, StartChatFnProps } from '@/components/ChatBox/type.d
 import { getGuideModule } from '@fastgpt/global/core/module/utils';
 import { checkChatSupportSelectFileByModules } from '@/web/core/chat/utils';
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
 
 export type ChatTestComponentRef = {
   resetChatTest: () => void;
@@ -58,7 +58,7 @@ const ChatTest = (
 
       // 流请求，获取数据
       const { responseText, responseData } = await streamFetch({
-        url: connectBaseUrl('/api/core/chat/chatTest'),
+        url: getWebReqUrl('/api/core/chat/chatTest'),
         data: {
           history,
           prompt: chatList[chatList.length - 2].value,

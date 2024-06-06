@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Box, useTheme, Flex, Image } from '@chakra-ui/react';
+import { Box, useTheme, Flex } from '@chakra-ui/react';
 import type { ChatHistoryItemResType } from '@fastgpt/global/core/chat/type.d';
 import { useTranslation } from 'next-i18next';
 import { moduleTemplatesFlat } from '@fastgpt/global/core/module/template/constants';
@@ -12,6 +12,7 @@ import Markdown from '../Markdown';
 import { QuoteList } from './QuoteModal';
 import { DatasetSearchModeMap } from '@fastgpt/global/core/dataset/constants';
 import { formatNumber } from '@fastgpt/global/common/math/tools';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 
 function Row({
   label,
@@ -101,7 +102,7 @@ const ResponseBox = React.memo(function ResponseBox({
       response.map((item, i) => ({
         label: (
           <Flex alignItems={'center'} justifyContent={'center'} px={2}>
-            <Image
+            <MyImage
               mr={2}
               src={
                 item.moduleLogo ||

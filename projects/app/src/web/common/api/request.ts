@@ -8,7 +8,7 @@ import { clearToken, getToken } from '@/web/support/user/auth';
 import { TOKEN_ERROR_CODE } from '@fastgpt/global/common/error/errorCode';
 import { TeamErrEnum } from '@fastgpt/global/common/error/code/team';
 import { useSystemStore } from '../system/useSystemStore';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
 
 interface ConfigType {
   headers?: { [key: string]: string };
@@ -107,7 +107,7 @@ function responseError(err: any) {
       !(window.location.pathname === '/chat/share' || window.location.pathname === '/chat/team')
     ) {
       window.location.replace(
-        `/login?lastRoute=${encodeURIComponent(location.pathname + location.search)}`
+        getWebReqUrl(`/login?lastRoute=${encodeURIComponent(location.pathname + location.search)}`)
       );
     }
 
@@ -153,7 +153,7 @@ function request(
 
   return instance
     .request({
-      baseURL: connectBaseUrl('/api'),
+      baseURL: getWebReqUrl('/api'),
       url,
       method,
       data: ['POST', 'PUT'].includes(method) ? data : null,

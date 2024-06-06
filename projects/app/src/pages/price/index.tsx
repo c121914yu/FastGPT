@@ -12,7 +12,7 @@ import PointsCard from './components/Points';
 import FAQ from './components/FAQ';
 import { getToken } from '@/web/support/user/auth';
 import Script from 'next/script';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
 
 const PriceBox = () => {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ const PriceBox = () => {
 
   return (
     <>
-      <Script src={connectBaseUrl('/js/qrcode.min.js')} strategy="lazyOnload"></Script>
+      <Script src={getWebReqUrl('/js/qrcode.min.js')} strategy="lazyOnload"></Script>
       <Box
         h={'100%'}
         overflow={'overlay'}

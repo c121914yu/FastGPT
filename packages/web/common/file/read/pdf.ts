@@ -1,5 +1,5 @@
 /* read file to txt */
-import { connectBaseUrl } from 'common/system/utils';
+import { getWebReqUrl } from '../../system/utils';
 import * as pdfjsLib from 'pdfjs-dist';
 
 type TokenType = {
@@ -13,7 +13,7 @@ type TokenType = {
 };
 
 export const readPdfFile = async ({ pdf }: { pdf: ArrayBuffer }) => {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = connectBaseUrl('/js/pdf.worker.js');
+  pdfjsLib.GlobalWorkerOptions.workerSrc = getWebReqUrl('/js/pdf.worker.js');
 
   const readPDFPage = async (doc: any, pageNo: number) => {
     const page = await doc.getPage(pageNo);

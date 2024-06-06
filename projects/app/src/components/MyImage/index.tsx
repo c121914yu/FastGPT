@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Image, Skeleton, ImageProps } from '@chakra-ui/react';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { Skeleton, ImageProps } from '@chakra-ui/react';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
+import CustomImage from '@fastgpt/web/components/common/Image/MyImage';
 
 export const MyImage = (props: ImageProps) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,11 +15,11 @@ export const MyImage = (props: ImageProps) => {
       justifyContent={'center'}
       my={1}
     >
-      <Image
+      <CustomImage
         display={'inline-block'}
         borderRadius={'md'}
         alt={''}
-        fallbackSrc={connectBaseUrl('/imgs/errImg.png')}
+        fallbackSrc={getWebReqUrl('/imgs/errImg.png')}
         fallbackStrategy={'onError'}
         cursor={succeed ? 'pointer' : 'default'}
         objectFit={'contain'}

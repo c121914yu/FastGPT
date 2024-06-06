@@ -25,6 +25,7 @@ import {
   ChatStatusEnum
 } from '@fastgpt/global/core/chat/constants';
 import FilesBlock from './FilesBox';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 
 const colorMap = {
   [ChatStatusEnum.loading]: {
@@ -155,7 +156,7 @@ ${JSON.stringify(questionGuides)}`;
                               color: 'primary.600'
                             }}
                           >
-                            <Image src={tool.toolAvatar} alt={''} w={'14px'} mr={2} />
+                            <MyImage src={tool.toolAvatar} alt={''} w={'14px'} mr={2} />
                             <Box mr={1}>{tool.toolName}</Box>
                             {isChatting && !tool.response && (
                               <MyIcon name={'common/loading'} w={'14px'} />

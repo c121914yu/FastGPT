@@ -3,6 +3,7 @@ import { Box, Flex, Grid, Image } from '@chakra-ui/react';
 import type { GridProps } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import MyIcon from '@fastgpt/web/components/common/Icon';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 
 // @ts-ignore
 interface Props extends GridProps {
@@ -73,7 +74,7 @@ const Tabs = ({ list, size = 'md', activeId, onChange, ...props }: Props) => {
           {item.icon && (
             <>
               {item.icon.startsWith('/') ? (
-                <Image mr={1} src={item.icon} alt={''} w={'16px'} />
+                <MyImage mr={1} src={item.icon} alt={''} w={'16px'} />
               ) : (
                 <MyIcon mr={1} name={item.icon as any} w={'16px'} />
               )}

@@ -12,7 +12,7 @@ import UserInfo from './components/Info';
 import { serviceSideProps } from '@/web/common/utils/i18n';
 import { useTranslation } from 'next-i18next';
 import Script from 'next/script';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
 
 const Promotion = dynamic(() => import('./components/Promotion'));
 const UsageTable = dynamic(() => import('./components/UsageTable'));
@@ -129,7 +129,7 @@ const Account = ({ currentTab }: { currentTab: `${TabEnum}` }) => {
 
   return (
     <>
-      <Script src={connectBaseUrl('/js/qrcode.min.js')} strategy="lazyOnload"></Script>
+      <Script src={getWebReqUrl('/js/qrcode.min.js')} strategy="lazyOnload"></Script>
       <PageContainer>
         <Flex flexDirection={['column', 'row']} h={'100%'} pt={[4, 0]}>
           {isPc ? (

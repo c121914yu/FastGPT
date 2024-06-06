@@ -10,7 +10,8 @@ import { useCopyData } from '@/web/common/hooks/useCopyData';
 import { useSelectFile } from '@/web/common/file/hooks/useSelectFile';
 import { fileToBase64 } from '@/web/common/file/utils';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 
 enum UsingWayEnum {
   link = 'link',
@@ -30,15 +31,15 @@ const SelectUsingWayModal = ({ share, onClose }: { share: OutLinkSchema; onClose
 
   const VariableTypeList = [
     {
-      title: <Image src={connectBaseUrl('/imgs/outlink/link.svg')} alt={''} />,
+      title: <MyImage src={'/imgs/outlink/link.svg'} alt={''} />,
       value: UsingWayEnum.link
     },
     {
-      title: <Image src={connectBaseUrl('/imgs/outlink/iframe.svg')} alt={''} />,
+      title: <MyImage src={'/imgs/outlink/iframe.svg'} alt={''} />,
       value: UsingWayEnum.iframe
     },
     {
-      title: <Image src={connectBaseUrl('/imgs/outlink/script.svg')} alt={''} />,
+      title: <MyImage src={'/imgs/outlink/script.svg'} alt={''} />,
       value: UsingWayEnum.script
     }
   ];
@@ -157,7 +158,7 @@ console.log("Chat box loaded")
               </Flex>
               <Flex {...gridItemStyle}>
                 <Box flex={1}>{t('core.app.outLink.Script Open Icon')}</Box>
-                <Image
+                <MyImage
                   src={getValues('scriptOpenIcon')}
                   alt={''}
                   w={'20px'}
@@ -168,7 +169,7 @@ console.log("Chat box loaded")
               </Flex>
               <Flex {...gridItemStyle}>
                 <Box flex={1}>{t('core.app.outLink.Script Close Icon')}</Box>
-                <Image
+                <MyImage
                   src={getValues('scriptCloseIcon')}
                   alt={''}
                   w={'20px'}

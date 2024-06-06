@@ -1,4 +1,5 @@
 import { Box, Button, Image } from '@chakra-ui/react';
+import MyImage from '../../../../Image/MyImage';
 
 export default function ComfirmVar({
   newVariables,
@@ -48,7 +49,7 @@ export default function ComfirmVar({
             border={'1px solid rgba(0, 0, 0, 0.1)'}
             mx={4}
           >
-            <Image alt={''} src={'/imgs/module/variable.png'} objectFit={'contain'} w={'20px'} />
+            <MyImage alt={''} src={'/imgs/module/variable.png'} objectFit={'contain'} w={'20px'} />
           </Box>
           <Box>引用了未定义的变量，是否自动添加？</Box>
         </Box>

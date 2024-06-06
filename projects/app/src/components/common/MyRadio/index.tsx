@@ -3,6 +3,7 @@ import { Box, Flex, useTheme, Grid, type GridProps, theme, Image } from '@chakra
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
 import { useToast } from '@fastgpt/web/hooks/useToast';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 
 // @ts-ignore
 interface Props extends GridProps {
@@ -97,7 +98,7 @@ const MyRadio = ({
           {!!item.icon && (
             <>
               {item.icon.startsWith('/') ? (
-                <Image src={item.icon} mr={'14px'} w={iconSize} alt={''} />
+                <MyImage src={item.icon} mr={'14px'} w={iconSize} alt={''} />
               ) : (
                 <MyIcon mr={'14px'} name={item.icon as any} w={iconSize} />
               )}

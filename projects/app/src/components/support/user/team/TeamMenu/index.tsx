@@ -6,6 +6,7 @@ import MyTooltip from '@/components/MyTooltip';
 import dynamic from 'next/dynamic';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { useToast } from '@fastgpt/web/hooks/useToast';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 
 const TeamManageModal = dynamic(() => import('../TeamManageModal'));
 
@@ -47,7 +48,7 @@ const TeamMenu = () => {
         <Flex w={'100%'} alignItems={'center'}>
           {userInfo?.team ? (
             <>
-              <Image src={userInfo.team.avatar} alt={''} w={'16px'} />
+              <MyImage src={userInfo.team.avatar} alt={''} w={'16px'} />
               <Box ml={2}>{userInfo.team.teamName}</Box>
             </>
           ) : (

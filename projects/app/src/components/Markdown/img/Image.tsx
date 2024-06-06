@@ -9,7 +9,8 @@ import {
   Skeleton,
   useDisclosure
 } from '@chakra-ui/react';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 
 const MdImage = ({ src }: { src?: string }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -28,11 +29,11 @@ const MdImage = ({ src }: { src?: string }) => {
 
   return (
     <>
-      <Image
+      <MyImage
         borderRadius={'md'}
         src={src}
         alt={''}
-        fallbackSrc={connectBaseUrl('/imgs/errImg.png')}
+        fallbackSrc={'/imgs/errImg.png'}
         fallbackStrategy={'onError'}
         cursor={succeed ? 'pointer' : 'default'}
         loading="lazy"
@@ -54,7 +55,7 @@ const MdImage = ({ src }: { src?: string }) => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent boxShadow={'none'} maxW={'auto'} w="auto" bg={'transparent'}>
-          <Image
+          <MyImage
             transform={`scale(${scale})`}
             borderRadius={'md'}
             src={src}
@@ -62,7 +63,7 @@ const MdImage = ({ src }: { src?: string }) => {
             w={'100%'}
             maxH={'80vh'}
             referrerPolicy="no-referrer"
-            fallbackSrc={connectBaseUrl('/imgs/errImg.png')}
+            fallbackSrc={'/imgs/errImg.png'}
             fallbackStrategy={'onError'}
             objectFit={'contain'}
             onWheel={handleWheel}

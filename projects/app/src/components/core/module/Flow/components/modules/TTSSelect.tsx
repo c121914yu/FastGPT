@@ -11,7 +11,8 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import MySlider from '@/components/Slider';
 import MySelect from '@fastgpt/web/components/common/MySelect';
-import { connectBaseUrl } from '@fastgpt/web/common/system/utils';
+import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
+import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 
 const TTSSelect = ({
   value,
@@ -131,7 +132,7 @@ const TTSSelect = ({
             <Flex mt={10} justifyContent={'end'}>
               {audioPlaying ? (
                 <Flex>
-                  <Image src={connectBaseUrl('/icon/speaking.gif')} w={'24px'} alt={''} />
+                  <MyImage src={'/icon/speaking.gif'} w={'24px'} alt={''} />
                   <Button
                     ml={2}
                     variant={'grayBase'}
