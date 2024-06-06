@@ -39,6 +39,7 @@ WORKDIR /app
 
 ARG name
 ARG proxy
+ARG baseUrl
 
 # copy common node_modules and one project node_modules
 COPY package.json pnpm-workspace.yaml ./
@@ -50,6 +51,8 @@ COPY --from=mainDeps /app/projects/$name/node_modules ./projects/$name/node_modu
 RUN [ -z "$proxy" ] || sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 
 RUN apk add --no-cache libc6-compat && npm install -g pnpm@8.6.0
+
+ENV NEXT_PUBLIC_BASE_URL=$baseUrl
 RUN pnpm --filter=$name build
 
 # --------- runner -----------

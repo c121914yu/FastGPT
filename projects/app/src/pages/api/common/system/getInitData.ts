@@ -91,6 +91,7 @@ export async function initSystemConfig() {
   const config: FastGPTConfigFileType = {
     feConfigs: {
       ...defaultFeConfigs,
+      ...fileRes,
       ...(dbConfig.feConfigs || {}),
       isPlus: !!FastGPTProUrl
     },

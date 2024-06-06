@@ -8,7 +8,7 @@ export const getUserFingerprint = async () => {
 };
 
 export const getWebReqUrl = (url: string = '') => {
-  if (!url) return;
+  if (!url) return url;
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   if (!baseUrl) return url;
