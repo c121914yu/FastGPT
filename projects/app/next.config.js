@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const { i18n } = require('./next-i18next.config');
 const path = require('path');
-console.log(process.env.NEXT_PUBLIC_BASE_URL || '/', '===');
+console.log(process.env.NEXT_PUBLIC_BASE_URL || '', '===');
 const nextConfig = {
-  basePath: process.env.NEXT_PUBLIC_BASE_URL || '/',
+  basePath: process.env.NEXT_PUBLIC_BASE_URL || '',
   i18n,
   output: 'standalone',
   reactStrictMode: process.env.NODE_ENV === 'development' ? false : true,
