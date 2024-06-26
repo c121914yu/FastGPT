@@ -253,7 +253,7 @@ const MyInfo = () => {
             <TeamMenu />
           </Box>
         </Flex>
-        {feConfigs.isPlus && (
+        {/* {feConfigs.isPlus && (
           <Box mt={6} whiteSpace={'nowrap'}>
             <Flex alignItems={'center'}>
               <Box flex={'0 0 80px'} fontSize={'md'}>
@@ -269,7 +269,7 @@ const MyInfo = () => {
               )}
             </Flex>
           </Box>
-        )}
+        )} */}
       </Box>
       {isOpenPayModal && <PayModal onClose={onClosePayModal} />}
       {isOpenUpdatePsw && <UpdatePswModal onClose={onCloseUpdatePsw} />}
@@ -554,7 +554,7 @@ const Other = () => {
             </Box>
           </Link>
         )}
-        <Link
+        {/* <Link
           href={feConfigs.chatbotUrl}
           target="_blank"
           display={'flex'}
@@ -572,7 +572,7 @@ const Other = () => {
           <Box ml={2} flex={1}>
             {t('common.system.Help Chatbot')}
           </Box>
-        </Link>
+        </Link> */}
 
         {feConfigs?.show_openai_account && (
           <Flex
