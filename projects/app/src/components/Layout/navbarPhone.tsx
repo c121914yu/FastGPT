@@ -35,15 +35,15 @@ const NavbarPhone = ({ unread }: { unread: number }) => {
         link: '/tools',
         activeLink: ['/tools'],
         unread: 0
+      },
+      {
+        label: t('navbar.Account'),
+        icon: 'support/user/userLight',
+        activeIcon: 'support/user/userFill',
+        link: '/account',
+        activeLink: ['/account'],
+        unread
       }
-      // {
-      //   label: t('navbar.Account'),
-      //   icon: 'support/user/userLight',
-      //   activeIcon: 'support/user/userFill',
-      //   link: '/account',
-      //   activeLink: ['/account'],
-      //   unread
-      // }
     ],
     [t, lastChatAppId, lastChatId, unread]
   );

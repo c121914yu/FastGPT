@@ -53,6 +53,13 @@ const Navbar = ({ unread }: { unread: number }) => {
         activeIcon: 'core/dataset/datasetFill',
         link: `/dataset/list`,
         activeLink: ['/dataset/list', '/dataset/detail']
+      },
+      {
+        label: t('navbar.Account'),
+        icon: 'support/user/userLight',
+        activeIcon: 'support/user/userFill',
+        link: '/account',
+        activeLink: ['/account']
       }
     ],
     [lastChatAppId, lastChatId, t]
