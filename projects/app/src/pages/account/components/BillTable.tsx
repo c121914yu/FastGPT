@@ -19,40 +19,33 @@ import { formatStorePrice2Read } from '@fastgpt/global/support/wallet/usage/tool
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
+import MySelect from '@/components/Select';
 import {
   BillTypeEnum,
   billPayWayMap,
   billStatusMap,
   billTypeMap
 } from '@fastgpt/global/support/wallet/bill/constants';
-// import { usePagination } from '@/web/common/hooks/usePagination';
-import MyBox from '@fastgpt/web/components/common/MyBox';
-import { useRequest } from '@fastgpt/web/hooks/useRequest';
+import { usePagination } from '@/web/common/hooks/usePagination';
+import MyBox from '@/components/common/MyBox';
+import { useRequest } from '@/web/common/hooks/useRequest';
+import MyModal from '@/components/MyModal';
 import { standardSubLevelMap, subModeMap } from '@fastgpt/global/support/wallet/sub/constants';
-import MySelect from '@fastgpt/web/components/common/MySelect';
-import MyModal from '@fastgpt/web/components/common/MyModal';
-import { usePagination } from '@fastgpt/web/hooks/usePagination';
-import FormLabel from '@fastgpt/web/components/common/MyBox/FormLabel';
-import { useI18n } from '@/web/context/I18n';
+
 const BillTable = () => {
   const { t } = useTranslation();
-  const { commonT } = useI18n();
   const { toast } = useToast();
-  const [billType, setBillType] = useState<BillTypeEnum | ''>('');
+  const [billType, setBillType] = useState<`${BillTypeEnum}` | ''>('');
   const [billDetail, setBillDetail] = useState<BillSchemaType>();
 
   const billTypeList = useMemo(
-    () =>
-      [
-        { label: t('common:common.All'), value: '' },
-        ...Object.entries(billTypeMap).map(([key, value]) => ({
-          label: t(value.label as any),
-          value: key
-        }))
-      ] as {
-        label: string;
-        value: BillTypeEnum | '';
-      }[],
+    () => [
+      { label: t('common.All'), value: '' },
+      ...Object.entries(billTypeMap).map(([key, value]) => ({
+        label: t(value.label),
+        value: key
+      }))
+    ],
     [t]
   );
 
@@ -111,7 +104,7 @@ const BillTable = () => {
             <Tr>
               <Th>#</Th>
               <Th>
-                <MySelect<BillTypeEnum | ''>
+                <MySelect
                   list={billTypeList}
                   value={billType}
                   size={'sm'}
@@ -121,9 +114,9 @@ const BillTable = () => {
                   w={'130px'}
                 ></MySelect>
               </Th>
-              <Th>{t('common:user.Time')}</Th>
-              <Th>{t('common:support.wallet.Amount')}</Th>
-              <Th>{t('common:support.wallet.bill.Status')}</Th>
+              <Th>{t('user.Time')}</Th>
+              <Th>{t('support.wallet.Amount')}</Th>
+              <Th>{t('support.wallet.bill.Status')}</Th>
               <Th></Th>
             </Tr>
           </Thead>
@@ -131,20 +124,20 @@ const BillTable = () => {
             {bills.map((item, i) => (
               <Tr key={item._id}>
                 <Td>{i + 1}</Td>
-                <Td>{t(billTypeMap[item.type]?.label as any)}</Td>
+                <Td>{t(billTypeMap[item.type]?.label)}</Td>
                 <Td>
                   {item.createTime ? dayjs(item.createTime).format('YYYY/MM/DD HH:mm:ss') : '-'}
                 </Td>
-                <Td>{commonT('common:pay.yuan', { amount: formatStorePrice2Read(item.price) })}</Td>
-                <Td>{t(billStatusMap[item.status]?.label as any)}</Td>
+                <Td>{formatStorePrice2Read(item.price)}元</Td>
+                <Td>{t(billStatusMap[item.status]?.label)}</Td>
                 <Td>
                   {item.status === 'NOTPAY' && (
                     <Button mr={4} onClick={() => handleRefreshPayOrder(item._id)} size={'sm'}>
-                      {t('common:common.Update')}
+                      {t('common.Update')}
                     </Button>
                   )}
                   <Button variant={'whiteBase'} size={'sm'} onClick={() => setBillDetail(item)}>
-                    {t('common:common.Detail')}
+                    {t('common.Detail')}
                   </Button>
                 </Td>
               </Tr>
@@ -165,7 +158,7 @@ const BillTable = () => {
           >
             <MyIcon name="empty" w={'48px'} h={'48px'} color={'transparent'} />
             <Box mt={2} color={'myGray.500'}>
-              {t('common:support.wallet.noBill')}
+              {t('support.wallet.noBill')}
             </Box>
           </Flex>
         )}
@@ -182,79 +175,69 @@ export default BillTable;
 
 function BillDetailModal({ bill, onClose }: { bill: BillSchemaType; onClose: () => void }) {
   const { t } = useTranslation();
-  const { commonT } = useI18n();
+
   return (
     <MyModal
       isOpen={true}
       onClose={onClose}
       iconSrc="/imgs/modal/bill.svg"
-      title={t('common:support.wallet.usage.Usage Detail')}
+      title={t('support.wallet.usage.Usage Detail')}
       maxW={['90vw', '700px']}
     >
       <ModalBody>
         <Flex alignItems={'center'} pb={4}>
-          <FormLabel flex={'0 0 120px'}>{t('common:support.wallet.bill.Number')}:</FormLabel>
+          <Box flex={'0 0 120px'}>{t('support.wallet.bill.Number')}:</Box>
           <Box>{bill.orderId}</Box>
         </Flex>
         <Flex alignItems={'center'} pb={4}>
-          <FormLabel flex={'0 0 120px'}>{t('common:support.wallet.usage.Time')}:</FormLabel>
+          <Box flex={'0 0 120px'}>{t('support.wallet.usage.Time')}:</Box>
           <Box>{dayjs(bill.createTime).format('YYYY/MM/DD HH:mm:ss')}</Box>
         </Flex>
         <Flex alignItems={'center'} pb={4}>
-          <FormLabel flex={'0 0 120px'}>{t('common:support.wallet.bill.Status')}:</FormLabel>
-          <Box>{t(billStatusMap[bill.status]?.label as any)}</Box>
+          <Box flex={'0 0 120px'}>{t('support.wallet.bill.Status')}:</Box>
+          <Box>{t(billStatusMap[bill.status]?.label)}</Box>
         </Flex>
         {!!bill.metadata?.payWay && (
           <Flex alignItems={'center'} pb={4}>
-            <FormLabel flex={'0 0 120px'}>{t('common:support.wallet.bill.payWay.Way')}:</FormLabel>
-            <Box>{t(billPayWayMap[bill.metadata.payWay]?.label as any)}</Box>
+            <Box flex={'0 0 120px'}>{t('support.wallet.bill.payWay.Way')}:</Box>
+            <Box>{t(billPayWayMap[bill.metadata.payWay]?.label)}</Box>
           </Flex>
         )}
         <Flex alignItems={'center'} pb={4}>
-          <FormLabel flex={'0 0 120px'}>{t('common:support.wallet.Amount')}:</FormLabel>
-          <Box>{commonT('common:pay.yuan', { amount: formatStorePrice2Read(bill.price) })}</Box>
+          <Box flex={'0 0 120px'}>{t('support.wallet.Amount')}:</Box>
+          <Box>{formatStorePrice2Read(bill.price)}元</Box>
         </Flex>
         <Flex alignItems={'center'} pb={4}>
-          <FormLabel flex={'0 0 120px'}>{t('common:support.wallet.bill.Type')}:</FormLabel>
-          <Box>{t(billTypeMap[bill.type]?.label as any)}</Box>
+          <Box flex={'0 0 120px'}>{t('support.wallet.bill.Type')}:</Box>
+          <Box>{t(billTypeMap[bill.type]?.label)}</Box>
         </Flex>
         {!!bill.metadata?.subMode && (
           <Flex alignItems={'center'} pb={4}>
-            <FormLabel flex={'0 0 120px'}>
-              {t('common:support.wallet.subscription.mode.Period')}:
-            </FormLabel>
-            <Box>{t(subModeMap[bill.metadata.subMode]?.label as any)}</Box>
+            <Box flex={'0 0 120px'}>{t('support.wallet.subscription.mode.Period')}:</Box>
+            <Box>{t(subModeMap[bill.metadata.subMode]?.label)}</Box>
           </Flex>
         )}
         {!!bill.metadata?.standSubLevel && (
           <Flex alignItems={'center'} pb={4}>
-            <FormLabel flex={'0 0 120px'}>
-              {t('common:support.wallet.subscription.Stand plan level')}:
-            </FormLabel>
-            <Box>{t(standardSubLevelMap[bill.metadata.standSubLevel]?.label as any)}</Box>
+            <Box flex={'0 0 120px'}>{t('support.wallet.subscription.Stand plan level')}:</Box>
+            <Box>{t(standardSubLevelMap[bill.metadata.standSubLevel]?.label)}</Box>
           </Flex>
         )}
         {bill.metadata?.month !== undefined && (
           <Flex alignItems={'center'} pb={4}>
-            <FormLabel flex={'0 0 120px'}>
-              {t('common:support.wallet.subscription.Month amount')}:
-            </FormLabel>
+            <Box flex={'0 0 120px'}>{t('support.wallet.subscription.Month amount')}:</Box>
             <Box>{bill.metadata?.month}</Box>
           </Flex>
         )}
         {bill.metadata?.datasetSize !== undefined && (
           <Flex alignItems={'center'} pb={4}>
-            <FormLabel flex={'0 0 120px'}>
-              {t('common:support.wallet.subscription.Extra dataset size')}:
-            </FormLabel>
+            <Box flex={'0 0 120px'}>{t('support.wallet.subscription.Extra dataset size')}:</Box>
             <Box>{bill.metadata?.datasetSize}</Box>
           </Flex>
         )}
         {bill.metadata?.extraPoints !== undefined && (
           <Flex alignItems={'center'} pb={4}>
-            <FormLabel flex={'0 0 120px'}>
-              {t('common:support.wallet.subscription.Extra ai points')}:
-            </FormLabel>
+            <Box flex={'0 0 120px'}>{t('support.wallet.subscription.Extra ai points')}:</Box>
             <Box>{bill.metadata.extraPoints}</Box>
           </Flex>
         )}

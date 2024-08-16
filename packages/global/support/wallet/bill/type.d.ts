@@ -9,9 +9,8 @@ export type BillSchemaType = {
   createTime: Date;
   orderId: string;
   status: 'SUCCESS' | 'REFUND' | 'NOTPAY' | 'CLOSED';
-  type: BillTypeEnum;
+  type: `${BillTypeEnum}`;
   price: number;
-  hasInvoice: boolean;
   metadata: {
     payWay: `${BillPayWayEnum}`;
     subMode?: `${SubModeEnum}`;
@@ -19,13 +18,12 @@ export type BillSchemaType = {
     month?: number;
     datasetSize?: number;
     extraPoints?: number;
-    invoice: boolean;
   };
 };
 
-export type ChatNodeUsageType = {
-  tokens?: number;
+export type ChatModuleBillType = {
   totalPoints: number;
   moduleName: string;
   model?: string;
+  charsLength?: number;
 };
