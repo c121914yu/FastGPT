@@ -30,6 +30,10 @@ export const isInternalAddress = (url: string): boolean => {
       return true;
     }
 
+    if (process.env.URL_FETCH_DISABLE_INTERNAL_IP !== 'true') {
+      return false;
+    }
+
     // For non-metadata URLs, check if it's a domain name
     const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
     if (!ipv4Pattern.test(hostname)) {
