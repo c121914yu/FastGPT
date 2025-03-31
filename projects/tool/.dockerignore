@@ -1,0 +1,17 @@
+.env*
+.env.local
+.env.*.local
+dist
+
+docker
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
+.git
+
+.yalc/
+yalc.lock
+testApi/

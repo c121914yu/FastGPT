@@ -8,7 +8,7 @@ export type CustomFieldConfigType = {
   // selectInputTypeList: FlowNodeInputTypeEnum[]; // 可以选哪些输入类型, 只有1个话,则默认选择
 
   // reference
-  selectValueTypeList?: WorkflowIOValueTypeEnum[]; // 可以选哪个数据类型, 只有1个的话,则默认选择
+  selectValueTypeList?: `${WorkflowIOValueTypeEnum}`[]; // 可以选哪个数据类型, 只有1个的话,则默认选择
 
   // showIsToolParam?: boolean; // 是否作为工具参数
 
@@ -40,10 +40,10 @@ export type InputComponentPropsType = {
 
 export type FlowNodeInputItemType = InputComponentPropsType & {
   selectedTypeIndex?: number;
-  renderTypeList: FlowNodeInputTypeEnum[]; // Node Type. Decide on a render style
+  renderTypeList: `${FlowNodeInputTypeEnum}`[]; // Node Type. Decide on a render style
 
   key: `${NodeInputKeyEnum}` | string;
-  valueType?: WorkflowIOValueTypeEnum; // data type
+  valueType?: `${WorkflowIOValueTypeEnum}`; // data type
   valueDesc?: string; // data desc
   value?: any;
   label: string;
@@ -63,13 +63,15 @@ export type FlowNodeInputItemType = InputComponentPropsType & {
   canSelectFile?: boolean;
   canSelectImg?: boolean;
   maxFiles?: number;
+
+  editField?: any;
 };
 
 export type FlowNodeOutputItemType = {
   id: string; // output unique id(Does not follow the key change)
-  type: FlowNodeOutputTypeEnum;
+  type: `${FlowNodeOutputTypeEnum}`;
   key: `${NodeOutputKeyEnum}` | string;
-  valueType?: WorkflowIOValueTypeEnum;
+  valueType?: `${WorkflowIOValueTypeEnum}`;
   valueDesc?: string;
   value?: any;
 

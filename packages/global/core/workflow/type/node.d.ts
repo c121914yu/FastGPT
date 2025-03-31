@@ -27,7 +27,7 @@ import { WorkflowInteractiveResponseType } from '../template/system/interactive/
 
 export type FlowNodeCommonType = {
   parentNodeId?: string;
-  flowNodeType: FlowNodeTypeEnum; // render node card
+  flowNodeType: `${FlowNodeTypeEnum}`; // render node card
   abandon?: boolean; // abandon node
 
   avatar?: string;
