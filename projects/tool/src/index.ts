@@ -1,43 +1,21 @@
 #!/usr/bin/env node
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import express from 'express';
-import { getMcpTools, handleToolCall } from './register';
-
-// Register mcp server
-const server = new Server(
-  {
-    name: 'FastGPT tool server',
-    version: '1.0.0'
-  },
-  {
-    capabilities: {
-      tools: {}
-    }
-  }
-);
-
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: getMcpTools()
-}));
-server.setRequestHandler(CallToolRequestSchema, async (request) => handleToolCall(request.params));
+import { getTools, handleToolCall } from './register';
+import { formatResponse } from './middleware/response';
+import { handleRequest } from './middleware/request';
+import { errorHandler } from './middleware/error';
 
 // Express server
 const app = express();
-let transport: SSEServerTransport | null = null;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(formatResponse());
 
-app.get('/sse', (req, res) => {
-  transport = new SSEServerTransport('/messages', res);
-  server.connect(transport);
-  res.write('ok');
-});
-app.post('/messages', (req, res) => {
-  if (transport) {
-    transport.handlePostMessage(req, res);
-  }
-});
+app.get('/v1/tools', handleRequest(getTools));
+app.post('/v1/callTool', handleRequest(handleToolCall));
+
+app.use(errorHandler);
 
 const port = Number(process.env.PORT || 3000);
 app
@@ -45,9 +23,9 @@ app
     console.log(`Server is running on port ${port}`);
     console.log(
       `Init tools`,
-      getMcpTools().map((item) => ({
+      getTools().map((item) => ({
         name: item.name,
-        description: item.description
+        intro: item.intro
       }))
     );
   })
