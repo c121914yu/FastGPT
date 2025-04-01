@@ -1,5 +1,6 @@
+import { formatTime2YMDHMS } from '@fastgpt/global/common/string/time';
 type Props = {
-  time: string;
+  time?: string;
 };
 type Response = Promise<{
   time: string;
@@ -7,7 +8,7 @@ type Response = Promise<{
 
 const main = async ({ time }: Props): Response => {
   return {
-    time
+    time: time ?? formatTime2YMDHMS(new Date())
   };
 };
 

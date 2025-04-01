@@ -8,7 +8,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export const formatTime2YMDHMW = (time?: Date | number) =>
-  dayjs(time).format('YYYY-MM-DD HH:mm:ss dddd');
+  time ? dayjs(time).format('YYYY-MM-DD HH:mm:ss dddd') : '';
 export const formatTime2YMDHMS = (time?: Date | number) =>
   time ? dayjs(time).format('YYYY-MM-DD HH:mm:ss') : '';
 export const formatTime2YMDHM = (time?: Date | number) =>

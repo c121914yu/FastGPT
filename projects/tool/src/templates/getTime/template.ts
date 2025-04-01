@@ -16,7 +16,7 @@ const template: ToolTemplateJsonType = {
     {
       name: '0.0.1',
       intro: '',
-      createTime: new Date('2025-3-31'),
+      createTime: new Date('2025/3/31'),
       description: '获取用户当前时区的时间。',
       workflow: {
         nodes: [

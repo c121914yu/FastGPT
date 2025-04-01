@@ -1,5 +1,9 @@
-import { ToolTemplateItemType } from '@fastgpt/global/core/app/tool/type';
+import { CallToolRequest, Tool } from '@modelcontextprotocol/sdk/types';
 
 declare global {
-  var memoryToolTemplates: ToolTemplateItemType[];
+  var memoryTools: Tool[];
+  var memoryToolCallbacks: Record<
+    string,
+    (e: CallToolRequest['params']['arguments']) => Promise<any>
+  >;
 }

@@ -4,7 +4,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import express from 'express';
-import { getMcpTools, handleToolCall } from './templates';
+import { getMcpTools, handleToolCall } from './register';
 
 // Register mcp server
 const server = new Server(
@@ -22,11 +22,10 @@ const server = new Server(
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: getMcpTools()
 }));
-
 server.setRequestHandler(CallToolRequestSchema, async (request) => handleToolCall(request.params));
 
+// Express server
 const app = express();
-
 let transport: SSEServerTransport | null = null;
 
 app.get('/sse', (req, res) => {
@@ -34,7 +33,6 @@ app.get('/sse', (req, res) => {
   server.connect(transport);
   res.write('ok');
 });
-
 app.post('/messages', (req, res) => {
   if (transport) {
     transport.handlePostMessage(req, res);
@@ -45,6 +43,13 @@ const port = Number(process.env.PORT || 3000);
 app
   .listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    console.log(
+      `Init tools`,
+      getMcpTools().map((item) => ({
+        name: item.name,
+        description: item.description
+      }))
+    );
   })
   .on('error', (err) => {
     console.log(err);
