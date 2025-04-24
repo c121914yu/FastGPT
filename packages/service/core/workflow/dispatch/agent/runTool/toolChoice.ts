@@ -285,7 +285,7 @@ export const runToolWithToolChoice = async (
     },
     toolModel
   );
-  // console.log(JSON.stringify(filterMessages, null, 2), '==requestMessages');
+  // console.log(JSON.stringify(requestBody, null, 2), '==requestBody');
   /* Run llm */
   const {
     response: aiResponse,

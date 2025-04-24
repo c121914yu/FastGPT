@@ -36,11 +36,10 @@ import DndDrag, {
   DraggableProvided,
   DraggableStateSnapshot
 } from '@fastgpt/web/components/common/DndDrag';
-
-const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 6);
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 export const defaultVariable: VariableItemType = {
-  id: nanoid(),
+  id: getNanoid(),
   key: '',
   label: '',
   type: VariableInputEnum.input,
@@ -136,7 +135,7 @@ const VariableEdit = ({
       } else {
         onChangeVariable.push({
           ...data,
-          id: nanoid()
+          id: getNanoid()
         });
       }
 

@@ -3,11 +3,10 @@ import { Box, Textarea, Button, Flex, useTheme, useDisclosure } from '@chakra-ui
 import { useSearchTestStore, SearchTestStoreItemType } from '@/web/core/dataset/store/searchTest';
 import { postSearchText } from '@/web/core/dataset/api';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { useRequest, useRequest2 } from '@fastgpt/web/hooks/useRequest';
+import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 import { formatTimeToChatTime } from '@fastgpt/global/common/string/time';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { customAlphabet } from 'nanoid';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import { useTranslation } from 'next-i18next';
 import { SearchTestResponse } from '@/global/core/dataset/api';
@@ -27,8 +26,7 @@ import { useContextSelector } from 'use-context-selector';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
 import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
-
-const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 12);
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 const DatasetParamsModal = dynamic(() => import('@/components/core/app/DatasetParamsModal'));
 
@@ -105,7 +103,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
         }
 
         const testItem: SearchTestStoreItemType = {
-          id: nanoid(),
+          id: getNanoid(),
           datasetId,
           text: getValues('inputText').trim(),
           time: new Date(),
