@@ -56,7 +56,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
       ...req.body
     });
 
-    const result = await aiTranscriptions({
+    const { text, duration: resultDuration } = await aiTranscriptions({
       model: getDefaultSTTModel(),
       fileStream: fs.createReadStream(file.path)
     });
@@ -64,11 +64,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     pushWhisperUsage({
       teamId,
       tmbId,
-      duration: result?.usage?.total_tokens || duration
+      duration: resultDuration || duration
     });
 
     jsonRes(res, {
-      data: result.text
+      data: text
     });
   } catch (err) {
     console.log(err);
@@ -77,7 +77,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
       error: err
     });
   }
-
   removeFilesByPaths(filePaths);
 }
 

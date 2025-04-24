@@ -167,19 +167,19 @@ export const useSpeech = (props?: OutLinkChatAuthProps & { appId?: string }) => 
               if (MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
                 return {
                   options: { mimeType: 'video/webm; codecs=vp9' },
-                  filename: 'recording.webm'
+                  filename: 'recording.mp3'
                 };
               }
               if (MediaRecorder.isTypeSupported('video/webm')) {
                 return {
                   options: { type: 'video/webm' },
-                  filename: 'recording.webm'
+                  filename: 'recording.mp3'
                 };
               }
               if (MediaRecorder.isTypeSupported('audio/webm')) {
                 return {
                   options: { mimeType: 'audio/webm' },
-                  filename: 'recording.webm'
+                  filename: 'recording.mp3'
                 };
               }
               if (MediaRecorder.isTypeSupported('audio/mp4')) {
@@ -203,7 +203,7 @@ export const useSpeech = (props?: OutLinkChatAuthProps & { appId?: string }) => 
               // 默认回退选项
               return {
                 options: { type: 'audio/webm' },
-                filename: 'recording.webm'
+                filename: 'recording.mp3'
               };
             })();
 

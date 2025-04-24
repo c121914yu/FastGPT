@@ -41,5 +41,8 @@ export const aiTranscriptions = async ({
     data: data
   });
 
-  return result;
+  return {
+    text: result.text,
+    duration: result.usage?.total_tokens
+  };
 };

@@ -55,7 +55,12 @@ export async function getVectorsByText({ model, input, type, headers }: GetVecto
         }
 
         const [tokens, vectors] = await Promise.all([
-          countPromptTokens(input),
+          (async () => {
+            if (res.usage.total_tokens) {
+              return res.usage.total_tokens;
+            }
+            return countPromptTokens(input);
+          })(),
           Promise.all(
             res.data
               .map((item) => unityDimensional(item.embedding))
