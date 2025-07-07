@@ -18,7 +18,8 @@ export async function register() {
         { startCron },
         { startTrainingQueue },
         { preLoadWorker },
-        { loadSystemModels }
+        { loadSystemModels },
+        { registerSignozTraces }
       ] = await Promise.all([
         import('@fastgpt/service/common/mongo/init'),
         import('@fastgpt/service/common/mongo/index'),
@@ -30,12 +31,14 @@ export async function register() {
         import('@/service/common/system/cron'),
         import('@/service/core/dataset/training/utils'),
         import('@fastgpt/service/worker/preload'),
-        import('@fastgpt/service/core/ai/config/utils')
+        import('@fastgpt/service/core/ai/config/utils'),
+        import('@fastgpt/service/common/signoz/traces')
       ]);
 
       // 执行初始化流程
       systemStartCb();
       initGlobalVariables();
+      registerSignozTraces();
 
       // Connect to MongoDB
       await connectMongo(connectionMongo, MONGO_URL);

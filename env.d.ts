@@ -38,6 +38,8 @@ declare global {
       PASSWORD_LOGIN_LOCK_SECONDS?: string;
       PASSWORD_EXPIRED_MONTH?: string;
       MAX_LOGIN_SESSION?: string;
+      SIGNOZ_BASE_URL?: string;
+      SIGNOZ_TRACES_NAME?: string;
     }
   }
 }
