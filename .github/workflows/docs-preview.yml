@@ -105,13 +105,7 @@ jobs:
           tool: issue-comment
           title: 'Docs Preview:'
           body: |
-<<<<<<< Updated upstream
-            ```
-            🔗 Preview URL: https://pueuoharpgcl.sealoshzh.site
-            ```
-=======
             ---
             🚀 **FastGPT Document Preview Ready!**
 
             🔗 [👀 Click here to visit preview](https://pueuoharpgcl.sealoshzh.site)
->>>>>>> Stashed changes
