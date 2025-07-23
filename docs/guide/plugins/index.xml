@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>系统插件 on FastGPT</title><link>https://doc.fastgpt.io/docs/guide/plugins/</link><description>Recent content in 系统插件 on FastGPT</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://doc.fastgpt.io/docs/guide/plugins/index.xml" rel="self" type="application/rss+xml"/><item><title>如何开发系统工具</title><link>https://doc.fastgpt.io/docs/guide/plugins/dev_system_tool/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://doc.fastgpt.io/docs/guide/plugins/dev_system_tool/</guid><description>介绍 linkFastGPT 系统工具项目从 4.10.0 版本后移动到独立的fastgpt-plugin项目中，采用纯代码的模式进行工具编写。你可以在fastgpt-plugin项目中进行独立开发和调试好插件后，直接向 FastGPT 官方提交 PR 即可，无需运行 FastGPT 主服务。
+概念 link 工具(Tool)：最小的运行单元，每个工具都有唯一 ID 和特定的输入和输出。 工具集(Toolset)：工具的集合，可以包含多个工具。 在fastgpt-plugin中，你可以每次创建一个工具/工具集，每次提交时，仅接收一个工具/工具集。如需开发多个，可以创建多个 PR 进行提交。
+1. 准备工作 link Forkfastgpt-plugin 项目 安装Bun 本地拉取项目进行 Dev 开发。 bun install bun run dev 2. 初始化一个新的工具/工具集 link2.1 执行创建命令 link bun run new:tool 依据提示分别选择创建工具/工具集，以及目录名（小驼峰命名）。
+执行完后，系统会在 packages/tool/packages/[your-tool-name]下生成一个工具/工具集的目录。
+系统工具 (Tool) 文件结构如下:
+src // 源代码，处理逻辑 └── index.ts test // 测试样例 └── index.test.ts config.ts // 配置，配置工具的名称、描述、类型、图标等 index.ts // 入口，不要改这个文件 logo.svg // Logo，替换成你的工具的 Logo package.json // npm 包 工具集(toolset) 的文件结构如下：</description></item><item><title>SearXNG 搜索插件配置与使用说明</title><link>https://doc.fastgpt.io/docs/guide/plugins/searxng_plugin_guide/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://doc.fastgpt.io/docs/guide/plugins/searxng_plugin_guide/</guid><description>SearXNG是一款免费的互联网元搜索引擎，它汇总了来自各种搜索服务和数据库的结果。它不会跟踪或分析用户。用户可以自行部署它进行使用。本文介绍 Searxng 的部署以及接入 FastGPT 插件。
+1. 部署应用 link这里介绍在 Sealos 中部署 SearXNG 的方法。Docker 部署，可以直接参考 SearXNG 官方教程。
+点击打开 Sealos 北京区，点击应用部署，并新建一个应用：
+打开应用部署 点击新建应用 2. 部署配置 link把下面参数，填入配置中：
+镜像名: searxng/searxng:latest CPU: 0.2 内存: 512M 容器暴露端口: 8080 开启公网访问 点击高级配置，填写环境变量和配置文件 环境变量
+填下面两个内容，主要是为了减小并发，不然内存占用非常大。
+UWSGI_WORKERS=4 UWSGI_THREADS=4 配置文件
+新增一个配置文件，文件名：/etc/searx/settings.yml 文件内容：
+general: debug: false instance_name: &amp;#34;searxng&amp;#34; privacypolicy_url: false donation_url: false contact_url: false enable_metrics: true open_metrics: &amp;#39;&amp;#39; brand: new_issue_url: https://github.com/searxng/searxng/issues/new docs_url: https://docs.searxng.org/ public_instances: https://searx.space wiki_url: https://github.com/searxng/searxng/wiki issue_url: https://github.com/searxng/searxng/issues search: safe_search: 0 autocomplete: &amp;#34;&amp;#34; autocomplete_min: 4 default_lang: &amp;#34;auto&amp;#34; ban_time_on_fail: 5 max_ban_time_on_fail: 120 formats: - html server: port: 8080 bind_address: &amp;#34;0.</description></item><item><title>Google 搜索插件填写说明</title><link>https://doc.fastgpt.io/docs/guide/plugins/google_search_plugin_guide/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://doc.fastgpt.io/docs/guide/plugins/google_search_plugin_guide/</guid><description>创建Google Custom Search Engine link https://programmablesearchengine.google.com/
+我们连到Custom Search Engine control panel 建立Search Engine
+取得搜索引擎的ID，即cx
+获取api key link https://developers.google.com/custom-search/v1/overview?hl=zh-cn
+填入插件输入参数 link 将搜索引擎ID填入cx字段，api key填入key字段</description></item><item><title>Bing 搜索插件填写说明</title><link>https://doc.fastgpt.io/docs/guide/plugins/bing_search_plugin/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://doc.fastgpt.io/docs/guide/plugins/bing_search_plugin/</guid><description> 打开微软Azure官网，登陆账号 link https://portal.azure.com/
+创建bing web搜索资源 link 搜索Bing Search v7，点击创建
+https://portal.azure.com/#create/Microsoft.BingSearch
+进入资源详情点击管理密钥 link 4. 复制任意一个密钥填入插件输入 link</description></item><item><title>Doc2x 插件填写说明</title><link>https://doc.fastgpt.io/docs/guide/plugins/doc2x_plugin_guide/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://doc.fastgpt.io/docs/guide/plugins/doc2x_plugin_guide/</guid><description>打开docx官网，创建账号，并复制 apikey link https://doc2x.noedgeai.com/
+填写apikey到fastgpt中 link 工作流****中：
+简易模式使用：</description></item></channel></rss>

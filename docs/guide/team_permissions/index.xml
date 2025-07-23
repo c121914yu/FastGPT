@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>团队与权限 on FastGPT</title><link>https://doc.fastgpt.io/docs/guide/team_permissions/</link><description>Recent content in 团队与权限 on FastGPT</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://doc.fastgpt.io/docs/guide/team_permissions/index.xml" rel="self" type="application/rss+xml"/><item><title>团队&amp;成员组&amp;权限</title><link>https://doc.fastgpt.io/docs/guide/team_permissions/team_roles_permissions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://doc.fastgpt.io/docs/guide/team_permissions/team_roles_permissions/</guid><description>团队 &amp;amp; 成员组 &amp;amp; 权限 link权限系统简介 linkFastGPT 权限系统融合了基于属性和基于角色的权限管理范式，为团队协作提供精细化的权限控制方案。通过成员、部门和群组三种管理模式，您可以灵活配置对团队、应用和知识库等资源的访问权限。
+团队 link每位用户可以同时归属于多个团队，系统默认为每位用户创建一个初始团队。目前暂不支持用户手动创建额外团队。
+权限管理 linkFastGPT 提供三种权限管理维度：
+成员权限：最高优先级，直接赋予个人的权限
+部门与群组权限：采用权限并集原则，优先级低于成员权限
+权限判定遵循以下逻辑：
+首先检查用户的个人成员权限
+其次检查用户所属部门和群组的权限（取并集）
+最终权限为上述结果的组合
+鉴权逻辑如下：
+资源权限 link对于不同的资源，有不同的权限。
+这里说的资源，是指应用、知识库、团队等等概念。
+下表为不同资源，可以进行管理的权限。
+资源 可管理权限 说明 团队 创建应用 创建，删除等基础操作 创建知识库 创建，删除等基础操作 创建团队 APIKey 创建，删除等基础操作 管理成员 邀请、移除用户，创建群组等 应用 可使用 允许进行对话交互 可编辑 修改基本信息，进行流程编排等 可管理 添加或删除协作者 知识库 可使用 可以在应用中调用该知识库 可编辑 修改知识库的内容 可管理 添加或删除协作者 协作者 link必须先添加协作者，才能对其进行权限管理：
+管理团队权限时，需先选择成员/组织/群组，再进行权限配置。
+对于应用和知识库等资源，可直接修改成员权限。
+团队权限在专门的权限页面进行设置
+特殊权限说明 link管理员权限 link管理员主要负责管理资源的协作关系，但有以下限制：
+不能修改或移除自身权限 不能修改或移除其他管理员权限 -不能将管理员权限赋予其他协作者 Owner 权限 link每个资源都有唯一的 Owner，拥有该资源的最高权限。Owner 可以转移所有权，但转移后原 Owner 将失去对资源的权限。
+Root 权限 linkRoot 作为系统唯一的超级管理员账号，对所有团队的所有资源拥有完全访问和管理权限。</description></item><item><title>邀请链接说明文档</title><link>https://doc.fastgpt.io/docs/guide/team_permissions/invitation_link/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://doc.fastgpt.io/docs/guide/team_permissions/invitation_link/</guid><description>v4.9.1 团队邀请成员将开始使用「邀请链接」的模式，弃用之前输入用户名进行添加的形式。
+在版本升级后，原收到邀请还未加入团队的成员，将自动清除邀请。请使用邀请链接重新邀请成员。
+如何使用 link 在团队管理页面，管理员可点击「邀请成员」按钮打开邀请成员弹窗 在邀请成员弹窗中，点击「创建邀请链接」按钮，创建邀请链接。 输入对应内容 链接描述：建议将链接描述为使用场景或用途。链接创建后不支持修改噢。
+有效期：30分钟，7天，1年
+有效人数：1人，无限制
+点击复制链接，并将其发送给想要邀请的人。 用户访问链接后，如果未登录/未注册，则先跳转到登录页面进行登录。在登录后将进入团队页面，处理邀请。 邀请链接形如：fastgpt.cn/account/team?invitelinkid=xxxx
+点击接受，则用户将加入团队
+点击忽略，则关闭弹窗，用户下次访问该邀请链接则还可以选择加入。
+链接失效和自动清理 link链接失效原因 link手动停用链接
+邀请链接到达有效期，自动停用
+有效人数为1人的链接，已有1人通过邀请链接加入团队。
+停用的链接无法访问，也无法再次启用。
+链接上限 link一个用户最多可以同时存在 10 个有效的邀请链接。
+链接自动清理 link失效的链接将在 30 天后自动清理。</description></item></channel></rss>
