@@ -6,7 +6,7 @@ import { z } from 'zod';
 export const docs = defineDocs({
   docs: {
     schema: frontmatterSchema.extend({
-      title: z.string().default('Untitled')
+      title: z.string().optional().default('Untitled')
     })
   },
   meta: {
