@@ -1,10 +1,22 @@
 import { Box, Flex } from '@chakra-ui/react';
-import type { AgentPlanType } from '@fastgpt/global/core/ai/agent/type';
+import type { AgentPlanStepStatusType, AgentPlanType } from '@fastgpt/global/core/ai/agent/type';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import React from 'react';
 import { planStepPulseAfterStyle, planStepPulseSx, planStepStatusStyle } from './constants';
 
+/**
+ * 历史 AgentV2 对话日志可能存在旧状态或缺失状态，按已完成渲染，避免页面崩溃。
+ */
+const getPlanStepStatus = (status: unknown): AgentPlanStepStatusType =>
+  typeof status === 'string' && status in planStepStatusStyle
+    ? (status as AgentPlanStepStatusType)
+    : 'done';
+
 const RenderPlan = React.memo(function RenderPlan({ plan }: { plan: AgentPlanType }) {
+  const steps = Array.isArray(plan.steps) ? plan.steps : [];
+
+  if (steps.length === 0) return null;
+
   return (
     <Box border={'base'} bg={'white'} overflow={'hidden'} borderRadius={'md'} w={'full'}>
       <Flex alignItems={'center'} px={4} py={3} bg={'myGray.50'} borderBottom={'base'}>
@@ -15,11 +27,12 @@ const RenderPlan = React.memo(function RenderPlan({ plan }: { plan: AgentPlanTyp
       </Flex>
       <Box px={4} py={4}>
         <Flex direction="column" gap={0}>
-          {plan.steps.map((step, index) => {
-            const style = planStepStatusStyle[step.status];
+          {steps.map((step, index) => {
+            const status = getPlanStepStatus(step.status);
+            const style = planStepStatusStyle[status];
 
             return (
-              <Flex key={step.id} gap={3}>
+              <Flex key={step.id || index} gap={3}>
                 <Flex direction="column" alignItems="center">
                   <Box
                     w="10px"
@@ -31,10 +44,10 @@ const RenderPlan = React.memo(function RenderPlan({ plan }: { plan: AgentPlanTyp
                     flexShrink={0}
                     mt={1.5}
                     position="relative"
-                    _after={step.status === 'in_progress' ? planStepPulseAfterStyle : undefined}
-                    sx={step.status === 'in_progress' ? planStepPulseSx : undefined}
+                    _after={status === 'in_progress' ? planStepPulseAfterStyle : undefined}
+                    sx={status === 'in_progress' ? planStepPulseSx : undefined}
                   />
-                  {index < plan.steps.length - 1 && (
+                  {index < steps.length - 1 && (
                     <Box
                       w="1.5px"
                       h="100%"
@@ -46,7 +59,7 @@ const RenderPlan = React.memo(function RenderPlan({ plan }: { plan: AgentPlanTyp
                   )}
                 </Flex>
 
-                <Box flex={1} pb={index < plan.steps.length - 1 ? 4 : 0} minW={0}>
+                <Box flex={1} pb={index < steps.length - 1 ? 4 : 0} minW={0}>
                   <Box fontSize="sm" fontWeight="medium" color="myGray.900">
                     {step.title}
                   </Box>
