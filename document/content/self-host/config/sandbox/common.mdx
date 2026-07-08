@@ -9,19 +9,19 @@ description: FastGPT Agent Sandbox 通用配置
 
 ### 1. 添加 yml
 
-可以参考 [agent-sandbox-proxy.yml](/deploy/sandbox_deploy/agent-proxy.yml)，将 service 加到 yml 文件里。并开放外网访问端口。并记录 `AGENT_SANDBOX_PROXY_SECRET` 环境变量，下一步需要使用。
+可以参考 [agent-sandbox-proxy.yml](/deploy/sandbox_deploy/agent-proxy.yml)，将 service 加到 yml 文件里。并开放 proxy 的浏览器访问端口。并记录 `AGENT_SANDBOX_PROXY_SECRET` 环境变量，下一步需要使用。
 
 FastGPT 服务里访问沙盒内部文件系统，会通过 proxy 去代理访问。
 
 **proxy 服务环境变量**
 
-| 变量                               | 默认值                                   | 说明                                                                      |
-| ---------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
-| `PORT`                             | `1006`                                   | `fastgpt-agent-sandbox-proxy` 监听端口。                                  |
-| `AGENT_SANDBOX_PROXY_SECRET`       | 无                                       | 与 FastGPT 主服务共用的密钥，至少 32 位。                                 |
-| `FASTGPT_APP_URL`                  | `http://fastgpt-app:3000`                | 代理回源 FastGPT 主服务的内网地址，要求两个服务在一个互通网络。           |
-| `FASTGPT_APP_REQUEST_TIMEOUT_SECS` | `10`                                     | 代理回源 FastGPT 主服务的请求超时时间，单位秒。沙盒冷启动较慢时建议调大。 |
-| `RUST_LOG`                         | `info,fastgpt_agent_sandbox_proxy=debug` | 代理服务日志级别。                                                        |
+| 变量                               | 默认值                                   | 说明                                                                                      |
+| ---------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `PORT`                             | `1006`                                   | `fastgpt-agent-sandbox-proxy` 监听端口。                                                  |
+| `AGENT_SANDBOX_PROXY_SECRET`       | 无                                       | 与 FastGPT 主服务共用的密钥，至少 32 位。                                                 |
+| `FASTGPT_APP_URL`                  | `http://fastgpt-app:3000`                | 代理回源 FastGPT 主服务的内网地址，要求两个服务在一个互通网络。                           |
+| `FASTGPT_APP_REQUEST_TIMEOUT_SECS` | `10`                                     | 代理回源 FastGPT 主服务的请求超时时间，单位秒；示例 yml 为覆盖冷启动场景显式配置为 `60`。 |
+| `RUST_LOG`                         | `info,fastgpt_agent_sandbox_proxy=debug` | 代理服务日志级别。                                                                        |
 
 ### 2. 修改 FastGPT 环境变量
 
@@ -59,15 +59,17 @@ AGENT_SANDBOX_NPM_REGISTRY=https://registry.npmmirror.com
 AGENT_SANDBOX_PYPI_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-### 资源限制变量
+### 常用资源限制变量
 
-`fastpgt-app` 和 `fastgpt-pro` 中你可以通过以下变量控制资源限制：
+`fastgpt-app` 和 `fastgpt-pro` 中你可以通过以下变量控制常用资源限制：
 
-| 变量                                 | 默认值     | 说明                                                                             |
-| ------------------------------------ | ---------- | -------------------------------------------------------------------------------- |
-| `AGENT_SANDBOX_DISK_MB`              | `1024`     | Agent 沙盒磁盘大小基准，单位 MB；会影响冷归档包、Skill 包和 IDE 单文件大小限制。 |
-| `AGENT_SANDBOX_WS_MAX_MESSAGE_BYTES` | `67108864` | IDE Agent WebSocket 单消息大小上限，单位字节。                                   |
-| `AGENT_SANDBOX_WS_MAX_FRAME_BYTES`   | `16777216` | IDE Agent WebSocket 单帧大小上限，单位字节。                                     |
+| 变量                                       | 默认值     | 说明                                                                             |
+| ------------------------------------------ | ---------- | -------------------------------------------------------------------------------- |
+| `AGENT_SANDBOX_DISK_MB`                    | `1024`     | Agent 沙盒磁盘大小基准，单位 MB；会影响冷归档包、Skill 包和 IDE 单文件大小限制。 |
+| `AGENT_SANDBOX_MAX_EDIT_DEBUG`             | `100`      | Agent 编辑/调试沙盒数量限制。                                                    |
+| `AGENT_SANDBOX_ENTRYPOINT_TIMEOUT_SECONDS` | `30`       | Agent 沙盒 entrypoint 执行超时时间，单位秒，允许范围为 `1` 到 `600`。            |
+| `AGENT_SANDBOX_WS_MAX_MESSAGE_BYTES`       | `67108864` | IDE Agent WebSocket 单消息大小上限，单位字节。                                   |
+| `AGENT_SANDBOX_WS_MAX_FRAME_BYTES`         | `16777216` | IDE Agent WebSocket 单帧大小上限，单位字节。                                     |
 
 ## 常见问题
 

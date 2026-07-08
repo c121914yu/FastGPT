@@ -15,7 +15,7 @@ OpenSandbox 适合需要自托管 Agent/Skill 沙盒运行环境的场景。开�
 
 ## 1. 添加 yml service
 
-参考 [opensandbox.yml](/deploy/sandbox_deploy/opensandbox.yml)，将 `fastgpt-opensandbox-server`、`fastgpt-volume-manager`、预拉取镜像和 `opensandbox-config` 加入当前 FastGPT 部署的 `docker-compose.yml`，并放到 FastGPT App 所在的 `app` network 中；不需要对外暴露 OpenSandbox 或 Volume Manager 端口。Agent Sandbox Proxy 请按[沙盒通用配置](./common)单独部署。
+参考 [opensandbox.yml](/deploy/sandbox_deploy/opensandbox.yml)，将 `fastgpt-opensandbox-server`、`fastgpt-volume-manager`、预拉取镜像和 `opensandbox-config` 加入当前 FastGPT 部署的 `docker-compose.yml`，并放到 FastGPT App 所在的 `app` network 中；不需要对外暴露 OpenSandbox 或 Volume Manager 端口。这里的不对外暴露只针对 OpenSandbox 和 Volume Manager，Agent Sandbox Proxy 的浏览器访问端口仍需按[沙盒通用配置](./common)单独部署并开放。
 
 下面示例使用国内镜像源。海外部署可将镜像替换为：
 
@@ -36,7 +36,7 @@ OpenSandbox 适合需要自托管 Agent/Skill 沙盒运行环境的场景。开�
 
 Docker runtime 必须挂载宿主机 Docker socket。Docker 默认路径通常是 `/var/run/docker.sock`；OrbStack 等环境需要替换为实际 socket 路径。
 
-如果服务器配置了 `HTTP_PROXY` / `HTTPS_PROXY`，建议给 OpenSandbox Server 和 Volume Manager 补充 `NO_PROXY` / `no_proxy`，至少包含 `localhost,127.0.0.1,127.0.0.0/8,fastgpt-opensandbox-server,fastgpt-volume-manager,host.docker.internal`，避免内部服务调用被代理劫持。OrbStack/Docker 可能自动注入包含 IPv6 CIDR 的 `NO_PROXY`，OpenSandbox 依赖的 httpx 可能把未加方括号的 IPv6 CIDR 误解析成 URL 端口，导致启动失败；遇到该问题时应显式覆盖 `NO_PROXY`。
+如果服务器配置了 `HTTP_PROXY` / `HTTPS_PROXY`，建议给 OpenSandbox Server 和 Volume Manager 补充 `NO_PROXY` / `no_proxy`，至少包含 `localhost,127.0.0.1,127.0.0.0/8,fastgpt-opensandbox-server,fastgpt-volume-manager,fastgpt-app,host.docker.internal,host.orb.internal,docker.orb.internal,*.orb.internal,*.orb.local`，避免内部服务调用被代理劫持。OrbStack/Docker 可能自动注入包含 IPv6 CIDR 的 `NO_PROXY`，OpenSandbox 依赖的 httpx 可能把未加方括号的 IPv6 CIDR 误解析成 URL 端口，导致启动失败；遇到该问题时应显式覆盖 `NO_PROXY`。
 
 ## 3. 修改 FastGPT 相关变量
 
@@ -62,6 +62,8 @@ AGENT_SANDBOX_OPENSANDBOX_VOLUME_MANAGER_TOKEN=replace_with_volume_manager_token
 ```
 
 如果你的 `docker-compose.yml` 已经使用 `x-agent-sandbox-config` 统一注入 Agent Sandbox 变量，可直接在该 anchor 中填入上述值，确保 `fastgpt-app` 和 `fastgpt-pro` 都继承该配置。
+
+注意：OpenSandbox 持久卷只读取 `AGENT_SANDBOX_OPENSANDBOX_VOLUME_MANAGER_URL` 和 `AGENT_SANDBOX_OPENSANDBOX_VOLUME_MANAGER_TOKEN`。不要使用旧版 `AGENT_SANDBOX_VOLUME_MANAGER_URL`、`AGENT_SANDBOX_VOLUME_MANAGER_TOKEN` 或 `AGENT_SANDBOX_ENABLE_VOLUME`。
 
 ## 4. 启动验证
 

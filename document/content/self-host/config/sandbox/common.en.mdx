@@ -9,19 +9,19 @@ This page covers shared Agent Sandbox configuration for both `opensandbox` and `
 
 ### 1. Add the yml service
 
-Use [agent-sandbox-proxy.yml](/deploy/sandbox_deploy/agent-proxy.yml) as a reference and add the service to your yml file. Expose the external access port and record the `AGENT_SANDBOX_PROXY_SECRET` value, which you will need in the next step.
+Use [agent-sandbox-proxy.yml](/deploy/sandbox_deploy/agent-proxy.yml) as a reference and add the service to your yml file. Expose the proxy port that browsers will connect to, and record the `AGENT_SANDBOX_PROXY_SECRET` value, which you will need in the next step.
 
 FastGPT uses this proxy when accessing the sandbox file system.
 
 **Proxy service environment variables**
 
-| Variable                           | Default                                  | Description                                                                                                               |
-| ---------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `PORT`                             | `1006`                                   | Listening port for `fastgpt-agent-sandbox-proxy`.                                                                         |
-| `AGENT_SANDBOX_PROXY_SECRET`       | None                                     | Secret shared with the FastGPT main service. Must be at least 32 characters.                                              |
-| `FASTGPT_APP_URL`                  | `http://fastgpt-app:3000`                | Internal URL of the FastGPT main service. The proxy and FastGPT must be able to reach each other on the network.          |
-| `FASTGPT_APP_REQUEST_TIMEOUT_SECS` | `10`                                     | Timeout, in seconds, for proxy requests back to the FastGPT main service. Increase it if sandbox cold starts take longer. |
-| `RUST_LOG`                         | `info,fastgpt_agent_sandbox_proxy=debug` | Log level for the proxy service.                                                                                          |
+| Variable                           | Default                                  | Description                                                                                                                            |
+| ---------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `PORT`                             | `1006`                                   | Listening port for `fastgpt-agent-sandbox-proxy`.                                                                                      |
+| `AGENT_SANDBOX_PROXY_SECRET`       | None                                     | Secret shared with the FastGPT main service. Must be at least 32 characters.                                                           |
+| `FASTGPT_APP_URL`                  | `http://fastgpt-app:3000`                | Internal URL of the FastGPT main service. The proxy and FastGPT must be able to reach each other on the network.                       |
+| `FASTGPT_APP_REQUEST_TIMEOUT_SECS` | `10`                                     | Timeout, in seconds, for proxy requests back to the FastGPT main service. The sample yml sets it to `60` to cover sandbox cold starts. |
+| `RUST_LOG`                         | `info,fastgpt_agent_sandbox_proxy=debug` | Log level for the proxy service.                                                                                                       |
 
 ### 2. Update FastGPT environment variables
 
@@ -59,15 +59,17 @@ AGENT_SANDBOX_NPM_REGISTRY=https://registry.npmmirror.com
 AGENT_SANDBOX_PYPI_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-### Resource limit variables
+### Common resource limit variables
 
-Configure the following variables in `fastgpt-app` and `fastgpt-pro` when you need to adjust resource limits:
+Configure the following variables in `fastgpt-app` and `fastgpt-pro` when you need to adjust common resource limits:
 
-| Variable                             | Default    | Description                                                                                                                       |
-| ------------------------------------ | ---------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `AGENT_SANDBOX_DISK_MB`              | `1024`     | Baseline Agent Sandbox disk size in MB. It affects cold archive package limits, Skill package limits, and IDE single-file limits. |
-| `AGENT_SANDBOX_WS_MAX_MESSAGE_BYTES` | `67108864` | Maximum IDE Agent WebSocket message size in bytes.                                                                                |
-| `AGENT_SANDBOX_WS_MAX_FRAME_BYTES`   | `16777216` | Maximum IDE Agent WebSocket frame size in bytes.                                                                                  |
+| Variable                                   | Default    | Description                                                                                                                       |
+| ------------------------------------------ | ---------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `AGENT_SANDBOX_DISK_MB`                    | `1024`     | Baseline Agent Sandbox disk size in MB. It affects cold archive package limits, Skill package limits, and IDE single-file limits. |
+| `AGENT_SANDBOX_MAX_EDIT_DEBUG`             | `100`      | Limit for Agent edit/debug sandboxes.                                                                                             |
+| `AGENT_SANDBOX_ENTRYPOINT_TIMEOUT_SECONDS` | `30`       | Timeout for Agent Sandbox entrypoint execution, in seconds. Allowed range: `1` to `600`.                                          |
+| `AGENT_SANDBOX_WS_MAX_MESSAGE_BYTES`       | `67108864` | Maximum IDE Agent WebSocket message size in bytes.                                                                                |
+| `AGENT_SANDBOX_WS_MAX_FRAME_BYTES`         | `16777216` | Maximum IDE Agent WebSocket frame size in bytes.                                                                                  |
 
 ## FAQ
 

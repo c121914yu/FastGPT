@@ -16,7 +16,7 @@ The OpenSandbox setup flow is below.
 
 ## 1. Add yml services
 
-Use [opensandbox.yml](/deploy/sandbox_deploy/opensandbox.yml) as a reference. Add `fastgpt-opensandbox-server`, `fastgpt-volume-manager`, the image pre-pull services, and `opensandbox-config` to your current FastGPT `docker-compose.yml`. Place them on the same `app` network as the FastGPT App service. You do not need to expose OpenSandbox or Volume Manager ports publicly. Deploy Agent Sandbox Proxy separately as described in [General Sandbox Configuration](./common).
+Use [opensandbox.yml](/deploy/sandbox_deploy/opensandbox.yml) as a reference. Add `fastgpt-opensandbox-server`, `fastgpt-volume-manager`, the image pre-pull services, and `opensandbox-config` to your current FastGPT `docker-compose.yml`. Place them on the same `app` network as the FastGPT App service. You do not need to expose OpenSandbox or Volume Manager ports publicly. This only applies to OpenSandbox and Volume Manager. The browser-facing Agent Sandbox Proxy port still needs to be deployed and exposed separately as described in [General Sandbox Configuration](./common).
 
 The sample uses China Mainland image registries. For deployments outside China Mainland, replace them with:
 
@@ -37,7 +37,7 @@ Only the following values usually need to be changed:
 
 Docker runtime requires mounting the host Docker socket. The default Docker path is usually `/var/run/docker.sock`; environments such as OrbStack may require replacing it with the actual socket path.
 
-If the server has `HTTP_PROXY` / `HTTPS_PROXY` configured, set `NO_PROXY` / `no_proxy` for OpenSandbox Server and Volume Manager. Include at least `localhost,127.0.0.1,127.0.0.0/8,fastgpt-opensandbox-server,fastgpt-volume-manager,host.docker.internal` to prevent internal service calls from being routed through the proxy. OrbStack/Docker may inject IPv6 CIDR entries into `NO_PROXY`; httpx used by OpenSandbox may parse unbracketed IPv6 CIDR values as invalid URL ports. Explicitly override `NO_PROXY` if you hit that startup issue.
+If the server has `HTTP_PROXY` / `HTTPS_PROXY` configured, set `NO_PROXY` / `no_proxy` for OpenSandbox Server and Volume Manager. Include at least `localhost,127.0.0.1,127.0.0.0/8,fastgpt-opensandbox-server,fastgpt-volume-manager,fastgpt-app,host.docker.internal,host.orb.internal,docker.orb.internal,*.orb.internal,*.orb.local` to prevent internal service calls from being routed through the proxy. OrbStack/Docker may inject IPv6 CIDR entries into `NO_PROXY`; httpx used by OpenSandbox may parse unbracketed IPv6 CIDR values as invalid URL ports. Explicitly override `NO_PROXY` if you hit that startup issue.
 
 ## 3. Update FastGPT variables
 
@@ -63,6 +63,8 @@ AGENT_SANDBOX_OPENSANDBOX_VOLUME_MANAGER_TOKEN=replace_with_volume_manager_token
 ```
 
 If your `docker-compose.yml` already uses `x-agent-sandbox-config` to inject Agent Sandbox variables, fill these values in that anchor so both `fastgpt-app` and `fastgpt-pro` inherit the same configuration.
+
+Note: OpenSandbox persistent volumes only read `AGENT_SANDBOX_OPENSANDBOX_VOLUME_MANAGER_URL` and `AGENT_SANDBOX_OPENSANDBOX_VOLUME_MANAGER_TOKEN`. Do not use the legacy `AGENT_SANDBOX_VOLUME_MANAGER_URL`, `AGENT_SANDBOX_VOLUME_MANAGER_TOKEN`, or `AGENT_SANDBOX_ENABLE_VOLUME` variables.
 
 ## 4. Start and verify
 
