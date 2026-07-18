@@ -10,6 +10,10 @@ description: 'FastGPT V4.15.3 更新说明'
 - 更新 fastgpt-app(fastgpt 主服务) 镜像 tag: v4.15.3
 - 更新 fastgpt-pro(fastgpt 商业版) 镜像 tag: v4.15.3
 
+## ⚙️ 优化
+
+1. completions 接口如果设置了不使用 base64 模式，会把接口传入的 base64 转成图片链接，减少工作流运行过程内存消耗。
+
 ## 🐛 修复
 
 1. 微信发布渠道，微信接口特殊异常时，会导致快速轮询。

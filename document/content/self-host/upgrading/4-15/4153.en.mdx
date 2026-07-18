@@ -10,6 +10,10 @@ description: 'FastGPT V4.15.3 Release Notes'
 - Update the fastgpt-app (FastGPT main service) image tag to v4.15.3.
 - Update the fastgpt-pro (FastGPT commercial edition) image tag to v4.15.3.
 
+## ⚙️ Improvements
+
+1. When Base64 mode is disabled for the completions API, Base64-encoded images in requests are converted to image URLs, reducing memory usage during workflow execution.
+
 ## 🐛 Fixes
 
 1. Fixed rapid polling in the WeChat publishing channel when the WeChat API returns certain errors.
