@@ -6,13 +6,17 @@ import { S3Buckets } from '@fastgpt/service/common/s3/config/constants';
 import { MongoDatasetCollection } from '@fastgpt/service/core/dataset/collection/schema';
 import { MongoDatasetData } from '@fastgpt/service/core/dataset/data/schema';
 import { MongoDatasetDataText } from '@fastgpt/service/core/dataset/data/dataTextSchema';
+import { MongoDatasetTraining } from '@fastgpt/service/core/dataset/training/schema';
 import { MongoDataset } from '@fastgpt/service/core/dataset/schema';
 import {
   MongoDatasetSynonym,
   MongoDatasetSynonymMapping
 } from '@fastgpt/service/core/dataset/synonym/schema';
 import { DatasetSynonymSchemaVersion } from '@fastgpt/global/core/dataset/synonym';
-import { DatasetDataIndexTypeEnum } from '@fastgpt/global/core/dataset/data/constants';
+import {
+  DatasetDataIndexStatusEnum,
+  DatasetDataIndexTypeEnum
+} from '@fastgpt/global/core/dataset/data/constants';
 import { DatasetCollectionTypeEnum, DatasetTypeEnum } from '@fastgpt/global/core/dataset/constants';
 import type {
   DatasetDataIndexItemType,
@@ -100,12 +104,16 @@ const createMongoData = async ({
   a = 'old answer',
   imageId,
   indexes,
+  indexStatus,
+  indexErrorMsg,
   history
 }: {
   q?: string;
   a?: string;
   imageId?: string;
   indexes?: DatasetDataIndexItemType[];
+  indexStatus?: DatasetDataIndexStatusEnum;
+  indexErrorMsg?: string;
   history?: DatasetDataItemType['history'];
 } = {}) => {
   const { root, dataset, collection } = await createDatasetContext();
@@ -117,6 +125,8 @@ const createMongoData = async ({
     q,
     a,
     imageId,
+    indexStatus,
+    indexErrorMsg,
     history,
     indexes: indexes ?? [
       {
@@ -1060,6 +1070,45 @@ describe('Dataset data service', () => {
         })
       );
     });
+
+    it('should re-index error data, set indexStatus to indexed, clear indexErrorMsg and remove failed training task', async () => {
+      const { data } = await createMongoData({
+        q: 'failed chunk',
+        a: '',
+        indexes: [],
+        indexStatus: DatasetDataIndexStatusEnum.error,
+        indexErrorMsg: 'embedding rate limit'
+      });
+      await MongoDatasetTraining.create({
+        teamId: data.teamId,
+        tmbId: data.tmbId,
+        datasetId: data.datasetId,
+        collectionId: data.collectionId,
+        mode: 'chunk',
+        billId: 'bill-id',
+        dataId: data._id,
+        retryCount: 0,
+        errorMsg: 'embedding rate limit'
+      });
+
+      await updateDatasetDataSystemIndexes({
+        dataId: String(data._id),
+        q: 'repaired chunk',
+        a: '',
+        model: embeddingModel
+      });
+
+      const updatedData = await MongoDatasetData.findById(data._id).lean();
+      expect(updatedData?.indexStatus).toBe(DatasetDataIndexStatusEnum.indexed);
+      expect(updatedData?.indexErrorMsg).toBeUndefined();
+      expect(updatedData?.q).toBe('repaired chunk');
+      expect(updatedData?.indexes).toHaveLength(1);
+      expect(updatedData?.indexes[0].type).toBe(DatasetDataIndexTypeEnum.default);
+      expect(updatedData?.indexes[0].text).toBe('repaired chunk');
+
+      const remainingTraining = await MongoDatasetTraining.findOne({ dataId: data._id });
+      expect(remainingTraining).toBeNull();
+    });
   });
 
   describe('deleteDatasetData', () => {
@@ -1102,6 +1151,27 @@ describe('Dataset data service', () => {
 
       expect(mockDeleteDatasetFileByKey).not.toHaveBeenCalled();
       expect(mockVectorDelete).not.toHaveBeenCalled();
+    });
+
+    it('should delete training tasks associated with dataId', async () => {
+      const { data } = await createMongoData({
+        indexes: [],
+        indexStatus: DatasetDataIndexStatusEnum.error
+      });
+      await MongoDatasetTraining.create({
+        teamId: data.teamId,
+        tmbId: data.tmbId,
+        datasetId: data.datasetId,
+        collectionId: data.collectionId,
+        mode: 'chunk',
+        billId: 'bill-id',
+        dataId: data._id,
+        retryCount: 0
+      });
+
+      await deleteDatasetData(toDataItem(data));
+
+      expect(await MongoDatasetTraining.findOne({ dataId: data._id })).toBeNull();
     });
   });
 });

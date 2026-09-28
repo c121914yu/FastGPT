@@ -1,4 +1,5 @@
 import { MongoDatasetData } from '@fastgpt/service/core/dataset/data/schema';
+import { MongoDatasetTraining } from '@fastgpt/service/core/dataset/training/schema';
 import { pushCollectionUpdateJob } from '@fastgpt/service/core/dataset/collection/mq';
 import type {
   UpdateDatasetDataPropsType,
@@ -300,9 +301,10 @@ export class DatasetDataOperation {
         })
       : undefined;
 
+    const isError = mongoData.indexStatus === DatasetDataIndexStatusEnum.error;
     // 把旧的 dataId 加到新的索引里
     const indexesWithExistingSystemIds = this.indexOperation.mergeExistingSystemIndexIds({
-      currentIndexes: mongoData.indexes,
+      currentIndexes: isError ? [] : mongoData.indexes,
       nextSystemIndexes: formatIndexesResult
     });
 
@@ -310,7 +312,7 @@ export class DatasetDataOperation {
     const patchResult = this.indexOperation.buildPatch({
       currentIndexes: mongoData.indexes,
       nextIndexes: indexesWithExistingSystemIds,
-      isSameIndex: forceRebuild ? () => false : undefined
+      isSameIndex: forceRebuild || isError ? () => false : undefined
     });
     // 先保存旧向量 id；insertVectorForPatch 会原地把 update 项替换成新 dataId。
     const deleteVectorIdList = this.indexOperation.getDeleteVectorIdList(patchResult);
@@ -390,6 +392,8 @@ export class DatasetDataOperation {
           teamId: mongoData.teamId,
           idList: deleteVectorIdList
         });
+
+        await MongoDatasetTraining.deleteMany({ dataId: mongoData._id }, { session: mongoSession });
       });
     } catch (error) {
       if (synonymContext) {
@@ -452,9 +456,13 @@ export class DatasetDataOperation {
       maxIndexSize: embModel.config.maxToken,
       indexPrefix
     });
+    const isError = mongoData.indexStatus === DatasetDataIndexStatusEnum.error;
+    const currentIndexes = isError
+      ? mongoData.indexes.filter((index) => !isDatasetDataSystemIndexType(index.type))
+      : mongoData.indexes;
     // 系统索引文本没变化时复用旧 dataId，避免无意义的向量重建。
     const nextSystemIndexDrafts = this.indexOperation.mergeExistingSystemIndexIds({
-      currentIndexes: mongoData.indexes,
+      currentIndexes,
       nextSystemIndexes: systemIndexes
     });
 
@@ -523,6 +531,8 @@ export class DatasetDataOperation {
                     { $literal: nextSystemIndexes }
                   ]
                 },
+                indexStatus: { $literal: DatasetDataIndexStatusEnum.indexed },
+                indexErrorMsg: '$$REMOVE',
                 ...(synonymContext && {
                   synonymVersion: synonymContext.version,
                   synonymRebuildingVersion: '$$REMOVE'
@@ -557,6 +567,8 @@ export class DatasetDataOperation {
           teamId: mongoData.teamId,
           idList: deleteVectorIdList
         });
+
+        await MongoDatasetTraining.deleteMany({ dataId: mongoData._id }, { session });
       });
     } catch (error) {
       if (synonymContext) {
@@ -587,6 +599,7 @@ export class DatasetDataOperation {
   async delete(data: DatasetDataItemType) {
     await mongoSessionRun(async (session) => {
       await MongoDatasetData.deleteOne({ _id: data.id }, { session });
+      await MongoDatasetTraining.deleteMany({ dataId: data.id }, { session });
       // getFullTextStore() 按引擎分发:mongo 删除 dataset_data_texts;milvus 为 no-op(全文行随向量删除清理)。
       await getFullTextStore().deleteByDataId(data.id, session);
 

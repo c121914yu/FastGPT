@@ -22,6 +22,7 @@ import { CollectionPermission } from '@fastgpt/global/support/permission/collect
 import { getCollectionWithDataset } from '../../../core/dataset/controller';
 import { MongoDatasetData } from '../../../core/dataset/data/schema';
 import { assertDatasetDataWritable } from '../../../core/dataset/data/utils';
+import { DatasetDataIndexStatusEnum } from '@fastgpt/global/core/dataset/data/constants';
 import { type AuthModeType, type AuthResponseType } from '../type';
 import { type ParentIdType } from '@fastgpt/global/common/parentFolder/type';
 import { i18nT } from '@fastgpt/global/common/i18n/utils';
@@ -334,8 +335,10 @@ export async function authDatasetData({
           ).url
         : undefined,
     chunkIndex: datasetData.chunkIndex,
-    indexes: datasetData.indexes,
+    indexes:
+      datasetData.indexStatus === DatasetDataIndexStatusEnum.error ? [] : datasetData.indexes,
     indexStatus: datasetData.indexStatus,
+    indexErrorMsg: datasetData.indexErrorMsg,
     datasetId: String(datasetData.datasetId),
     collectionId: String(datasetData.collectionId),
     metadata: datasetData.metadata,

@@ -29,6 +29,7 @@ import { ImportDataSourceEnum } from '@fastgpt/global/core/dataset/constants';
 import { useContextSelector } from 'use-context-selector';
 import { CollectionPageContext } from './Context';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
+import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystem } from '@fastgpt/web/hooks/useSystem';
 import DatasetTagFilter from './DatasetTagFilter';
 import MyBox from '@fastgpt/web/components/common/MyBox';
@@ -69,6 +70,7 @@ const Header = ({
   const { t } = useTranslation();
   const { feConfigs } = useSystemStore();
   const { isPc } = useSystem();
+  const { toast } = useToast();
 
   const datasetDetail = useContextSelector(DatasetPageContext, (v) => v.datasetDetail);
 
@@ -302,14 +304,24 @@ const Header = ({
                                 {t('dataset:core.dataset.Image collection')}
                               </Flex>
                             ),
-                            onClick: () =>
+                            onClick: () => {
+                              if (
+                                !datasetDetail.vectorModel?.config.vision &&
+                                !datasetDetail.vlmModel
+                              ) {
+                                return toast({
+                                  status: 'warning',
+                                  title: t('dataset:image_dataset_requires_model_tip')
+                                });
+                              }
                               router.replace({
                                 query: {
                                   ...router.query,
                                   currentTab: TabEnum.import,
                                   source: ImportDataSourceEnum.imageDataset
                                 }
-                              })
+                              });
+                            }
                           }
                         ]
                       : []),

@@ -1,6 +1,6 @@
 {
   "Image_Preview": "Picture preview",
-  "Image_dataset_requires_VLM_model_to_be_configured": "Image collections require an image understanding model or a multimodal embedding model. Please configure a matching model first.",
+  "Image_dataset_requires_VLM_model_to_be_configured": "Image collections require an image understanding model or a multimodal index model. Please adjust the dataset models first.",
   "file_name": "Filename",
   "file_size": "Filesize",
   "image": "picture",

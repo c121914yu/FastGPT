@@ -44,7 +44,6 @@ import {
   DatasetDataIndexStatusEnum,
   getDatasetDataIndexStatusMapData
 } from '@fastgpt/global/core/dataset/data/constants';
-import { isDatasetDataIndexed } from '@fastgpt/global/core/dataset/data/utils';
 
 const InsertImagesModal = dynamic(() => import('./data/InsertImageModal'), {
   ssr: false
@@ -302,15 +301,14 @@ const DataCard = () => {
         <ScrollData px={5} pb={5}>
           <Flex flexDir={'column'} gap={2}>
             {datasetDataList.map((item, index) => {
-              // 待索引数据只读可见：点击提示不可修改，不进入编辑弹层，也不渲染删除入口。
-              const isIndexed = isDatasetDataIndexed(item.indexStatus);
+              // 待索引数据只读可见：点击提示不可修改，不进入编辑弹层，也不渲染删除入口。索引失败数据可编辑与删除。
               const isIndexing = item.indexStatus === DatasetDataIndexStatusEnum.indexing;
               const indexStatusInfo = getDatasetDataIndexStatusMapData(item.indexStatus);
 
               return (
                 <Card
                   key={item._id}
-                  cursor={isIndexed || isIndexing ? 'pointer' : 'default'}
+                  cursor={'pointer'}
                   p={3}
                   userSelect={'none'}
                   boxShadow={'none'}
@@ -319,8 +317,8 @@ const DataCard = () => {
                   position={'relative'}
                   overflow={'hidden'}
                   _hover={{
-                    borderColor: isIndexed || isIndexing ? 'blue.600' : undefined,
-                    boxShadow: isIndexed || isIndexing ? 'lg' : 'none',
+                    borderColor: 'blue.600',
+                    boxShadow: 'lg',
                     '& .header': { visibility: 'visible' },
                     '& .footer': { visibility: 'visible' },
                     bg: index % 2 === 1 ? 'myGray.200' : 'blue.100'
@@ -334,7 +332,6 @@ const DataCard = () => {
                       });
                       return;
                     }
-                    if (!isIndexed) return;
                     setEditDataId(item._id);
                   }}
                 >
@@ -454,7 +451,7 @@ const DataCard = () => {
                       )}
                     </Flex>
 
-                    {canWrite && isIndexed && (
+                    {canWrite && !isIndexing && (
                       <PopoverConfirm
                         Trigger={
                           <IconButton

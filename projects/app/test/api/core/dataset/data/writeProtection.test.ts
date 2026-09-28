@@ -96,7 +96,7 @@ describe('pending index data write protection', () => {
     }
   );
 
-  it.each([DatasetDataIndexStatusEnum.indexed, undefined])(
+  it.each([DatasetDataIndexStatusEnum.indexed, DatasetDataIndexStatusEnum.error, undefined])(
     'allows data-level writes for %s data',
     async (indexStatus) => {
       const { root, data } = await createData(indexStatus);
@@ -110,6 +110,9 @@ describe('pending index data write protection', () => {
       expect(String(result.datasetData.id)).toBe(String(data._id));
       // 读取路径使用的字段完整，缺失状态不回填。
       expect(result.datasetData.indexStatus).toBe(indexStatus);
+      if (indexStatus === DatasetDataIndexStatusEnum.error) {
+        expect(result.datasetData.indexes).toEqual([]);
+      }
     }
   );
 

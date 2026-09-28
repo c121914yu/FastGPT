@@ -11,7 +11,10 @@ import {
 import { defaultCollectionDetail } from '@/web/core/dataset/constants';
 import { ModelTypeEnum } from '@fastgpt/global/core/ai/constants';
 import { DatasetCollectionTypeEnum } from '@fastgpt/global/core/dataset/constants';
-import { DatasetDataIndexTypeEnum } from '@fastgpt/global/core/dataset/data/constants';
+import {
+  DatasetDataIndexStatusEnum,
+  DatasetDataIndexTypeEnum
+} from '@fastgpt/global/core/dataset/data/constants';
 import { isDatasetDataSystemIndexType } from '@fastgpt/global/core/dataset/data/utils';
 import type { DatasetDataIndexItemType } from '@fastgpt/global/core/dataset/type';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
@@ -24,6 +27,7 @@ export type InputDataType = {
   q: string;
   a: string;
   imagePreivewUrl?: string;
+  indexStatus?: DatasetDataIndexStatusEnum;
   indexes: (Omit<DatasetDataIndexItemType, 'dataId'> & {
     // Backend index data id. New client-side rows do not have it until create succeeds.
     dataId?: string;
@@ -92,7 +96,7 @@ const formatIndexesForRequest = (indexes: InputDataType['indexes'] = []) =>
     }));
 
 const formatDataForForm = (
-  data: Partial<Pick<InputDataType, 'q' | 'a' | 'imagePreivewUrl'>> & {
+  data: Partial<Pick<InputDataType, 'q' | 'a' | 'imagePreivewUrl' | 'indexStatus'>> & {
     indexes?: DatasetDataIndexItemType[];
   } = {},
   dataId?: string,
@@ -102,7 +106,11 @@ const formatDataForForm = (
   q: data.q || '',
   a: data.a || '',
   imagePreivewUrl: data.imagePreivewUrl,
-  indexes: formatIndexesForForm(data.indexes, previousIndexes)
+  indexStatus: data.indexStatus,
+  indexes:
+    data.indexStatus === DatasetDataIndexStatusEnum.error
+      ? []
+      : formatIndexesForForm(data.indexes, previousIndexes)
 });
 
 const getInitialTab = ({
