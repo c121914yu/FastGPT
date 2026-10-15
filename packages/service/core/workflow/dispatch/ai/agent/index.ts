@@ -22,7 +22,7 @@ import {
   assertSandboxAvailable,
   resolveAppSandboxAvailability
 } from '../../../../ai/sandbox/application/availability';
-import { getWorkflowFileMaxAmount } from '../../../utils/context';
+import { getWorkflowContext } from '../../context';
 import { loadWorkflowModelResource } from '../../../resource/service';
 import { runtimeSummaryToNodeSummary, stripNodeSummaryErrorFields } from '../../utils/summary';
 import { getNodeErrResponse, removeUnfinishedInteractiveHistories } from '../../utils';
@@ -142,7 +142,7 @@ export const dispatchRunAgent = async (props: DispatchAgentModuleProps): Promise
   const assistantResponses: AIChatItemValueItemType[] = [];
   const childNodeResponses: ChatHistoryItemResType[] = [];
   const nodeResponseCollector = createAgentNodeResponseCollector({
-    nodeResponseSink: props.nodeResponseSink,
+    nodeResponseSink: getWorkflowContext().nodeResponseSink,
     nodeResponses: childNodeResponses,
     nodeResponseParentId: shouldWrapNodeResponses ? props.nodeResponseParentId : undefined,
     onNodeResponseSummary: (summary) =>
@@ -264,6 +264,7 @@ export const dispatchRunAgent = async (props: DispatchAgentModuleProps): Promise
       await assertSandboxAvailable(runningAppInfo.teamId);
     }
 
+    const { fileContext } = getWorkflowContext();
     const userContext = await useUserContext({
       histories: restoredMessages ? [] : histories,
       currentFiles: fileLinks,
@@ -275,7 +276,7 @@ export const dispatchRunAgent = async (props: DispatchAgentModuleProps): Promise
       authTmbId: datasetParams?.authTmbId,
       tmbId: runningUserInfo.tmbId,
       timezone,
-      maxFileAmount: getWorkflowFileMaxAmount()
+      maxFileAmount: fileContext.limits.maxFileAmount
     });
 
     // 初始化 sandbox：初始化、注入 skills、files。命中 Version 快照的 Skill 由快照授权，未命中的检查运行人权限。
