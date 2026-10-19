@@ -15,6 +15,7 @@ import {
   FlowNodeTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
 import { moduleTemplatesFlat } from '@fastgpt/global/core/workflow/template/constants';
+import type { FlowNodeTemplateOutputItemType } from '@fastgpt/global/core/workflow/template/output';
 import { EmptyNode } from '@fastgpt/global/core/workflow/template/system/emptyNode';
 import type { IfElseListItemType } from '@fastgpt/global/core/workflow/template/system/ifElse/type';
 import { initNewIfElseList } from '@fastgpt/global/common/workflow/condition';
@@ -260,13 +261,15 @@ export const storeNode2FlowNode = ({
         const toolDescription = isPluginNode
           ? (storeInput.toolDescription ?? inputTemplate.toolDescription)
           : (inputTemplate.toolDescription ?? storeInput.toolDescription);
-        const label = usesLegacyDatasetSearchFilter &&
+        const label =
+          usesLegacyDatasetSearchFilter &&
           inputTemplate.key === NodeInputKeyEnum.collectionFilterMatch
             ? 'workflow:collection_metadata_filter'
             : isPluginNode
               ? (storeInput.label ?? inputTemplate.label)
               : inputTemplate.label;
-        const description = usesLegacyDatasetSearchFilter &&
+        const description =
+          usesLegacyDatasetSearchFilter &&
           inputTemplate.key === NodeInputKeyEnum.collectionFilterMatch
             ? 'workflow:filter_description'
             : isPluginNode
@@ -326,7 +329,7 @@ export const storeNode2FlowNode = ({
           })
       ),
     outputs: staticTemplateOutputs
-      .map<FlowNodeOutputItemType>((outputTemplate) => {
+      .map<FlowNodeTemplateOutputItemType>((outputTemplate) => {
         const storeOutput =
           storeNode.outputs.find((item) => item.key === outputTemplate.key) || outputTemplate;
         const outputDescription = storeOutput.description ?? outputTemplate.description;
